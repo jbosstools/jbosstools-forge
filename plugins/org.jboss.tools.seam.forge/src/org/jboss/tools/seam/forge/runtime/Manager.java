@@ -9,18 +9,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.internal.jobs.JobManager;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -34,8 +30,6 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.seam.forge.Activator;
 import org.osgi.framework.Bundle;
 
 public class Manager implements IDebugEventSetListener {
@@ -78,7 +72,6 @@ public class Manager implements IDebugEventSetListener {
 				try {
 					file = FileLocator.getBundleFile(bundle);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				if (file == null) return;
@@ -109,10 +102,6 @@ public class Manager implements IDebugEventSetListener {
 				classpath.add(systemLibsEntry.getMemento());
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_CLASSPATH, classpath);
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_DEFAULT_CLASSPATH, false);
-//				workingCopy.setAttribute(
-//						IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, 
-//						"-Dforge.home=/Users/koen/Downloads/forge-1.0.0.Alpha1 "); // +
-//						"-Dseam.forge.shell.colorEnabled=true" );
 				IWorkspace workspace = ResourcesPlugin.getWorkspace();
 				IWorkspaceRoot root = workspace.getRoot();
 				IPath path = root.getLocation();
@@ -168,19 +157,6 @@ public class Manager implements IDebugEventSetListener {
 		propertyChangeSupport.removePropertyChangeListener("runtimeState", listener);
 	}
 
-	private IStatus createStatus(String message) {
-		return new Status(
-			IStatus.INFO,
-			Activator.getDefault().getBundle().getSymbolicName(),
-			IStatus.OK,
-			message,
-			null);
-	}
-	
-	private void log(String message) {
-		Activator.getDefault().getLog().log(createStatus(message));
-	}
-	
 	protected void finalize() throws Throwable {
 		if (forgeProcess != null) {
 			if (!forgeProcess.isTerminated()) {

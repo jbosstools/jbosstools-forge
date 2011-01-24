@@ -3,18 +3,16 @@ package org.jboss.tools.seam.forge.view;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.internal.ui.views.console.ProcessConsole;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.MessagePage;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
+import org.jboss.tools.seam.forge.console.Console;
 import org.jboss.tools.seam.forge.runtime.Manager;
 
 public class ConsoleView extends ViewPart implements PropertyChangeListener {
