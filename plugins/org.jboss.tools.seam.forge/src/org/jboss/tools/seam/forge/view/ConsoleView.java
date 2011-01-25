@@ -71,7 +71,6 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (evt.getNewValue().equals(evt.getOldValue())) return;
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
