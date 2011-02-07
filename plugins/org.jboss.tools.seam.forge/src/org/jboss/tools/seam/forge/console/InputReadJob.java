@@ -22,14 +22,12 @@ class InputReadJob extends Job {
 
     protected IStatus run(IProgressMonitor monitor) {
         try {
-            byte[] b = new byte[1024];
-            int read = 0;
-            while (input != null && read >= 0) {
-                read = input.read(b);
-                if (read > 0) {
-                    String s = new String(b, 0, read);
-                    streamsProxy.write(s);
-                }
+        	StringBuffer buffer = new StringBuffer();
+            int read;
+            while (input != null && (read = input.read()) != -1) {
+            	buffer.append((char)read);
+            	streamsProxy.write(buffer.toString());
+            	buffer.setLength(0);
             }
         } catch (IOException e) {
             Activator.log(e);
