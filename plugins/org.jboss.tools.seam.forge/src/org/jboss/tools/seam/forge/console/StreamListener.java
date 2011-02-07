@@ -5,19 +5,18 @@ import java.io.IOException;
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IFlushableStreamMonitor;
 import org.eclipse.debug.core.model.IStreamMonitor;
-import org.eclipse.ui.console.IOConsoleOutputStream;
 import org.jboss.tools.seam.forge.Activator;
 
 class StreamListener implements IStreamListener {
 
-    private IOConsoleOutputStream stream;
+    private ConsoleOutputStream stream;
     private IStreamMonitor streamMonitor;
     private String streamId;
     private boolean flushed = false;
     private boolean listenerRemoved = false;
     private String encoding;
 
-    StreamListener(String streamIdentifier, IStreamMonitor monitor, IOConsoleOutputStream stream, String encoding) {
+    StreamListener(String streamIdentifier, IStreamMonitor monitor, ConsoleOutputStream stream, String encoding) {
         this.streamId = streamIdentifier;
         this.streamMonitor = monitor;
         this.stream = stream;
@@ -30,7 +29,7 @@ class StreamListener implements IStreamListener {
     	return streamId;
     }
     
-    IOConsoleOutputStream getStream() {
+    ConsoleOutputStream getStream() {
     	return stream;
     }
 

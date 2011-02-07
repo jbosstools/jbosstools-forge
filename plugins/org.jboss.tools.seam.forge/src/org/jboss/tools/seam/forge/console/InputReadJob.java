@@ -7,15 +7,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.model.IStreamsProxy;
-import org.eclipse.ui.console.IOConsoleInputStream;
 import org.jboss.tools.seam.forge.Activator;
 
 class InputReadJob extends Job {
 
     private IStreamsProxy streamsProxy;
-    private IOConsoleInputStream input;
+    private ConsoleInputStream input;
 
-    InputReadJob(IStreamsProxy streamsProxy, IOConsoleInputStream input) {
+    InputReadJob(IStreamsProxy streamsProxy, ConsoleInputStream input) {
         super("Forge Console Input Job");
         this.input = input;
         this.streamsProxy = streamsProxy;
