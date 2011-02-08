@@ -10,10 +10,8 @@ public class ConsoleInputStream extends InputStream {
     private int size = 0;
     private boolean eofSent = false;
     private boolean closed = false;
-    private Console console;
 
-    ConsoleInputStream(Console console) {
-        this.console = console;
+    ConsoleInputStream() {
     }
     
     public synchronized int read() throws IOException {
@@ -66,7 +64,6 @@ public class ConsoleInputStream extends InputStream {
         }
         closed = true;
         notifyAll();
-        console.streamClosed(this);
     }
 
 }

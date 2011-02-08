@@ -31,6 +31,7 @@ import org.eclipse.ui.progress.WorkbenchJob;
  *
  */
 public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumentPartitionerExtension {
+	
 	private PendingPartition consoleClosedPartition;
 	private IDocument document;
 	private ArrayList partitions;
