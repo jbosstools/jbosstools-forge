@@ -46,7 +46,7 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
 		}        
         partitioner = new ConsolePartitioner(inputStream, this);
         partitioner.connect(getDocument());
-        inputStream.setColor(ColorManager.getInstance().getColor(INPUT_STREAM_RGB));
+//        inputStream.setColor(ColorManager.getInstance().getColor(INPUT_STREAM_RGB));
         connect();
     }
 

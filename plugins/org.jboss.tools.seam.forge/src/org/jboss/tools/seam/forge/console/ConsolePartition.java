@@ -129,7 +129,7 @@ public class ConsolePartition implements ITypedRegion {
      * of this partition in a viewer.
      */
     public StyleRange getStyleRange(int rangeOffset, int rangeLength) {
-        return new StyleRange(rangeOffset, rangeLength, getColor(), null, getFontStyle());
+        return new StyleRange(rangeOffset, rangeLength, null, null);
     }
 
     /**
@@ -139,12 +139,12 @@ public class ConsolePartition implements ITypedRegion {
      * 
      * @return the font of one of the backing streams
      */
-    private int getFontStyle() {
-        if (type.equals(INPUT_PARTITION_TYPE)) {
-            return inputStream.getFontStyle();
-        } 
-        return outputStream.getFontStyle();
-    }
+//    private int getFontStyle() {
+//        if (type.equals(INPUT_PARTITION_TYPE)) {
+//            return inputStream.getFontStyle();
+//        } 
+//        return outputStream.getFontStyle();
+//    }
 
     /**
      * Returns the colour of the input stream if the type of the partition 
@@ -153,12 +153,12 @@ public class ConsolePartition implements ITypedRegion {
      * 
      * @return the colour of one of the backing streams
      */
-    public Color getColor() {
-        if (type.equals(INPUT_PARTITION_TYPE)) {
-            return inputStream.getColor();
-        } 
-        return outputStream.getColor();
-    }
+//    public Color getColor() {
+//        if (type.equals(INPUT_PARTITION_TYPE)) {
+//            return inputStream.getColor();
+//        } 
+//        return outputStream.getColor();
+//    }
 
     /**
      * Returns if this partition is read-only.
