@@ -5,11 +5,6 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.console.ConsolePlugin;
 
-/**
- * A region in an IOConsole's document.
- * 
- * @since 3.1
- */
 public class ConsolePartition implements ITypedRegion {
 	public static final String OUTPUT_PARTITION_TYPE = ConsolePlugin.getUniqueIdentifier() + ".io_console_output_partition_type"; //$NON-NLS-1$
 	public static final String INPUT_PARTITION_TYPE = ConsolePlugin.getUniqueIdentifier() + ".io_console_input_partition_type"; //$NON-NLS-1$
@@ -131,34 +126,6 @@ public class ConsolePartition implements ITypedRegion {
     public StyleRange getStyleRange(int rangeOffset, int rangeLength) {
         return new StyleRange(rangeOffset, rangeLength, null, null);
     }
-
-    /**
-     *  Returns the font of the input stream if the type of the partition 
-     * is <code>INPUT_PARTITION_TYPE</code>, otherwise it returns the output 
-     * stream font
-     * 
-     * @return the font of one of the backing streams
-     */
-//    private int getFontStyle() {
-//        if (type.equals(INPUT_PARTITION_TYPE)) {
-//            return inputStream.getFontStyle();
-//        } 
-//        return outputStream.getFontStyle();
-//    }
-
-    /**
-     * Returns the colour of the input stream if the type of the partition 
-     * is <code>INPUT_PARTITION_TYPE</code>, otherwise it returns the output 
-     * stream colour
-     * 
-     * @return the colour of one of the backing streams
-     */
-//    public Color getColor() {
-//        if (type.equals(INPUT_PARTITION_TYPE)) {
-//            return inputStream.getColor();
-//        } 
-//        return outputStream.getColor();
-//    }
 
     /**
      * Returns if this partition is read-only.

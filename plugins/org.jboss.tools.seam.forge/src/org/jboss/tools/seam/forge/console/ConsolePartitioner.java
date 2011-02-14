@@ -312,6 +312,7 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumen
 	 * @see org.eclipse.jface.text.IDocumentPartitionerExtension#documentChanged2(org.eclipse.jface.text.DocumentEvent)
 	 */
 	public IRegion documentChanged2(DocumentEvent event) {
+		System.out.println("documentChanged2 : " + event.fText);
 	    if (document == null) {
 	        return null; //another thread disconnected the partitioner
 	    }
@@ -439,6 +440,8 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumen
 	 * @param s The string that should be appended to the document.
 	 */
 	public void streamAppended(ConsoleOutputStream stream, String s) throws IOException {
+		System.out.println("streamAppended : " + s);
+		if (s.indexOf('\t') != -1) System.out.println("Got a tab!");
         if (document == null) {
             throw new IOException("Document is closed"); //$NON-NLS-1$
         }

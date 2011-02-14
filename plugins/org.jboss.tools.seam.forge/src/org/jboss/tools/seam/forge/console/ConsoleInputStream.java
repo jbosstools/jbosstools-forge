@@ -11,9 +11,6 @@ public class ConsoleInputStream extends InputStream {
     private boolean eofSent = false;
     private boolean closed = false;
 
-    ConsoleInputStream() {
-    }
-    
     public synchronized int read() throws IOException {
         waitForData();
         if (available() == -1) { 
