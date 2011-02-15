@@ -13,29 +13,28 @@ public class ConsoleText extends StyledText {
 	public void invokeAction(int action) {
 		checkWidget();
 		switch (action) {
-			// Navigation
 			case ST.LINE_UP:
 				doLineUp();
 				break;
 			case ST.LINE_DOWN:
 				doLineDown();
 				break;
-			case ST.DELETE_PREVIOUS:
-				doDeletePrevious();
-				break;
+//			case ST.DELETE_PREVIOUS:
+//				doDeletePrevious();
+//				break;
 			default:
 				super.invokeAction(action);
 		}
 	}
 	
 	private void doLineUp() {
-		System.out.println("Line up");
+//		System.out.println("Line up");
 	}
 	private void doLineDown() {
-		System.out.println("Line down");
+//		System.out.println("Line down");
 	}
-	private void doDeletePrevious() {
-		System.out.println("Backspace");
-	}
+//	private void doDeletePrevious() {
+//		System.out.println("Backspace");
+//	}
 
 }

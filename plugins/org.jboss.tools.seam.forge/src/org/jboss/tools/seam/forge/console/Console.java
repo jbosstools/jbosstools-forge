@@ -8,6 +8,8 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.TextConsole;
@@ -15,7 +17,7 @@ import org.eclipse.ui.part.IPageBookViewPage;
 
 public class Console extends TextConsole implements IDebugEventSetListener  {
 
-    private ConsolePartitioner partitioner;
+    private MyPartitioner partitioner;
     private ConsoleInputStream inputStream;
     private ConsoleOutputStream outputStream;
     private IProcess process = null;
@@ -36,7 +38,7 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
     }
     
     private void initOutputStream() {
-    	outputStream = new ConsoleOutputStream(partitioner);
+    	outputStream = new ConsoleOutputStream(this);
     	IStreamMonitor streamMonitor = getOutputStreamMonitor();
     	if (streamMonitor != null) {
     		synchronized(streamMonitor) {
@@ -62,7 +64,7 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
     }
     
     private void initPartitioner() {
-    	partitioner = new ConsolePartitioner(inputStream, this);
+    	partitioner = new MyPartitioner();
     	partitioner.connect(getDocument());
     }
 
@@ -90,7 +92,7 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
 		try {
 			inputStream.close();
 			outputStream.close();
-			partitioner.streamsClosed();
+//			partitioner.streamsClosed();
 		} catch (IOException e) {}
 	}
 
@@ -127,6 +129,23 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
         } else {
             DebugPlugin.getDefault().addDebugEventListener(this);
         }
+    }
+    
+    public void appendString(final String str) {
+    	Display.getDefault().asyncExec(new Runnable() {				
+			@Override
+			public void run() {
+				try {
+					for (int i = 0; i < str.length(); i++) {
+						if (str.charAt(i) == '\b') {
+							getDocument().replace(getDocument().getLength() - 1, 1, "");
+						} else {
+							getDocument().replace(getDocument().getLength(), 0, str.substring(i, i + 1));
+						}
+					}
+				} catch (BadLocationException e) {}
+			}
+		});
     }
 
 }

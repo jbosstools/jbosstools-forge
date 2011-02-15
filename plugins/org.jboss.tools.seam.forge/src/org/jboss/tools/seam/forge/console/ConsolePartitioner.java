@@ -89,7 +89,7 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumen
     
     private int fBuffer; 
     
-	public ConsolePartitioner(ConsoleInputStream inputStream, Console console) {
+	private ConsolePartitioner(ConsoleInputStream inputStream, Console console) {
 		this.inputStream = inputStream;
 		this.console = console;
 		trimJob.setRule(console.getSchedulingRule());

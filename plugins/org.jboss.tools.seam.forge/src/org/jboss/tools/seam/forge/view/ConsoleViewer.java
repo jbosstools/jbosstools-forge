@@ -15,8 +15,8 @@ import org.jboss.tools.seam.forge.console.Console;
 public class ConsoleViewer extends TextConsoleViewer {
 	
 	private static String BACKSPACE = new String(new byte[] {'\b'});
-	private static String UP_ARROW = new String(new byte[] { 0x1b, 0x5b, 0x41 });
-	private static String DOWN_ARROW = new String(new byte[] { 0x1b, 0x5b, 0x42 });
+//	private static String UP_ARROW = new String(new byte[] { 0x1b, 0x5b, 0x41 });
+//	private static String DOWN_ARROW = new String(new byte[] { 0x1b, 0x5b, 0x42 });
 
     private Console console = null;
 
@@ -32,17 +32,16 @@ public class ConsoleViewer extends TextConsoleViewer {
     }
     
     private void handleBackspace() {
-    	System.out.println("handle backspace");
-//    	console.getInputStream().appendData(BACKSPACE);
+    	console.getInputStream().appendData(BACKSPACE);
     }
     
     private void handleArrowUp() {
-    	System.out.println("handle arrow up");
+//    	System.out.println("handle arrow up");
 //    	console.getInputStream().appendData(UP_ARROW);
     }
     
     private void handleArrowDown() {
-    	System.out.println("handle arrow down");
+//    	System.out.println("handle arrow down");
 //    	console.getInputStream().appendData(DOWN_ARROW);
     }
     

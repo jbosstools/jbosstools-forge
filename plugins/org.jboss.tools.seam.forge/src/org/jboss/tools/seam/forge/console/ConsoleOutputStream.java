@@ -6,10 +6,10 @@ import java.io.OutputStream;
 public class ConsoleOutputStream extends OutputStream {
 
     private boolean closed = false;
-    private ConsolePartitioner partitioner;
+    private Console console;
     
-    ConsoleOutputStream(ConsolePartitioner partitioner) {
-        this.partitioner = partitioner;
+    ConsoleOutputStream(Console console) {
+        this.console = console;
     }
 
     public synchronized boolean isClosed() {
@@ -21,7 +21,7 @@ public class ConsoleOutputStream extends OutputStream {
             throw new IOException("Output Stream is closed"); 
         }
         closed = true;
-        partitioner = null;
+        console = null;
     }
 
     public void flush() throws IOException {
@@ -34,7 +34,7 @@ public class ConsoleOutputStream extends OutputStream {
         if(closed) {
             throw new IOException("Output Stream is closed"); 
         }
-        notifyParitioner(new String(b, off, len));
+        notifyPartitioner(new String(b, off, len));
     }
 
     public void write(byte[] b) throws IOException {
@@ -49,18 +49,11 @@ public class ConsoleOutputStream extends OutputStream {
         if(closed) {
             throw new IOException("Output Stream is closed"); 
         }
-        notifyParitioner(str);
+        notifyPartitioner(str);
     }
     
-    private void notifyParitioner(String str) throws IOException {
-        try {
-            partitioner.streamAppended(this, str);
-        } catch (IOException e) {
-            if (!closed) {
-                close();
-            }
-            throw e;
-        }
+    private void notifyPartitioner(String str) throws IOException {
+    	console.appendString(str);
     }
 
 }
