@@ -17,7 +17,7 @@ import org.eclipse.ui.part.IPageBookViewPage;
 
 public class Console extends TextConsole implements IDebugEventSetListener  {
 
-    private MyPartitioner partitioner;
+    private ConsolePartitioner partitioner;
     private ConsoleInputStream inputStream;
     private ConsoleOutputStream outputStream;
     private IProcess process = null;
@@ -64,7 +64,7 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
     }
     
     private void initPartitioner() {
-    	partitioner = new MyPartitioner();
+    	partitioner = new ConsolePartitioner();
     	partitioner.connect(getDocument());
     }
 

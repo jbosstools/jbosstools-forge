@@ -1,9 +1,10 @@
-package org.jboss.tools.seam.forge.console;
+package org.jboss.tools.seam.forge.old;
 
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.console.ConsolePlugin;
+import org.jboss.tools.seam.forge.console.ConsoleInputStream;
+import org.jboss.tools.seam.forge.console.ConsoleOutputStream;
 
 public class ConsolePartition implements ITypedRegion {
 	public static final String OUTPUT_PARTITION_TYPE = ConsolePlugin.getUniqueIdentifier() + ".io_console_output_partition_type"; //$NON-NLS-1$
