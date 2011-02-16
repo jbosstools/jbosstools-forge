@@ -107,6 +107,7 @@ public class Manager implements IDebugEventSetListener {
 				IPath path = root.getLocation();
 				File workingDir = path.toFile();
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, workingDir.getAbsolutePath());
+//				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dseam.forge.shell.colorEnabled=true");
 				ILaunchConfiguration configuration = workingCopy.doSave();
 				ILaunch launch = configuration.launch(ILaunchManager.RUN_MODE, null, false, false);
 				IProcess[] processes = launch.getProcesses();

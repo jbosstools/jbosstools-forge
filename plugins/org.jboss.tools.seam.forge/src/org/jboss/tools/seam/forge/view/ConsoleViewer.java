@@ -14,9 +14,9 @@ import org.jboss.tools.seam.forge.console.Console;
 
 public class ConsoleViewer extends TextConsoleViewer {
 	
-	private static String BACKSPACE = new String(new byte[] {'\b'});
-//	private static String UP_ARROW = new String(new byte[] { 0x1b, 0x5b, 0x41 });
-//	private static String DOWN_ARROW = new String(new byte[] { 0x1b, 0x5b, 0x42 });
+	private static String BACKSPACE = new Character('b').toString();
+	private static String UP_ARROW = new Character((char)16).toString();
+	private static String DOWN_ARROW = new Character((char)14).toString();
 
     private Console console = null;
 
@@ -36,13 +36,11 @@ public class ConsoleViewer extends TextConsoleViewer {
     }
     
     private void handleArrowUp() {
-//    	System.out.println("handle arrow up");
-//    	console.getInputStream().appendData(UP_ARROW);
+    	console.getInputStream().appendData(UP_ARROW);
     }
     
     private void handleArrowDown() {
-//    	System.out.println("handle arrow down");
-//    	console.getInputStream().appendData(DOWN_ARROW);
+    	console.getInputStream().appendData(DOWN_ARROW);
     }
     
 	protected StyledText createTextWidget(Composite parent, int styles) {

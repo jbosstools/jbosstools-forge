@@ -10,60 +10,59 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner {
 
 	@Override
 	public void connect(IDocument document) {
+//		System.out.println("connect");
 		document.setDocumentPartitioner(this);
 	}
 
 	@Override
 	public void disconnect() {
-		// TODO Auto-generated method stub
-		
+//		System.out.println("disconnect");
 	}
 
 	@Override
 	public void documentAboutToBeChanged(DocumentEvent event) {
-		// TODO Auto-generated method stub
-		
+//		System.out.println("documentAboutToBeChanged");
 	}
 
 	@Override
 	public boolean documentChanged(DocumentEvent event) {
-		// TODO Auto-generated method stub
+//		System.out.println("documentChanged");
 		return false;
 	}
 
 	@Override
 	public String[] getLegalContentTypes() {
-		// TODO Auto-generated method stub
+//		System.out.println("getLegalContentTypes");
 		return null;
 	}
 
 	@Override
 	public String getContentType(int offset) {
-		// TODO Auto-generated method stub
+//		System.out.println("getContentType");
 		return null;
 	}
 
 	@Override
 	public ITypedRegion[] computePartitioning(int offset, int length) {
-		// TODO Auto-generated method stub
+//		System.out.println("computePartitioning");
 		return null;
 	}
 
 	@Override
 	public ITypedRegion getPartition(int offset) {
-		// TODO Auto-generated method stub
+//		System.out.println("getPartition");
 		return null;
 	}
 
 	@Override
 	public boolean isReadOnly(int offset) {
-		// TODO Auto-generated method stub
+//		System.out.println("isReadOnly");
 		return false;
 	}
 
 	@Override
 	public StyleRange[] getStyleRanges(int offset, int length) {
-		// TODO Auto-generated method stub
+		System.out.println("getStyleRanges : [offset, " + offset + "] [length, " + length + "]");
 		return null;
 	}
 
