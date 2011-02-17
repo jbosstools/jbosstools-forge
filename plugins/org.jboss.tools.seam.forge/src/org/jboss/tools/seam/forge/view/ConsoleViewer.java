@@ -14,7 +14,7 @@ import org.jboss.tools.seam.forge.console.Console;
 
 public class ConsoleViewer extends TextConsoleViewer {
 	
-	private static String BACKSPACE = new Character('b').toString();
+	private static String BACKSPACE = new Character('\b').toString();
 	private static String UP_ARROW = new Character((char)16).toString();
 	private static String DOWN_ARROW = new Character((char)14).toString();
 

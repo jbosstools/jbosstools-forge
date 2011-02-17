@@ -62,7 +62,7 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner {
 
 	@Override
 	public StyleRange[] getStyleRanges(int offset, int length) {
-		System.out.println("getStyleRanges : [offset, " + offset + "] [length, " + length + "]");
+//		System.out.println("getStyleRanges : [offset, " + offset + "] [length, " + length + "]");
 		return null;
 	}
 
