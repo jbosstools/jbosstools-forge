@@ -9,6 +9,8 @@ import org.jboss.tools.seam.forge.Activator;
 class StreamListener implements IStreamListener {
 
     private ConsoleOutputStream stream;
+    private StringBuffer buffer = new StringBuffer();
+    private boolean creatingProject = false;
 
     StreamListener(ConsoleOutputStream stream) {
         this.stream = stream;
@@ -16,10 +18,26 @@ class StreamListener implements IStreamListener {
     
     public void streamAppended(String text, IStreamMonitor streamMonitor) {
         try {
+        	buffer.append(text);
+        	if (buffer.indexOf("new-project") != -1) {
+        		creatingProject = true;
+        	}
             stream.write(text);
+            if (creatingProject 
+            		&& (text.indexOf('\n') != -1) 
+            		&& (buffer.indexOf("Created project [") != -1) 
+            		&& (buffer.indexOf("] in new working directory [") != -1)) {
+            	postProcessCreatedProject(buffer.toString());
+            	creatingProject = false;
+            	buffer = new StringBuffer();
+            }
         } catch (IOException e) {
             Activator.log(e);
         }
+    }
+    
+    private void postProcessCreatedProject(String command) {
+    	System.out.println("processing created project: \n" + command);
     }
 
 }

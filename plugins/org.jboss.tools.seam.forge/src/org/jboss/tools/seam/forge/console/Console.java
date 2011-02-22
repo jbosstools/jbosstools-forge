@@ -29,8 +29,13 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
         this.process = process;
         initInputStream();
         initPartitioner();
+        initCommandRecorder();
         initOutputStream();
         initInputReadJob();
+    }
+    
+    private void initCommandRecorder() {
+    	getDocument().addDocumentListener(new CommandRecorder());
     }
     
     private void initInputStream() {
