@@ -2,6 +2,7 @@ package org.jboss.tools.seam.forge.console;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
+import org.jboss.tools.seam.forge.importer.ProjectImporter;
 
 public class CommandRecorder implements IDocumentListener {
 	
@@ -63,8 +64,30 @@ public class CommandRecorder implements IDocumentListener {
 	}
 	
 	private void postProcessCurrentCommand() {
-		System.out.println("post processing current command : " + currentCommand);
-		System.out.println("beforePrompt :\n" + beforePrompt);
+		if ("pwd".equals(currentCommand)) {
+			// do nothing
+		} else if ("new-project".equals(currentCommand)) {
+			int index = beforePrompt.lastIndexOf("Wrote ");
+			if (index == -1) return;
+			if (index + 6 > beforePrompt.length()) return;
+			String str = beforePrompt.substring(index + 6);
+			index = str.lastIndexOf("/src/main/resources/META-INF/forge.xml\n***SUCCESS*** Created project [");
+			if (index == -1) return;
+			if (index + 70 > str.length()) return;
+			String projectPath = str.substring(0, index);
+			str = str.substring(index + 70);
+			index = str.indexOf("] in new working directory [");
+			if (index == -1) return;
+			if (index + 28 > str.length()) return;
+			str = str.substring(index + 28);
+			index = str.indexOf("]");
+			if (index == -1) return;
+			String projectDirName = str.substring(0, index);
+			index = projectPath.indexOf(projectDirName);
+			if (index == -1) return;
+			String projectBaseDirPath = projectPath.substring(0, index - 1);
+			new ProjectImporter(projectBaseDirPath, projectDirName).importProject();
+		}
 	}
 
 }
