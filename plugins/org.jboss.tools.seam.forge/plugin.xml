@@ -44,5 +44,18 @@
          </action>
       </viewContribution>
    </extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			name="Forge"
+			class="org.jboss.tools.seam.forge.preferences.EmptyPreferencePage"
+			id="org.jboss.tools.seam.forge">
+		</page>
+		<page
+			name="Installed Forge Runtimes"
+			category="org.jboss.tools.seam.forge"
+			class="org.jboss.tools.seam.forge.preferences.EmptyPreferencePage"
+			id="org.jboss.tools.seam.forge.runtimes">
+        </page>
+	</extension>
 
 </plugin>
