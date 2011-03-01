@@ -53,7 +53,7 @@
 		<page
 			name="Installed Forge Runtimes"
 			category="org.jboss.tools.seam.forge"
-			class="org.jboss.tools.seam.forge.preferences.EmptyPreferencePage"
+			class="org.jboss.tools.seam.forge.preferences.ForgeRuntimesPreferencePage"
 			id="org.jboss.tools.seam.forge.runtimes">
         </page>
 	</extension>

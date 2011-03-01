@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.model.IStreamsProxy;
-import org.jboss.tools.seam.forge.Activator;
+import org.jboss.tools.seam.forge.ForgePlugin;
 
 class InputReadJob extends Job {
 
@@ -30,7 +30,7 @@ class InputReadJob extends Job {
             	buffer.setLength(0);
             }
         } catch (IOException e) {
-            Activator.log(e);
+            ForgePlugin.log(e);
         }
         return Status.OK_STATUS;
     }
