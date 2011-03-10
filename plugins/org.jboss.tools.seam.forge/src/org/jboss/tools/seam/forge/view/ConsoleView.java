@@ -13,7 +13,7 @@ import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 import org.jboss.tools.seam.forge.console.Console;
-import org.jboss.tools.seam.forge.runtime.Manager;
+import org.jboss.tools.seam.forge.launching.ForgeRuntime;
 
 public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	
@@ -29,7 +29,7 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	public ConsoleView() {
 		if (INSTANCE == null) {
 			INSTANCE = this;
-			Manager.INSTANCE.addPropertyChangeListener(this);
+			ForgeRuntime.INSTANCE.addPropertyChangeListener(this);
 		}
 	}
 
@@ -80,14 +80,14 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	}
 	
 	private void showAppropriatePage() {
-		String runtimeState = Manager.INSTANCE.getRuntimeState();
-		if (Manager.STATE_NOT_RUNNING.equals(runtimeState)) {
+		String runtimeState = ForgeRuntime.INSTANCE.getRuntimeState();
+		if (ForgeRuntime.STATE_NOT_RUNNING.equals(runtimeState)) {
 			pageBook.showPage(notRunning);
-		} else if (Manager.STATE_RUNNING.equals(runtimeState)) {
+		} else if (ForgeRuntime.STATE_RUNNING.equals(runtimeState)) {
 			showForgeIsRunning();
-		} else if (Manager.STATE_STARTING.equals(runtimeState)) {
+		} else if (ForgeRuntime.STATE_STARTING.equals(runtimeState)) {
 			pageBook.showPage(waitWhileForgeIsStarting);
-		} else if (Manager.STATE_STOPPING.equals(runtimeState)) {
+		} else if (ForgeRuntime.STATE_STOPPING.equals(runtimeState)) {
 			pageBook.showPage(forgeIsStopping);
 		}
 	}
@@ -114,7 +114,7 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	}
 	
 	public void dispose() {
-		Manager.INSTANCE.removePropertyChangeListener(this);
+		ForgeRuntime.INSTANCE.removePropertyChangeListener(this);
 		super.dispose();
 	}
 
