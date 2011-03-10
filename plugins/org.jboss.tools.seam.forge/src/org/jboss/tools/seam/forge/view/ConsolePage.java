@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.console.TextConsoleViewer;
 import org.eclipse.ui.part.Page;
 import org.jboss.tools.seam.forge.console.Console;
-import org.jboss.tools.seam.forge.runtime.Manager;
+import org.jboss.tools.seam.forge.launching.ForgeRuntime;
 
 public class ConsolePage extends Page {
 	
@@ -14,7 +14,7 @@ public class ConsolePage extends Page {
 
 	@Override
 	public void createControl(Composite parent) {
-		console = new Console(Manager.INSTANCE.getProcess());
+		console = new Console(ForgeRuntime.INSTANCE.getProcess());
 		viewer = new ConsoleViewer(parent, console);
 		console.initialize();
 	}
