@@ -21,7 +21,6 @@ import java.util.Set;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.debug.internal.ui.SWTFactory;
 import org.eclipse.jdt.launching.AbstractVMInstall;
 import org.eclipse.jdt.launching.AbstractVMInstallType;
 import org.eclipse.jdt.launching.IVMInstall;
@@ -54,14 +53,15 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -69,17 +69,20 @@ import org.eclipse.swt.widgets.TableColumn;
 
 public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	
-	private Composite fControl;
+	private final int DEFAULT_COLUMN_WIDTH = 350/3 +1;
+
+	
+	private Composite control;
 	private List fVMs = new ArrayList(); 
-	private CheckboxTableViewer fVMList;
-	private Button fAddButton;
-	private Button fRemoveButton;
-	private Button fEditButton;
-	private Button fSearchButton;	
+	private CheckboxTableViewer runtimesTableViewer;
+	private Button addButton;
+	private Button removeButton;
+	private Button editButton;
+	private Button searchButton;	
 	private int fSortColumn = 0;
 	private ListenerList fSelectionListeners = new ListenerList();
 	private ISelection fPrevSelection = new StructuredSelection();
-    private Table fTable;
+    private Table runtimesTable;
 	private static String fgLastUsedID;	
 
 	class JREsContentProvider implements IStructuredContentProvider {		
@@ -102,8 +105,6 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 						return vm.getName();
 					case 1:
 						return vm.getInstallLocation().getAbsolutePath();
-					case 2: 
-						return vm.getVMInstallType().getName();						
 				}
 			}
 			return element.toString();
@@ -120,7 +121,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	}
 
 	public ISelection getSelection() {
-		return new StructuredSelection(fVMList.getCheckedElements());
+		return new StructuredSelection(runtimesTableViewer.getCheckedElements());
 	}
 
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
@@ -133,73 +134,125 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 				fPrevSelection = selection;
 				Object jre = ((IStructuredSelection)selection).getFirstElement();
 				if (jre == null) {
-					fVMList.setCheckedElements(new Object[0]);
+					runtimesTableViewer.setCheckedElements(new Object[0]);
 				} else {
-					fVMList.setCheckedElements(new Object[]{jre});
-					fVMList.reveal(jre);
+					runtimesTableViewer.setCheckedElements(new Object[]{jre});
+					runtimesTableViewer.reveal(jre);
 				}
 				fireSelectionChanged();
 			}
 		}
 	}
-
-	public void createControl(Composite ancestor) {
-		Font font = ancestor.getFont();
-		Composite parent= SWTFactory.createComposite(ancestor, font, 2, 1, GridData.FILL_BOTH);
-		fControl = parent;	
-				
-		SWTFactory.createLabel(parent, "Installed Forge Runtimes:", 2);
-				
-		fTable= new Table(parent, SWT.CHECK | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
-		GridData gd = new GridData(GridData.FILL_BOTH);
-		gd.heightHint = 250;
-		gd.widthHint = 350;
-		fTable.setLayoutData(gd);
-		fTable.setFont(font);
-		fTable.setHeaderVisible(true);
-		fTable.setLinesVisible(true);	
-
-		TableColumn column = new TableColumn(fTable, SWT.NULL);
-		column.setText("Name"); 
-		column.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				sortByName();
-			}
-		});
-		int defaultwidth = 350/3 +1;
-		column.setWidth(defaultwidth);
 	
-		column = new TableColumn(fTable, SWT.NULL);
-		column.setText("Location"); 
-		column.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				sortByLocation();
+	public void createControl(Composite ancestor) {
+		control = createMainControl(ancestor);					
+		createTitleLabel();				
+		createRuntimesArea();			
+		createButtonsArea();				
+		fillWithWorkspaceForgeRuntimes();		
+		sortByName();		
+		enableButtons();
+	}
+	
+	private void createTitleLabel() {
+		Label label = new Label(control, SWT.NONE);
+		label.setText("Installed Forge Runtimes:");
+		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalSpan = 2;
+		gd.grabExcessHorizontalSpace = false;
+		label.setLayoutData(gd);
+	}
+
+	private void createButtonsArea() {
+		Composite buttons = createButtonsComposite();
+    	createAddButton(buttons);		
+		createEditButton(buttons);		
+		createRemoveButton(buttons);		
+		createSearchButton(buttons);
+	}
+
+	private void createSearchButton(Composite buttons) {
+		searchButton = new Button(buttons, SWT.PUSH);
+		searchButton.setText("&Search...");
+		searchButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
+		searchButton.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event evt) {
+				search();
 			}
 		});
-		column.setWidth(defaultwidth);
-		
-		column = new TableColumn(fTable, SWT.NULL);
-		column.setText("Type"); 
-		column.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				sortByType();
+	}
+
+	private void createRemoveButton(Composite buttons) {
+		removeButton = new Button(buttons, SWT.PUSH);
+		removeButton.setText("&Remove");
+		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
+		removeButton.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event evt) {
+				removeVMs();
 			}
 		});
-		column.setWidth(defaultwidth);
-		
-		fVMList = new CheckboxTableViewer(fTable);			
-		fVMList.setLabelProvider(new VMLabelProvider());
-		fVMList.setContentProvider(new JREsContentProvider());
-		// by default, sort by name
-		sortByName();
-		
-		fVMList.addSelectionChangedListener(new ISelectionChangedListener() {
+	}
+
+	private void createEditButton(Composite buttons) {
+		editButton = new Button(buttons, SWT.PUSH);
+		editButton.setText("&Edit...");
+		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
+		editButton.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event evt) {
+				editVM();
+			}
+		});
+	}
+
+	private void createAddButton(Composite buttons) {
+		addButton = new Button(buttons, SWT.PUSH);
+		addButton.setText("&Add...");
+		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
+		addButton.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event evt) {
+				addVM();
+			}
+		});
+	}
+	
+	private Composite createButtonsComposite() {
+		Composite buttons = new Composite(control, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+    	buttons.setLayout(layout);
+    	GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
+		gd.horizontalSpan = 1;
+    	buttons.setLayoutData(gd);
+		return buttons;
+	}
+
+	private Composite createMainControl(Composite ancestor) {
+    	Composite result = new Composite(ancestor, SWT.NONE);
+    	result.setLayout(new GridLayout(2, false));
+    	GridData gd = new GridData(GridData.FILL_BOTH);
+    	result.setLayoutData(gd);
+		return result;
+	}
+
+	private void createRuntimesArea() {
+		createRuntimesTable();	
+		createNameColumn();
+		createLocationColumn();		
+		createRuntimesTableViewer();
+	}
+
+	private void createRuntimesTableViewer() {
+		runtimesTableViewer = new CheckboxTableViewer(runtimesTable);			
+		runtimesTableViewer.setLabelProvider(new VMLabelProvider());
+		runtimesTableViewer.setContentProvider(new JREsContentProvider());
+		runtimesTableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			public void selectionChanged(SelectionChangedEvent evt) {
 				enableButtons();
 			}
 		});
 		
-		fVMList.addCheckStateListener(new ICheckStateListener() {
+		runtimesTableViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(CheckStateChangedEvent event) {
 				if (event.getChecked()) {
 					setCheckedJRE((IVMInstall)event.getElement());
@@ -209,58 +262,55 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 			}
 		});
 		
-		fVMList.addDoubleClickListener(new IDoubleClickListener() {
+		runtimesTableViewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent e) {
-				if (!fVMList.getSelection().isEmpty()) {
+				if (!runtimesTableViewer.getSelection().isEmpty()) {
 					editVM();
 				}
 			}
 		});
-		fTable.addKeyListener(new KeyAdapter() {
+	}
+
+	private void createLocationColumn() {
+		TableColumn column = new TableColumn(runtimesTable, SWT.NULL);
+		column.setText("Location"); 
+		column.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				sortByLocation();
+			}
+		});
+		column.setWidth(DEFAULT_COLUMN_WIDTH);
+	}
+
+	private void createNameColumn() {
+		TableColumn column = new TableColumn(runtimesTable, SWT.NULL);
+		column.setText("Name"); 
+		column.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				sortByName();
+			}
+		});
+		column.setWidth(DEFAULT_COLUMN_WIDTH);
+	}
+
+	private void createRuntimesTable() {
+		runtimesTable= new Table(control, SWT.CHECK | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		GridData gd = new GridData(GridData.FILL_BOTH);
+		gd.heightHint = 250;
+		gd.widthHint = 350;
+		runtimesTable.setLayoutData(gd);
+		runtimesTable.setFont(control.getFont());
+		runtimesTable.setHeaderVisible(true);
+		runtimesTable.setLinesVisible(true);
+		runtimesTable.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent event) {
 				if (event.character == SWT.DEL && event.stateMask == 0) {
-					if (fRemoveButton.isEnabled()){
+					if (removeButton.isEnabled()){
 						removeVMs();
 					}
 				}
 			}
-		});	
-		
-		Composite buttons = SWTFactory.createComposite(parent, font, 1, 1, GridData.VERTICAL_ALIGN_BEGINNING, 0, 0);
-		
-		fAddButton = SWTFactory.createPushButton(buttons, "&Add...", null); 
-		fAddButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event evt) {
-				addVM();
-			}
 		});
-		
-		fEditButton= SWTFactory.createPushButton(buttons, "&Edit...", null); 
-		fEditButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event evt) {
-				editVM();
-			}
-		});
-		
-		fRemoveButton= SWTFactory.createPushButton(buttons, "&Remove", null); 
-		fRemoveButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event evt) {
-				removeVMs();
-			}
-		});
-		
-		SWTFactory.createVerticalSpacer(parent, 1);
-		
-		fSearchButton = SWTFactory.createPushButton(buttons, "&Search...", null); 
-		fSearchButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event evt) {
-				search();
-			}
-		});		
-		
-		fillWithWorkspaceJREs();
-		enableButtons();
-		fAddButton.setEnabled(JavaRuntime.getVMInstallTypes().length > 0);
 	}
 	
 	public String generateName(String name){
@@ -290,7 +340,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	}
 
 	private void sortByType() {
-		fVMList.setComparator(new ViewerComparator() {
+		runtimesTableViewer.setComparator(new ViewerComparator() {
 			public int compare(Viewer viewer, Object e1, Object e2) {
 				if ((e1 instanceof IVMInstall) && (e2 instanceof IVMInstall)) {
 					IVMInstall left= (IVMInstall)e1;
@@ -314,7 +364,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	}
 	
 	private void sortByName() {
-		fVMList.setComparator(new ViewerComparator() {
+		runtimesTableViewer.setComparator(new ViewerComparator() {
 			public int compare(Viewer viewer, Object e1, Object e2) {
 				if ((e1 instanceof IVMInstall) && (e2 instanceof IVMInstall)) {
 					IVMInstall left= (IVMInstall)e1;
@@ -335,7 +385,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 * Sorts by VM location.
 	 */
 	private void sortByLocation() {
-		fVMList.setComparator(new ViewerComparator() {
+		runtimesTableViewer.setComparator(new ViewerComparator() {
 			public int compare(Viewer viewer, Object e1, Object e2) {
 				if ((e1 instanceof IVMInstall) && (e2 instanceof IVMInstall)) {
 					IVMInstall left= (IVMInstall)e1;
@@ -356,22 +406,21 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 * Enables the buttons based on selected items counts in the viewer
 	 */
 	private void enableButtons() {
-		IStructuredSelection selection = (IStructuredSelection) fVMList.getSelection();
+		IStructuredSelection selection = (IStructuredSelection) runtimesTableViewer.getSelection();
 		int selectionCount= selection.size();
-		fEditButton.setEnabled(selectionCount == 1);
-//		fCopyButton.setEnabled(selectionCount > 0);
-		if (selectionCount > 0 && selectionCount < fVMList.getTable().getItemCount()) {
+		editButton.setEnabled(selectionCount == 1);
+		if (selectionCount > 0 && selectionCount < runtimesTableViewer.getTable().getItemCount()) {
 			Iterator iterator = selection.iterator();
 			while (iterator.hasNext()) {
 				IVMInstall install = (IVMInstall)iterator.next();
 				if (isContributed(install)) {
-					fRemoveButton.setEnabled(false);
+					removeButton.setEnabled(false);
 					return;
 				}
 			}
-			fRemoveButton.setEnabled(true);
+			removeButton.setEnabled(true);
 		} else {
-			fRemoveButton.setEnabled(false);
+			removeButton.setEnabled(false);
 		}
 	}	
 	
@@ -390,7 +439,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 * @return control
 	 */
 	public Control getControl() {
-		return fControl;
+		return control;
 	}
 	
 	/**
@@ -403,8 +452,8 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 		for (int i = 0; i < vms.length; i++) {
 			fVMs.add(vms[i]);
 		}
-		fVMList.setInput(fVMs);
-		fVMList.refresh();
+		runtimesTableViewer.setInput(fVMs);
+		runtimesTableViewer.refresh();
 	}
 	
 	/**
@@ -437,7 +486,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 */
 	public void vmAdded(IVMInstall vm) {
 		fVMs.add(vm);
-		fVMList.refresh();
+		runtimesTableViewer.refresh();
 	}
 	
 	/**
@@ -457,7 +506,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 * Performs the edit VM action when the Edit... button is pressed
 	 */
 	private void editVM() {
-		IStructuredSelection selection= (IStructuredSelection)fVMList.getSelection();
+		IStructuredSelection selection= (IStructuredSelection)runtimesTableViewer.getSelection();
 		VMStandin vm= (VMStandin)selection.getFirstElement();
 		if (vm == null) {
 			return;
@@ -488,7 +537,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 * Performs the remove VM(s) action when the Remove... button is pressed
 	 */
 	private void removeVMs() {
-		IStructuredSelection selection= (IStructuredSelection)fVMList.getSelection();
+		IStructuredSelection selection= (IStructuredSelection)runtimesTableViewer.getSelection();
 		IVMInstall[] vms = new IVMInstall[selection.size()];
 		Iterator iter = selection.iterator();
 		int i = 0;
@@ -509,7 +558,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 		for (int i = 0; i < vms.length; i++) {
 			fVMs.remove(vms[i]);
 		}
-		fVMList.refresh();
+		runtimesTableViewer.refresh();
 		IStructuredSelection curr = (IStructuredSelection) getSelection();
 		if (!curr.equals(prev)) {
 			IVMInstall[] installs = getJREs();
@@ -759,7 +808,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 * @return the checked JRE or <code>null</code> if none
 	 */
 	public IVMInstall getCheckedJRE() {
-		Object[] objects = fVMList.getCheckedElements();
+		Object[] objects = runtimesTableViewer.getCheckedElements();
 		if (objects.length == 0) {
 			return null;
 		}
@@ -774,9 +823,9 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 * @param qualifier key qualifier
 	 */
 	public void saveColumnSettings(IDialogSettings settings, String qualifier) {
-        int columnCount = fTable.getColumnCount();
+        int columnCount = runtimesTable.getColumnCount();
 		for (int i = 0; i < columnCount; i++) {
-			settings.put(qualifier + ".columnWidth" + i, fTable.getColumn(i).getWidth());	 //$NON-NLS-1$
+			settings.put(qualifier + ".columnWidth" + i, runtimesTable.getColumn(i).getWidth());	 //$NON-NLS-1$
 		}
 		settings.put(qualifier + ".sortColumn", fSortColumn); //$NON-NLS-1$
 	}
@@ -789,7 +838,7 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	 * @param qualifier key to restore settings from
 	 */
 	public void restoreColumnSettings(IDialogSettings settings, String qualifier) {
-		fVMList.getTable().layout(true);
+		runtimesTableViewer.getTable().layout(true);
         restoreColumnWidths(settings, qualifier);
 		try {
 			fSortColumn = settings.getInt(qualifier + ".sortColumn"); //$NON-NLS-1$
@@ -810,23 +859,22 @@ public class InstalledForgeRuntimesBlock implements ISelectionProvider {
 	}
 	
 	private void restoreColumnWidths(IDialogSettings settings, String qualifier) {
-        int columnCount = fTable.getColumnCount();
+        int columnCount = runtimesTable.getColumnCount();
         for (int i = 0; i < columnCount; i++) {
             int width = -1;
             try {
                 width = settings.getInt(qualifier + ".columnWidth" + i); 
             } catch (NumberFormatException e) {}
             
-            if ((width <= 0) || (i == fTable.getColumnCount() - 1)) {
-                fTable.getColumn(i).pack();
+            if ((width <= 0) || (i == runtimesTable.getColumnCount() - 1)) {
+                runtimesTable.getColumn(i).pack();
             } else {
-                fTable.getColumn(i).setWidth(width);
+                runtimesTable.getColumn(i).setWidth(width);
             }
         }
 	}
 	
-	protected void fillWithWorkspaceJREs() {
-		// fill with JREs
+	protected void fillWithWorkspaceForgeRuntimes() {
 		List standins = new ArrayList();
 		IVMInstallType[] types = JavaRuntime.getVMInstallTypes();
 		for (int i = 0; i < types.length; i++) {
