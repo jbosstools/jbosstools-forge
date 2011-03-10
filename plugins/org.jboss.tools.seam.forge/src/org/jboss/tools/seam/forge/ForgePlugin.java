@@ -3,7 +3,7 @@ package org.jboss.tools.seam.forge;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.jboss.tools.seam.forge.runtime.Manager;
+import org.jboss.tools.seam.forge.launching.ForgeRuntime;
 import org.osgi.framework.BundleContext;
 
 public class ForgePlugin extends AbstractUIPlugin {
@@ -18,8 +18,8 @@ public class ForgePlugin extends AbstractUIPlugin {
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		if (Manager.INSTANCE.isForgeRunning()) {
-			Manager.INSTANCE.stopForge();
+		if (ForgeRuntime.INSTANCE.isForgeRunning()) {
+			ForgeRuntime.INSTANCE.stopForge();
 		}
 		plugin = null;
 		super.stop(context);
