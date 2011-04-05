@@ -67,25 +67,20 @@ public class CommandRecorder implements IDocumentListener {
 		if ("pwd".equals(currentCommand)) {
 			// do nothing
 		} else if ("new-project".equals(currentCommand)) {
-			int index = beforePrompt.lastIndexOf("Wrote ");
+			int index = beforePrompt.lastIndexOf("***SUCCESS*** Created project [");
 			if (index == -1) return;
-			if (index + 6 > beforePrompt.length()) return;
-			String str = beforePrompt.substring(index + 6);
-			index = str.lastIndexOf("/src/main/resources/META-INF/forge.xml\n***SUCCESS*** Created project [");
-			if (index == -1) return;
-			if (index + 70 > str.length()) return;
-			String projectPath = str.substring(0, index);
-			str = str.substring(index + 70);
-			index = str.indexOf("] in new working directory [");
+			if (index + 31 > beforePrompt.length()) return;
+			String str = beforePrompt.substring(index + 31);
+			index = str.lastIndexOf("] in new working directory [");
 			if (index == -1) return;
 			if (index + 28 > str.length()) return;
 			str = str.substring(index + 28);
 			index = str.indexOf("]");
 			if (index == -1) return;
-			String projectDirName = str.substring(0, index);
-			index = projectPath.indexOf(projectDirName);
-			if (index == -1) return;
-			String projectBaseDirPath = projectPath.substring(0, index - 1);
+			String projectPath = str.substring(0, index);
+			index = projectPath.lastIndexOf('/');
+			String projectDirName = projectPath.substring(index + 1);
+			String projectBaseDirPath = projectPath.substring(0, index);
 			new ProjectImporter(projectBaseDirPath, projectDirName).importProject();
 		}
 	}

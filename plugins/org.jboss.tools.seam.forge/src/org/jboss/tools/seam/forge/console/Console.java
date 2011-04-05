@@ -136,16 +136,54 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
         }
     }
     
+    private int lastLineLength = 0;
+    private int lastLinePosition = 0;
+    private StringBuffer escapeSequence = new StringBuffer();
+    private boolean escapeSequenceStarted = false;
+    
     public void appendString(final String str) {
     	Display.getDefault().asyncExec(new Runnable() {				
 			@Override
 			public void run() {
 				try {
 					for (int i = 0; i < str.length(); i++) {
+						char c = str.charAt(i);
+						if (c == '\r') continue; //ignore
+						if (c == '[' && escapeSequenceStarted) continue; 
+						if (c == 27) {
+							escapeSequenceStarted = true;
+							continue;
+						}
+						if (escapeSequenceStarted) {
+							int type = Character.getType(c);
+							if (type == Character.LOWERCASE_LETTER || type == Character.UPPERCASE_LETTER) {
+								if (c == 'G') {
+									int columnNumber = Integer.valueOf(escapeSequence.toString());
+									escapeSequence.setLength(0);
+									lastLineLength = columnNumber - 1;
+									escapeSequenceStarted = false;
+								}
+								if (c == 'K') {
+									int doclength = getDocument().getLength();
+									int currentPosition = lastLinePosition + lastLineLength;									
+									getDocument().replace(currentPosition, doclength - currentPosition, "");
+									escapeSequenceStarted = false;
+								}
+							} else {
+								escapeSequence.append(c);
+							}
+							continue;
+						}
 						if (str.charAt(i) == '\b') {
 							getDocument().replace(getDocument().getLength() - 1, 1, "");
+							lastLineLength--;
 						} else {
 							getDocument().replace(getDocument().getLength(), 0, str.substring(i, i + 1));
+							lastLineLength++;
+						}
+						if (c == '\n') {
+							lastLineLength = 0;
+							lastLinePosition = getDocument().getLength();
 						}
 					}
 				} catch (BadLocationException e) {}
