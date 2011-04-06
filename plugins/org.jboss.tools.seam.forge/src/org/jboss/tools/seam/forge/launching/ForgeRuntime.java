@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -46,7 +45,6 @@ import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.jboss.tools.seam.forge.ForgePlugin;
-import org.osgi.framework.Bundle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -161,38 +159,16 @@ public class ForgeRuntime implements IDebugEventSetListener {
 		return s.toString("UTF8"); 		
 	}
 	
-//	private static Document createDefaultInstallationsDocument() {
-//		Document document = createEmptyDocument();
-//		if (document == null) return null;
-//		Element main = document.createElement("forgeInstallations");
-//		document.appendChild(main);
-//		String defaultLocation = ForgePlugin.getDefault().getBundle().getLocation();
-//		defaultLocation = defaultLocation.substring(15);
-//		Element defaultInstallation = document.createElement("installation");
-//		defaultInstallation.setAttribute("name", "embedded");
-//		defaultInstallation.setAttribute("location", defaultLocation); 
-//		main.appendChild(defaultInstallation);
-//		main.setAttribute("default", "embedded");
-//		return document;
-//	}
-
-//	private static String createDefaultInstallationsPreferences() {
-//		String result = null;
-//		Document document = createDefaultInstallationsDocument();
-//		try {
-//			result = serializeDocument(document);
-//		} catch (Exception e) {
-//			ForgePlugin.log(e);
-//		}
-//		return result;
-//	}
-//	
 	private static void createInitialInstallations() {
-		String defaultLocation = ForgePlugin.getDefault().getBundle().getLocation().substring(15);
-		defaultInstallation = new ForgeInstallation("embedded", defaultLocation);
-		installations = new ArrayList<ForgeInstallation>();
-		installations.add(defaultInstallation);
-		saveInstallations();
+		try {
+			File file = FileLocator.getBundleFile(ForgePlugin.getDefault().getBundle());
+			defaultInstallation = new ForgeInstallation("embedded", file.getAbsolutePath());
+			installations = new ArrayList<ForgeInstallation>();
+			installations.add(defaultInstallation);
+			saveInstallations();
+		} catch (IOException e) {
+			ForgePlugin.log(e);
+		}
 	}
 	
 	public static void setInstallations(ForgeInstallation[] installs, ForgeInstallation defaultInstall) {
@@ -273,7 +249,11 @@ public class ForgeRuntime implements IDebugEventSetListener {
 //					e1.printStackTrace();
 //				}
 //				if (file == null) return;
-				if (!file.exists()) return;
+				if (!file.exists()) {
+					ForgePlugin.log(new RuntimeException("Not a correct Forge runtime."));
+					setRuntimeState(STATE_NOT_RUNNING);
+					return;
+				}
 				File[] children = file.listFiles(new FilenameFilter() {					
 					@Override
 					public boolean accept(File dir, String name) {
@@ -281,7 +261,9 @@ public class ForgeRuntime implements IDebugEventSetListener {
 					}
 				});
 				if (children.length != 1) {
-					ForgePlugin.log(new RuntimeException("More than one lib folder?"));
+					ForgePlugin.log(new RuntimeException("Not a correct Forge runtime."));
+					setRuntimeState(STATE_NOT_RUNNING);
+					return;
 				}
 				File forgeLibDir = children[0];
 				
