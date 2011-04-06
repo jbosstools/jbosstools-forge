@@ -1,25 +1,20 @@
 package org.jboss.tools.seam.forge.preferences;
 
 
-import java.util.Iterator;
+import java.util.ArrayList;
 
-import org.eclipse.jdt.launching.IVMInstall;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -32,19 +27,18 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.jboss.tools.seam.forge.launching.ForgeInstallation;
 import org.jboss.tools.seam.forge.launching.ForgeRuntime;
 
 public class ForgeInstallationsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 				
 	private final int DEFAULT_COLUMN_WIDTH = 350/3 +1;
 
-//	private InstalledForgeRuntimesBlock fJREBlock;
-	
-//	private Table runtimesTable;
 	private CheckboxTableViewer runtimesTableViewer	;
 	private Button removeButton;
 	private Button editButton;
-	private int sortColumn = 0;
+	private ArrayList<ForgeInstallation> installations = null;
+	private ForgeInstallation defaultInstallation = null;
 	
 	public ForgeInstallationsPreferencePage() {
 		super("Installed Forge Runtimes");
@@ -53,38 +47,19 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	public void init(IWorkbench workbench) {
 	}
 
-//	private void initDefaultVM() {
-//		IVMInstall realDefault= JavaRuntime.getDefaultVMInstall();
-//		if (realDefault != null) {
-////			IVMInstall[] vms= fJREBlock.getJREs();
-//			IVMInstall[] vms= (IVMInstall[])runtimesTableViewer.getInput();
-//			for (int i = 0; i < vms.length; i++) {
-//				IVMInstall fakeVM= vms[i];
-//				if (fakeVM.equals(realDefault)) {
-//					verifyDefaultVM(fakeVM);
-//					break;
-//				}
-//			}
-//		}
-//	}
-	
-	protected Control createContents(Composite ancestor) {
-//		initializeDialogUnits(ancestor);		
+	protected Control createContents(Composite parent) {
 		noDefaultAndApplyButton();		
-		createLayout(ancestor);		
-		createWrapLabel(ancestor);
-		createVerticalSpacer(ancestor);	
-		createPageBody(ancestor);
-//		createInstalledForgeRuntimesBlock(ancestor);					
-		initForgeInstallations();		
-		sortByName();		
+		createLayout(parent);		
+		createWrapLabel(parent);
+		createVerticalSpacer(parent);	
+		createPageBody(parent);
+		initializeForgeInstallations();		
 		enableButtons();
-//		applyDialogFont(ancestor);
-		return ancestor;
+		return parent;
 	}
 	
-	private void createPageBody(Composite ancestor) {
-		Composite pageBody = createPageBodyControl(ancestor);					
+	private void createPageBody(Composite parent) {
+		Composite pageBody = createPageBodyControl(parent);					
 		createTitleLabel(pageBody);				
 		createRuntimesArea(pageBody);			
 		createButtonsArea(pageBody);						
@@ -97,35 +72,60 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		createRemoveButton(buttons);		
 	}
 
-	private void createRemoveButton(Composite buttons) {
-		removeButton = new Button(buttons, SWT.PUSH);
+	private void createRemoveButton(Composite parent) {
+		removeButton = new Button(parent, SWT.PUSH);
 		removeButton.setText("&Remove");
 		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
 		removeButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event evt) {
-				ForgeInstallationsPreferenceHelper.removeVMs();
+				ISelection selection = runtimesTableViewer.getSelection();
+				if (selection != null && selection instanceof IStructuredSelection) {
+					Object object = ((IStructuredSelection)selection).getFirstElement();
+					if (object != null && object instanceof ForgeInstallation) {
+						installations.remove(object);
+						refreshForgeInstallations();
+					}
+				}
 			}
 		});
 	}
 
-	private void createAddButton(Composite buttons) {
-		Button addButton = new Button(buttons, SWT.PUSH);
+	private void createAddButton(Composite parent) {
+		Button addButton = new Button(parent, SWT.PUSH);
 		addButton.setText("&Add...");
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
 		addButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event evt) {
-				ForgeInstallationsPreferenceHelper.addVM();
+				ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
+				dialog.initialize("Add Forge Runtime", "", "");
+				if (dialog.open() != Dialog.CANCEL) {
+					installations.add(new ForgeInstallation(dialog.getName(), dialog.getLocation()));
+					refreshForgeInstallations();
+				}
 			}
 		});
 	}
 	
-	private void createEditButton(Composite buttons) {
-		editButton = new Button(buttons, SWT.PUSH);
+	private void createEditButton(Composite parent) {
+		editButton = new Button(parent, SWT.PUSH);
 		editButton.setText("&Edit...");
 		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
 		editButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event evt) {
-				ForgeInstallationsPreferenceHelper.editVM();
+				ISelection selection = runtimesTableViewer.getSelection();
+				if (selection != null && selection instanceof IStructuredSelection) {
+					Object object = ((IStructuredSelection)selection).getFirstElement();
+					if (object != null && object instanceof ForgeInstallation) {
+						ForgeInstallation installation = (ForgeInstallation)object;
+						ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
+						dialog.initialize("Edit Forge Runtime", installation.getName(), installation.getLocation());
+						if (dialog.open() != Dialog.CANCEL) {
+							installation.setName(dialog.getName());
+							installation.setLocation(dialog.getLocation());
+							refreshForgeInstallations();
+						}
+					}
+				}
 			}
 		});
 	}
@@ -167,63 +167,37 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 				enableButtons();
 			}
 		});
-//		runtimesTableViewer.addCheckStateListener(new ICheckStateListener() {
-//			public void checkStateChanged(CheckStateChangedEvent event) {
-//				if (event.getChecked()) {
-//					setCheckedJRE((IVMInstall)event.getElement());
-//				} else {
-//					setCheckedJRE(null);
-//				}
-//			}
-//		});		
-		runtimesTableViewer.addDoubleClickListener(new IDoubleClickListener() {
-			public void doubleClick(DoubleClickEvent e) {
-				if (!runtimesTableViewer.getSelection().isEmpty()) {
-					ForgeInstallationsPreferenceHelper.editVM();
+		runtimesTableViewer.addCheckStateListener(new ICheckStateListener() {
+			public void checkStateChanged(final CheckStateChangedEvent event) {
+				Object object = event.getElement();
+				if (object != null && object instanceof ForgeInstallation) {
+					defaultInstallation = (ForgeInstallation)object;
+					refreshForgeInstallations();
 				}
 			}
-		});
+		});		
 	}
 		
 	private void createLocationColumn(Table table) {
 		TableColumn column = new TableColumn(table, SWT.NULL);
 		column.setText("Location"); 
-		column.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				sortByLocation();
-			}
-		});
 		column.setWidth(DEFAULT_COLUMN_WIDTH);
 	}
 
 	private void createNameColumn(Table table) {
 		TableColumn column = new TableColumn(table, SWT.NULL);
 		column.setText("Name"); 
-		column.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				sortByName();
-			}
-		});
 		column.setWidth(DEFAULT_COLUMN_WIDTH);
 	}
 
 	private Table createRuntimesTable(Composite parent) {
-		Table runtimesTable= new Table(parent, SWT.CHECK | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION);
+		Table runtimesTable= new Table(parent, SWT.CHECK | SWT.BORDER | SWT.SINGLE | SWT.FULL_SELECTION);
 		GridData gd = new GridData(GridData.FILL_BOTH);
 		gd.heightHint = 250;
 		gd.widthHint = 350;
 		runtimesTable.setLayoutData(gd);
 		runtimesTable.setHeaderVisible(true);
 		runtimesTable.setLinesVisible(true);
-		runtimesTable.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent event) {
-				if (event.character == SWT.DEL && event.stateMask == 0) {
-					if (removeButton.isEnabled()){
-						ForgeInstallationsPreferenceHelper.removeVMs();
-					}
-				}
-			}
-		});
 		return runtimesTable;
 	}
 	
@@ -259,65 +233,40 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		gd.horizontalSpan = ((GridLayout)parent.getLayout()).numColumns;
 		lbl.setLayoutData(gd);
 	}
+	
+	private void initializeForgeInstallations() {
+		installations = new ArrayList<ForgeInstallation>();
+		for (ForgeInstallation install : ForgeRuntime.getInstallations()) {
+			ForgeInstallation copy = new ForgeInstallation(install.getName(), install.getLocation());
+			if (install == ForgeRuntime.getDefaultInstallation()) {
+				defaultInstallation = copy;
+			}
+			installations.add(copy);
+		}
+		refreshForgeInstallations();
+	}
 
-	private void initForgeInstallations() {
-		runtimesTableViewer.setInput(ForgeRuntime.getInstallations());
-		runtimesTableViewer.setCheckedElements(new Object[] { ForgeRuntime.getDefaultInstallation() });
+	private void refreshForgeInstallations() {
+		runtimesTableViewer.setInput((ForgeInstallation[])installations.toArray(new ForgeInstallation[installations.size()]));
+		runtimesTableViewer.setCheckedElements(new Object[] { defaultInstallation });
 		runtimesTableViewer.refresh();
 	}
 
-	private void sortByName() {
-		runtimesTableViewer.setComparator(new ViewerComparator() {
-			public int compare(Viewer viewer, Object e1, Object e2) {
-				if ((e1 instanceof IVMInstall) && (e2 instanceof IVMInstall)) {
-					IVMInstall left= (IVMInstall)e1;
-					IVMInstall right= (IVMInstall)e2;
-					return left.getName().compareToIgnoreCase(right.getName());
-				}
-				return super.compare(viewer, e1, e2);
-			}
-			
-			public boolean isSorterProperty(Object element, String property) {
-				return true;
-			}
-		});		
-		sortColumn = 1;		
-	}
-
-	private void sortByLocation() {
-		runtimesTableViewer.setComparator(new ViewerComparator() {
-			public int compare(Viewer viewer, Object e1, Object e2) {
-				if ((e1 instanceof IVMInstall) && (e2 instanceof IVMInstall)) {
-					IVMInstall left= (IVMInstall)e1;
-					IVMInstall right= (IVMInstall)e2;
-					return left.getInstallLocation().getAbsolutePath().compareToIgnoreCase(right.getInstallLocation().getAbsolutePath());
-				}
-				return super.compare(viewer, e1, e2);
-			}
-			
-			public boolean isSorterProperty(Object element, String property) {
-				return true;
-			}
-		});		
-		sortColumn = 2;		
-	}
-
 	private void enableButtons() {
+		Object selectedObject = null;
 		IStructuredSelection selection = (IStructuredSelection) runtimesTableViewer.getSelection();
-		int selectionCount= selection.size();
-		editButton.setEnabled(selectionCount == 1);
-		if (selectionCount > 0 && selectionCount < runtimesTableViewer.getTable().getItemCount()) {
-			Iterator iterator = selection.iterator();
-			while (iterator.hasNext()) {
-				IVMInstall install = (IVMInstall)iterator.next();
-//				if (isContributed(install)) {
-//					removeButton.setEnabled(false);
-//					return;
-//				}
-			}
-			removeButton.setEnabled(true);
-		} else {
+		if (selection != null) {
+			selectedObject = selection.getFirstElement();
+		}
+		if (selectedObject == null 
+//				|| (selectedObject == runtimesTableViewer.getCheckedElements()[0])
+				|| (selectedObject instanceof ForgeInstallation 
+						&& ("embedded".equals(((ForgeInstallation)selectedObject).getName())))) {
 			removeButton.setEnabled(false);
+			editButton.setEnabled(false);
+		} else {
+			removeButton.setEnabled(selectedObject != runtimesTableViewer.getCheckedElements()[0]);
+			editButton.setEnabled(true);
 		}
 	}	
 	
@@ -325,49 +274,15 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		final boolean[] canceled = new boolean[] {false};
 		BusyIndicator.showWhile(null, new Runnable() {
 			public void run() {
-//				IVMInstall defaultVM = getCurrentDefaultVM();
-////				IVMInstall[] vms = fJREBlock.getJREs();
-//				IVMInstall[] vms = (IVMInstall[])runtimesTableViewer.getInput();
-//				ForgeRuntimesUpdater updater = new ForgeRuntimesUpdater();
-//				if (!updater.updateJRESettings(vms, defaultVM)) {
-//					canceled[0] = true;
-//				}
+				ForgeInstallation[] installations = (ForgeInstallation[])runtimesTableViewer.getInput();
+				ForgeInstallation defaultInstallation = (ForgeInstallation)runtimesTableViewer.getCheckedElements()[0];
+				ForgeRuntime.setInstallations(installations, defaultInstallation);
 			}
 		});		
 		if(canceled[0]) {
 			return false;
 		}
-//		fJREBlock.saveColumnSettings(
-//				ForgePlugin.getDefault().getDialogSettings(), 
-//				ForgePlugin.PLUGIN_ID + ".forge_runtimes_preference_page_context");
 		return super.performOk();
 	}	
 	
-//	private void verifyDefaultVM(IVMInstall vm) {
-//		if (vm != null) {
-//			LibraryLocation[] locations= JavaRuntime.getLibraryLocations(vm);
-//			boolean exist = true;
-//			for (int i = 0; i < locations.length; i++) {
-//				exist = exist && new File(locations[i].getSystemLibraryPath().toOSString()).exists();
-//			}
-//			if (exist) {
-//				fJREBlock.setCheckedJRE(vm);
-//			} else {
-//				fJREBlock.removeJREs(new IVMInstall[]{vm});
-//				IVMInstall def = JavaRuntime.getDefaultVMInstall();
-//				if (def == null) {
-//					fJREBlock.setCheckedJRE(null);
-//				} else {
-//					fJREBlock.setCheckedJRE(def);
-//				}
-//				return;
-//			}
-//		} else {
-//			fJREBlock.setCheckedJRE(null);
-//		}
-//	}
-	
-//	private IVMInstall getCurrentDefaultVM() {
-//		return fJREBlock.getCheckedJRE();
-//	}
 }

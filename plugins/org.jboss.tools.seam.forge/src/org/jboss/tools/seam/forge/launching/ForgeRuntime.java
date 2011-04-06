@@ -77,7 +77,8 @@ public class ForgeRuntime implements IDebugEventSetListener {
 	private static void initializeInstallations() {
 		String installPrefsXml = ForgePlugin.getDefault().getPreferenceStore().getString(PREF_FORGE_INSTALLATIONS);
 		if (installPrefsXml == null || "".equals(installPrefsXml)) {
-			installPrefsXml = createDefaultInstallationsPreferences();
+			createInitialInstallations();
+			installPrefsXml = ForgePlugin.getDefault().getPreferenceStore().getString(PREF_FORGE_INSTALLATIONS);
 		}
 		initializeFromXml(installPrefsXml);
 	}
@@ -160,31 +161,75 @@ public class ForgeRuntime implements IDebugEventSetListener {
 		return s.toString("UTF8"); 		
 	}
 	
-	private static Document createDefaultInstallationsDocument() {
+//	private static Document createDefaultInstallationsDocument() {
+//		Document document = createEmptyDocument();
+//		if (document == null) return null;
+//		Element main = document.createElement("forgeInstallations");
+//		document.appendChild(main);
+//		String defaultLocation = ForgePlugin.getDefault().getBundle().getLocation();
+//		defaultLocation = defaultLocation.substring(15);
+//		Element defaultInstallation = document.createElement("installation");
+//		defaultInstallation.setAttribute("name", "embedded");
+//		defaultInstallation.setAttribute("location", defaultLocation); 
+//		main.appendChild(defaultInstallation);
+//		main.setAttribute("default", "embedded");
+//		return document;
+//	}
+
+//	private static String createDefaultInstallationsPreferences() {
+//		String result = null;
+//		Document document = createDefaultInstallationsDocument();
+//		try {
+//			result = serializeDocument(document);
+//		} catch (Exception e) {
+//			ForgePlugin.log(e);
+//		}
+//		return result;
+//	}
+//	
+	private static void createInitialInstallations() {
+		String defaultLocation = ForgePlugin.getDefault().getBundle().getLocation().substring(15);
+		defaultInstallation = new ForgeInstallation("embedded", defaultLocation);
+		installations = new ArrayList<ForgeInstallation>();
+		installations.add(defaultInstallation);
+		saveInstallations();
+	}
+	
+	public static void setInstallations(ForgeInstallation[] installs, ForgeInstallation defaultInstall) {
+		installations.clear();
+		for (ForgeInstallation install : installs) {
+			installations.add(install);
+		}
+		defaultInstallation = defaultInstall;
+		saveInstallations();
+	}
+	
+	private static void saveInstallations() {
+		try {
+			String xml = serializeDocument(createInstallationsDocument());
+			ForgePlugin.getDefault().getPreferenceStore().setValue(PREF_FORGE_INSTALLATIONS, xml);
+		} catch (IOException e) {
+			ForgePlugin.log(e);
+		} catch (TransformerException e) {
+			ForgePlugin.log(e);
+		}
+	}
+
+	private static Document createInstallationsDocument() {
 		Document document = createEmptyDocument();
 		if (document == null) return null;
 		Element main = document.createElement("forgeInstallations");
 		document.appendChild(main);
-		String defaultLocation = ForgePlugin.getDefault().getBundle().getLocation();
-		defaultLocation = defaultLocation.substring(15);
-		Element defaultInstallation = document.createElement("installation");
-		defaultInstallation.setAttribute("name", "embedded");
-		defaultInstallation.setAttribute("location", defaultLocation); 
-		main.appendChild(defaultInstallation);
-		main.setAttribute("default", "embedded");
+		for (ForgeInstallation installation : installations) {
+			Element element = document.createElement("installation");
+			element.setAttribute("name", installation.getName());
+			element.setAttribute("location", installation.getLocation());
+			main.appendChild(element);
+		}
+		main.setAttribute("default", defaultInstallation.getName());
 		return document;
 	}
 
-	private static String createDefaultInstallationsPreferences() {
-		String result = null;
-		Document document = createDefaultInstallationsDocument();
-		try {
-			result = serializeDocument(document);
-		} catch (Exception e) {
-			ForgePlugin.log(e);
-		}
-		return result;
-	}
 	
 	public static final ForgeRuntime INSTANCE = new ForgeRuntime();
 	public static final String STATE_NOT_RUNNING = "org.jboss.tools.seam.forge.notRunning";
@@ -219,14 +264,16 @@ public class ForgeRuntime implements IDebugEventSetListener {
 				ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(null, "Seam Forge");
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "org.jboss.seam.forge.shell.Bootstrap");
 				List<String> classpath = new ArrayList<String>();
-				Bundle bundle = Platform.getBundle("org.jboss.tools.seam.forge");
+//				Bundle bundle = Platform.getBundle("org.jboss.tools.seam.forge");
 				File file = null;
-				try {
-					file = FileLocator.getBundleFile(bundle);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				if (file == null) return;
+//				try {
+//					file = FileLocator.getBundleFile(bundle);
+					file = new File(ForgeRuntime.getDefaultInstallation().getLocation());
+//				} catch (IOException e1) {
+//					e1.printStackTrace();
+//				}
+//				if (file == null) return;
+				if (!file.exists()) return;
 				File[] children = file.listFiles(new FilenameFilter() {					
 					@Override
 					public boolean accept(File dir, String name) {
