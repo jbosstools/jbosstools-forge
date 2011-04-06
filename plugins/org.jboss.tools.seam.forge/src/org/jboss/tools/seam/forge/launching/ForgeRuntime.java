@@ -280,7 +280,9 @@ public class ForgeRuntime implements IDebugEventSetListener {
 						return name.endsWith("lib");
 					}
 				});
-				if (children.length != 1) return;
+				if (children.length != 1) {
+					ForgePlugin.log(new RuntimeException("More than one lib folder?"));
+				}
 				File forgeLibDir = children[0];
 				
 				File[] forgeLibFiles = forgeLibDir.listFiles(new FilenameFilter() {					
@@ -317,7 +319,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 				setRuntimeState(STATE_RUNNING);
 			}
 		} catch (CoreException e) {
-			e.printStackTrace();
+			ForgePlugin.log(e);
 		}
 	}
 	
