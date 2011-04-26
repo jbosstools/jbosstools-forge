@@ -82,6 +82,8 @@ public class CommandRecorder implements IDocumentListener {
 			String projectDirName = projectPath.substring(index + 1);
 			String projectBaseDirPath = projectPath.substring(0, index);
 			new ProjectImporter(projectBaseDirPath, projectDirName).importProject();
+		} else {
+			
 		}
 	}
 

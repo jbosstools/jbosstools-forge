@@ -237,8 +237,8 @@ public class ForgeRuntime implements IDebugEventSetListener {
 						break;
 					}
 				}
-				ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(null, "Seam Forge");
-				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "org.jboss.seam.forge.shell.Bootstrap");
+				ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(null, "Forge");
+				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "org.jboss.forge.shell.Bootstrap");
 				List<String> classpath = new ArrayList<String>();
 //				Bundle bundle = Platform.getBundle("org.jboss.tools.seam.forge");
 				File file = null;
@@ -291,6 +291,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 				File workingDir = path.toFile();
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, workingDir.getAbsolutePath());
 //				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dseam.forge.shell.colorEnabled=true");
+				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dforge.compatibility.IDE=true");
 				ILaunchConfiguration configuration = workingCopy.doSave();
 				ILaunch launch = configuration.launch(ILaunchManager.RUN_MODE, null, false, false);
 				IProcess[] processes = launch.getProcesses();

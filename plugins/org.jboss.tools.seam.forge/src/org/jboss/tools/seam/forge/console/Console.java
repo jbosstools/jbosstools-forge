@@ -162,13 +162,14 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
 									escapeSequence.setLength(0);
 									lastLineLength = columnNumber - 1;
 									escapeSequenceStarted = false;
-								}
-								if (c == 'K') {
+								} else if (c == 'K') {
 									int doclength = getDocument().getLength();
 									int currentPosition = lastLinePosition + lastLineLength;									
 									getDocument().replace(currentPosition, doclength - currentPosition, "");
 									escapeSequenceStarted = false;
-								}
+//								} else if (c == 'm') {
+//									
+								} 
 							} else {
 								escapeSequence.append(c);
 							}
