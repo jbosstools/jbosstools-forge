@@ -67,7 +67,11 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	}
 	
 	@Override
-	public void setFocus() {}
+	public void setFocus() {
+		if (ForgeRuntime.STATE_RUNNING.equals(ForgeRuntime.INSTANCE.getRuntimeState())) {
+			forgeIsRunningPage.setFocus();
+		}
+	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {

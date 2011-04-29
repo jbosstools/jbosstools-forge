@@ -26,6 +26,7 @@ public class ConsolePage extends Page {
 
 	@Override
 	public void setFocus() {
+		viewer.getControl().setFocus();
 	}
 	
 	public Console getConsole() {

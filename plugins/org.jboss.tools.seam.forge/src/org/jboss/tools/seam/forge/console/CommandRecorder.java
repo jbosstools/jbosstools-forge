@@ -5,6 +5,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -15,6 +19,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
+import org.jboss.tools.seam.forge.ForgePlugin;
 import org.jboss.tools.seam.forge.importer.ProjectImporter;
 
 public class CommandRecorder implements IDocumentListener {
@@ -73,12 +78,23 @@ public class CommandRecorder implements IDocumentListener {
 			return "new-project";
 		} else if ("persistence".equals(candidateCommand)) {
 			return "persistence";
+		} else if ("entity".equals(candidateCommand)) {
+			return "entity";
 		} else {
 			return null;
 		}
 	}
 	
 	private void postProcessCurrentCommand() {
+		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+		String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
+		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		try {
+			project.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			ForgePlugin.log(e);
+		}
 		if ("pwd".equals(currentCommand)) {
 			// do nothing
 		} else if ("new-project".equals(currentCommand)) {
@@ -100,29 +116,72 @@ public class CommandRecorder implements IDocumentListener {
 		} else if ("persistence".equals(currentCommand)) {
 			int index = beforePrompt.lastIndexOf("***SUCCESS*** Installed [forge.spec.jpa] successfully.\nWrote ");
 			if (index == -1) return;
-			String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
-			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+//			String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
+//			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+//			try {
+//				project.refreshLocal(IResource.DEPTH_INFINITE, null);
+//			} catch (CoreException e) {
+//				ForgePlugin.log(e);
+//			}
 			try {
-				project.refreshLocal(IResource.DEPTH_INFINITE, null);
-			} catch (CoreException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			try {
-				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-				IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 				IFile file = project.getFile("/src/main/resources/META-INF/persistence.xml");
+				if (file == null) return;
+				Object objectToSelect = file;
 				IDE.openEditor(workbenchPage, file);
 				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
 				if (packageExplorer instanceof ISetSelectionTarget) {
-					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(file));
+					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
+				}
+				IViewPart outlineViewer = workbenchPage.showView("org.eclipse.ui.views.ContentOutline");
+				if (outlineViewer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)outlineViewer).selectReveal(new StructuredSelection(objectToSelect));
 				}
 			} catch (PartInitException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ForgePlugin.log(e);
+			}
+		} else if ("entity".equals(currentCommand)) {
+			int index = beforePrompt.lastIndexOf("Picked up type <JavaResource>: ");
+			if (index == -1) return;
+//			String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
+//			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+			if (index + 31 > beforePrompt.length() -1) return;
+			String entityName = beforePrompt.substring(index + 31, beforePrompt.length() - 1).replace('.', '/');
+//			try {
+//				project.refreshLocal(IResource.DEPTH_INFINITE, null);
+//			} catch (CoreException e) {
+//				ForgePlugin.log(e);
+//			}
+			try {
+				IFile file = project.getFile("/src/main/java/" + entityName + ".java");
+				if (file == null) return;
+				Object objectToSelect = file;
+				IDE.openEditor(workbenchPage, file);
+				IJavaElement javaElement = JavaCore.create(file);
+				if (javaElement != null && javaElement.getElementType() == IJavaElement.COMPILATION_UNIT) {
+					try {
+						objectToSelect = ((ICompilationUnit)javaElement).getTypes()[0];
+					} catch (JavaModelException e) {
+						ForgePlugin.log(e);
+					}
+				}
+				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
+				if (packageExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
+				}
+				IViewPart outlineViewer = workbenchPage.showView("org.eclipse.ui.views.ContentOutline");
+				if (outlineViewer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)outlineViewer).selectReveal(new StructuredSelection(objectToSelect));
+				}
+			} catch (PartInitException e) {
+				ForgePlugin.log(e);
 			}
 		} else {
 			
+		}
+		try {
+			workbenchPage.showView("org.jboss.tools.seam.forge.console").setFocus();
+		} catch (PartInitException e) {
+			ForgePlugin.log(e);
 		}
 	}
 
