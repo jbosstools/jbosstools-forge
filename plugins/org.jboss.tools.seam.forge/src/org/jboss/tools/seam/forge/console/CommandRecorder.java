@@ -6,7 +6,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.DocumentEvent;
@@ -19,6 +21,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
+import org.eclipse.ui.views.contentoutline.ContentOutline;
 import org.jboss.tools.seam.forge.ForgePlugin;
 import org.jboss.tools.seam.forge.importer.ProjectImporter;
 
@@ -80,6 +83,8 @@ public class CommandRecorder implements IDocumentListener {
 			return "persistence";
 		} else if ("entity".equals(candidateCommand)) {
 			return "entity";
+		} else if ("field".equals(candidateCommand)) {
+			return "field";
 		} else {
 			return null;
 		}
@@ -116,13 +121,6 @@ public class CommandRecorder implements IDocumentListener {
 		} else if ("persistence".equals(currentCommand)) {
 			int index = beforePrompt.lastIndexOf("***SUCCESS*** Installed [forge.spec.jpa] successfully.\nWrote ");
 			if (index == -1) return;
-//			String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
-//			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-//			try {
-//				project.refreshLocal(IResource.DEPTH_INFINITE, null);
-//			} catch (CoreException e) {
-//				ForgePlugin.log(e);
-//			}
 			try {
 				IFile file = project.getFile("/src/main/resources/META-INF/persistence.xml");
 				if (file == null) return;
@@ -142,15 +140,8 @@ public class CommandRecorder implements IDocumentListener {
 		} else if ("entity".equals(currentCommand)) {
 			int index = beforePrompt.lastIndexOf("Picked up type <JavaResource>: ");
 			if (index == -1) return;
-//			String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
-//			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 			if (index + 31 > beforePrompt.length() -1) return;
 			String entityName = beforePrompt.substring(index + 31, beforePrompt.length() - 1).replace('.', '/');
-//			try {
-//				project.refreshLocal(IResource.DEPTH_INFINITE, null);
-//			} catch (CoreException e) {
-//				ForgePlugin.log(e);
-//			}
 			try {
 				IFile file = project.getFile("/src/main/java/" + entityName + ".java");
 				if (file == null) return;
@@ -172,6 +163,48 @@ public class CommandRecorder implements IDocumentListener {
 				if (outlineViewer instanceof ISetSelectionTarget) {
 					((ISetSelectionTarget)outlineViewer).selectReveal(new StructuredSelection(objectToSelect));
 				}
+			} catch (PartInitException e) {
+				ForgePlugin.log(e);
+			}
+		} else if ("field".equals(currentCommand)) {
+			try {
+				int index = beforePrompt.lastIndexOf("Added field to ");
+				if (index == -1) return;
+				if (index + 15 > beforePrompt.length()) return;
+				String str = beforePrompt.substring(index + 15);
+				index = str.indexOf(':');
+				if (index == -1) return;
+				String entityName = str.substring(0, index);
+				str = str.substring(index);
+				index = str.lastIndexOf(';');
+				if (index == -1) return;
+				str = str.substring(0, index);
+				index = str.lastIndexOf(' ');
+				if (index == -1) return;
+				String fieldName = str.substring(index + 1);
+				IFile file = project.getFile("/src/main/java/" + entityName.replace('.', '/') + ".java");
+				if (file == null) return;
+				Object objectToSelect = file;
+				IJavaElement javaElement = JavaCore.create(file);
+				if (javaElement != null && javaElement.getElementType() == IJavaElement.COMPILATION_UNIT) {
+					try {
+						IType type = ((ICompilationUnit)javaElement).getTypes()[0];
+						IField field = type.getField(fieldName);
+						if (field != null) {
+							objectToSelect = field;
+						}
+					} catch (JavaModelException e) {
+						ForgePlugin.log(e);
+					}
+				}
+				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
+				if (packageExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
+				}
+//				IViewPart outlineViewer = workbenchPage.showView("org.eclipse.ui.views.ContentOutline");
+//				if (outlineViewer instanceof ContentOutline) {
+//					((ContentOutline)outlineViewer).getCurrentPage().get
+//				}
 			} catch (PartInitException e) {
 				ForgePlugin.log(e);
 			}
