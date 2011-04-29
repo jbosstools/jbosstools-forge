@@ -1,7 +1,20 @@
 package org.jboss.tools.seam.forge.console;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.ISetSelectionTarget;
 import org.jboss.tools.seam.forge.importer.ProjectImporter;
 
 public class CommandRecorder implements IDocumentListener {
@@ -58,6 +71,8 @@ public class CommandRecorder implements IDocumentListener {
 			return "pwd";
 		} else if ("new-project".equals(candidateCommand)) {
 			return "new-project";
+		} else if ("persistence".equals(candidateCommand)) {
+			return "persistence";
 		} else {
 			return null;
 		}
@@ -82,6 +97,30 @@ public class CommandRecorder implements IDocumentListener {
 			String projectDirName = projectPath.substring(index + 1);
 			String projectBaseDirPath = projectPath.substring(0, index);
 			new ProjectImporter(projectBaseDirPath, projectDirName).importProject();
+		} else if ("persistence".equals(currentCommand)) {
+			int index = beforePrompt.lastIndexOf("***SUCCESS*** Installed [forge.spec.jpa] successfully.\nWrote ");
+			if (index == -1) return;
+			String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+			try {
+				project.refreshLocal(IResource.DEPTH_INFINITE, null);
+			} catch (CoreException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+				IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+				IFile file = project.getFile("/src/main/resources/META-INF/persistence.xml");
+				IDE.openEditor(workbenchPage, file);
+				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
+				if (packageExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(file));
+				}
+			} catch (PartInitException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			
 		}
