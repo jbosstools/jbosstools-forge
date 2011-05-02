@@ -3,6 +3,7 @@ package org.jboss.tools.seam.forge.console;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -85,6 +86,8 @@ public class CommandRecorder implements IDocumentListener {
 			return "entity";
 		} else if ("field".equals(candidateCommand)) {
 			return "field";
+		} else if ("prettyfaces".equals(candidateCommand)) {
+			return "prettyfaces";
 		} else {
 			return null;
 		}
@@ -94,11 +97,14 @@ public class CommandRecorder implements IDocumentListener {
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 		String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
-		try {
-			project.refreshLocal(IResource.DEPTH_INFINITE, null);
-		} catch (CoreException e) {
-			ForgePlugin.log(e);
+		if (project != null) {
+			try {
+				project.refreshLocal(IResource.DEPTH_INFINITE, null);
+			} catch (CoreException e) {
+				ForgePlugin.log(e);
+			}
 		}
 		if ("pwd".equals(currentCommand)) {
 			// do nothing
@@ -205,6 +211,30 @@ public class CommandRecorder implements IDocumentListener {
 //				if (outlineViewer instanceof ContentOutline) {
 //					((ContentOutline)outlineViewer).getCurrentPage().get
 //				}
+			} catch (PartInitException e) {
+				ForgePlugin.log(e);
+			}
+		} else if ("prettyfaces".equals(currentCommand)) {
+			int index = beforePrompt.lastIndexOf("***SUCCESS*** Installed [com.ocpsoft.prettyfaces] successfully.");
+			if (index == -1) return;
+			String str = beforePrompt.substring(0, index - 1);
+			index = str.lastIndexOf("Wrote ");
+			if (index == -1) return;
+			if (index + 6 > str.length()) return;
+			str = str.substring(index + 6);
+			String projectLocation = project.getLocation().toString();
+			index = str.lastIndexOf(projectLocation);
+			if (index != 0) return;
+			str = str.substring(projectLocation.length());
+			IFile file = project.getFile(str);
+			if (file == null) return;
+			Object objectToSelect = file;
+			try {
+				IDE.openEditor(workbenchPage, file);
+				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
+				if (packageExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
+				}
 			} catch (PartInitException e) {
 				ForgePlugin.log(e);
 			}
