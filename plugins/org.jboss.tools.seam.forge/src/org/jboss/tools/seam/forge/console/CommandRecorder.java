@@ -3,18 +3,19 @@ package org.jboss.tools.seam.forge.console;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -22,7 +23,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
-import org.eclipse.ui.views.contentoutline.ContentOutline;
+import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.seam.forge.ForgePlugin;
 import org.jboss.tools.seam.forge.importer.ProjectImporter;
 
@@ -88,6 +89,8 @@ public class CommandRecorder implements IDocumentListener {
 			return "field";
 		} else if ("prettyfaces".equals(candidateCommand)) {
 			return "prettyfaces";
+		} else if ("build".equals(candidateCommand)) {
+			return "build";
 		} else {
 			return null;
 		}
@@ -97,7 +100,6 @@ public class CommandRecorder implements IDocumentListener {
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 		String projectName = currentPrompt.substring(1, currentPrompt.indexOf(']'));
-		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		if (project != null) {
 			try {
@@ -123,7 +125,8 @@ public class CommandRecorder implements IDocumentListener {
 			index = projectPath.lastIndexOf('/');
 			String projectDirName = projectPath.substring(index + 1);
 			String projectBaseDirPath = projectPath.substring(0, index);
-			new ProjectImporter(projectBaseDirPath, projectDirName).importProject();
+			ProjectImporter importer = new ProjectImporter(projectBaseDirPath, projectDirName);
+			importer.importProject();
 		} else if ("persistence".equals(currentCommand)) {
 			int index = beforePrompt.lastIndexOf("***SUCCESS*** Installed [forge.spec.jpa] successfully.\nWrote ");
 			if (index == -1) return;
@@ -132,13 +135,16 @@ public class CommandRecorder implements IDocumentListener {
 				if (file == null) return;
 				Object objectToSelect = file;
 				IDE.openEditor(workbenchPage, file);
-				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
-				if (packageExplorer instanceof ISetSelectionTarget) {
+				IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
+				if (projectExplorer != null && projectExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)projectExplorer).selectReveal(new StructuredSelection(objectToSelect));
+				} 
+				IViewPart packageExplorer = workbenchPage.findView("org.eclipse.jdt.ui.PackageExplorer"); 
+				if (packageExplorer == null && projectExplorer == null) {
+					packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer");
+				} 
+				if (packageExplorer != null && packageExplorer instanceof ISetSelectionTarget) {
 					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
-				}
-				IViewPart outlineViewer = workbenchPage.showView("org.eclipse.ui.views.ContentOutline");
-				if (outlineViewer instanceof ISetSelectionTarget) {
-					((ISetSelectionTarget)outlineViewer).selectReveal(new StructuredSelection(objectToSelect));
 				}
 			} catch (PartInitException e) {
 				ForgePlugin.log(e);
@@ -161,13 +167,16 @@ public class CommandRecorder implements IDocumentListener {
 						ForgePlugin.log(e);
 					}
 				}
-				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
-				if (packageExplorer instanceof ISetSelectionTarget) {
+				IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
+				if (projectExplorer != null && projectExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)projectExplorer).selectReveal(new StructuredSelection(objectToSelect));
+				} 
+				IViewPart packageExplorer = workbenchPage.findView("org.eclipse.jdt.ui.PackageExplorer"); 
+				if (packageExplorer == null && projectExplorer == null) {
+					packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer");
+				} 
+				if (packageExplorer != null && packageExplorer instanceof ISetSelectionTarget) {
 					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
-				}
-				IViewPart outlineViewer = workbenchPage.showView("org.eclipse.ui.views.ContentOutline");
-				if (outlineViewer instanceof ISetSelectionTarget) {
-					((ISetSelectionTarget)outlineViewer).selectReveal(new StructuredSelection(objectToSelect));
 				}
 			} catch (PartInitException e) {
 				ForgePlugin.log(e);
@@ -190,27 +199,22 @@ public class CommandRecorder implements IDocumentListener {
 				String fieldName = str.substring(index + 1);
 				IFile file = project.getFile("/src/main/java/" + entityName.replace('.', '/') + ".java");
 				if (file == null) return;
-				Object objectToSelect = file;
+				IEditorPart editorPart = IDE.openEditor(workbenchPage, file);
 				IJavaElement javaElement = JavaCore.create(file);
 				if (javaElement != null && javaElement.getElementType() == IJavaElement.COMPILATION_UNIT) {
 					try {
 						IType type = ((ICompilationUnit)javaElement).getTypes()[0];
 						IField field = type.getField(fieldName);
 						if (field != null) {
-							objectToSelect = field;
+							ISourceRange sourceRange = field.getSourceRange();
+							if (sourceRange != null && editorPart != null && editorPart instanceof ITextEditor) {
+								((ITextEditor)editorPart).selectAndReveal(sourceRange.getOffset(), sourceRange.getLength());
+							}
 						}
 					} catch (JavaModelException e) {
 						ForgePlugin.log(e);
 					}
 				}
-				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
-				if (packageExplorer instanceof ISetSelectionTarget) {
-					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
-				}
-//				IViewPart outlineViewer = workbenchPage.showView("org.eclipse.ui.views.ContentOutline");
-//				if (outlineViewer instanceof ContentOutline) {
-//					((ContentOutline)outlineViewer).getCurrentPage().get
-//				}
 			} catch (PartInitException e) {
 				ForgePlugin.log(e);
 			}
@@ -231,13 +235,22 @@ public class CommandRecorder implements IDocumentListener {
 			Object objectToSelect = file;
 			try {
 				IDE.openEditor(workbenchPage, file);
-				IViewPart packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer"); 
-				if (packageExplorer instanceof ISetSelectionTarget) {
+				IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
+				if (projectExplorer != null && projectExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget)projectExplorer).selectReveal(new StructuredSelection(objectToSelect));
+				} 
+				IViewPart packageExplorer = workbenchPage.findView("org.eclipse.jdt.ui.PackageExplorer"); 
+				if (packageExplorer == null && projectExplorer == null) {
+					packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer");
+				} 
+				if (packageExplorer != null && packageExplorer instanceof ISetSelectionTarget) {
 					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
 				}
 			} catch (PartInitException e) {
 				ForgePlugin.log(e);
 			}
+		} else if ("build".equals(currentCommand)) {
+			
 		} else {
 			
 		}
