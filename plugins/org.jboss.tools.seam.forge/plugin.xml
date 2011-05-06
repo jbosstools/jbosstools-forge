@@ -4,11 +4,11 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="org.jboss.tools.seam.forge"
-            name="Seam Forge">
+            id="org.jboss.tools.forge"
+            name="Forge">
       </category>
       <view
-            category="org.jboss.tools.seam.forge"
+            category="org.jboss.tools.forge"
             class="org.jboss.tools.seam.forge.view.ConsoleView"
             id="org.jboss.tools.seam.forge.console"
             name="Forge Console"
