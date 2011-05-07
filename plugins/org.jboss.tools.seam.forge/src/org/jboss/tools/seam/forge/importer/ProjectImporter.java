@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.core.IMavenConstants;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
@@ -28,11 +27,10 @@ public class ProjectImporter {
 	}
 	
 	public void importProject() {		
-		final MavenPlugin mavenPlugin = MavenPlugin.getDefault();
 	    Job job = new WorkspaceJob("Importing Forge project") {
 	        public IStatus runInWorkspace(IProgressMonitor monitor) {
 	          try {
-	        	  mavenPlugin.getProjectConfigurationManager().importProjects(
+	        	  MavenPlugin.getProjectConfigurationManager().importProjects(
 	        			  getProjectToImport(), 
 	        			  new ProjectImportConfiguration(), 
 	        			  monitor);
@@ -42,7 +40,7 @@ public class ProjectImporter {
 	          return Status.OK_STATUS;
 	        }
 	      };
-	      job.setRule(mavenPlugin.getProjectConfigurationManager().getRule());
+	      job.setRule(MavenPlugin.getProjectConfigurationManager().getRule());
 	      job.schedule();
 	}
 	
@@ -50,9 +48,9 @@ public class ProjectImporter {
 		MavenProjectInfo result = null;
 		try {
 			File projectDir = new File(baseDirPath, projectName);
-			File pomFile = new File(projectDir, IMavenConstants.POM_FILE_NAME);
-			Model model = MavenPlugin.getDefault().getMavenModelManager().readMavenModel(pomFile);
-			String pomName = projectName + "/" + IMavenConstants.POM_FILE_NAME;
+			File pomFile = new File(projectDir, "pom.xml");
+			Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
+			String pomName = projectName + "/" + "pom.xml";
 			result = new MavenProjectInfo(pomName, pomFile, model, null);
 		} catch (CoreException e) {
 			

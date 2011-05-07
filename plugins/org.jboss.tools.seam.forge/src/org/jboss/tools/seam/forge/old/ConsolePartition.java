@@ -26,7 +26,8 @@ public class ConsolePartition implements ITypedRegion {
      * Only one of inputStream or outputStream will be null depending on the partitions type.
      */
     private ConsoleOutputStream outputStream;
-    private ConsoleInputStream inputStream;
+    @SuppressWarnings("unused")
+	private ConsoleInputStream inputStream;
     private int length;
     
     /**

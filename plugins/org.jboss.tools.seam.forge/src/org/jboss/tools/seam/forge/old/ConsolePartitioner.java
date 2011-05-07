@@ -33,6 +33,7 @@ import org.jboss.tools.seam.forge.console.ConsoleOutputStream;
  * @since 3.1
  *
  */
+@SuppressWarnings(value = { "rawtypes", "unchecked" })
 public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumentPartitionerExtension {
 	
 	private PendingPartition consoleClosedPartition;
@@ -74,6 +75,7 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumen
 	/**
 	 * An array of legal line delimiters
 	 */
+	@SuppressWarnings("unused")
 	private String[] lld;
 	private int highWaterMark = -1;
 	private int lowWaterMark = -1;
