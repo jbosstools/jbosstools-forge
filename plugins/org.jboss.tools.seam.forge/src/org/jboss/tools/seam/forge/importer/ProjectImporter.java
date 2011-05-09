@@ -30,7 +30,7 @@ public class ProjectImporter {
 	    Job job = new WorkspaceJob("Importing Forge project") {
 	        public IStatus runInWorkspace(IProgressMonitor monitor) {
 	          try {
-	        	  MavenPlugin.getProjectConfigurationManager().importProjects(
+	        	  MavenPlugin.getDefault().getProjectConfigurationManager().importProjects(
 	        			  getProjectToImport(), 
 	        			  new ProjectImportConfiguration(), 
 	        			  monitor);
@@ -40,7 +40,7 @@ public class ProjectImporter {
 	          return Status.OK_STATUS;
 	        }
 	      };
-	      job.setRule(MavenPlugin.getProjectConfigurationManager().getRule());
+	      job.setRule(MavenPlugin.getDefault().getProjectConfigurationManager().getRule());
 	      job.schedule();
 	}
 	
@@ -49,7 +49,7 @@ public class ProjectImporter {
 		try {
 			File projectDir = new File(baseDirPath, projectName);
 			File pomFile = new File(projectDir, "pom.xml");
-			Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
+			Model model = MavenPlugin.getDefault().getMavenModelManager().readMavenModel(pomFile);
 			String pomName = projectName + "/" + "pom.xml";
 			result = new MavenProjectInfo(pomName, pomFile, model, null);
 		} catch (CoreException e) {
