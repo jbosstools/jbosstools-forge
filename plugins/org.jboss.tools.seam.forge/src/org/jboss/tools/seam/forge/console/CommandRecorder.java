@@ -25,6 +25,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.seam.forge.ForgePlugin;
+import org.jboss.tools.seam.forge.importer.ProjectConfigurationUpdater;
 import org.jboss.tools.seam.forge.importer.ProjectImporter;
 
 public class CommandRecorder implements IDocumentListener {
@@ -167,6 +168,7 @@ public class CommandRecorder implements IDocumentListener {
 						ForgePlugin.log(e);
 					}
 				}
+				new ProjectConfigurationUpdater(project).updateProject();
 				IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
 				if (projectExplorer != null && projectExplorer instanceof ISetSelectionTarget) {
 					((ISetSelectionTarget)projectExplorer).selectReveal(new StructuredSelection(objectToSelect));
