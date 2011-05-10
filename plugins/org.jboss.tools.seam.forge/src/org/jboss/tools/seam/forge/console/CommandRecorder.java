@@ -168,7 +168,6 @@ public class CommandRecorder implements IDocumentListener {
 						ForgePlugin.log(e);
 					}
 				}
-				new ProjectConfigurationUpdater(project).updateProject();
 				IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
 				if (projectExplorer != null && projectExplorer instanceof ISetSelectionTarget) {
 					((ISetSelectionTarget)projectExplorer).selectReveal(new StructuredSelection(objectToSelect));
@@ -235,6 +234,7 @@ public class CommandRecorder implements IDocumentListener {
 			IFile file = project.getFile(str);
 			if (file == null) return;
 			Object objectToSelect = file;
+			new ProjectConfigurationUpdater(project).updateProject();
 			try {
 				IDE.openEditor(workbenchPage, file);
 				IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
