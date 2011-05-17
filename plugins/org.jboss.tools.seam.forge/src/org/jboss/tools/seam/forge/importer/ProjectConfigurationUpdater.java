@@ -21,7 +21,7 @@ public class ProjectConfigurationUpdater {
 	    Job job = new WorkspaceJob("Importing Forge project") {
 	        public IStatus runInWorkspace(IProgressMonitor monitor) {
 	          try {
-	        	  MavenPlugin.getDefault().getProjectConfigurationManager().updateProjectConfiguration(
+	        	  MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration(
 	        			  project, 
 	        			  monitor);
 	          } catch(CoreException ex) {
@@ -30,7 +30,7 @@ public class ProjectConfigurationUpdater {
 	          return Status.OK_STATUS;
 	        }
 	      };
-	      job.setRule(MavenPlugin.getDefault().getProjectConfigurationManager().getRule());
+	      job.setRule(MavenPlugin.getProjectConfigurationManager().getRule());
 	      job.schedule();
 	}
 	
