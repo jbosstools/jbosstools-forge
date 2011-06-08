@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IStreamMonitor;
-import org.jboss.tools.forge.ForgePlugin;
+import org.jboss.tools.forge.ForgeUIPlugin;
 
 class StreamListener implements IStreamListener {
 
@@ -32,7 +32,7 @@ class StreamListener implements IStreamListener {
             	buffer = new StringBuffer();
             }
         } catch (IOException e) {
-            ForgePlugin.log(e);
+            ForgeUIPlugin.log(e);
         }
     }
     

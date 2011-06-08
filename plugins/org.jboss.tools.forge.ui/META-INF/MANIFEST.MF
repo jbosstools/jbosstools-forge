@@ -17,6 +17,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.views
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.jboss.tools.forge.ForgePlugin
+Bundle-Activator: org.jboss.tools.forge.ForgeUIPlugin
 Bundle-ClassPath: .,
  lib/jline.jar

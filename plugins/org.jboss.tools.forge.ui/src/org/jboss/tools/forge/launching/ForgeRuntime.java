@@ -44,7 +44,7 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jdt.launching.IRuntimeClasspathEntry;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.jboss.tools.forge.ForgePlugin;
+import org.jboss.tools.forge.ForgeUIPlugin;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -73,10 +73,10 @@ public class ForgeRuntime implements IDebugEventSetListener {
 	}
 	
 	private static void initializeInstallations() {
-		String installPrefsXml = ForgePlugin.getDefault().getPreferenceStore().getString(PREF_FORGE_INSTALLATIONS);
+		String installPrefsXml = ForgeUIPlugin.getDefault().getPreferenceStore().getString(PREF_FORGE_INSTALLATIONS);
 		if (installPrefsXml == null || "".equals(installPrefsXml)) {
 			createInitialInstallations();
-			installPrefsXml = ForgePlugin.getDefault().getPreferenceStore().getString(PREF_FORGE_INSTALLATIONS);
+			installPrefsXml = ForgeUIPlugin.getDefault().getPreferenceStore().getString(PREF_FORGE_INSTALLATIONS);
 		}
 		initializeFromXml(installPrefsXml);
 	}
@@ -112,9 +112,9 @@ public class ForgeRuntime implements IDebugEventSetListener {
 		try {
 			result = documentBuilder.parse(inputStream);
 		} catch (SAXException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 		} catch (IOException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 		}
 		return result;
 	}
@@ -124,7 +124,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 		try {
 			result = new BufferedInputStream(new ByteArrayInputStream(string.getBytes("UTF8")));
 		} catch (UnsupportedEncodingException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 		}
 		return result;
 	}
@@ -133,7 +133,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 		try {
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		} catch (ParserConfigurationException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 			return null;
 		}
 	}
@@ -161,13 +161,13 @@ public class ForgeRuntime implements IDebugEventSetListener {
 	
 	private static void createInitialInstallations() {
 		try {
-			File file = FileLocator.getBundleFile(ForgePlugin.getDefault().getBundle());
+			File file = FileLocator.getBundleFile(ForgeUIPlugin.getDefault().getBundle());
 			defaultInstallation = new ForgeInstallation("embedded", file.getAbsolutePath());
 			installations = new ArrayList<ForgeInstallation>();
 			installations.add(defaultInstallation);
 			saveInstallations();
 		} catch (IOException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 		}
 	}
 	
@@ -183,11 +183,11 @@ public class ForgeRuntime implements IDebugEventSetListener {
 	private static void saveInstallations() {
 		try {
 			String xml = serializeDocument(createInstallationsDocument());
-			ForgePlugin.getDefault().getPreferenceStore().setValue(PREF_FORGE_INSTALLATIONS, xml);
+			ForgeUIPlugin.getDefault().getPreferenceStore().setValue(PREF_FORGE_INSTALLATIONS, xml);
 		} catch (IOException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 		} catch (TransformerException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 		}
 	}
 
@@ -208,10 +208,10 @@ public class ForgeRuntime implements IDebugEventSetListener {
 
 	
 	public static final ForgeRuntime INSTANCE = new ForgeRuntime();
-	public static final String STATE_NOT_RUNNING = "org.jboss.tools.seam.forge.notRunning";
-	public static final String STATE_RUNNING = "org.jboss.tools.seam.forge.running";
-	public static final String STATE_STARTING = "org.jboss.tools.seam.forge.starting";
-	public static final String STATE_STOPPING = "org.jboss.tools.seam.forge.stopping";
+	public static final String STATE_NOT_RUNNING = "org.jboss.tools.forge.notRunning";
+	public static final String STATE_RUNNING = "org.jboss.tools.forge.running";
+	public static final String STATE_STARTING = "org.jboss.tools.forge.starting";
+	public static final String STATE_STOPPING = "org.jboss.tools.forge.stopping";
 	
 	private IProcess forgeProcess = null;
 	private String runtimeState = STATE_NOT_RUNNING;
@@ -232,7 +232,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 				ILaunchConfiguration[] configurations = manager.getLaunchConfigurations(type);
 				for (int i = 0; i < configurations.length; i++) {
 					ILaunchConfiguration configuration = configurations[i];
-					if (configuration.getName().equals("Seam Forge")) {
+					if (configuration.getName().equals("Forge")) {
 						configuration.delete();
 						break;
 					}
@@ -240,7 +240,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 				ILaunchConfigurationWorkingCopy workingCopy = type.newInstance(null, "Forge");
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "org.jboss.forge.shell.Bootstrap");
 				List<String> classpath = new ArrayList<String>();
-//				Bundle bundle = Platform.getBundle("org.jboss.tools.seam.forge");
+//				Bundle bundle = Platform.getBundle("org.jboss.tools.forge");
 				File file = null;
 //				try {
 //					file = FileLocator.getBundleFile(bundle);
@@ -250,7 +250,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 //				}
 //				if (file == null) return;
 				if (!file.exists()) {
-					ForgePlugin.log(new RuntimeException("Not a correct Forge runtime."));
+					ForgeUIPlugin.log(new RuntimeException("Not a correct Forge runtime."));
 					setRuntimeState(STATE_NOT_RUNNING);
 					return;
 				}
@@ -261,7 +261,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 					}
 				});
 				if (children.length != 1) {
-					ForgePlugin.log(new RuntimeException("Not a correct Forge runtime."));
+					ForgeUIPlugin.log(new RuntimeException("Not a correct Forge runtime."));
 					setRuntimeState(STATE_NOT_RUNNING);
 					return;
 				}
@@ -290,7 +290,6 @@ public class ForgeRuntime implements IDebugEventSetListener {
 				IPath path = root.getLocation();
 				File workingDir = path.toFile();
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, workingDir.getAbsolutePath());
-//				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dseam.forge.shell.colorEnabled=true");
 				workingCopy.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, "-Dforge.compatibility.IDE=true");
 				ILaunchConfiguration configuration = workingCopy.doSave();
 				ILaunch launch = configuration.launch(ILaunchManager.RUN_MODE, null, false, false);
@@ -302,7 +301,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 				setRuntimeState(STATE_RUNNING);
 			}
 		} catch (CoreException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 		}
 	}
 	

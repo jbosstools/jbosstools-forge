@@ -24,7 +24,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.jboss.tools.forge.ForgePlugin;
+import org.jboss.tools.forge.ForgeUIPlugin;
 import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
 import org.jboss.tools.forge.importer.ProjectImporter;
 
@@ -106,7 +106,7 @@ public class CommandRecorder implements IDocumentListener {
 			try {
 				project.refreshLocal(IResource.DEPTH_INFINITE, null);
 			} catch (CoreException e) {
-				ForgePlugin.log(e);
+				ForgeUIPlugin.log(e);
 			}
 		}
 		if ("pwd".equals(currentCommand)) {
@@ -148,7 +148,7 @@ public class CommandRecorder implements IDocumentListener {
 					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
 				}
 			} catch (PartInitException e) {
-				ForgePlugin.log(e);
+				ForgeUIPlugin.log(e);
 			}
 		} else if ("entity".equals(currentCommand)) {
 			int index = beforePrompt.lastIndexOf("Picked up type <JavaResource>: ");
@@ -165,7 +165,7 @@ public class CommandRecorder implements IDocumentListener {
 					try {
 						objectToSelect = ((ICompilationUnit)javaElement).getTypes()[0];
 					} catch (JavaModelException e) {
-						ForgePlugin.log(e);
+						ForgeUIPlugin.log(e);
 					}
 				}
 				IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
@@ -180,7 +180,7 @@ public class CommandRecorder implements IDocumentListener {
 					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
 				}
 			} catch (PartInitException e) {
-				ForgePlugin.log(e);
+				ForgeUIPlugin.log(e);
 			}
 		} else if ("field".equals(currentCommand)) {
 			try {
@@ -213,11 +213,11 @@ public class CommandRecorder implements IDocumentListener {
 							}
 						}
 					} catch (JavaModelException e) {
-						ForgePlugin.log(e);
+						ForgeUIPlugin.log(e);
 					}
 				}
 			} catch (PartInitException e) {
-				ForgePlugin.log(e);
+				ForgeUIPlugin.log(e);
 			}
 		} else if ("prettyfaces".equals(currentCommand)) {
 			int index = beforePrompt.lastIndexOf("***SUCCESS*** Installed [com.ocpsoft.prettyfaces] successfully.");
@@ -249,7 +249,7 @@ public class CommandRecorder implements IDocumentListener {
 					((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(objectToSelect));
 				}
 			} catch (PartInitException e) {
-				ForgePlugin.log(e);
+				ForgeUIPlugin.log(e);
 			}
 		} else if ("build".equals(currentCommand)) {
 			
@@ -257,9 +257,9 @@ public class CommandRecorder implements IDocumentListener {
 			
 		}
 		try {
-			workbenchPage.showView("org.jboss.tools.seam.forge.console").setFocus();
+			workbenchPage.showView("org.jboss.tools.forge.console").setFocus();
 		} catch (PartInitException e) {
-			ForgePlugin.log(e);
+			ForgeUIPlugin.log(e);
 		}
 	}
 

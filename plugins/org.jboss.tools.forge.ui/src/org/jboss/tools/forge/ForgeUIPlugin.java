@@ -6,11 +6,11 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.jboss.tools.forge.launching.ForgeRuntime;
 import org.osgi.framework.BundleContext;
 
-public class ForgePlugin extends AbstractUIPlugin {
+public class ForgeUIPlugin extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "org.jboss.tools.seam.forge"; 
+	public static final String PLUGIN_ID = "org.jboss.tools.forge.ui"; 
 
-	private static ForgePlugin plugin;
+	private static ForgeUIPlugin plugin;
 	
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -25,7 +25,7 @@ public class ForgePlugin extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	public static ForgePlugin getDefault() {
+	public static ForgeUIPlugin getDefault() {
 		return plugin;
 	}
 

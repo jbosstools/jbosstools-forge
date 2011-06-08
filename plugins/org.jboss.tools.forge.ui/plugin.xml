@@ -10,7 +10,7 @@
       <view
             category="org.jboss.tools.forge"
             class="org.jboss.tools.forge.view.ConsoleView"
-            id="org.jboss.tools.seam.forge.console"
+            id="org.jboss.tools.forge.console"
             name="Forge Console"
             restorable="true">
       </view>
@@ -18,29 +18,29 @@
    <extension
          point="org.eclipse.ui.viewActions">
       <viewContribution
-            id="org.jboss.tools.seam.forge.view"
-            targetID="org.jboss.tools.seam.forge.console">
+            id="org.jboss.tools.forge.view"
+            targetID="org.jboss.tools.forge.console">
          <menu
-               id="org.jboss.tools.seam.forge.menubar"
-               label="Seam Forge">
+               id="org.jboss.tools.forge.menubar"
+               label="Forge">
          </menu>
          <action
                class="org.jboss.tools.forge.action.StopDelegate"
                icon="icons/stop.gif"
-               id="org.jboss.tools.seam.forge.stop"
+               id="org.jboss.tools.forge.stop"
                label="Stop Forge"
-               menubarPath="org.jboss.tools.seam.forge.menubar"
+               menubarPath="org.jboss.tools.forge.menubar"
                style="push"
-               toolbarPath="org.jboss.tools.seam.forge.toolbar">
+               toolbarPath="org.jboss.tools.forge.toolbar">
          </action>
          <action
                class="org.jboss.tools.forge.action.StartDelegate"
                icon="icons/start.gif"
-               id="org.jboss.tools.seam.forge.start"
+               id="org.jboss.tools.forge.start"
                label="Start Forge"
-               menubarPath="org.jboss.tools.seam.forge.menu"
+               menubarPath="org.jboss.tools.forge.menu"
                style="push"
-               toolbarPath="org.jboss.tools.seam.forge.toolbar">
+               toolbarPath="org.jboss.tools.forge.toolbar">
          </action>
       </viewContribution>
    </extension>
@@ -48,13 +48,13 @@
 		<page
 			name="Forge"
 			class="org.jboss.tools.forge.preferences.EmptyPreferencePage"
-			id="org.jboss.tools.seam.forge">
+			id="org.jboss.tools.forge">
 		</page>
 		<page
 			name="Installed Forge Runtimes"
-			category="org.jboss.tools.seam.forge"
+			category="org.jboss.tools.forge"
 			class="org.jboss.tools.forge.preferences.ForgeInstallationsPreferencePage"
-			id="org.jboss.tools.seam.forge.runtimes">
+			id="org.jboss.tools.forge.runtimes">
         </page>
 	</extension>
 
