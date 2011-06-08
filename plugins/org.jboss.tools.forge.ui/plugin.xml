@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.jboss.tools.forge"
+            name="Forge">
+      </category>
+      <view
+            category="org.jboss.tools.forge"
+            class="org.jboss.tools.forge.view.ConsoleView"
+            id="org.jboss.tools.seam.forge.console"
+            name="Forge Console"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="org.jboss.tools.seam.forge.view"
+            targetID="org.jboss.tools.seam.forge.console">
+         <menu
+               id="org.jboss.tools.seam.forge.menubar"
+               label="Seam Forge">
+         </menu>
+         <action
+               class="org.jboss.tools.forge.action.StopDelegate"
+               icon="icons/stop.gif"
+               id="org.jboss.tools.seam.forge.stop"
+               label="Stop Forge"
+               menubarPath="org.jboss.tools.seam.forge.menubar"
+               style="push"
+               toolbarPath="org.jboss.tools.seam.forge.toolbar">
+         </action>
+         <action
+               class="org.jboss.tools.forge.action.StartDelegate"
+               icon="icons/start.gif"
+               id="org.jboss.tools.seam.forge.start"
+               label="Start Forge"
+               menubarPath="org.jboss.tools.seam.forge.menu"
+               style="push"
+               toolbarPath="org.jboss.tools.seam.forge.toolbar">
+         </action>
+      </viewContribution>
+   </extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			name="Forge"
+			class="org.jboss.tools.forge.preferences.EmptyPreferencePage"
+			id="org.jboss.tools.seam.forge">
+		</page>
+		<page
+			name="Installed Forge Runtimes"
+			category="org.jboss.tools.seam.forge"
+			class="org.jboss.tools.forge.preferences.ForgeInstallationsPreferencePage"
+			id="org.jboss.tools.seam.forge.runtimes">
+        </page>
+	</extension>
+
+</plugin>
