@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.jboss.tools.seam.forge.feature_1.0.0.qualifier.jar" id="org.jboss.tools.seam.forge.feature" version="1.0.0.qualifier">
-      <category name="org.jboss.tools.seam.forge"/>
-   </feature>
-   <category-def name="org.jboss.tools.seam.forge" label="Seam Forge"/>
-</site>

@@ -13,7 +13,7 @@
 	<name>forge.features</name>
 	<packaging>pom</packaging>
 	<modules>
-		<module>org.jboss.tools.seam.forge.feature</module>
+		<module>org.jboss.tools.forge.feature</module>
 	</modules>
 </project>
 	
