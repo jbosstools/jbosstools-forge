@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.jboss.tools.forge.feature_1.0.0.qualifier.jar" id="org.jboss.tools.forge.feature" version="1.0.0.qualifier">
+      <category name="org.jboss.tools.forge"/>
+   </feature>
+   <category-def name="org.jboss.tools.forge" label="Forge"/>
+</site>
