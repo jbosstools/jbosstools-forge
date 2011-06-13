@@ -14,8 +14,8 @@
 	<packaging>pom</packaging>
 	<modules>
 	        <module>org.jboss.tools.forge.runtime</module>
-                <module>org.jboss.tools.forge.core</module>
-		<module>org.jboss.tools.forge.ui</module>
+             <!--    <module>org.jboss.tools.forge.core</module>
+		<module>org.jboss.tools.forge.ui</module> -->
 	</modules>
 </project>
 	
