@@ -5,14 +5,16 @@
 	<parent>
 		<groupId>org.jboss.tools</groupId>
 		<artifactId>forge</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
 	</parent>
 	<groupId>org.jboss.tools.forge</groupId>
-	<artifactId>plugins</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>forge.plugins</artifactId>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>forge.plugins</name>
 	<packaging>pom</packaging>
 	<modules>
+	        <module>org.jboss.tools.forge.runtime</module>
+                <module>org.jboss.tools.forge.core</module>
 		<module>org.jboss.tools.forge.ui</module>
 	</modules>
 </project>
