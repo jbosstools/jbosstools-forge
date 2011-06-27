@@ -144,10 +144,10 @@ public class ForgeLaunchHelper {
 		return result;
 	}
 	
-	public static IProcess launch(ForgeRuntime runtime) {
+	public static IProcess launch(String name, String location) {
 		IProcess result = null;
-		String launchConfigurationName = runtime.getName() + System.currentTimeMillis();
-		List<String> classPath = createClassPath(runtime.getLocation());
+		String launchConfigurationName = name + System.currentTimeMillis();
+		List<String> classPath = createClassPath(location);
 		if (classPath != null) {
 			ILaunch launch = launch(launchConfigurationName, classPath);
 			removeLaunchConfiguration(launchConfigurationName);

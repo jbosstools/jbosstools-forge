@@ -19,12 +19,20 @@ import org.junit.Test;
 
 public class ForgeLaunchHelperTest {
 
+	private static String TEST_LOCATION;
+	
 	private IProcess forgeProcess = null;
-	private ForgeRuntime forgeRuntime = null;
+	
+	static {
+		try {
+			TEST_LOCATION = FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime")).getAbsolutePath();
+		} catch (IOException e) {
+			TEST_LOCATION = null;
+		}
+	}
 
 	@Before
 	public void setUp() throws Exception {
-		forgeRuntime = new TestRuntime();
 		forgeProcess = null;
 	}
 
@@ -36,7 +44,6 @@ public class ForgeLaunchHelperTest {
 			} catch (DebugException e) {}
 		}
 		forgeProcess = null;
-		forgeRuntime = null;
 	}
 
 	@Test
@@ -44,7 +51,7 @@ public class ForgeLaunchHelperTest {
 		new UIJob("testLaunch") {
 			public IStatus runInUIThread(IProgressMonitor monitor) {
 				try {
-					forgeProcess = ForgeLaunchHelper.launch(forgeRuntime);
+					forgeProcess = ForgeLaunchHelper.launch("test", TEST_LOCATION);
 					assertNotNull(forgeProcess);
 					assertFalse(forgeProcess.isTerminated());
 				} catch (RuntimeException e) {
@@ -54,19 +61,6 @@ public class ForgeLaunchHelperTest {
 			}
 			
 		}.schedule();
-	}
-
-	private class TestRuntime extends ForgeRuntime {
-		public String getName() {
-			return "test";
-		}
-		public String getLocation() {
-			try {
-				return FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime")).getAbsolutePath();
-			} catch (IOException e) {
-				return null;
-			}
-		}
 	}
 
 }
