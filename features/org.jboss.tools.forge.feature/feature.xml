@@ -24,6 +24,13 @@ for a full listing of individual contributors.
          id="org.jboss.tools.forge.ui"
          download-size="0"
          install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jboss.tools.forge.runtime"
+         download-size="0"
+         install-size="0"
          version="0.0.0"/>
 
 </feature>
