@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.DebugPlugin;
@@ -161,7 +162,7 @@ public class ForgeRuntime implements IDebugEventSetListener {
 	
 	private static void createInitialInstallations() {
 		try {
-			File file = FileLocator.getBundleFile(ForgeUIPlugin.getDefault().getBundle());
+			File file = FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime"));
 			defaultInstallation = new ForgeInstallation("embedded", file.getAbsolutePath());
 			installations = new ArrayList<ForgeInstallation>();
 			installations.add(defaultInstallation);
