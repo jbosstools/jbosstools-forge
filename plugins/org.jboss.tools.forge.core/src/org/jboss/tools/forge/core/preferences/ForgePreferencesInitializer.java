@@ -5,7 +5,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
 
-public class ForgePreferenceInitializer extends AbstractPreferenceInitializer {
+public class ForgePreferencesInitializer extends AbstractPreferenceInitializer {
 
 	static final String INITIAL_RUNTIMES_PREFERENCE =
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +

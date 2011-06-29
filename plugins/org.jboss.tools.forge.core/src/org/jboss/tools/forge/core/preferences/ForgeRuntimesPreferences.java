@@ -55,7 +55,7 @@ public class ForgeRuntimesPreferences {
 	private String getForgeRuntimesPreference() {
 		return getForgeCorePreferences().get(
 				PREF_FORGE_RUNTIMES, 
-				ForgePreferenceInitializer.INITIAL_RUNTIMES_PREFERENCE);
+				ForgePreferencesInitializer.INITIAL_RUNTIMES_PREFERENCE);
 	}
 	
 	private void initializeRuntimes() {
