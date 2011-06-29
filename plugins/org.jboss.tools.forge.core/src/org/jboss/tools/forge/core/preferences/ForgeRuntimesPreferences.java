@@ -23,43 +23,43 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class ForgeInstallations {
+public class ForgeRuntimesPreferences {
 	
-	static final String PREF_FORGE_INSTALLATIONS = "org.jboss.tools.forge.core.installations";
+	static final String PREF_FORGE_RUNTIMES = "org.jboss.tools.forge.core.runtimes";
 	
-	public static final ForgeInstallations INSTANCE = new ForgeInstallations();
+	public static final ForgeRuntimesPreferences INSTANCE = new ForgeRuntimesPreferences();
 	
-	List<ForgeRuntime> installations = null;
-	ForgeRuntime defaultInstallation = null;
+	List<ForgeRuntime> runtimes = null;
+	ForgeRuntime defaultRuntime = null;
 	
-	private ForgeInstallations() {}
+	private ForgeRuntimesPreferences() {}
 	
-	public ForgeRuntime[] getInstallations() {
-		if (installations == null) {
-			initializeInstallations();
+	public ForgeRuntime[] getRuntimes() {
+		if (runtimes == null) {
+			initializeRuntimes();
 		}
-		return (ForgeRuntime[])installations.toArray(new ForgeRuntime[installations.size()]);
+		return (ForgeRuntime[])runtimes.toArray(new ForgeRuntime[runtimes.size()]);
 	}
 	
 	public ForgeRuntime getDefault() {
-		if (defaultInstallation == null) {
-			initializeInstallations();
+		if (defaultRuntime == null) {
+			initializeRuntimes();
 		}
-		return defaultInstallation;
+		return defaultRuntime;
 	}
 	
 	private IEclipsePreferences getForgeCorePreferences() {
 		return InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
 	}
 	
-	private String getForgeInstallationsPreference() {
+	private String getForgeRuntimesPreference() {
 		return getForgeCorePreferences().get(
-				PREF_FORGE_INSTALLATIONS, 
-				ForgePreferenceInitializer.INITIAL_INSTALLATIONS_PREFERENCE);
+				PREF_FORGE_RUNTIMES, 
+				ForgePreferenceInitializer.INITIAL_RUNTIMES_PREFERENCE);
 	}
 	
-	private void initializeInstallations() {
-		initializeFromXml(getForgeInstallationsPreference());
+	private void initializeRuntimes() {
+		initializeFromXml(getForgeRuntimesPreference());
 	}
 	
 	private void initializeFromXml(String xml) {
@@ -67,11 +67,11 @@ public class ForgeInstallations {
 		if (documentBuilder == null) return;
 		InputStream inputStream = createInputStream(xml);
 		if (inputStream == null) return;
-		installations = new ArrayList<ForgeRuntime>();
-		Document document = parseInstallations(documentBuilder, inputStream);	
-		Element installationsElement = document.getDocumentElement();
-		String defaultInstallationName = installationsElement.getAttribute("default");
-		NodeList nodeList = installationsElement.getChildNodes();
+		runtimes = new ArrayList<ForgeRuntime>();
+		Document document = parseRuntimes(documentBuilder, inputStream);	
+		Element runtimeElement = document.getDocumentElement();
+		String defaultRuntimeName = runtimeElement.getAttribute("default");
+		NodeList nodeList = runtimeElement.getChildNodes();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -82,15 +82,15 @@ public class ForgeInstallations {
 					runtime = ForgeEmbeddedRuntime.INSTANCE;
 				}
 				if (runtime == null) continue;
-				installations.add(runtime);
-				if (defaultInstallationName.equals(runtime.getName())) {
-					defaultInstallation = runtime;
+				runtimes.add(runtime);
+				if (defaultRuntimeName.equals(runtime.getName())) {
+					defaultRuntime = runtime;
 				}
 			}
 		}
 	}
 	
-	private Document parseInstallations(DocumentBuilder documentBuilder, InputStream inputStream) {
+	private Document parseRuntimes(DocumentBuilder documentBuilder, InputStream inputStream) {
 		Document result = null;
 		try {
 			result = documentBuilder.parse(inputStream);

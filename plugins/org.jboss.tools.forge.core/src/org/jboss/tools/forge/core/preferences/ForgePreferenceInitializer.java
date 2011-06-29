@@ -7,16 +7,16 @@ import org.jboss.tools.forge.core.ForgeCorePlugin;
 
 public class ForgePreferenceInitializer extends AbstractPreferenceInitializer {
 
-	static final String INITIAL_INSTALLATIONS_PREFERENCE =
+	static final String INITIAL_RUNTIMES_PREFERENCE =
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-			"<forgeInstallations default=\"embedded\">" +
-			"   <installation name=\"embedded\" type=\"embedded\"/>" +
-			"</forgeInstallations>";
+			"<forgeRuntimes default=\"embedded\">" +
+			"   <runtime name=\"embedded\" type=\"embedded\"/>" +
+			"</forgeRuntimes>";
 
 	@Override
 	public void initializeDefaultPreferences() {
 		IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
-		preferences.put(ForgeInstallations.PREF_FORGE_INSTALLATIONS, INITIAL_INSTALLATIONS_PREFERENCE);
+		preferences.put(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, INITIAL_RUNTIMES_PREFERENCE);
 	}
 
 }

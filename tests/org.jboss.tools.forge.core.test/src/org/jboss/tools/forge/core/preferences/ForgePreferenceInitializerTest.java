@@ -13,11 +13,11 @@ public class ForgePreferenceInitializerTest {
 	@Test
 	public void testInitializeDefaultPreferences() {
 		IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
-		assertNull(preferences.get(ForgeInstallations.PREF_FORGE_INSTALLATIONS, null));
+		assertNull(preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null));
 		new ForgePreferenceInitializer().initializeDefaultPreferences();
 		assertEquals(
-				ForgePreferenceInitializer.INITIAL_INSTALLATIONS_PREFERENCE, 
-				preferences.get(ForgeInstallations.PREF_FORGE_INSTALLATIONS, null));
+				ForgePreferenceInitializer.INITIAL_RUNTIMES_PREFERENCE, 
+				preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null));
 	}
 
 }
