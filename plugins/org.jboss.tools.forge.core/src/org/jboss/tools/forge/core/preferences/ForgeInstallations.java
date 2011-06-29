@@ -1,22 +1,20 @@
 package org.jboss.tools.forge.core.preferences;
 
-import java.util.List;
-
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 
 public class ForgeInstallations {
 	
-	private static final String PREF_FORGE_INSTALLATIONS = "installations";
+//	private static final String PREF_FORGE_INSTALLATIONS = "installations";
 	
-	private static List<ForgeRuntime> installations = null;
+//	private static List<ForgeRuntime> installations = null;
 	private static ForgeRuntime defaultInstallation = null;
 	
-	public static ForgeRuntime[] getInstallations() {
+//	public static ForgeRuntime[] getInstallations() {
 //		if (installations == null) {
 //			initializeInstallations();
 //		}
-		return (ForgeRuntime[])installations.toArray(new ForgeRuntime[installations.size()]);
-	}
+//		return (ForgeRuntime[])installations.toArray(new ForgeRuntime[installations.size()]);
+//	}
 	
 	public static ForgeRuntime getDefault() {
 //		if (installations == null) {
@@ -28,7 +26,15 @@ public class ForgeInstallations {
 //	private static IEclipsePreferences getForgeCorePreferences() {
 //		return InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
 //	}
-//	
+	
+//	private static void initializeInstallations() {
+//		initializeEmbeddedRuntime();
+//	}
+	
+//	private static void initializeEmbeddedRuntime() {
+		
+//	}
+	
 //	private static void initializeInstallations() {
 //		String installPrefsXml = getForgeCorePreferences().get(PREF_FORGE_INSTALLATIONS, null);
 //		if (installPrefsXml == null || "".equals(installPrefsXml)) {
