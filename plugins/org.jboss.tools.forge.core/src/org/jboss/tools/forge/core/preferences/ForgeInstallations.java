@@ -1,111 +1,126 @@
 package org.jboss.tools.forge.core.preferences;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.process.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class ForgeInstallations {
 	
 	static final String PREF_FORGE_INSTALLATIONS = "org.jboss.tools.forge.core.installations";
 	
-//	private static List<ForgeRuntime> installations = null;
-	private static ForgeRuntime DEFAULT_INSTALLATION = null;
+	public static final ForgeInstallations INSTANCE = new ForgeInstallations();
 	
-//	public static ForgeRuntime[] getInstallations() {
-//		if (installations == null) {
-//			initializeInstallations();
-//		}
-//		return (ForgeRuntime[])installations.toArray(new ForgeRuntime[installations.size()]);
-//	}
+	List<ForgeRuntime> installations = null;
+	ForgeRuntime defaultInstallation = null;
 	
-	public static ForgeRuntime getDefault() {
-		if (DEFAULT_INSTALLATION == null) {
+	private ForgeInstallations() {}
+	
+	public ForgeRuntime[] getInstallations() {
+		if (installations == null) {
 			initializeInstallations();
 		}
-		return DEFAULT_INSTALLATION;
+		return (ForgeRuntime[])installations.toArray(new ForgeRuntime[installations.size()]);
 	}
 	
-//	private static IEclipsePreferences getForgeCorePreferences() {
-//		return InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
-//	}
-	
-//	private static void initializeInstallations() {
-//		initializeEmbeddedRuntime();
-//	}
-	
-//	private static void initializeEmbeddedRuntime() {
-		
-//	}
-	
-	private static void initializeInstallations() {
-		DEFAULT_INSTALLATION = ForgeEmbeddedRuntime.INSTANCE;
+	public ForgeRuntime getDefault() {
+		if (defaultInstallation == null) {
+			initializeInstallations();
+		}
+		return defaultInstallation;
 	}
 	
-//	private static void initializeInstallations() {
-//		String installPrefsXml = getForgeCorePreferences().get(PREF_FORGE_INSTALLATIONS, null);
-//		if (installPrefsXml == null || "".equals(installPrefsXml)) {
-//			createInitialInstallations();
-//			installPrefsXml = getForgeCorePreferences().get(PREF_FORGE_INSTALLATIONS, null);
-//		}
-//		initializeFromXml(installPrefsXml);
-//	}
-//	
-//	private static void initializeFromXml(String installPrefsXml) {
-//		if (installPrefsXml == null) return;
-//		DocumentBuilder documentBuilder = newDocumentBuilder();
-//		if (documentBuilder == null) return;
-//		InputStream inputStream = createInputStream(installPrefsXml);
-//		if (inputStream == null) return;
-//		installations = new ArrayList<ForgeRuntime>();
-//		Document document = parseInstallations(documentBuilder, inputStream);	
-//		Element installationsElement = document.getDocumentElement();
-//		String defaultInstallationName = installationsElement.getAttribute("default");
-//		NodeList nodeList = installationsElement.getChildNodes();
-//		for (int i = 0; i < nodeList.getLength(); i++) {
-//			Node node = nodeList.item(i);
-//			if (node.getNodeType() == Node.ELEMENT_NODE) {
-//				Element element = (Element)node;
-//				String name = element.getAttribute("name");
-//				String location = element.getAttribute("location");
-//				ForgeRuntime newInstallation = new ForgeRuntime(name, location);
-//				installations.add(newInstallation);
-//				if (name.equals(defaultInstallationName)) {
-//					defaultInstallation = newInstallation;
-//				}
-//			}
-//		}
-//	}
-//	
-//	private static Document parseInstallations(DocumentBuilder documentBuilder, InputStream inputStream) {
-//		Document result = null;
-//		try {
-//			result = documentBuilder.parse(inputStream);
-//		} catch (SAXException e) {
-//			ForgeUIPlugin.log(e);
-//		} catch (IOException e) {
-//			ForgeUIPlugin.log(e);
-//		}
-//		return result;
-//	}
-//	
-//	private static InputStream createInputStream(String string) {
-//		InputStream result = null;
-//		try {
-//			result = new BufferedInputStream(new ByteArrayInputStream(string.getBytes("UTF8")));
-//		} catch (UnsupportedEncodingException e) {
-//			ForgeUIPlugin.log(e);
-//		}
-//		return result;
-//	}
-//	
-//	private static DocumentBuilder newDocumentBuilder() {
-//		try {
-//			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
-//		} catch (ParserConfigurationException e) {
-//			ForgeUIPlugin.log(e);
-//			return null;
-//		}
-//	}
-//	
+	private IEclipsePreferences getForgeCorePreferences() {
+		return InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
+	}
+	
+	private String getForgeInstallationsPreference() {
+		return getForgeCorePreferences().get(
+				PREF_FORGE_INSTALLATIONS, 
+				ForgePreferenceInitializer.INITIAL_INSTALLATIONS_PREFERENCE);
+	}
+	
+	private void initializeInstallations() {
+		initializeFromXml(getForgeInstallationsPreference());
+	}
+	
+	private void initializeFromXml(String xml) {
+		DocumentBuilder documentBuilder = newDocumentBuilder();
+		if (documentBuilder == null) return;
+		InputStream inputStream = createInputStream(xml);
+		if (inputStream == null) return;
+		installations = new ArrayList<ForgeRuntime>();
+		Document document = parseInstallations(documentBuilder, inputStream);	
+		Element installationsElement = document.getDocumentElement();
+		String defaultInstallationName = installationsElement.getAttribute("default");
+		NodeList nodeList = installationsElement.getChildNodes();
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Node node = nodeList.item(i);
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+				Element element = (Element)node;
+				String type = element.getAttribute("type");
+				ForgeRuntime runtime = null;
+				if ("embedded".equals(type)) {
+					runtime = ForgeEmbeddedRuntime.INSTANCE;
+				}
+				if (runtime == null) continue;
+				installations.add(runtime);
+				if (defaultInstallationName.equals(runtime.getName())) {
+					defaultInstallation = runtime;
+				}
+			}
+		}
+	}
+	
+	private Document parseInstallations(DocumentBuilder documentBuilder, InputStream inputStream) {
+		Document result = null;
+		try {
+			result = documentBuilder.parse(inputStream);
+		} catch (SAXException e) {
+			ForgeCorePlugin.log(e);
+		} catch (IOException e) {
+			ForgeCorePlugin.log(e);
+		}
+		return result;
+	}
+	
+	private InputStream createInputStream(String string) {
+		InputStream result = null;
+		try {
+			result = new BufferedInputStream(new ByteArrayInputStream(string.getBytes("UTF8")));
+		} catch (UnsupportedEncodingException e) {
+			ForgeCorePlugin.log(e);
+		}
+		return result;
+	}
+	
+	private DocumentBuilder newDocumentBuilder() {
+		try {
+			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			ForgeCorePlugin.log(e);
+			return null;
+		}
+	}
+	
 //	private static Document createEmptyDocument() {
 //		DocumentBuilder documentBuilder = newDocumentBuilder();
 //		if (documentBuilder == null) {

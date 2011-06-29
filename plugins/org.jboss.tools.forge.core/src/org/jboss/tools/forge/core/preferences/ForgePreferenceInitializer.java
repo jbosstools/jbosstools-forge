@@ -10,7 +10,7 @@ public class ForgePreferenceInitializer extends AbstractPreferenceInitializer {
 	static final String INITIAL_INSTALLATIONS_PREFERENCE =
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
 			"<forgeInstallations default=\"embedded\">" +
-			"   <installation name=\"embedded\"/>" +
+			"   <installation name=\"embedded\" type=\"embedded\"/>" +
 			"</forgeInstallations>";
 
 	@Override
