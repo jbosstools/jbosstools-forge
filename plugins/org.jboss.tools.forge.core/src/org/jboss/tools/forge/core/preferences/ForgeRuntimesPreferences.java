@@ -2,6 +2,7 @@ package org.jboss.tools.forge.core.preferences;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -11,11 +12,18 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.process.ForgeEmbeddedRuntime;
+import org.jboss.tools.forge.core.process.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -29,8 +37,8 @@ public class ForgeRuntimesPreferences {
 	
 	public static final ForgeRuntimesPreferences INSTANCE = new ForgeRuntimesPreferences();
 	
-	List<ForgeRuntime> runtimes = null;
-	ForgeRuntime defaultRuntime = null;
+	private List<ForgeRuntime> runtimes = null;
+	private ForgeRuntime defaultRuntime = null;
 	
 	private ForgeRuntimesPreferences() {}
 	
@@ -80,6 +88,10 @@ public class ForgeRuntimesPreferences {
 				ForgeRuntime runtime = null;
 				if ("embedded".equals(type)) {
 					runtime = ForgeEmbeddedRuntime.INSTANCE;
+				} else if ("external".equals(type)) {
+					String name = element.getAttribute("name");
+					String location = element.getAttribute("location");
+					runtime = new ForgeExternalRuntime(name, location);
 				}
 				if (runtime == null) continue;
 				runtimes.add(runtime);
@@ -120,73 +132,67 @@ public class ForgeRuntimesPreferences {
 			return null;
 		}
 	}
+		
+	public void setRuntimes(ForgeRuntime[] runtimes, ForgeRuntime defaultRuntime) {
+		this.runtimes.clear();
+		for (ForgeRuntime runtime : runtimes) {
+			this.runtimes.add(runtime);
+		}
+		this.defaultRuntime = defaultRuntime;
+		saveRuntimes();
+	}
 	
-//	private static Document createEmptyDocument() {
-//		DocumentBuilder documentBuilder = newDocumentBuilder();
-//		if (documentBuilder == null) {
-//			return null;
-//		} else {
-//			return documentBuilder.newDocument();
-//		}
-//	}
-//	
-//	private static String serializeDocument(Document doc) throws TransformerException, IOException {
-//		ByteArrayOutputStream s = new ByteArrayOutputStream();
-//		TransformerFactory factory = TransformerFactory.newInstance();
-//		Transformer transformer = factory.newTransformer();
-//		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-//		transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
-//		DOMSource source = new DOMSource(doc);
-//		StreamResult outputTarget = new StreamResult(s);
-//		transformer.transform(source, outputTarget);
-//		return s.toString("UTF8"); 		
-//	}
-//	
-//	private static void createInitialInstallations() {
-//		try {
-//			File file = FileLocator.getBundleFile(ForgeUIPlugin.getDefault().getBundle());
-//			defaultInstallation = new ForgeInstallation("embedded", file.getAbsolutePath());
-//			installations = new ArrayList<ForgeInstallation>();
-//			installations.add(defaultInstallation);
-//			saveInstallations();
-//		} catch (IOException e) {
-//			ForgeUIPlugin.log(e);
-//		}
-//	}
-//	
-//	public static void setInstallations(ForgeInstallation[] installs, ForgeInstallation defaultInstall) {
-//		installations.clear();
-//		for (ForgeInstallation install : installs) {
-//			installations.add(install);
-//		}
-//		defaultInstallation = defaultInstall;
-//		saveInstallations();
-//	}
-//	
-//	private static void saveInstallations() {
-//		try {
-//			String xml = serializeDocument(createInstallationsDocument());
-//			ForgeUIPlugin.getDefault().getPreferenceStore().setValue(PREF_FORGE_INSTALLATIONS, xml);
-//		} catch (IOException e) {
-//			ForgeUIPlugin.log(e);
-//		} catch (TransformerException e) {
-//			ForgeUIPlugin.log(e);
-//		}
-//	}
-//
-//	private static Document createInstallationsDocument() {
-//		Document document = createEmptyDocument();
-//		if (document == null) return null;
-//		Element main = document.createElement("forgeInstallations");
-//		document.appendChild(main);
-//		for (ForgeInstallation installation : installations) {
-//			Element element = document.createElement("installation");
-//			element.setAttribute("name", installation.getName());
-//			element.setAttribute("location", installation.getLocation());
-//			main.appendChild(element);
-//		}
-//		main.setAttribute("default", defaultInstallation.getName());
-//		return document;
-//	}
+	private void saveRuntimes() {
+		try {
+			String xml = serializeDocument(createRuntimesDocument());
+			InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID).put(PREF_FORGE_RUNTIMES, xml);
+		} catch (IOException e) {
+			ForgeCorePlugin.log(e);
+		} catch (TransformerException e) {
+			ForgeCorePlugin.log(e);
+		}
+	}
+	
+	private Document createRuntimesDocument() {
+		Document document = createEmptyDocument();
+		if (document == null)
+			return null;
+		Element main = document.createElement("forgeRuntimes");
+		document.appendChild(main);
+		for (ForgeRuntime runtime : runtimes) {
+			Element element = document.createElement("runtime");
+			element.setAttribute("name", runtime.getName());
+			if (!(runtime instanceof ForgeEmbeddedRuntime)) {
+				element.setAttribute("location", runtime.getLocation());
+			}
+			element.setAttribute("type", runtime.getType());
+			main.appendChild(element);
+		}
+		if (defaultRuntime != null) {
+			main.setAttribute("default", defaultRuntime.getName());
+		}
+		return document;
+	}
+	
+	private Document createEmptyDocument() {
+		DocumentBuilder documentBuilder = newDocumentBuilder();
+		if (documentBuilder == null) {
+			return null;
+		} else {
+			return documentBuilder.newDocument();
+		}
+	}
+	
+	private static String serializeDocument(Document doc) throws TransformerException, IOException {
+		ByteArrayOutputStream s = new ByteArrayOutputStream();
+		TransformerFactory factory = TransformerFactory.newInstance();
+		Transformer transformer = factory.newTransformer();
+		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
+		DOMSource source = new DOMSource(doc);
+		StreamResult outputTarget = new StreamResult(s);
+		transformer.transform(source, outputTarget);
+		return s.toString("UTF8"); 		
+	}
 
 }
