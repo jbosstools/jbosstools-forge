@@ -18,5 +18,10 @@ public class ForgeExternalRuntime implements ForgeRuntime {
 	public String getLocation() {
 		return location;
 	}
+	
+	@Override
+	public String getType() {
+		return "external";
+	}
 
 }

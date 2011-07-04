@@ -4,5 +4,6 @@ public interface ForgeRuntime {
 	
 	String getName();
 	String getLocation();
+	String getType();
 
 }

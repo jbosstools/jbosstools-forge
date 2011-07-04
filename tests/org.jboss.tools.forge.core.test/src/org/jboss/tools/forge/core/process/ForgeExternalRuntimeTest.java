@@ -11,6 +11,7 @@ public class ForgeExternalRuntimeTest {
 		ForgeExternalRuntime runtime = new ForgeExternalRuntime("foo", "bar");
 		assertEquals("foo", runtime.getName());
 		assertEquals("bar", runtime.getLocation());
+		assertEquals("external", runtime.getType());
 	}
 
 }

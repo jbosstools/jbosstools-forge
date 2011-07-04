@@ -11,26 +11,24 @@ import org.junit.Test;
 
 public class ForgeEmbeddedRuntimeTest {
 	
-	private String name = null;
 	private String location = null;
 	
 	@Before 
 	public void setUp() throws Exception {
-		name = "embedded";
 		location = FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime")).getAbsolutePath();
 	}
 	
 	@After
 	public void tearDown() {
-		name = null;
 		location = null;
 	}
 	
 	@Test
 	public void testForgeEmbeddedRuntime() {
 		assertNotNull(ForgeEmbeddedRuntime.INSTANCE);
-		assertEquals(name, ForgeEmbeddedRuntime.INSTANCE.getName());
+		assertEquals("embedded", ForgeEmbeddedRuntime.INSTANCE.getName());
 		assertEquals(location, ForgeEmbeddedRuntime.INSTANCE.getLocation());
+		assertEquals("embedded", ForgeEmbeddedRuntime.INSTANCE.getType());
 	}
 
 }

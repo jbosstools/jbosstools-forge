@@ -27,5 +27,10 @@ public class ForgeEmbeddedRuntime implements ForgeRuntime {
 		}
 		return result;
 	}
+	
+	@Override
+	public String getType() {
+		return "embedded";
+	}
 
 }
