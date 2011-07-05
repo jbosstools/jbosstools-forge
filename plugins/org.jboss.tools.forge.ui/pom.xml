@@ -4,10 +4,9 @@
 	<parent>
 	  <groupId>org.jboss.tools.forge</groupId>
 	  <artifactId>forge.plugins</artifactId>
-	  <version>0.0.2-SNAPSHOT</version>
+	  <version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>org.jboss.tools.forge.plugins</groupId>
-	<artifactId>org.jboss.tools.forge.ui</artifactId> 
-	<version>1.0.0-SNAPSHOT</version>
+	<artifactId>org.jboss.tools.forge.ui</artifactId> 	
 	<packaging>eclipse-plugin</packaging>
 </project>
