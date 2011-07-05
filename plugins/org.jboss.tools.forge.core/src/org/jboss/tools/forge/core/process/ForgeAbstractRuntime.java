@@ -35,10 +35,10 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		}
 		try {
 			progressMonitor.beginTask("Starting Forge", IProgressMonitor.UNKNOWN);
-			state = STATE_STARTING;
-			propertyChangeSupport.firePropertyChange(PROPERTY_STATE, STATE_NOT_RUNNING, STATE_STARTING);
 			streamListener = new StartupListener();
 			process = ForgeLaunchHelper.launch(getName(), getLocation());
+			state = STATE_STARTING;
+			propertyChangeSupport.firePropertyChange(PROPERTY_STATE, STATE_NOT_RUNNING, STATE_STARTING);
 			process.getStreamsProxy().getOutputStreamMonitor().addListener(streamListener);
 			progressMonitor.worked(1);
 			while (STATE_STARTING.equals(state)) {

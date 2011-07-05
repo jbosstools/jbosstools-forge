@@ -132,6 +132,9 @@ public class ForgeAbstractRuntimeTest {
 	private class TestPropertyChangeListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			propertyChangeEvents.add(evt);
+			if (ForgeRuntime.STATE_STARTING.equals(evt.getNewValue())) {
+				assertNotNull(runtime.getProcess());
+			}
 		}		
 	}
 	
