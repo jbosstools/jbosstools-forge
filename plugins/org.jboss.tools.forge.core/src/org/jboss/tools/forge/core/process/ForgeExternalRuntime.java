@@ -1,6 +1,6 @@
 package org.jboss.tools.forge.core.process;
 
-public class ForgeExternalRuntime implements ForgeRuntime {
+public class ForgeExternalRuntime extends ForgeAbstractRuntime {
 	
 	private String name, location;
 	

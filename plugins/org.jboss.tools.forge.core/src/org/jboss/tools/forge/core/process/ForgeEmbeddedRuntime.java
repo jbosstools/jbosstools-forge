@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
 
-public class ForgeEmbeddedRuntime implements ForgeRuntime {
+public class ForgeEmbeddedRuntime extends ForgeAbstractRuntime {
 	
 	public static final ForgeRuntime INSTANCE = new ForgeEmbeddedRuntime();
 	

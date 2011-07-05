@@ -1,6 +1,6 @@
 package org.jboss.tools.forge.core.process;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
