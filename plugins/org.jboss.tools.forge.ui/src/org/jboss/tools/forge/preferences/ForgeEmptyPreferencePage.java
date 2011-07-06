@@ -7,9 +7,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class EmptyPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+public class ForgeEmptyPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 	
-	public EmptyPreferencePage() {
+	public ForgeEmptyPreferencePage() {
 		super();
 		setDescription("Expand the tree to edit preferences for a specific feature.");
 	}

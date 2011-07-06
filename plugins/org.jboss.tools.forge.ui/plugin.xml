@@ -47,7 +47,7 @@
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			name="Forge"
-			class="org.jboss.tools.forge.preferences.EmptyPreferencePage"
+			class="org.jboss.tools.forge.preferences.ForgeEmptyPreferencePage"
 			id="org.jboss.tools.forge">
 		</page>
 		<page
