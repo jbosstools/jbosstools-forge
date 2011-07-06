@@ -44,8 +44,7 @@ public class ConsoleViewer extends TextConsoleViewer {
     }
     
 	protected StyledText createTextWidget(Composite parent, int styles) {
-		ConsoleText styledText= new ConsoleText(parent, styles | SWT.WRAP);
-		styledText.setLeftMargin(Math.max(styledText.getLeftMargin(), 2));
+		StyledText styledText = super.createTextWidget(parent, styles);
 		styledText.addKeyListener(new ConsoleKeyListener());
 		return styledText;
 	}
