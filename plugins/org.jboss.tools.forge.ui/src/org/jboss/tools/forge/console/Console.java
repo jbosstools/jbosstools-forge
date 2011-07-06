@@ -14,6 +14,7 @@ import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.part.IPageBookViewPage;
+import org.jboss.tools.forge.core.io.ForgeInputReadJob;
 
 public class Console extends TextConsole implements IDebugEventSetListener  {
 
@@ -63,7 +64,7 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
     }
     
     private void initInputReadJob() {
-    	InputReadJob inputReadJob = new InputReadJob(process.getStreamsProxy(), inputStream);
+    	ForgeInputReadJob inputReadJob = new ForgeInputReadJob(process.getStreamsProxy(), inputStream);
     	inputReadJob.setSystem(true);
     	inputReadJob.schedule();
     }
