@@ -18,5 +18,5 @@ Require-Bundle: org.eclipse.ui,
  org.jboss.tools.forge.core;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.jboss.tools.forge.ForgeUIPlugin
+Bundle-Activator: org.jboss.tools.forge.ui.ForgeUIPlugin
 Bundle-ClassPath: .

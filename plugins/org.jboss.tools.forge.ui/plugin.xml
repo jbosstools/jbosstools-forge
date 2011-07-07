@@ -25,7 +25,7 @@
                label="Forge">
          </menu>
          <action
-               class="org.jboss.tools.forge.action.StopDelegate"
+               class="org.jboss.tools.forge.ui.action.StopDelegate"
                icon="icons/stop.gif"
                id="org.jboss.tools.forge.stop"
                label="Stop Forge"
@@ -34,7 +34,7 @@
                toolbarPath="org.jboss.tools.forge.toolbar">
          </action>
          <action
-               class="org.jboss.tools.forge.action.StartDelegate"
+               class="org.jboss.tools.forge.ui.action.StartDelegate"
                icon="icons/start.gif"
                id="org.jboss.tools.forge.start"
                label="Start Forge"
@@ -47,13 +47,13 @@
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			name="Forge"
-			class="org.jboss.tools.forge.preferences.ForgeEmptyPreferencePage"
+			class="org.jboss.tools.forge.ui.preferences.ForgeEmptyPreferencePage"
 			id="org.jboss.tools.forge">
 		</page>
 		<page
 			name="Installed Forge Runtimes"
 			category="org.jboss.tools.forge"
-			class="org.jboss.tools.forge.preferences.ForgeInstallationsPreferencePage"
+			class="org.jboss.tools.forge.ui.preferences.ForgeInstallationsPreferencePage"
 			id="org.jboss.tools.forge.runtimes">
         </page>
 	</extension>

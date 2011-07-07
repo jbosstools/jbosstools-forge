@@ -24,9 +24,9 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.jboss.tools.forge.ForgeUIPlugin;
 import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
 import org.jboss.tools.forge.importer.ProjectImporter;
+import org.jboss.tools.forge.ui.ForgeUIPlugin;
 
 public class CommandRecorder implements IDocumentListener {
 	
