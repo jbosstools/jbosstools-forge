@@ -13,10 +13,10 @@ import org.eclipse.ui.part.MessagePage;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
-import org.jboss.tools.forge.console.Console;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
-import org.jboss.tools.forge.view.ConsolePage;
+import org.jboss.tools.forge.ui.console.Console;
+import org.jboss.tools.forge.ui.console.ConsolePage;
 
 public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	

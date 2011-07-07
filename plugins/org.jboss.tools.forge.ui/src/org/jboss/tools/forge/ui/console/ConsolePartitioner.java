@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.console;
+package org.jboss.tools.forge.ui.console;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocument;

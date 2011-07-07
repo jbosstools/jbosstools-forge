@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.view;
+package org.jboss.tools.forge.ui.console;
 
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
@@ -10,7 +10,6 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.console.TextConsoleViewer;
-import org.jboss.tools.forge.console.Console;
 
 public class ConsoleViewer extends TextConsoleViewer {
 	

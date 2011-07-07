@@ -1,11 +1,10 @@
-package org.jboss.tools.forge.view;
+package org.jboss.tools.forge.ui.console;
 
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.console.TextConsoleViewer;
 import org.eclipse.ui.part.Page;
-import org.jboss.tools.forge.console.Console;
 
 public class ConsolePage extends Page {
 	
