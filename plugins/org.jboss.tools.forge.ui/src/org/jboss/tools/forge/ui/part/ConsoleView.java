@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.view;
+package org.jboss.tools.forge.ui.part;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -16,6 +16,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.jboss.tools.forge.console.Console;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.view.ConsolePage;
 
 public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	

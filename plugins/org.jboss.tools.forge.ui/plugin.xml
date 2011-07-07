@@ -9,7 +9,7 @@
       </category>
       <view
             category="org.jboss.tools.forge"
-            class="org.jboss.tools.forge.view.ConsoleView"
+            class="org.jboss.tools.forge.ui.part.ConsoleView"
             id="org.jboss.tools.forge.console"
             name="Forge Console"
             restorable="true">
