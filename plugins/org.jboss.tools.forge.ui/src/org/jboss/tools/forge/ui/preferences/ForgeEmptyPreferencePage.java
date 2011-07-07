@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.preferences;
+package org.jboss.tools.forge.ui.preferences;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
