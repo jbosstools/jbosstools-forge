@@ -25,7 +25,7 @@ import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.progress.WorkbenchJob;
-import org.jboss.tools.forge.console.ConsoleInputStream;
+import org.jboss.tools.forge.core.io.ConsoleInputStream;
 import org.jboss.tools.forge.ui.console.Console;
 
 /**

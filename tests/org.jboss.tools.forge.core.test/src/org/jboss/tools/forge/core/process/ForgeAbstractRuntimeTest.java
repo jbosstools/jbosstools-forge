@@ -25,7 +25,7 @@ import org.junit.Test;
 
 public class ForgeAbstractRuntimeTest {
 	
-	private ForgeRuntime runtime;
+	private ForgeAbstractRuntime runtime;
 	private Set<String> calledMethods;
 	private List<PropertyChangeEvent> propertyChangeEvents;
 	private PropertyChangeListener propertyChangeListener;

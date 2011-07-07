@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.ui.console.ConsolePlugin;
-import org.jboss.tools.forge.console.ConsoleInputStream;
+import org.jboss.tools.forge.core.io.ConsoleInputStream;
 
 public class ConsolePartition implements ITypedRegion {
 	public static final String OUTPUT_PARTITION_TYPE = ConsolePlugin.getUniqueIdentifier() + ".io_console_output_partition_type"; //$NON-NLS-1$

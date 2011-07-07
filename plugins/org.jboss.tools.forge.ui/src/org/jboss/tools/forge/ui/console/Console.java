@@ -15,7 +15,7 @@ import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.part.IPageBookViewPage;
-import org.jboss.tools.forge.console.ConsoleInputStream;
+import org.jboss.tools.forge.core.io.ConsoleInputStream;
 import org.jboss.tools.forge.core.io.ForgeInputReadJob;
 
 public class Console extends TextConsole implements IDebugEventSetListener  {
