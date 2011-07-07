@@ -3,18 +3,18 @@ package org.jboss.tools.forge.preferences;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.jboss.tools.forge.launching.ForgeInstallation;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
 
 public class ForgeInstallationLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	public String getColumnText(Object element, int columnIndex) {
-		if (element instanceof ForgeInstallation) {
-			ForgeInstallation forgeInstallation= (ForgeInstallation)element;
+		if (element instanceof ForgeRuntime) {
+			ForgeRuntime forgeRuntime= (ForgeRuntime)element;
 			switch(columnIndex) {
 				case 0:
-					return forgeInstallation.getName();
+					return forgeRuntime.getName();
 				case 1:
-					return forgeInstallation.getLocation();
+					return forgeRuntime.getLocation();
 			}
 		}
 		return element.toString();

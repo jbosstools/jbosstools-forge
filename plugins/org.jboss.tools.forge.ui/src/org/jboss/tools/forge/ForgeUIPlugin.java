@@ -3,7 +3,6 @@ package org.jboss.tools.forge;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.jboss.tools.forge.launching.ForgeRuntime;
 import org.osgi.framework.BundleContext;
 
 public class ForgeUIPlugin extends AbstractUIPlugin {
@@ -18,9 +17,6 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 	}
 
 	public void stop(BundleContext context) throws Exception {
-		if (ForgeRuntime.INSTANCE.isForgeRunning()) {
-			ForgeRuntime.INSTANCE.stopForge();
-		}
 		plugin = null;
 		super.stop(context);
 	}

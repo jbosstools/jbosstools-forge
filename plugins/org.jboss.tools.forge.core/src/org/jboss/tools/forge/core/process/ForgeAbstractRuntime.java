@@ -115,9 +115,14 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	            DebugEvent event = events[i];
 	            if (event.getSource().equals(process)) {
 	                if (event.getKind() == DebugEvent.TERMINATE) {
-	                	setNewState(STATE_NOT_RUNNING);
-	                	process = null;
-	                	DebugPlugin.getDefault().removeDebugEventListener(terminateListener);
+	                	DebugPlugin.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+			                	setNewState(STATE_NOT_RUNNING);
+			                	process = null;
+			                	DebugPlugin.getDefault().removeDebugEventListener(terminateListener);
+							}	                		
+	                	});
 	                }
 	            }
 	        }

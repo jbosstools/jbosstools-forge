@@ -27,8 +27,10 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.jboss.tools.forge.launching.ForgeInstallation;
-import org.jboss.tools.forge.launching.ForgeRuntime;
+import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.process.ForgeEmbeddedRuntime;
+import org.jboss.tools.forge.core.process.ForgeExternalRuntime;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
 
 public class ForgeInstallationsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 				
@@ -37,8 +39,8 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	private CheckboxTableViewer runtimesTableViewer	;
 	private Button removeButton;
 	private Button editButton;
-	private ArrayList<ForgeInstallation> installations = null;
-	private ForgeInstallation defaultInstallation = null;
+	private ArrayList<ForgeRuntime> runtimes = null;
+	private ForgeRuntime defaultRuntime = null;
 	
 	public ForgeInstallationsPreferencePage() {
 		super("Installed Forge Runtimes");
@@ -81,8 +83,8 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 				ISelection selection = runtimesTableViewer.getSelection();
 				if (selection != null && selection instanceof IStructuredSelection) {
 					Object object = ((IStructuredSelection)selection).getFirstElement();
-					if (object != null && object instanceof ForgeInstallation) {
-						installations.remove(object);
+					if (object != null && object instanceof ForgeRuntime) {
+						runtimes.remove(object);
 						refreshForgeInstallations();
 					}
 				}
@@ -99,7 +101,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 				ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
 				dialog.initialize("Add Forge Runtime", "", "");
 				if (dialog.open() != Dialog.CANCEL) {
-					installations.add(new ForgeInstallation(dialog.getName(), dialog.getLocation()));
+					runtimes.add(new ForgeExternalRuntime(dialog.getName(), dialog.getLocation()));
 					refreshForgeInstallations();
 				}
 			}
@@ -115,8 +117,8 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 				ISelection selection = runtimesTableViewer.getSelection();
 				if (selection != null && selection instanceof IStructuredSelection) {
 					Object object = ((IStructuredSelection)selection).getFirstElement();
-					if (object != null && object instanceof ForgeInstallation) {
-						ForgeInstallation installation = (ForgeInstallation)object;
+					if (object != null && object instanceof ForgeExternalRuntime) {
+						ForgeExternalRuntime installation = (ForgeExternalRuntime)object;
 						ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
 						dialog.initialize("Edit Forge Runtime", installation.getName(), installation.getLocation());
 						if (dialog.open() != Dialog.CANCEL) {
@@ -170,8 +172,8 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		runtimesTableViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(final CheckStateChangedEvent event) {
 				Object object = event.getElement();
-				if (object != null && object instanceof ForgeInstallation) {
-					defaultInstallation = (ForgeInstallation)object;
+				if (object != null && object instanceof ForgeRuntime) {
+					defaultRuntime = (ForgeRuntime)object;
 					refreshForgeInstallations();
 				}
 			}
@@ -235,20 +237,25 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	}
 	
 	private void initializeForgeInstallations() {
-		installations = new ArrayList<ForgeInstallation>();
-		for (ForgeInstallation install : ForgeRuntime.getInstallations()) {
-			ForgeInstallation copy = new ForgeInstallation(install.getName(), install.getLocation());
-			if (install == ForgeRuntime.getDefaultInstallation()) {
-				defaultInstallation = copy;
+		runtimes = new ArrayList<ForgeRuntime>();
+		for (ForgeRuntime runtime : ForgeRuntimesPreferences.INSTANCE.getRuntimes()) {
+			ForgeRuntime copy = null;
+			if (runtime instanceof ForgeEmbeddedRuntime) {
+				copy = runtime;
+			} else if (runtime instanceof ForgeExternalRuntime) {
+				copy = new ForgeExternalRuntime(runtime.getName(), runtime.getLocation());
 			}
-			installations.add(copy);
+			if (runtime == ForgeRuntimesPreferences.INSTANCE.getDefault()) {
+				defaultRuntime = copy;
+			}
+			runtimes.add(copy);
 		}
 		refreshForgeInstallations();
 	}
 
 	private void refreshForgeInstallations() {
-		runtimesTableViewer.setInput((ForgeInstallation[])installations.toArray(new ForgeInstallation[installations.size()]));
-		runtimesTableViewer.setCheckedElements(new Object[] { defaultInstallation });
+		runtimesTableViewer.setInput((ForgeRuntime[])runtimes.toArray(new ForgeRuntime[runtimes.size()]));
+		runtimesTableViewer.setCheckedElements(new Object[] { defaultRuntime });
 		runtimesTableViewer.refresh();
 	}
 
@@ -259,9 +266,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 			selectedObject = selection.getFirstElement();
 		}
 		if (selectedObject == null 
-//				|| (selectedObject == runtimesTableViewer.getCheckedElements()[0])
-				|| (selectedObject instanceof ForgeInstallation 
-						&& ("embedded".equals(((ForgeInstallation)selectedObject).getName())))) {
+				|| (selectedObject instanceof ForgeEmbeddedRuntime)) {
 			removeButton.setEnabled(false);
 			editButton.setEnabled(false);
 		} else {
@@ -274,9 +279,9 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		final boolean[] canceled = new boolean[] {false};
 		BusyIndicator.showWhile(null, new Runnable() {
 			public void run() {
-				ForgeInstallation[] installations = (ForgeInstallation[])runtimesTableViewer.getInput();
-				ForgeInstallation defaultInstallation = (ForgeInstallation)runtimesTableViewer.getCheckedElements()[0];
-				ForgeRuntime.setInstallations(installations, defaultInstallation);
+				ForgeRuntime[] runtimes = (ForgeRuntime[])runtimesTableViewer.getInput();
+				ForgeRuntime defaultRuntime = (ForgeRuntime)runtimesTableViewer.getCheckedElements()[0];
+				ForgeRuntimesPreferences.INSTANCE.setRuntimes(runtimes, defaultRuntime);
 			}
 		});		
 		if(canceled[0]) {
