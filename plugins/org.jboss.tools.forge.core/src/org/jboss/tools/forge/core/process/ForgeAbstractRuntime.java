@@ -5,10 +5,14 @@ import java.beans.PropertyChangeSupport;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
+import org.eclipse.debug.core.model.IStreamsProxy;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
 
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
@@ -17,6 +21,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	private IProcess process = null;
 	private String state = STATE_NOT_RUNNING;
+	private final TerminateListener terminateListener = new TerminateListener();
 	
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	
@@ -37,23 +42,26 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			progressMonitor.beginTask("Starting Forge", IProgressMonitor.UNKNOWN);
 			streamListener = new StartupListener();
 			process = ForgeLaunchHelper.launch(getName(), getLocation());
-			state = STATE_STARTING;
-			propertyChangeSupport.firePropertyChange(PROPERTY_STATE, STATE_NOT_RUNNING, STATE_STARTING);
+			setNewState(STATE_STARTING);
+			DebugPlugin.getDefault().addDebugEventListener(terminateListener);
 			process.getStreamsProxy().getOutputStreamMonitor().addListener(streamListener);
 			progressMonitor.worked(1);
 			while (STATE_STARTING.equals(state)) {
 				if (progressMonitor.isCanceled()) {
 					terminate();
-					state = STATE_NOT_RUNNING;
-					propertyChangeSupport.firePropertyChange(PROPERTY_STATE, STATE_STARTING, STATE_NOT_RUNNING);
 				} else {
 					progressMonitor.worked(1);
 				}
 			}
 		} finally {
-			process.getStreamsProxy().getOutputStreamMonitor().removeListener(streamListener);
-			if (STATE_NOT_RUNNING.equals(state)) {
-				process = null;
+			if (process != null) {
+				IStreamsProxy streamsProxy = process.getStreamsProxy();
+				if (streamsProxy != null) {
+					IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
+					if (outputStreamMonitor != null) {
+						outputStreamMonitor.removeListener(streamListener);
+					}
+				}
 			}
 			progressMonitor.done();
 		}
@@ -66,9 +74,6 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		try {
 			progressMonitor.beginTask("Stopping Forge", 1);
 			terminate();
-			process = null;
-			state = STATE_NOT_RUNNING;
-			propertyChangeSupport.firePropertyChange(PROPERTY_STATE, STATE_RUNNING, STATE_NOT_RUNNING);
 		} finally {
 			progressMonitor.done();
 		}
@@ -82,6 +87,12 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		}
 	}
 	
+	private void setNewState(String newState) {
+		String oldState = state;
+		state = newState;
+		propertyChangeSupport.firePropertyChange(PROPERTY_STATE, oldState, state);
+	}
+	
 	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
 	}
@@ -93,9 +104,25 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private class StartupListener implements IStreamListener {
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
-			state = STATE_RUNNING;
-			propertyChangeSupport.firePropertyChange(PROPERTY_STATE, STATE_STARTING, STATE_RUNNING);
+			setNewState(STATE_RUNNING);
 		}		
+	}
+	
+	private class TerminateListener implements IDebugEventSetListener {
+		@Override
+		public void handleDebugEvents(DebugEvent[] events) {
+	        for (int i = 0; i < events.length; i++) {
+	            DebugEvent event = events[i];
+	            if (event.getSource().equals(process)) {
+	                if (event.getKind() == DebugEvent.TERMINATE) {
+	                	setNewState(STATE_NOT_RUNNING);
+	                	process = null;
+	                	DebugPlugin.getDefault().removeDebugEventListener(terminateListener);
+	                }
+	            }
+	        }
+		}
+		
 	}
 
 }
