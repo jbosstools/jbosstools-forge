@@ -1,6 +1,7 @@
 package org.jboss.tools.forge.old;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +27,6 @@ import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.progress.WorkbenchJob;
 import org.jboss.tools.forge.console.Console;
 import org.jboss.tools.forge.console.ConsoleInputStream;
-import org.jboss.tools.forge.console.ConsoleOutputStream;
 
 /**
  * Partitions an IOConsole's document
@@ -444,7 +444,7 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumen
 	 * @param stream The stream that was written to.
 	 * @param s The string that should be appended to the document.
 	 */
-	public void streamAppended(ConsoleOutputStream stream, String s) throws IOException {
+	public void streamAppended(OutputStream stream, String s) throws IOException {
 		System.out.println("streamAppended : " + s);
 		if (s.indexOf('\t') != -1) System.out.println("Got a tab!");
         if (document == null) {
@@ -485,9 +485,9 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumen
 	 */
 	private class PendingPartition {
 		StringBuffer text = new StringBuffer(8192);
-		ConsoleOutputStream stream;
+		OutputStream stream;
 		
-		PendingPartition(ConsoleOutputStream stream, String text) {
+		PendingPartition(OutputStream stream, String text) {
 			this.stream = stream;
 			if (text != null) {
                 append(text);

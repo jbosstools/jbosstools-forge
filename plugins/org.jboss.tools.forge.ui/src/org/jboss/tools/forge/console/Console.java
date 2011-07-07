@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
@@ -20,9 +21,8 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
 
     private ConsolePartitioner partitioner;
     private ConsoleInputStream inputStream;
-    private ConsoleOutputStream outputStream;
     private IProcess process = null;
-    private StreamListener outputStreamListener;
+    private IStreamListener outputStreamListener;
 
     
     public Console(IProcess process) {
@@ -44,14 +44,16 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
     }
     
     private void initOutputStream() {
-    	outputStream = new ConsoleOutputStream(this);
-    	IStreamMonitor streamMonitor = getOutputStreamMonitor();
-    	if (streamMonitor != null) {
-    		synchronized(streamMonitor) {
-    			outputStreamListener = new StreamListener(outputStream);
-    			streamMonitor.addListener(outputStreamListener);
-    		}
-    	}
+    	outputStreamListener = new IStreamListener() {			
+			@Override
+			public void streamAppended(String text, IStreamMonitor monitor) {
+				appendString(text);
+			}
+		};
+		IStreamMonitor streamMonitor = getOutputStreamMonitor();
+		synchronized(streamMonitor) {
+			streamMonitor.addListener(outputStreamListener);
+		}
     }
     
     private IStreamMonitor getOutputStreamMonitor() {
@@ -97,8 +99,6 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
 	private synchronized void closeStreams() {
 		try {
 			inputStream.close();
-			outputStream.close();
-//			partitioner.streamsClosed();
 		} catch (IOException e) {}
 	}
 
@@ -112,7 +112,6 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
     		}
     	}
     	outputStreamListener = null;
-        outputStream = null;
         inputStream = null;
     }
 
