@@ -13,10 +13,18 @@ public class ForgeExternalRuntime extends ForgeAbstractRuntime {
 	public String getName() {
 		return name;
 	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	@Override
 	public String getLocation() {
 		return location;
+	}
+	
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	
 	@Override
