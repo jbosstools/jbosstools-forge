@@ -1,14 +1,18 @@
 package org.jboss.tools.forge.core.process;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -63,9 +67,33 @@ public class ForgeLaunchHelper {
 		List<String> result = new ArrayList<String>();
 		result = addUserClasses(result, location);
 		if (result != null) {
+			result = addExtClasses(result);
 			result = addSystemLibs(result);
 		}
 		return result;
+	}
+	
+	private static List<String> addExtClasses(List<String> classPath) {
+		try {
+			File file = FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime.ext"));
+			if (file != null) {
+				if (file.isDirectory()) {
+					File[] files = file.listFiles(new FileFilter() {
+						public boolean accept(File pathname) {
+							return pathname.getAbsolutePath().endsWith("bin");
+						}
+					});
+					if (files.length > 0) {
+						classPath.add(createUserClassEntryMemento(files[0]));
+					}
+				} else {
+					classPath.add(createUserClassEntryMemento(file));
+				}
+			}
+		} catch (IOException e) {
+			ForgeCorePlugin.log(new RuntimeException("Problem while adding ext lib entry", e));
+		}
+		return classPath;
 	}
 	
 	private static List<String> addSystemLibs(List<String> classPath) {
