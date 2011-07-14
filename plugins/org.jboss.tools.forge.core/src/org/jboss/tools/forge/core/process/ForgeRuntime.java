@@ -7,9 +7,11 @@ import org.eclipse.debug.core.model.IProcess;
 
 public interface ForgeRuntime {
 	
-	String STATE_NOT_RUNNING = "org.jboss.tools.forge.notRunning";
-	String STATE_RUNNING = "org.jboss.tools.forge.running";
-	String STATE_STARTING = "org.jboss.tools.forge.starting";
+	String STATE_NOT_RUNNING = "org.jboss.tools.forge.runtime.notRunning";
+	String STATE_RUNNING = "org.jboss.tools.forge.runtime.running";
+	String STATE_STARTING = "org.jboss.tools.forge.runtime.starting";
+	
+	String PROPERTY_STATE = "org.jboss.tools.forge.runtime.state";
 
 	String getName();
 	String getLocation();

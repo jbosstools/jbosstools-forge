@@ -17,8 +17,6 @@ import org.jboss.tools.forge.core.ForgeCorePlugin;
 
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
-	private static final String PROPERTY_STATE = "state";
-	
 	private IProcess process = null;
 	private String state = STATE_NOT_RUNNING;
 	private final TerminateListener terminateListener = new TerminateListener();
@@ -50,8 +48,13 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				if (progressMonitor.isCanceled()) {
 					terminate();
 				} else {
+					Thread.sleep(1000);
 					progressMonitor.worked(1);
 				}
+			}
+		} catch (InterruptedException e) {
+			if (progressMonitor.isCanceled()) {
+				terminate();
 			}
 		} finally {
 			if (process != null) {
@@ -81,7 +84,9 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	private void terminate() {
 		try {
-			process.terminate();
+			if (process != null) {
+				process.terminate();
+			}
 		} catch (DebugException e) {
 			ForgeCorePlugin.log(e);
 		}
@@ -104,6 +109,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private class StartupListener implements IStreamListener {
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
+			process.getStreamsProxy().getOutputStreamMonitor().removeListener(this);
 			setNewState(STATE_RUNNING);
 		}		
 	}
