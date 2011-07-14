@@ -4,6 +4,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -15,18 +18,23 @@ import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.console.Console;
 import org.jboss.tools.forge.ui.console.ConsolePage;
 
 public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	
+	private static final String NOT_RUNNING_MESSAGE = "Forge is not running.";
+	private static final String STARTING_MESSAGE = "Please wait while Forge is starting";
+	
 	public static ConsoleView INSTANCE;
 	
 	private PageBook pageBook = null;
 	private Control notRunning;
-	private Control starting;
 	private Control running;
-	private ConsolePage forgeIsRunningPage;
+	private ConsolePage runningPage;
+	private MessagePage notRunningPage;
+	private String notRunningMessage;
 	
 	private ForgeRuntime runtime;
 	
@@ -40,7 +48,6 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	public void createPartControl(Composite parent) {
 		pageBook = new PageBook(parent, SWT.NONE);
 		createNotRunningPage(parent);
-		createStartingPage(parent);
 		showPage(notRunning);
 	}
 	
@@ -48,39 +55,41 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 		MessagePage page = new MessagePage();
 		page.createControl(pageBook);
 		page.init(new PageSite(getViewSite()));
-		page.setMessage("Forge is not running.");
+		notRunningMessage = NOT_RUNNING_MESSAGE;
+		page.setMessage(notRunningMessage);
 		notRunning = page.getControl();
-	}
-	
-	private void createStartingPage(Composite parent) {
-		MessagePage page = new MessagePage();
-		page.createControl(pageBook);
-		page.init(new PageSite(getViewSite()));
-		page.setMessage("Please wait while Forge is starting");
-		starting = page.getControl();
+		notRunningPage = page;
 	}
 	
 	@Override
 	public void setFocus() {
 		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
-			forgeIsRunningPage.setFocus();
+			runningPage.setFocus();
 		}
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (ForgeRuntime.STATE_STARTING.equals(evt.getNewValue())) {
-			handleStateStarting();
-		} else if (ForgeRuntime.STATE_RUNNING.equals(evt.getNewValue())) {
-			handleStateRunning();
-		} else if (ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getNewValue())) {
-			handleStateNotRunning();
+		if (ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) {
+			if (ForgeRuntime.STATE_STARTING.equals(evt.getNewValue())) {
+				handleStateStarting();
+			} else if (ForgeRuntime.STATE_RUNNING.equals(evt.getNewValue())) {
+				handleStateRunning();
+			} else if (ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getNewValue())) {
+				handleStateNotRunning();
+			}
 		}
 	}
 	
 	private void handleStateStarting() {
-		showPage(starting);
-		createRunningPage();
+		getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				notRunningMessage = STARTING_MESSAGE;
+				notRunningPage.setMessage(notRunningMessage);
+				createRunningPage();
+			}			
+		});
 	}
 	
 	private void handleStateRunning() {
@@ -92,11 +101,18 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 			runtime.removePropertyChangeListener(INSTANCE);
 			runtime = null;
 		}
-		showPage(notRunning);
+		getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				notRunningMessage = NOT_RUNNING_MESSAGE;
+				notRunningPage.setMessage(notRunningMessage);
+				showPage(notRunning);
+			}			
+		});
 	}
 	
 	private void showPage(final Control control) {
-		Display.getDefault().asyncExec(new Runnable() {
+		getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				pageBook.showPage(control);
@@ -106,11 +122,11 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	
 	private void createRunningPage() {
 		Control oldForgeIsRunning = running;
-		ConsolePage oldForgeIsRunningPage = forgeIsRunningPage;
-		forgeIsRunningPage = new ConsolePage(runtime.getProcess());
-		forgeIsRunningPage.createControl(pageBook);
-		forgeIsRunningPage.init(new PageSite(getViewSite()));
-		running = forgeIsRunningPage.getControl();
+		ConsolePage oldForgeIsRunningPage = runningPage;
+		runningPage = new ConsolePage(runtime.getProcess());
+		runningPage.createControl(pageBook);
+		runningPage.init(new PageSite(getViewSite()));
+		running = runningPage.getControl();
 		if (oldForgeIsRunningPage != null) {
 			Console oldConsole = oldForgeIsRunningPage.getConsole();
 			if (oldConsole != null) {
@@ -136,14 +152,36 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 		if (runtime != null) return;
 		runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
 		runtime.addPropertyChangeListener(INSTANCE);
-		final IProgressMonitor progressMonitor = getViewSite().getActionBars().getStatusLineManager().getProgressMonitor();
-		Display.getDefault().asyncExec(new Runnable() {
+		Job job = new Job("Starting Forge") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				runtime.start(monitor);
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+		Thread waitThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				runtime.start(progressMonitor);				
-				if (progressMonitor.isCanceled()) {
-					handleStateNotRunning();
+				while (!ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
+					try {
+						Thread.sleep(1000);
+						updateNonRunningPage();
+					} catch (InterruptedException e) {
+						ForgeUIPlugin.log(e);
+					}
 				}
+			}			
+		});
+		waitThread.start();
+	}
+	
+	private void updateNonRunningPage() {
+		getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				notRunningMessage += '.';
+				notRunningPage.setMessage(notRunningMessage);
 			}			
 		});
 	}
@@ -152,6 +190,10 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 		if (runtime == null) return;
 		final IProgressMonitor progressMonitor = getViewSite().getActionBars().getStatusLineManager().getProgressMonitor();
 		runtime.stop(progressMonitor);
+	}
+	
+	private Display getDisplay() {
+		return getViewSite().getPage().getWorkbenchWindow().getShell().getDisplay();
 	}
 
 }

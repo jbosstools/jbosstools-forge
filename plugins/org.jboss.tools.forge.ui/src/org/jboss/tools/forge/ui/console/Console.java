@@ -136,11 +136,12 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
             DebugPlugin.getDefault().addDebugEventListener(this);
         }
     }
-    
+
     private int lastLineLength = 0;
     private int lastLinePosition = 0;
     private StringBuffer escapeSequence = new StringBuffer();
     private boolean escapeSequenceStarted = false;
+    private boolean metaDataSequenceStarted = false; 
     
     public void appendString(final String str) {
     	Display.getDefault().asyncExec(new Runnable() {				
@@ -157,20 +158,31 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
 						}
 						if (escapeSequenceStarted) {
 							int type = Character.getType(c);
+//							if (!metaDataSequenceStarted && (type == Character.LOWERCASE_LETTER || type == Character.UPPERCASE_LETTER)) {
 							if (type == Character.LOWERCASE_LETTER || type == Character.UPPERCASE_LETTER) {
 								if (c == 'G') {
 									int columnNumber = Integer.valueOf(escapeSequence.toString());
-									escapeSequence.setLength(0);
 									lastLineLength = columnNumber - 1;
+									escapeSequence.setLength(0);
 									escapeSequenceStarted = false;
 								} else if (c == 'K') {
 									int doclength = getDocument().getLength();
 									int currentPosition = lastLinePosition + lastLineLength;									
 									getDocument().replace(currentPosition, doclength - currentPosition, "");
+									escapeSequence.setLength(0);
 									escapeSequenceStarted = false;
 //								} else if (c == 'm') {
 //									
-								} 
+								}
+//							} else if (c == '%') {
+//								if (metaDataSequenceStarted) {
+//									metaDataSequenceStarted = false;
+//									escapeSequenceStarted = false;
+//									handleMetaData(escapeSequence.toString());
+//									escapeSequence.setLength(0);
+//								} else {
+//									metaDataSequenceStarted = true;
+//								}
 							} else {
 								escapeSequence.append(c);
 							}
@@ -191,6 +203,10 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
 				} catch (BadLocationException e) {}
 			}
 		});
+    }
+    
+    private void handleMetaData(String metaData) {
+    	System.out.println("meta data detected: " + metaData);
     }
 
 }
