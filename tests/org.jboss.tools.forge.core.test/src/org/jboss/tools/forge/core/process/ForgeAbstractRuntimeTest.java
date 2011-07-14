@@ -17,8 +17,6 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.debug.core.DebugEvent;
-import org.eclipse.debug.core.DebugPlugin;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -124,21 +122,6 @@ public class ForgeAbstractRuntimeTest {
 		assertTrue(calledMethods.contains("beginTask"));
 		assertTrue(calledMethods.contains("done"));
 		assertEquals(0, amountWorked);
-		assertEquals(1, propertyChangeEvents.size());
-		for (PropertyChangeEvent evt : propertyChangeEvents) {
-			assertEquals(ForgeRuntime.STATE_RUNNING, evt.getOldValue());
-			assertEquals(ForgeRuntime.STATE_NOT_RUNNING, evt.getNewValue());
-		}
-	}
-	
-	@Test
-	public void testTerminateProcess() {
-		runtime.start(null);
-		assertEquals(ForgeRuntime.STATE_RUNNING, runtime.getState());
-		propertyChangeEvents.clear();
-		DebugEvent debugEvent = new DebugEvent(runtime.getProcess(), DebugEvent.TERMINATE);
-		DebugPlugin.getDefault().fireDebugEventSet(new DebugEvent[] { debugEvent });
-		assertNull(runtime.getProcess());
 		assertEquals(1, propertyChangeEvents.size());
 		for (PropertyChangeEvent evt : propertyChangeEvents) {
 			assertEquals(ForgeRuntime.STATE_RUNNING, evt.getOldValue());
