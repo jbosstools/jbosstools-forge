@@ -42,8 +42,12 @@ public class ConsoleViewer extends TextConsoleViewer {
     	console.getInputStream().appendData(DOWN_ARROW);
     }
     
+    private void handleF1Down() {
+//    	console.getInputStream().appendData((char)27 + "[%hidden blahblahblah %");
+    }
+    
 	protected StyledText createTextWidget(Composite parent, int styles) {
-		StyledText styledText = super.createTextWidget(parent, styles);
+		StyledText styledText = super.createTextWidget(parent, styles | SWT.WRAP);
 		styledText.addKeyListener(new ConsoleKeyListener());
 		return styledText;
 	}
@@ -76,6 +80,8 @@ public class ConsoleViewer extends TextConsoleViewer {
 				handleArrowUp();
 			} else if (e.keyCode == SWT.ARROW_DOWN) {
 				handleArrowDown();
+			} else if (e.keyCode == SWT.F1) {
+				handleF1Down();
 			}
 		}
 		
