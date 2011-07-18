@@ -7,7 +7,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -19,7 +18,6 @@ import org.eclipse.ui.part.ViewPart;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.console.Console;
 import org.jboss.tools.forge.ui.console.ConsolePage;
 
 public class ConsoleView extends ViewPart implements PropertyChangeListener {
@@ -123,16 +121,16 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	private void createRunningPage() {
 		Control oldForgeIsRunning = running;
 		ConsolePage oldForgeIsRunningPage = runningPage;
-		runningPage = new ConsolePage(runtime.getProcess());
+		runningPage = new ConsolePage(runtime);
 		runningPage.createControl(pageBook);
 		runningPage.init(new PageSite(getViewSite()));
 		running = runningPage.getControl();
 		if (oldForgeIsRunningPage != null) {
-			Console oldConsole = oldForgeIsRunningPage.getConsole();
-			if (oldConsole != null) {
-				DebugPlugin.getDefault().removeDebugEventListener(oldConsole);
-				oldConsole.dispose();
-			}
+//			Console oldConsole = oldForgeIsRunningPage.getConsole();
+//			if (oldConsole != null) {
+//				DebugPlugin.getDefault().removeDebugEventListener(oldConsole);
+//				oldConsole.dispose();
+//			}
 			oldForgeIsRunningPage.dispose();
 		}
 		if (oldForgeIsRunning != null) {			

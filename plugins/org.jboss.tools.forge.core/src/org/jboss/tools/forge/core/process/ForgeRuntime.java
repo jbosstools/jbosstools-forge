@@ -3,7 +3,7 @@ package org.jboss.tools.forge.core.process;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.debug.core.model.IProcess;
+import org.jboss.tools.forge.core.io.ForgeOutputListener;
 
 public interface ForgeRuntime {
 	
@@ -17,9 +17,14 @@ public interface ForgeRuntime {
 	String getLocation();
 	String getType();
 	String getState();
-	IProcess getProcess();
 	void start(IProgressMonitor progressMonitor);
 	void stop(IProgressMonitor progressMonitor);
+	
+	void sendInput(String str);
+	
+	void addOutputListener(ForgeOutputListener outputListener);
+	void removeOutputListener(ForgeOutputListener outputListener);
+	
 	void addPropertyChangeListener(PropertyChangeListener propertyChangeListener);
 	void removePropertyChangeListener(PropertyChangeListener propertyChangeListener);
 

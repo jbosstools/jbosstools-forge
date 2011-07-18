@@ -20,3 +20,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.jboss.tools.forge.ui.ForgeUIPlugin
 Bundle-ClassPath: .
+Export-Package: org.jboss.tools.forge.ui.console

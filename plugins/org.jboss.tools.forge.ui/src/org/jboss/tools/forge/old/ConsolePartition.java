@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import org.eclipse.jface.text.ITypedRegion;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.ui.console.ConsolePlugin;
-import org.jboss.tools.forge.core.io.ConsoleInputStream;
+import org.jboss.tools.forge.core.io.ForgeInputStream;
 
 public class ConsolePartition implements ITypedRegion {
 	public static final String OUTPUT_PARTITION_TYPE = ConsolePlugin.getUniqueIdentifier() + ".io_console_output_partition_type"; //$NON-NLS-1$
@@ -28,7 +28,7 @@ public class ConsolePartition implements ITypedRegion {
      */
     private OutputStream outputStream;
     @SuppressWarnings("unused")
-	private ConsoleInputStream inputStream;
+	private ForgeInputStream inputStream;
     private int length;
     
     /**
@@ -44,7 +44,7 @@ public class ConsolePartition implements ITypedRegion {
     /**
      * Creates a new partition to contain input from a console
      */
-    public ConsolePartition(ConsoleInputStream inputStream, String text) {
+    public ConsolePartition(ForgeInputStream inputStream, String text) {
         this.inputStream = inputStream;
         buffer = new StringBuffer(text);
         length = text.length();

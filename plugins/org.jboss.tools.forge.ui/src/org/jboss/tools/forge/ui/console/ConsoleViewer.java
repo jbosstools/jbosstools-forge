@@ -10,6 +10,7 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.console.TextConsoleViewer;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
 
 public class ConsoleViewer extends TextConsoleViewer {
 	
@@ -17,29 +18,29 @@ public class ConsoleViewer extends TextConsoleViewer {
 	private static String UP_ARROW = new Character((char)16).toString();
 	private static String DOWN_ARROW = new Character((char)14).toString();
 
-    private Console console = null;
-
-    public ConsoleViewer(Composite parent, Console console) {
-        super(parent, console);
-        this.console = console;
-        getDocument().addDocumentListener(new DocumentListener());
+	private ForgeRuntime runtime = null;
+    
+    public ConsoleViewer(Composite parent, ForgeRuntime runtime) {
+    	super(parent, new Console(runtime));
+    	this.runtime = runtime;
+      getDocument().addDocumentListener(new DocumentListener());
     }
 
     protected void handleVerifyEvent(VerifyEvent e) {
-		console.getInputStream().appendData(e.text);
+		runtime.sendInput(e.text);
 		e.doit = false;    	
     }
     
     private void handleBackspace() {
-    	console.getInputStream().appendData(BACKSPACE);
+    	runtime.sendInput(BACKSPACE);
     }
     
     private void handleArrowUp() {
-    	console.getInputStream().appendData(UP_ARROW);
+    	runtime.sendInput(UP_ARROW);
     }
     
     private void handleArrowDown() {
-    	console.getInputStream().appendData(DOWN_ARROW);
+    	runtime.sendInput(DOWN_ARROW);
     }
     
     private void handleF1Down() {

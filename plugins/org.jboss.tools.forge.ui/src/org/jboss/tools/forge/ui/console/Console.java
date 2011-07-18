@@ -1,38 +1,46 @@
 package org.jboss.tools.forge.ui.console;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
-import org.eclipse.debug.core.DebugEvent;
-import org.eclipse.debug.core.DebugPlugin;
-import org.eclipse.debug.core.IDebugEventSetListener;
-import org.eclipse.debug.core.IStreamListener;
-import org.eclipse.debug.core.model.IProcess;
-import org.eclipse.debug.core.model.IStreamMonitor;
-import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.part.IPageBookViewPage;
-import org.jboss.tools.forge.core.io.ConsoleInputStream;
-import org.jboss.tools.forge.core.io.ForgeInputReadJob;
+import org.jboss.tools.forge.core.io.ForgeInputStream;
+import org.jboss.tools.forge.core.io.ForgeOutputListener;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.ui.ForgeUIPlugin;
 
-public class Console extends TextConsole implements IDebugEventSetListener  {
+public class Console extends TextConsole {
 
     private ConsolePartitioner partitioner;
-    private ConsoleInputStream inputStream;
-    private IProcess process = null;
-    private IStreamListener outputStreamListener;
+    private ForgeInputStream inputStream;
+    private RuntimeStopListener stopListener;
+    private ForgeOutputListener outputListener;
+    private ForgeRuntime runtime;
 
     
-    public Console(IProcess process) {
+    public Console(ForgeRuntime runtime) {
         super("Forge Console", null, null, true);
-        this.process = process;
+        this.runtime = runtime;
         initInputStream();
         initPartitioner();
         initCommandRecorder();
-        initOutputStream();
+        initOutputListener();
+        initInputReadJob();
+    }
+    
+    protected void init() {
+    	super.init();
+        initInputStream();
+        initPartitioner();
+        initCommandRecorder();
+        initOutputListener();
+        initStopListener();
         initInputReadJob();
     }
     
@@ -41,33 +49,26 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
     }
     
     private void initInputStream() {
-    	inputStream = new ConsoleInputStream();
+    	inputStream = new ForgeInputStream();
     }
     
-    private void initOutputStream() {
-    	outputStreamListener = new IStreamListener() {			
+    private void initStopListener() {
+    	stopListener = new RuntimeStopListener();
+    	runtime.addPropertyChangeListener(stopListener);
+    }
+    
+    private void initOutputListener() {
+    	outputListener = new ForgeOutputListener() {			
 			@Override
-			public void streamAppended(String text, IStreamMonitor monitor) {
-				appendString(text);
+			public void outputAvailable(String output) {
+				appendString(output);
 			}
 		};
-		IStreamMonitor streamMonitor = getOutputStreamMonitor();
-		synchronized(streamMonitor) {
-			streamMonitor.addListener(outputStreamListener);
-		}
-    }
-    
-    private IStreamMonitor getOutputStreamMonitor() {
-    	IStreamMonitor streamMonitor = null;
-    	IStreamsProxy streamsProxy = process.getStreamsProxy();
-    	if (streamsProxy != null) {
-    		streamMonitor = streamsProxy.getOutputStreamMonitor();
-    	}
-    	return streamMonitor;
+		runtime.addOutputListener(outputListener);
     }
     
     private void initInputReadJob() {
-    	ForgeInputReadJob inputReadJob = new ForgeInputReadJob(process.getStreamsProxy(), inputStream);
+    	ForgeInputReadJob inputReadJob = new ForgeInputReadJob(runtime, inputStream);
     	inputReadJob.setSystem(true);
     	inputReadJob.schedule();
     }
@@ -81,61 +82,30 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
         throw new UnsupportedOperationException();
     }
     
-    public ConsoleInputStream getInputStream() {
-        return inputStream;
-    }
-
     protected IConsoleDocumentPartitioner getPartitioner() {
         return partitioner;
     }
 
     public void dispose() {
-        super.dispose();
-        partitioner.disconnect();
-        closeStreams();
-        disposeStreams();
-        DebugPlugin.getDefault().removeDebugEventListener(this);
-    }
-
-	private synchronized void closeStreams() {
-		try {
-			inputStream.close();
-		} catch (IOException e) {}
-	}
-
-    private synchronized void disposeStreams() {
-    	IStreamMonitor streamMonitor = getOutputStreamMonitor();
-    	if (streamMonitor != null) {
-    		synchronized(streamMonitor) {
-    			if (outputStreamListener != null) {
-    				streamMonitor.removeListener(outputStreamListener);
-    			}
-    		}
+    	if (!ForgeRuntime.STATE_NOT_RUNNING.equals(runtime.getState())) {
+    		runtime.stop(null);
     	}
-    	outputStreamListener = null;
-        inputStream = null;
+        super.dispose();
+    }
+    
+    private void handleRuntimeStopped() {
+    	try {
+	    	runtime.removePropertyChangeListener(stopListener);
+	    	stopListener = null;
+	    	runtime.removeOutputListener(outputListener);
+	    	outputListener = null;
+	    	partitioner.disconnect();
+	    	inputStream.close();
+    	} catch (IOException e) {
+    		ForgeUIPlugin.log(e);
+    	}
     }
 
-    public void handleDebugEvents(DebugEvent[] events) {
-        for (int i = 0; i < events.length; i++) {
-            DebugEvent event = events[i];
-            if (event.getSource().equals(process)) {
-                if (event.getKind() == DebugEvent.TERMINATE) {
-                    closeStreams();
-                    DebugPlugin.getDefault().removeDebugEventListener(this);
-                }
-            }
-        }
-    }
-
-    protected void init() {
-        super.init();
-        if (process.isTerminated()) {
-            closeStreams();
-        } else {
-            DebugPlugin.getDefault().addDebugEventListener(this);
-        }
-    }
 
     private int lastLineLength = 0;
     private int lastLinePosition = 0;
@@ -207,6 +177,16 @@ public class Console extends TextConsole implements IDebugEventSetListener  {
     
     private void handleMetaData(String metaData) {
     	System.out.println("meta data detected: " + metaData);
+    }
+    
+    private class RuntimeStopListener implements PropertyChangeListener {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName()) && 
+					ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getNewValue())) {
+				handleRuntimeStopped();
+			}
+		}   	
     }
 
 }

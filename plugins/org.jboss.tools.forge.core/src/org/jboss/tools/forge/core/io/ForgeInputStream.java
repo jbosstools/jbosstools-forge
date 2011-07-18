@@ -3,7 +3,7 @@ package org.jboss.tools.forge.core.io;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ConsoleInputStream extends InputStream {
+public class ForgeInputStream extends InputStream {
 
     private byte[] input = new byte[0];
     private int outPointer = 0;

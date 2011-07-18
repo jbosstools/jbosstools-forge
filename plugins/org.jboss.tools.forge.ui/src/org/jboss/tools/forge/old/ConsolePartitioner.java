@@ -25,7 +25,7 @@ import org.eclipse.ui.console.ConsolePlugin;
 import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.progress.UIJob;
 import org.eclipse.ui.progress.WorkbenchJob;
-import org.jboss.tools.forge.core.io.ConsoleInputStream;
+import org.jboss.tools.forge.core.io.ForgeInputStream;
 import org.jboss.tools.forge.ui.console.Console;
 
 /**
@@ -58,7 +58,7 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumen
 	/**
 	 * The input stream attached to this document.
 	 */
-	private ConsoleInputStream inputStream;
+	private ForgeInputStream inputStream;
 	/**
 	 * Flag to indicate that the updateJob is updating the document.
 	 */
@@ -94,7 +94,7 @@ public class ConsolePartitioner implements IConsoleDocumentPartitioner, IDocumen
     
     private int fBuffer; 
     
-	private ConsolePartitioner(ConsoleInputStream inputStream, Console console) {
+	private ConsolePartitioner(ForgeInputStream inputStream, Console console) {
 		this.inputStream = inputStream;
 		this.console = console;
 		trimJob.setRule(console.getSchedulingRule());
