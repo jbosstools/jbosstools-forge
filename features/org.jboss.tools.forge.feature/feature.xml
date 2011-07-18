@@ -2,7 +2,8 @@
 <feature
       id="org.jboss.tools.forge.feature"
       label="%featureName"
-      version="1.0.0.qualifier">
+      version="1.0.0.qualifier"
+      provider-name="JBoss by Red Hat">
 
    <description url="http://www.example.com/description">
       %description
