@@ -23,7 +23,7 @@ public class ConsoleViewer extends TextConsoleViewer {
     public ConsoleViewer(Composite parent, ForgeRuntime runtime) {
     	super(parent, new Console(runtime));
     	this.runtime = runtime;
-      getDocument().addDocumentListener(new DocumentListener());
+        getDocument().addDocumentListener(new DocumentListener());
     }
 
     protected void handleVerifyEvent(VerifyEvent e) {
@@ -44,7 +44,7 @@ public class ConsoleViewer extends TextConsoleViewer {
     }
     
     private void handleF1Down() {
-//    	console.getInputStream().appendData((char)27 + "[%hidden blahblahblah %");
+    	runtime.sendInput((char)27 + "[%hidden blahblahblah" +(char)27 + "[%");
     }
     
 	protected StyledText createTextWidget(Composite parent, int styles) {

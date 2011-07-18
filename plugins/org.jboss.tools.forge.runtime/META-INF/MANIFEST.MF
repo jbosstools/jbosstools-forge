@@ -7,7 +7,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/forge-shell-api.jar,
  lib/cdi-api.jar,
  lib/javax.inject.jar
-Export-Package: javax.enterprise.context,
+Export-Package: javax.decorator,
+ javax.enterprise.context,
  javax.enterprise.event,
  javax.inject,
  org.jboss.forge,

@@ -10,6 +10,7 @@ import org.eclipse.ui.console.IConsoleDocumentPartitioner;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.TextConsole;
 import org.eclipse.ui.part.IPageBookViewPage;
+import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeInputStream;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
@@ -27,11 +28,7 @@ public class Console extends TextConsole {
     public Console(ForgeRuntime runtime) {
         super("Forge Console", null, null, true);
         this.runtime = runtime;
-        initInputStream();
-        initPartitioner();
-        initCommandRecorder();
-        initOutputListener();
-        initInputReadJob();
+        initialize();
     }
     
     protected void init() {
@@ -58,12 +55,14 @@ public class Console extends TextConsole {
     }
     
     private void initOutputListener() {
-    	outputListener = new ForgeOutputListener() {			
+    	ForgeOutputListener target = new ForgeOutputListener() {			
 			@Override
 			public void outputAvailable(String output) {
+				System.out.println("ForgeOutputListener->outputAvailable : " + output);
 				appendString(output);
 			}
 		};
+		outputListener = new ForgeHiddenOutputFilter(target);
 		runtime.addOutputListener(outputListener);
     }
     
@@ -101,6 +100,7 @@ public class Console extends TextConsole {
 	    	outputListener = null;
 	    	partitioner.disconnect();
 	    	inputStream.close();
+	    	inputStream = null;
     	} catch (IOException e) {
     		ForgeUIPlugin.log(e);
     	}
@@ -188,5 +188,5 @@ public class Console extends TextConsole {
 			}
 		}   	
     }
-
+    
 }
