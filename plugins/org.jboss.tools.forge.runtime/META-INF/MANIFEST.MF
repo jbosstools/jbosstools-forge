@@ -4,3 +4,13 @@ Bundle-Name: Forge Runtime
 Bundle-SymbolicName: org.jboss.tools.forge.runtime
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/forge-shell-api.jar,
+ lib/cdi-api.jar,
+ lib/javax.inject.jar
+Export-Package: javax.enterprise.context,
+ javax.enterprise.event,
+ javax.inject,
+ org.jboss.forge,
+ org.jboss.forge.shell,
+ org.jboss.forge.shell.events,
+ org.jboss.forge.shell.plugins
