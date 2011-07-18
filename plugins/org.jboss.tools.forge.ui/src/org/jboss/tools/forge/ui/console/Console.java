@@ -111,7 +111,7 @@ public class Console extends TextConsole {
     private int lastLinePosition = 0;
     private StringBuffer escapeSequence = new StringBuffer();
     private boolean escapeSequenceStarted = false;
-    private boolean metaDataSequenceStarted = false; 
+//    private boolean metaDataSequenceStarted = false; 
     
     public void appendString(final String str) {
     	Display.getDefault().asyncExec(new Runnable() {				
@@ -173,10 +173,6 @@ public class Console extends TextConsole {
 				} catch (BadLocationException e) {}
 			}
 		});
-    }
-    
-    private void handleMetaData(String metaData) {
-    	System.out.println("meta data detected: " + metaData);
     }
     
     private class RuntimeStopListener implements PropertyChangeListener {
