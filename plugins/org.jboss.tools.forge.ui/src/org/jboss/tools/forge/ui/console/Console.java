@@ -58,7 +58,6 @@ public class Console extends TextConsole {
     	ForgeOutputListener target = new ForgeOutputListener() {			
 			@Override
 			public void outputAvailable(String output) {
-				System.out.println("ForgeOutputListener->outputAvailable : " + output);
 				appendString(output);
 			}
 		};

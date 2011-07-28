@@ -44,7 +44,7 @@ public class ConsoleViewer extends TextConsoleViewer {
     }
     
     private void handleF1Down() {
-    	runtime.sendInput((char)27 + "[%hidden blahblahblah" +(char)27 + "[%");
+    	runtime.sendInput(new Character((char)31).toString() + "hidden command!\n"); // + (char)27 + "[%\n");
     }
     
 	protected StyledText createTextWidget(Composite parent, int styles) {
