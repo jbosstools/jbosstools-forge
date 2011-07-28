@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Forge Runtime
+Bundle-Name: Forge Runtime Plugin
 Bundle-SymbolicName: org.jboss.tools.forge.runtime
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -10,8 +10,11 @@ Bundle-ClassPath: lib/forge-shell-api.jar,
 Export-Package: javax.decorator,
  javax.enterprise.context,
  javax.enterprise.event,
+ javax.enterprise.inject,
  javax.inject,
  org.jboss.forge,
  org.jboss.forge.shell,
  org.jboss.forge.shell.events,
- org.jboss.forge.shell.plugins
+ org.jboss.forge.shell.plugins,
+ org.jboss.forge.shell.spi
+Bundle-Vendor: JBoss by Red Hat
