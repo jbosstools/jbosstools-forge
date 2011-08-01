@@ -21,6 +21,8 @@ import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.console.ConsolePage;
 
 public class ConsoleView extends ViewPart implements PropertyChangeListener {
+
+	public static final String ID = "org.jboss.tools.forge.console";
 	
 	private static final String NOT_RUNNING_MESSAGE = "Forge is not running.";
 	private static final String STARTING_MESSAGE = "Please wait while Forge is starting";
@@ -192,6 +194,10 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	
 	private Display getDisplay() {
 		return getViewSite().getPage().getWorkbenchWindow().getShell().getDisplay();
+	}
+	
+	public ForgeRuntime getRuntime() {
+		return runtime;
 	}
 
 }

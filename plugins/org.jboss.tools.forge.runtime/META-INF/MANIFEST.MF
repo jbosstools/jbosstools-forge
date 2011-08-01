@@ -14,6 +14,7 @@ Export-Package: javax.decorator,
  javax.inject,
  org.jboss.forge,
  org.jboss.forge.shell,
+ org.jboss.forge.shell.command,
  org.jboss.forge.shell.events,
  org.jboss.forge.shell.plugins,
  org.jboss.forge.shell.spi

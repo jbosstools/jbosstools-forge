@@ -61,7 +61,12 @@ public class Console extends TextConsole {
 				appendString(output);
 			}
 		};
-		outputListener = new ForgeHiddenOutputFilter(target);
+		outputListener = new ForgeHiddenOutputFilter(target) {
+			@Override
+			public void handleFilteredString(String str) {
+				System.out.println("handleHiddenOutput : " + str);
+			}
+		};
 		runtime.addOutputListener(outputListener);
     }
     

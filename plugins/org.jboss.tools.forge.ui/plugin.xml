@@ -57,5 +57,21 @@
 			id="org.jboss.tools.forge.runtimes">
         </page>
 	</extension>
+	<extension 
+			point="org.eclipse.ui.commands">
+		<command
+				categoryId="org.eclipse.ui.category.window"
+            	defaultHandler="org.jboss.tools.forge.ui.commands.ForgeCommandListHandler"
+            	description="Quickly access the list of Forge commands"
+            	id="org.jboss.tools.forge.ui.commandList"
+            	name="Forge Command List"/>
+	</extension>
+	<extension
+			point="org.eclipse.ui.bindings">
+		<key
+			commandId="org.jboss.tools.forge.ui.commandList"
+            sequence="M1+4"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration" />
+	</extension>
 
 </plugin>

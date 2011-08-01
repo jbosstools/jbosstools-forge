@@ -1,12 +1,14 @@
 package org.jboss.tools.forge.core.io;
 
-public class ForgeHiddenOutputFilter implements ForgeOutputListener {
+public abstract class ForgeHiddenOutputFilter implements ForgeOutputFilter {
 	
 	private ForgeOutputListener target = null;
 	private boolean hidden = false;
 	private StringBuffer hiddenBuffer = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();	
 	private StringBuffer escapeSequence = new StringBuffer(); 
+	
+	public ForgeHiddenOutputFilter() {}
 	
 	public ForgeHiddenOutputFilter(ForgeOutputListener target) {
 		this.target = target;
@@ -43,12 +45,14 @@ public class ForgeHiddenOutputFilter implements ForgeOutputListener {
 			} else if (c == '%') {
 				if (escapeSequence.length() == 2) {
 					if (hidden) {
-						handleHiddenOutput(hiddenBuffer);
+						handleFilteredString(hiddenBuffer.toString());
 						hiddenBuffer.setLength(0);
 					} else {
 						String out = targetBuffer.toString();
 						targetBuffer.setLength(0);
-						target.outputAvailable(out);
+						if (target != null) {
+							target.outputAvailable(out);
+						}
 					}
 					escapeSequence.setLength(0);
 					hidden = !hidden;
@@ -78,22 +82,11 @@ public class ForgeHiddenOutputFilter implements ForgeOutputListener {
 		if (hiddenBuffer.length() == 0 && targetBuffer.length() != 0) {
 			String out = targetBuffer.toString();
 			targetBuffer.setLength(0);
-			target.outputAvailable(out);
+			if (target != null) {
+				target.outputAvailable(out);
+			}
 		}
 		
 	}
 	
-	private void handleHiddenOutput(StringBuffer output) {
-		System.out.println("handleHiddenOutput : " + output.toString());
-	}
-	
-	private void appendToTargetBuffer(StringBuffer buffer) {
-		System.out.println("appendToTargetBuffer : " + buffer);
-		targetBuffer.append(buffer);
-	}
-	
-	private void appendToHiddenBuffer(StringBuffer buffer) {
-		System.out.println("appendToHiddenBuffer : " + buffer);
-	}
-
 }

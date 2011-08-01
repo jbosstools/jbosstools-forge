@@ -17,10 +17,12 @@ public interface ForgeRuntime {
 	String getLocation();
 	String getType();
 	String getState();
+	
 	void start(IProgressMonitor progressMonitor);
 	void stop(IProgressMonitor progressMonitor);
 	
 	void sendInput(String str);
+	String sendCommand(String str);
 	
 	void addOutputListener(ForgeOutputListener outputListener);
 	void removeOutputListener(ForgeOutputListener outputListener);

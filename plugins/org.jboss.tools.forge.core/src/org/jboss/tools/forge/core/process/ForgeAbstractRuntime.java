@@ -17,6 +17,7 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
+import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
@@ -25,6 +26,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private String state = STATE_NOT_RUNNING;	
 	private final TerminateListener terminateListener = new TerminateListener();	
 	private MasterOutputListener masterOutputListener = new MasterOutputListener();
+	private CommandResultListener commandResultListener = new CommandResultListener();
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	private List<ForgeOutputListener> outputListeners = new ArrayList<ForgeOutputListener>();
 	
@@ -83,6 +85,37 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			}
 			progressMonitor.done();
 		}
+	}
+	
+	public String sendCommand(String str) {
+		String result = null;
+		if (process != null && !process.isTerminated()) {
+			IStreamsProxy streamsProxy = process.getStreamsProxy();
+			if (streamsProxy != null) {
+				IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
+				if (streamMonitor != null) {
+					commandResultListener.command = str + '\n';
+					streamMonitor.removeListener(masterOutputListener);
+					streamMonitor.addListener(commandResultListener);
+					try {
+						streamsProxy.write(new Character((char)31).toString() + str + '\n');
+					} catch (IOException e) {
+						ForgeCorePlugin.log(e);
+					}
+					try {
+						while (commandResultListener.result == null) {
+							Thread.sleep(100);
+						}
+					} catch (InterruptedException e) {}
+					result = commandResultListener.result;
+					commandResultListener.result = null;
+					commandResultListener.command = null;
+					streamMonitor.removeListener(commandResultListener);
+					streamMonitor.addListener(masterOutputListener);
+				}
+			}
+		}
+		return result;
 	}
 	
 	public void sendInput(String str) {
@@ -162,6 +195,21 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		public void streamAppended(String text, IStreamMonitor monitor) {
 			for (ForgeOutputListener listener : outputListeners) {
 				listener.outputAvailable(text);
+			}
+		}
+	}
+	
+	private class CommandResultListener extends ForgeHiddenOutputFilter implements IStreamListener {
+		String result = null;
+		String command = null;
+		@Override
+		public void streamAppended(String text, IStreamMonitor monitor) {
+			outputAvailable(text);
+		}
+		@Override
+		public void handleFilteredString(String str) {
+			if (!str.endsWith(command)) {
+				result = str;
 			}
 		}
 	}
