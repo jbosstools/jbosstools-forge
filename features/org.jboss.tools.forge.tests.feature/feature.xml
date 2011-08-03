@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="org.jboss.tools.forge.tests.feature" label="%featureName" version="1.0.0.qualifier" provider-name="%featureProvider">
+
+	<description>
+      %description
+   </description>
+
+	<copyright>
+      %copyright
+   </copyright>
+
+	<license url="%licenseURL">
+      %license
+   </license>
+
+	<plugin id="org.jboss.tools.forge.core.test" download-size="0" install-size="0" version="0.0.0" />
+	<plugin id="org.jboss.tools.forge.ui.test" download-size="0" install-size="0" version="0.0.0" />
+</feature>
