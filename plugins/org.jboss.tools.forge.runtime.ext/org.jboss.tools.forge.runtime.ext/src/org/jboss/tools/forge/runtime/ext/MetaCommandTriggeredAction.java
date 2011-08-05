@@ -3,10 +3,14 @@ package org.jboss.tools.forge.runtime.ext;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
 import org.jboss.forge.shell.Shell;
+import org.jboss.forge.shell.command.PluginMetadata;
 import org.jboss.forge.shell.command.PluginRegistry;
 import org.jboss.forge.shell.spi.TriggeredAction;
 
@@ -36,15 +40,23 @@ public class MetaCommandTriggeredAction implements TriggeredAction {
 	}
 	
 	private void handleHiddenCommand(String text) {	
-		if ("command-list-query".equals(text)) {
-			shell.print(ESCAPE + "command-list-answer: " + getCommandList() + ESCAPE);
+		if ("plugin-candidates-query".equals(text)) {
+			shell.print(ESCAPE + "plugin-candidates-answer: " + getPluginCandidates() + ESCAPE);
 		}
 	}
 	
-	private String getCommandList() {
+	private String getPluginCandidates() {
 		StringBuffer resultBuffer = new StringBuffer();
-		for (String name : registry.getPlugins().keySet()) {
-			resultBuffer.append(name).append(" ");
+		Map<String, List<PluginMetadata>> plugins = registry.getPlugins();
+		for (Entry<String, List<PluginMetadata>> entry : plugins.entrySet()) {
+			for (PluginMetadata pluginMeta : entry.getValue()) {
+				if (pluginMeta.hasCommands()) {
+					String pluginName = pluginMeta.getName();
+					if (pluginMeta.constrantsSatisfied(shell)) {
+						resultBuffer.append(pluginName).append(" ");
+					}
+				}
+			}
 		}
 		return resultBuffer.toString();
 	}

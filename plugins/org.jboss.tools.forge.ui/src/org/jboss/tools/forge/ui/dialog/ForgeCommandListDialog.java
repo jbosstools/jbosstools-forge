@@ -11,12 +11,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
 
 public class ForgeCommandListDialog extends PopupDialog {
 	
-	private SortedSet<String> commandSet = new TreeSet<String>();
+	private ForgeRuntime runtime = null;
 
-	public ForgeCommandListDialog(IWorkbenchWindow window, String commands) {
+	public ForgeCommandListDialog(IWorkbenchWindow window, ForgeRuntime runtime) {
 		super(window.getShell(), 
 				SWT.RESIZE, 
 				true, 
@@ -26,23 +27,31 @@ public class ForgeCommandListDialog extends PopupDialog {
 				true, 
 				"Select the command you want Forge to execute",
 				null);
-		StringTokenizer tokenizer = new StringTokenizer(commands);
+		this.runtime = runtime;
+	}
+	
+	private SortedSet<String> getPluginCandidates() {
+		SortedSet<String> result = new TreeSet<String>();
+		String pluginCandidates = runtime.sendCommand("plugin-candidates-query");
+		StringTokenizer tokenizer = new StringTokenizer(pluginCandidates);
 		if (tokenizer.hasMoreTokens()) {
 			String first = tokenizer.nextToken();
-			if ("command-list-answer:".equals(first)) {
+			if ("plugin-candidates-answer:".equals(first)) {
 				while (tokenizer.hasMoreTokens()) {
-					commandSet.add(tokenizer.nextToken());
+					result.add(tokenizer.nextToken());
 				}
 			}
 		}		
+		return result;
 	}
 
 	protected Control createDialogArea(Composite parent) {
 		Composite result = (Composite)super.createDialogArea(parent);
 		result.setLayout(new FillLayout());
 		List list = new List(result, SWT.SINGLE);
-		for (String command : commandSet) {
-			list.add(command);
+		SortedSet<String> pluginCandidates = getPluginCandidates();
+		for (String plugin : pluginCandidates) {
+			list.add(plugin);
 		}
 		return result;
 	}

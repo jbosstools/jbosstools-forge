@@ -27,9 +27,7 @@ public class ForgeCommandListHandler extends AbstractHandler {
 			return null;
 		}
 		
-		String result = runtime.sendCommand("command-list-query");
-		
-		new ForgeCommandListDialog(window, result).open();
+		new ForgeCommandListDialog(window, runtime).open();
 		
 		return null;
 	}
