@@ -1,0 +1,11 @@
+
+META-INF
+org
+org/apache
+org/apache/maven
+org/apache/maven/wagon
+org/apache/maven/wagon/shared
+org/apache/maven/wagon/shared/http
+META-INF/maven
+META-INF/maven/org.apache.maven.wagon
+META-INF/maven/org.apache.maven.wagon/wagon-http-shared

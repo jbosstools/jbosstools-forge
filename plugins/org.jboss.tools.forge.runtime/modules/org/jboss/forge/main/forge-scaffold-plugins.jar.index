@@ -1,0 +1,17 @@
+
+META-INF
+org
+org/jboss
+org/jboss/forge
+org/jboss/forge/scaffold
+org/jboss/forge/scaffold/plugins
+org/jboss/forge/scaffold/plugins/events
+org/jboss/forge/scaffold/plugins/meta
+org/jboss/forge/scaffold/plugins/meta/model
+org/jboss/forge/scaffold/plugins/shell
+org/jboss/forge/scaffold/templates
+org/jboss/forge/scaffold/templates/components
+org/jboss/forge/scaffold/templates/fpak
+META-INF/maven
+META-INF/maven/org.jboss.forge
+META-INF/maven/org.jboss.forge/forge-scaffold-plugins

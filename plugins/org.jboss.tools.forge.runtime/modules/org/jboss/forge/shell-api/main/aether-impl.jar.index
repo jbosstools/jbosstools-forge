@@ -1,0 +1,11 @@
+
+META-INF
+META-INF/plexus
+org
+org/sonatype
+org/sonatype/aether
+org/sonatype/aether/impl
+org/sonatype/aether/impl/internal
+META-INF/maven
+META-INF/maven/org.sonatype.aether
+META-INF/maven/org.sonatype.aether/aether-impl

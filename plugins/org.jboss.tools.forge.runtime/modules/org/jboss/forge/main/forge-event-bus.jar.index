@@ -1,0 +1,17 @@
+
+META-INF
+META-INF/services
+org
+org/jboss
+org/jboss/forge
+org/jboss/forge/bus
+org/jboss/forge/bus/cdi
+org/jboss/forge/bus/event
+org/jboss/forge/bus/event/changes
+org/jboss/forge/bus/event/changes/java
+org/jboss/forge/bus/event/changes/java/types
+org/jboss/forge/bus/spi
+org/jboss/forge/bus/util
+META-INF/maven
+META-INF/maven/org.jboss.forge
+META-INF/maven/org.jboss.forge/forge-event-bus

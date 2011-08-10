@@ -1,0 +1,16 @@
+
+META-INF
+org
+org/apache
+org/apache/maven
+org/apache/maven/wagon
+org/apache/maven/wagon/authentication
+org/apache/maven/wagon/authorization
+org/apache/maven/wagon/events
+org/apache/maven/wagon/observers
+org/apache/maven/wagon/proxy
+org/apache/maven/wagon/repository
+org/apache/maven/wagon/resource
+META-INF/maven
+META-INF/maven/org.apache.maven.wagon
+META-INF/maven/org.apache.maven.wagon/wagon-provider-api

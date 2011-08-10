@@ -1,0 +1,9 @@
+
+META-INF
+org
+org/kohsuke
+org/kohsuke/args4j
+org/kohsuke/args4j/spi
+META-INF/maven
+META-INF/maven/args4j
+META-INF/maven/args4j/args4j

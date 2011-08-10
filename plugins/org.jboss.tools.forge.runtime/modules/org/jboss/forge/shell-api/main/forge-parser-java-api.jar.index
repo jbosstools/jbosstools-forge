@@ -1,0 +1,12 @@
+
+META-INF
+org
+org/jboss
+org/jboss/forge
+org/jboss/forge/parser
+org/jboss/forge/parser/java
+org/jboss/forge/parser/java/util
+org/jboss/forge/parser/spi
+META-INF/maven
+META-INF/maven/org.jboss.forge
+META-INF/maven/org.jboss.forge/forge-parser-java-api

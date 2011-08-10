@@ -1,0 +1,14 @@
+
+META-INF
+__redirected
+org
+org/jboss
+org/jboss/modules
+org/jboss/modules/filter
+org/jboss/modules/log
+org/jboss/modules/management
+org/jboss/modules/ref
+schema
+META-INF/maven
+META-INF/maven/org.jboss.modules
+META-INF/maven/org.jboss.modules/jboss-modules

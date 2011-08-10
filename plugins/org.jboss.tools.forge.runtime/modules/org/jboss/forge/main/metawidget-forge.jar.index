@@ -1,0 +1,12 @@
+
+META-INF
+org
+org/metawidget
+org/metawidget/forge
+org/metawidget/forge/validation
+org/metawidget/persistence
+org/metawidget/scaffold
+org/metawidget/templates
+META-INF/maven
+META-INF/maven/org.metawidget
+META-INF/maven/org.metawidget/metawidget-forge

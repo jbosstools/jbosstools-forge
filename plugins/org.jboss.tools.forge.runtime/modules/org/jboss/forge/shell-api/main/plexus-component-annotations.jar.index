@@ -1,0 +1,10 @@
+
+META-INF
+org
+org/codehaus
+org/codehaus/plexus
+org/codehaus/plexus/component
+org/codehaus/plexus/component/annotations
+META-INF/maven
+META-INF/maven/org.codehaus.plexus
+META-INF/maven/org.codehaus.plexus/plexus-component-annotations
