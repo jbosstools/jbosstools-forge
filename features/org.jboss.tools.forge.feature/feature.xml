@@ -41,4 +41,11 @@ for a full listing of individual contributors.
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="org.jboss.tools.forge.runtime.ext"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
