@@ -1,9 +1,0 @@
-
-META-INF
-org
-org/eclipse
-org/eclipse/core
-org/eclipse/core/internal
-org/eclipse/core/internal/boot
-org/eclipse/core/internal/runtime
-org/eclipse/core/runtime

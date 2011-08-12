@@ -1,9 +1,0 @@
-
-META-INF
-org
-org/eclipse
-org/eclipse/jgit
-org/eclipse/jgit/awtui
-META-INF/maven
-META-INF/maven/org.eclipse.jgit
-META-INF/maven/org.eclipse.jgit/org.eclipse.jgit.ui
