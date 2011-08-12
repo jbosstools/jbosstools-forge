@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import javax.inject.Inject;
 
 import org.jboss.forge.shell.Shell;
+import org.jboss.forge.shell.command.CommandMetadata;
 import org.jboss.forge.shell.command.PluginMetadata;
 import org.jboss.forge.shell.command.PluginRegistry;
 import org.jboss.forge.shell.spi.TriggeredAction;
@@ -50,10 +51,11 @@ public class MetaCommandTriggeredAction implements TriggeredAction {
 		Map<String, List<PluginMetadata>> plugins = registry.getPlugins();
 		for (Entry<String, List<PluginMetadata>> entry : plugins.entrySet()) {
 			for (PluginMetadata pluginMeta : entry.getValue()) {
-				if (pluginMeta.hasCommands()) {
-					String pluginName = pluginMeta.getName();
-					if (pluginMeta.constrantsSatisfied(shell)) {
-						resultBuffer.append(pluginName).append(" ");
+				List<CommandMetadata> commands = pluginMeta.getAllCommands();
+				if (!commands.isEmpty()) {
+					resultBuffer.append("p:").append(pluginMeta.getName()).append(' ');
+					for (CommandMetadata commandMeta : commands) {
+						resultBuffer.append("c:").append(commandMeta.getName()).append(' ');
 					}
 				}
 			}
