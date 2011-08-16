@@ -45,7 +45,6 @@ for a full listing of individual contributors.
          id="org.jboss.tools.forge.runtime.ext"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>
