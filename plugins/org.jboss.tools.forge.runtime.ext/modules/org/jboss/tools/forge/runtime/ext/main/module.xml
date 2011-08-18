@@ -4,7 +4,6 @@
 
    <resources>
       <resource-root path="../../../../../../../../bin" />
-      <resource-root path="../../../../../../../.." />
    </resources>
 
    <dependencies>
