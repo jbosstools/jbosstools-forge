@@ -3,7 +3,7 @@
 <module xmlns="urn:jboss:module:1.0" name="org.jboss.tools.forge.runtime.ext">
 
    <resources>
-      <resource-root path="../../../../../../../.." />
+      <resource-root path="../../../../../../../../bin" />
    </resources>
 
    <dependencies>
