@@ -14,7 +14,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.jboss.tools.forge.feature</module>
-		<module>org.jboss.tools.forge.tests.feature</module>
+		<module>org.jboss.tools.forge.test.feature</module>
 	</modules>
 </project>
 	
