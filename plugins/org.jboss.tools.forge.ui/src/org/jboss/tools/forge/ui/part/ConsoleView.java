@@ -105,19 +105,23 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 			@Override
 			public void run() {
 				notRunningMessage = NOT_RUNNING_MESSAGE;
-				notRunningPage.setMessage(notRunningMessage);
+				if (!notRunningPage.getControl().isDisposed()) {
+					notRunningPage.setMessage(notRunningMessage);
+				}
 				showPage(notRunning);
 			}			
 		});
 	}
 	
 	private void showPage(final Control control) {
-		getDisplay().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				pageBook.showPage(control);
-			}			
-		});
+		if (getSite().getShell() != null) {
+			getDisplay().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					pageBook.showPage(control);
+				}			
+			});
+		}
 	}
 	
 	private void createRunningPage() {
@@ -193,7 +197,7 @@ public class ConsoleView extends ViewPart implements PropertyChangeListener {
 	}
 	
 	private Display getDisplay() {
-		return getViewSite().getPage().getWorkbenchWindow().getShell().getDisplay();
+		return getSite().getShell().getDisplay();
 	}
 	
 	public ForgeRuntime getRuntime() {
