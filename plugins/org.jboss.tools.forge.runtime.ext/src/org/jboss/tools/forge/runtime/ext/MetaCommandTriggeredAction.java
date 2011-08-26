@@ -51,11 +51,13 @@ public class MetaCommandTriggeredAction implements TriggeredAction {
 		Map<String, List<PluginMetadata>> plugins = registry.getPlugins();
 		for (Entry<String, List<PluginMetadata>> entry : plugins.entrySet()) {
 			for (PluginMetadata pluginMeta : entry.getValue()) {
-				List<CommandMetadata> commands = pluginMeta.getAllCommands();
-				if (!commands.isEmpty()) {
-					resultBuffer.append("p:").append(pluginMeta.getName()).append(' ');
-					for (CommandMetadata commandMeta : commands) {
-						resultBuffer.append("c:").append(commandMeta.getName()).append(' ');
+				if (pluginMeta.constrantsSatisfied(shell)) {
+					List<CommandMetadata> commands = pluginMeta.getAllCommands();
+					if (!commands.isEmpty()) {
+						resultBuffer.append("p:").append(pluginMeta.getName()).append(' ');
+						for (CommandMetadata commandMeta : commands) {
+							resultBuffer.append("c:").append(commandMeta.getName()).append(' ');
+						}
 					}
 				}
 			}
