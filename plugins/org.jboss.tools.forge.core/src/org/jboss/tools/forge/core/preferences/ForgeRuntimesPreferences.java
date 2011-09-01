@@ -25,6 +25,7 @@ import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.process.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.process.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.osgi.service.prefs.BackingStoreException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -144,11 +145,15 @@ public class ForgeRuntimesPreferences {
 	
 	private void saveRuntimes() {
 		try {
+			IEclipsePreferences eclipsePreferences = getForgeCorePreferences();
 			String xml = serializeDocument(createRuntimesDocument());
-			InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID).put(PREF_FORGE_RUNTIMES, xml);
+			eclipsePreferences.put(PREF_FORGE_RUNTIMES, xml);
+			eclipsePreferences.flush();
 		} catch (IOException e) {
 			ForgeCorePlugin.log(e);
 		} catch (TransformerException e) {
+			ForgeCorePlugin.log(e);
+		} catch (BackingStoreException e) {
 			ForgeCorePlugin.log(e);
 		}
 	}
