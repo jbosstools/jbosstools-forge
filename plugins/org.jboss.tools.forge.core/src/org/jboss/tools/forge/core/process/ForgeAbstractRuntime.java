@@ -103,11 +103,12 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 						ForgeCorePlugin.log(e);
 					}
 					try {
-						while (commandResultListener.result == null) {
+						int count = 0; // give up after 5 seconds
+						while (commandResultListener.result == null && count++ < 50) {
 							Thread.sleep(100);
 						}
 					} catch (InterruptedException e) {}
-					result = commandResultListener.result;
+					result = commandResultListener.result == null ? "" : commandResultListener.result;
 					commandResultListener.result = null;
 					commandResultListener.command = null;
 					streamMonitor.removeListener(commandResultListener);
@@ -204,6 +205,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		String command = null;
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
+			System.out.println("streamAppended: " + text);
 			outputAvailable(text);
 		}
 		@Override
