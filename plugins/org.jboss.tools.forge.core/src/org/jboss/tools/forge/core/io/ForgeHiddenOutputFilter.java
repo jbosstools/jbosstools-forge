@@ -59,10 +59,8 @@ public abstract class ForgeHiddenOutputFilter implements ForgeOutputFilter {
 				} else {
 					escapeSequence.append(c);
 					if (hidden) {
-//						appendToHiddenBuffer(escapeSequence);
 						hiddenBuffer.append(escapeSequence);
 					} else {
-//						appendToTargetBuffer(escapeSequence);
 						targetBuffer.append(escapeSequence);
 					}
 					escapeSequence.setLength(0);
@@ -70,10 +68,8 @@ public abstract class ForgeHiddenOutputFilter implements ForgeOutputFilter {
 			} else {
 				escapeSequence.append(c);
 				if (hidden) {
-//					appendToHiddenBuffer(escapeSequence);
 					hiddenBuffer.append(escapeSequence);
 				} else {
-//					appendToTargetBuffer(escapeSequence);
 					targetBuffer.append(escapeSequence);
 				}
 				escapeSequence.setLength(0);
