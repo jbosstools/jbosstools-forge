@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.trials;
+package org.jboss.tools.forge.ui.console;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;

@@ -9,7 +9,7 @@
       </category>
       <view
             category="org.jboss.tools.forge"
-            class="org.jboss.tools.forge.ui.trials.ForgeView"
+            class="org.jboss.tools.forge.ui.part.ForgeView"
             id="org.jboss.tools.forge.console"
             name="Forge Console"
             restorable="true">
@@ -50,7 +50,7 @@
                toolbarPath="org.jboss.tools.forge.toolbar">
          </action> -->
          <action
-               class="org.jboss.tools.forge.ui.trials.StopDelegate"
+               class="org.jboss.tools.forge.ui.action.StopDelegate"
                icon="icons/stop.gif"
                id="org.jboss.tools.forge.stop"
                label="Stop Forge"
@@ -59,7 +59,7 @@
                toolbarPath="org.jboss.tools.forge.toolbar">
          </action>
          <action
-               class="org.jboss.tools.forge.ui.trials.StartDelegate"
+               class="org.jboss.tools.forge.ui.action.StartDelegate"
                icon="icons/start.gif"
                id="org.jboss.tools.forge.start"
                label="Start Forge"

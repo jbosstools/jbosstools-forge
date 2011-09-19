@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.trials;
+package org.jboss.tools.forge.ui.console;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -20,7 +20,6 @@ import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.console.CommandRecorder;
 
 public class ForgeTextViewer extends TextViewer {
 

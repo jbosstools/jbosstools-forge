@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.trials;
+package org.jboss.tools.forge.ui.part;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -19,6 +19,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.console.ForgeTextViewer;
 
 public class ForgeView extends ViewPart implements PropertyChangeListener {
 

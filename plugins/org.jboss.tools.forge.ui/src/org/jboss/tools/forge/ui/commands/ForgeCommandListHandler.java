@@ -7,7 +7,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.dialog.ForgeCommandListDialog;
-import org.jboss.tools.forge.ui.trials.ForgeView;
+import org.jboss.tools.forge.ui.part.ForgeView;
 
 public class ForgeCommandListHandler extends AbstractHandler {
 

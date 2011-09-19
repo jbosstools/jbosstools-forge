@@ -4,13 +4,13 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
-import org.jboss.tools.forge.ui.part.ConsoleView;
+import org.jboss.tools.forge.ui.part.ForgeView;
 
 public class StartDelegate implements IViewActionDelegate {
 	
 	@Override
 	public void run(IAction action) {
-		ConsoleView.INSTANCE.startForge();
+		ForgeView.INSTANCE.startForge();
 	}
 
 	@Override
