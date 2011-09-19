@@ -30,20 +30,8 @@ public abstract class ForgeHiddenOutputFilter implements ForgeOutputFilter {
 					}
 					escapeSequence.setLength(0);
 				}
-			} else if (c == '[') {
-				if (escapeSequence.length() == 1) {
-					escapeSequence.append(c);
-				} else {
-					escapeSequence.append(c);
-					if (hidden) {
-						hiddenBuffer.append(escapeSequence);
-					} else {
-						targetBuffer.append(escapeSequence);
-					}
-					escapeSequence.setLength(0);
-				}
 			} else if (c == '%') {
-				if (escapeSequence.length() == 2) {
+				if (escapeSequence.length() == 1) {
 					if (hidden) {
 						handleFilteredString(hiddenBuffer.toString());
 						hiddenBuffer.setLength(0);

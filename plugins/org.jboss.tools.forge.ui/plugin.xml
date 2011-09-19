@@ -9,11 +9,18 @@
       </category>
       <view
             category="org.jboss.tools.forge"
-            class="org.jboss.tools.forge.ui.part.ConsoleView"
+            class="org.jboss.tools.forge.ui.trials.ForgeView"
             id="org.jboss.tools.forge.console"
             name="Forge Console"
             restorable="true">
       </view>
+<!--      <view
+            category="org.jboss.tools.forge"
+            class="org.jboss.tools.forge.ui.part.ConsoleView" 
+            id="org.jboss.tools.forge.console"
+            name="Forge Console"
+            restorable="true"> 
+      </view> -->
    </extension>
    <extension
          point="org.eclipse.ui.viewActions">
@@ -24,7 +31,7 @@
                id="org.jboss.tools.forge.menubar"
                label="Forge">
          </menu>
-         <action
+<!--         <action
                class="org.jboss.tools.forge.ui.action.StopDelegate"
                icon="icons/stop.gif"
                id="org.jboss.tools.forge.stop"
@@ -35,6 +42,24 @@
          </action>
          <action
                class="org.jboss.tools.forge.ui.action.StartDelegate"
+               icon="icons/start.gif"
+               id="org.jboss.tools.forge.start"
+               label="Start Forge"
+               menubarPath="org.jboss.tools.forge.menu"
+               style="push"
+               toolbarPath="org.jboss.tools.forge.toolbar">
+         </action> -->
+         <action
+               class="org.jboss.tools.forge.ui.trials.StopDelegate"
+               icon="icons/stop.gif"
+               id="org.jboss.tools.forge.stop"
+               label="Stop Forge"
+               menubarPath="org.jboss.tools.forge.menubar"
+               style="push"
+               toolbarPath="org.jboss.tools.forge.toolbar">
+         </action>
+         <action
+               class="org.jboss.tools.forge.ui.trials.StartDelegate"
                icon="icons/start.gif"
                id="org.jboss.tools.forge.start"
                label="Start Forge"

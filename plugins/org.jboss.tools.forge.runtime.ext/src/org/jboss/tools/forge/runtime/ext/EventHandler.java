@@ -8,7 +8,7 @@ import org.jboss.forge.shell.events.PostStartup;
 
 public class EventHandler {
 	
-	private static final String ESCAPE = new String(new char[] { 27, '[', '%'} );
+	private static final String ESCAPE = new String(new char[] { 27, '%'} );
 	
 	@Inject
 	private Shell shell;

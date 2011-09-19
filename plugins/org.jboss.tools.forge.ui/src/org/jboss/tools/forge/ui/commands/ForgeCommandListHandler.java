@@ -7,7 +7,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.dialog.ForgeCommandListDialog;
-import org.jboss.tools.forge.ui.part.ConsoleView;
+import org.jboss.tools.forge.ui.trials.ForgeView;
 
 public class ForgeCommandListHandler extends AbstractHandler {
 
@@ -17,12 +17,12 @@ public class ForgeCommandListHandler extends AbstractHandler {
 		if (window == null) {
 			return null;
 		}
-		IViewPart part = window.getActivePage().findView(ConsoleView.ID);
-		if (part == null || !(part instanceof ConsoleView)) {
+		IViewPart part = window.getActivePage().findView(ForgeView.ID);
+		if (part == null || !(part instanceof ForgeView)) {
 			return null;
 		}
 		
-		ForgeRuntime runtime = ((ConsoleView)part).getRuntime();
+		ForgeRuntime runtime = ((ForgeView)part).getRuntime();
 		if (runtime == null || !(ForgeRuntime.STATE_RUNNING.equals(runtime.getState()))) {
 			return null;
 		}
