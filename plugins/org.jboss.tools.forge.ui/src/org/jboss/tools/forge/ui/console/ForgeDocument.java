@@ -2,14 +2,13 @@ package org.jboss.tools.forge.ui.console;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
-import org.eclipse.swt.widgets.Display;
 
 public class ForgeDocument extends Document {
 	
     public void appendString(final String str) {
-    	Display.getDefault().asyncExec(new Runnable() {				
-			@Override
-			public void run() {
+//    	Display.getDefault().asyncExec(new Runnable() {				
+//			@Override
+//			public void run() {
 				try {
 					for (int i = 0; i < str.length(); i++) {
 						char c = str.charAt(i);
@@ -21,8 +20,8 @@ public class ForgeDocument extends Document {
 						}
 					}
 				} catch (BadLocationException e) {}
-			}
-		});
+//			}
+//		});
     }
 
 }

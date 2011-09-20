@@ -114,7 +114,7 @@ public class ForgeLaunchHelper {
 	private static String createVmArguments(String location) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("-Dforge.home=").append(location).append(' ');
-		buffer.append("-DDforge.shell.colorEnabled=true").append(' ');
+		buffer.append("-Dforge.shell.colorEnabled=true").append(' ');
 		buffer.append("-Dforge.compatibility.IDE=true").append(' ');
 		buffer.append("-cp ").append(location).append("/jboss-modules.jar ");
 		return buffer.toString();

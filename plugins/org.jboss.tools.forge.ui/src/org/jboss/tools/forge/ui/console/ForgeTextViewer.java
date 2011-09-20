@@ -9,10 +9,12 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.io.ForgeAnsiCommandFilter;
@@ -40,9 +42,6 @@ public class ForgeTextViewer extends TextViewer {
 	private class ConsoleKeyListener implements KeyListener {
 		@Override
 		public void keyPressed(KeyEvent e) {
-		}
-		@Override
-		public void keyReleased(KeyEvent e) {
 			if (e.keyCode == SWT.BS) {
 				handleBackspace();
 			} else if (e.keyCode == SWT.ARROW_UP) {
@@ -52,6 +51,9 @@ public class ForgeTextViewer extends TextViewer {
 			} else if (e.keyCode == SWT.F1) {
 				handleF1Down();
 			}
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {
 		}		
 	}
    
@@ -104,6 +106,12 @@ public class ForgeTextViewer extends TextViewer {
     	StyledText textWidget = getTextWidget();
     	textWidget.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
     	textWidget.addKeyListener(new ConsoleKeyListener());
+    	currentStyleRange = new StyleRange(0, 0, getColor(SWT.COLOR_BLACK), null);
+    	textWidget.setStyleRange(currentStyleRange);
+    }
+    
+    private Color getColor(int colorCode) {
+    	return Display.getDefault().getSystemColor(colorCode);
     }
     
     private void initCommandRecorder() {
@@ -113,8 +121,17 @@ public class ForgeTextViewer extends TextViewer {
     private void initOutputListener() {
     	ForgeOutputListener target = new ForgeOutputListener() {			
 			@Override
-			public void outputAvailable(String output) {
-				document.appendString(output);
+			public void outputAvailable(final String output) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						document.appendString(output);
+						if (currentStyleRange != null) {
+							currentStyleRange.length = currentStyleRange.length + output.length();
+							getTextWidget().setStyleRange(currentStyleRange);
+						}
+					}					
+				});
 			}
 		};
 		ForgeAnsiCommandFilter ansiCommandFilter = new ForgeAnsiCommandFilter(target) {			
@@ -173,6 +190,8 @@ public class ForgeTextViewer extends TextViewer {
 		    	switch (c) {
 		    		case 'G' : moveCursorAbsolute(command); break;
 		    		case 'K' : clearCurrentLine(command); break;
+		    		case 'm' : changeColor(command); break;
+		    		default : ForgeUIPlugin.log(new RuntimeException("Unhandled Ansi control sequence in ForgeTextViewer: "+ command));
 		    	}
 			}   		
     	});
@@ -195,6 +214,35 @@ public class ForgeTextViewer extends TextViewer {
         } catch (BadLocationException e) {
         	ForgeUIPlugin.log(e);
         }
+    }
+    
+    private StyleRange currentStyleRange = null; 
+    
+    private void changeColor(String command) {
+    	String str = command.substring(2, command.length() - 1);
+    	Color newColor = null;
+    	if ("30".equals(str)) {
+    		newColor = getColor(SWT.COLOR_BLACK);
+    	} else if ("31".equals(str)) {
+    		newColor = getColor(SWT.COLOR_RED);
+    	} else if ("32".equals(str)) {
+    		newColor = getColor(SWT.COLOR_GREEN);
+    	} else if ("33".equals(str)) {
+    		newColor = getColor(SWT.COLOR_DARK_YELLOW);
+    	} else if ("34".equals(str)) {
+    		newColor = getColor(SWT.COLOR_BLUE);
+    	} else if ("35".equals(str)) {
+    		newColor = getColor(SWT.COLOR_MAGENTA);
+    	} else if ("36".equals(str)) {
+    		newColor = getColor(SWT.COLOR_CYAN);
+    	} else if ("37".equals(str)) {
+    		newColor = getColor(SWT.COLOR_GRAY);
+    	}
+    	if (newColor != null) {
+    		currentStyleRange = new StyleRange(getTextWidget().getCharCount(), 0, newColor, null);
+    	} else {
+    		currentStyleRange = null;
+    	}
     }
     
 }
