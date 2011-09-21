@@ -50,7 +50,9 @@ public abstract class ForgeAnsiCommandFilter implements ForgeOutputListener {
 	private boolean isAnsiEnd(char c) {
 		return  c == 'G' || 
 				c == 'K' ||
-				c == 'm';
+				c == 'm' ||
+				c == 'H' ||
+				c == 'J';
 	}
 	
 }

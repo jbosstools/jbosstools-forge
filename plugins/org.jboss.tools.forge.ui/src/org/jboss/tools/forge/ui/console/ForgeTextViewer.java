@@ -28,7 +28,9 @@ public class ForgeTextViewer extends TextViewer {
 	private static String BACKSPACE = new Character('\b').toString();
 	private static String UP_ARROW = new Character((char)16).toString();
 	private static String DOWN_ARROW = new Character((char)14).toString();
-
+	private static String LEFT_ARROW = new Character((char)2).toString();
+	private static String RIGHT_ARROW = new Character((char)6).toString();
+	
 	private class RuntimeStopListener implements PropertyChangeListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
@@ -43,13 +45,15 @@ public class ForgeTextViewer extends TextViewer {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.keyCode == SWT.BS) {
-				handleBackspace();
+				runtime.sendInput(BACKSPACE);
 			} else if (e.keyCode == SWT.ARROW_UP) {
-				handleArrowUp();
+				runtime.sendInput(UP_ARROW);
 			} else if (e.keyCode == SWT.ARROW_DOWN) {
-				handleArrowDown();
-			} else if (e.keyCode == SWT.F1) {
-				handleF1Down();
+				runtime.sendInput(DOWN_ARROW);
+			} else if (e.keyCode == SWT.ARROW_LEFT) {
+				runtime.sendInput(LEFT_ARROW);
+			} else if (e.keyCode == SWT.ARROW_RIGHT) {
+				runtime.sendInput(RIGHT_ARROW);
 			}
 		}
 		@Override
@@ -81,6 +85,9 @@ public class ForgeTextViewer extends TextViewer {
     private ForgeOutputListener outputListener;
     private ForgeRuntime runtime;
     private ForgeDocument document;
+    private StyleRange currentStyleRange = null; 
+    
+    
     
     public ForgeTextViewer(Composite parent, ForgeRuntime runtime) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -95,7 +102,7 @@ public class ForgeTextViewer extends TextViewer {
         initOutputListener();
         initStopListener();
     }
-    
+        
     private void initDocument() {
     	document = new ForgeDocument();
         document.addDocumentListener(new DocumentListener());
@@ -166,38 +173,43 @@ public class ForgeTextViewer extends TextViewer {
 		e.doit = false;    	
     }
     
-    private void handleBackspace() {
-    	runtime.sendInput(BACKSPACE);
+    protected void handleVerifyKeyEvent(VerifyEvent e) {
+		if (e.keyCode == SWT.BS) {
+			runtime.sendInput(BACKSPACE);
+			e.doit = false;
+		} else if (e.keyCode == SWT.ARROW_UP) {
+			runtime.sendInput(UP_ARROW);
+			e.doit = false;
+		} else if (e.keyCode == SWT.ARROW_DOWN) {
+			runtime.sendInput(DOWN_ARROW);
+			e.doit = false;
+		} else if (e.keyCode == SWT.ARROW_LEFT) {
+			runtime.sendInput(LEFT_ARROW);
+			e.doit = false;
+		} else if (e.keyCode == SWT.ARROW_RIGHT) {
+			runtime.sendInput(RIGHT_ARROW);
+			e.doit = false;
+		}
     }
-    
-    private void handleArrowUp() {
-    	runtime.sendInput(UP_ARROW);
-    }
-    
-    private void handleArrowDown() {
-    	runtime.sendInput(DOWN_ARROW);
-    }
-    
-    private void handleF1Down() {
-    	runtime.sendInput(new Character((char)31).toString() + "hidden command!\n"); 
-    }
-    
+        
     private void executeAnsiCommand(final String command) {
     	Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 		    	char c = command.charAt(command.length() - 1);
 		    	switch (c) {
-		    		case 'G' : moveCursorAbsolute(command); break;
+		    		case 'G' : moveCursorAbsoluteInLine(command); break;
 		    		case 'K' : clearCurrentLine(command); break;
 		    		case 'm' : changeColor(command); break;
+		    		case 'H' : setCursorPosition(command); break;
+		    		case 'J' : clearCurrentScreenPage(command); break;
 		    		default : ForgeUIPlugin.log(new RuntimeException("Unhandled Ansi control sequence in ForgeTextViewer: "+ command));
 		    	}
 			}   		
     	});
     }
     
-    private void moveCursorAbsolute(final String command) {
+    private void moveCursorAbsoluteInLine(final String command) {
     	try {
     		int column = Integer.valueOf(command.substring(2, command.length() - 1));
     		int lineStart = document.getLineOffset(document.getLineOfOffset(getTextWidget().getCaretOffset()));
@@ -215,8 +227,6 @@ public class ForgeTextViewer extends TextViewer {
         	ForgeUIPlugin.log(e);
         }
     }
-    
-    private StyleRange currentStyleRange = null; 
     
     private void changeColor(String command) {
     	String str = command.substring(2, command.length() - 1);
@@ -242,6 +252,30 @@ public class ForgeTextViewer extends TextViewer {
     		currentStyleRange = new StyleRange(getTextWidget().getCharCount(), 0, newColor, null);
     	} else {
     		currentStyleRange = null;
+    	}
+    }
+    
+    private void setCursorPosition(String command) {
+    	String str = command.substring(2, command.length() - 1);
+    	int i = str.indexOf(';');
+    	int line = 0, column = 0;
+    	if (i != -1) {
+    		line = Integer.valueOf(str.substring(0, i));
+    		column = Integer.valueOf(str.substring(i + 1));
+    	} else if (str.length() > 0) {
+    		line = Integer.valueOf(str);
+    	}
+    	StyledText textWidget = getTextWidget();
+    	int offset = textWidget.getOffsetAtLine(line);
+    	int maxColumn = textWidget.getLine(line).length();
+    	offset += Math.min(maxColumn, column);
+    	getTextWidget().setCaretOffset(offset);
+    }
+    
+    private void clearCurrentScreenPage(String command) {
+    	String str = command.substring(2, command.length() - 1);
+    	if ("2".equals(str)) {
+    		getDocument().set("");
     	}
     }
     
