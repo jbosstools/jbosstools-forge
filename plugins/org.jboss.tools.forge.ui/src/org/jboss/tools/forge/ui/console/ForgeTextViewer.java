@@ -9,10 +9,9 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -41,32 +40,12 @@ public class ForgeTextViewer extends TextViewer {
 		}   	
     }
     
-	private class ConsoleKeyListener implements KeyListener {
-		@Override
-		public void keyPressed(KeyEvent e) {
-			if (e.keyCode == SWT.BS) {
-				runtime.sendInput(BACKSPACE);
-			} else if (e.keyCode == SWT.ARROW_UP) {
-				runtime.sendInput(UP_ARROW);
-			} else if (e.keyCode == SWT.ARROW_DOWN) {
-				runtime.sendInput(DOWN_ARROW);
-			} else if (e.keyCode == SWT.ARROW_LEFT) {
-				runtime.sendInput(LEFT_ARROW);
-			} else if (e.keyCode == SWT.ARROW_RIGHT) {
-				runtime.sendInput(RIGHT_ARROW);
-			}
-		}
-		@Override
-		public void keyReleased(KeyEvent e) {
-		}		
-	}
-   
 	private class DocumentListener implements IDocumentListener {
     	@Override
         public void documentAboutToBeChanged(DocumentEvent event) {
         }
         @Override
-        public void documentChanged(DocumentEvent event) {
+        public void documentChanged(final DocumentEvent event) {
         	Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
@@ -74,7 +53,7 @@ public class ForgeTextViewer extends TextViewer {
 		            if (textWidget != null && !textWidget.isDisposed()) {
 		                int lineCount = textWidget.getLineCount();
 		                textWidget.setTopIndex(lineCount - 1);
-		                textWidget.setCaretOffset(textWidget.getCharCount());
+//		                textWidget.setCaretOffset(event.fOffset + event.fLength);
 		            }
 				}       		
         	});
@@ -110,13 +89,36 @@ public class ForgeTextViewer extends TextViewer {
     }
     
     private void initViewer() {
-    	StyledText textWidget = getTextWidget();
-    	textWidget.setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
-    	textWidget.addKeyListener(new ConsoleKeyListener());
-    	currentStyleRange = new StyleRange(0, 0, getColor(SWT.COLOR_BLACK), null);
-    	textWidget.setStyleRange(currentStyleRange);
+    	getTextWidget().setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
     }
     
+	protected StyledText createTextWidget(Composite parent, int styles) {
+		StyledText styledText= new StyledText(parent, styles) {
+			public void invokeAction(int action) {
+				switch (action) {
+					case ST.LINE_UP:
+						runtime.sendInput(UP_ARROW);
+						break;
+					case ST.LINE_DOWN:
+						runtime.sendInput(DOWN_ARROW);
+						break;
+					case ST.COLUMN_PREVIOUS:
+						runtime.sendInput(LEFT_ARROW);
+						break;
+					case ST.COLUMN_NEXT:
+						runtime.sendInput(RIGHT_ARROW);
+						break;
+					case ST.DELETE_PREVIOUS:
+						runtime.sendInput(BACKSPACE);
+						break;
+					default: super.invokeAction(action);
+				}
+			}
+		};
+		styledText.setLeftMargin(Math.max(styledText.getLeftMargin(), 2));
+		return styledText;
+	}
+
     private Color getColor(int colorCode) {
     	return Display.getDefault().getSystemColor(colorCode);
     }
@@ -132,10 +134,17 @@ public class ForgeTextViewer extends TextViewer {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						document.appendString(output);
-						if (currentStyleRange != null) {
-							currentStyleRange.length = currentStyleRange.length + output.length();
-							getTextWidget().setStyleRange(currentStyleRange);
+						try {
+							String filteredOutput = output.replaceAll("\r", "");
+							int caretOffset = getTextWidget().getCaretOffset();
+							document.replace(caretOffset, document.getLength() - caretOffset, filteredOutput);
+							getTextWidget().setCaretOffset(caretOffset + filteredOutput.length());
+							if (currentStyleRange != null) {
+								currentStyleRange.length = currentStyleRange.length + filteredOutput.length();
+								getTextWidget().setStyleRange(currentStyleRange);
+							}
+						} catch (BadLocationException e) {
+				        	ForgeUIPlugin.log(e);							
 						}
 					}					
 				});
@@ -167,31 +176,12 @@ public class ForgeTextViewer extends TextViewer {
     	runtime.removeOutputListener(outputListener);
     	outputListener = null;
     }
-
+    
     protected void handleVerifyEvent(VerifyEvent e) {
 		runtime.sendInput(e.text);
 		e.doit = false;    	
     }
     
-    protected void handleVerifyKeyEvent(VerifyEvent e) {
-		if (e.keyCode == SWT.BS) {
-			runtime.sendInput(BACKSPACE);
-			e.doit = false;
-		} else if (e.keyCode == SWT.ARROW_UP) {
-			runtime.sendInput(UP_ARROW);
-			e.doit = false;
-		} else if (e.keyCode == SWT.ARROW_DOWN) {
-			runtime.sendInput(DOWN_ARROW);
-			e.doit = false;
-		} else if (e.keyCode == SWT.ARROW_LEFT) {
-			runtime.sendInput(LEFT_ARROW);
-			e.doit = false;
-		} else if (e.keyCode == SWT.ARROW_RIGHT) {
-			runtime.sendInput(RIGHT_ARROW);
-			e.doit = false;
-		}
-    }
-        
     private void executeAnsiCommand(final String command) {
     	Display.getDefault().asyncExec(new Runnable() {
 			@Override
