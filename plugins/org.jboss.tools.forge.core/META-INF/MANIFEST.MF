@@ -13,3 +13,4 @@ Export-Package: org.jboss.tools.forge.core,
  org.jboss.tools.forge.core.preferences,
  org.jboss.tools.forge.core.process
 Bundle-Activator: org.jboss.tools.forge.core.ForgeCorePlugin
+Bundle-Vendor: JBoss by Red Hat
