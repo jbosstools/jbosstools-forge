@@ -121,6 +121,11 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	
 	private void handleStateRunning() {
 		showPage(running);
+		getDisplay().asyncExec(new Runnable() {
+			public void run() {
+				running.forceFocus();
+			}			
+		});
 	}
 	
 	private void handleStateNotRunning() {
