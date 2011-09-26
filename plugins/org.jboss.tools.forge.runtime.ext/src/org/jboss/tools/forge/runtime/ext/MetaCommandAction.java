@@ -17,7 +17,7 @@ import org.jboss.forge.shell.command.PluginMetadata;
 import org.jboss.forge.shell.command.PluginRegistry;
 import org.jboss.forge.shell.spi.TriggeredAction;
 
-public class MetaCommandTriggeredAction implements TriggeredAction {
+public class MetaCommandAction implements TriggeredAction {
 
 	private static final String ESCAPE = new String(new char[] { 27, '%' });
 
