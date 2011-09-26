@@ -12,6 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -24,11 +25,14 @@ import org.jboss.tools.forge.ui.ForgeUIPlugin;
 
 public class ForgeTextViewer extends TextViewer {
 
-	private static String BACKSPACE = new Character('\b').toString();
-	private static String UP_ARROW = new Character((char)16).toString();
-	private static String DOWN_ARROW = new Character((char)14).toString();
-	private static String LEFT_ARROW = new Character((char)2).toString();
-	private static String RIGHT_ARROW = new Character((char)6).toString();
+	private static String PREV_CHAR = new Character((char)2).toString();
+	private static String BLAH = new Character((char)3).toString();
+	private static String EXIT = new Character((char)4).toString();
+	private static String NEXT_CHAR = new Character((char)6).toString();
+	private static String DELETE_PREV_CHAR = new Character((char)8).toString();
+	private static String PREV_HISTORY = new Character((char)16).toString();
+	private static String NEXT_HISTORY = new Character((char)14).toString();
+	private static String DELETE_NEXT_CHAR = new Character((char)127).toString();
 	
 	private class RuntimeStopListener implements PropertyChangeListener {
 		@Override
@@ -39,7 +43,7 @@ public class ForgeTextViewer extends TextViewer {
 			}
 		}   	
     }
-    
+	
 	private class DocumentListener implements IDocumentListener {
     	@Override
         public void documentAboutToBeChanged(DocumentEvent event) {
@@ -53,7 +57,6 @@ public class ForgeTextViewer extends TextViewer {
 		            if (textWidget != null && !textWidget.isDisposed()) {
 		                int lineCount = textWidget.getLineCount();
 		                textWidget.setTopIndex(lineCount - 1);
-//		                textWidget.setCaretOffset(event.fOffset + event.fLength);
 		            }
 				}       		
         	});
@@ -90,6 +93,19 @@ public class ForgeTextViewer extends TextViewer {
     
     private void initViewer() {
     	getTextWidget().setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
+    	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {
+			
+			@Override
+			public void verifyKey(VerifyEvent event) {
+				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
+					if (event.keyCode == 'd') {
+						runtime.sendInput(EXIT);
+					} else if (event.keyCode == 'c') {
+						runtime.sendInput(BLAH);
+					}
+				}
+			}
+		});
     }
     
 	protected StyledText createTextWidget(Composite parent, int styles) {
@@ -97,19 +113,22 @@ public class ForgeTextViewer extends TextViewer {
 			public void invokeAction(int action) {
 				switch (action) {
 					case ST.LINE_UP:
-						runtime.sendInput(UP_ARROW);
+						runtime.sendInput(PREV_HISTORY);
 						break;
 					case ST.LINE_DOWN:
-						runtime.sendInput(DOWN_ARROW);
+						runtime.sendInput(NEXT_HISTORY);
 						break;
 					case ST.COLUMN_PREVIOUS:
-						runtime.sendInput(LEFT_ARROW);
+						runtime.sendInput(PREV_CHAR);
 						break;
 					case ST.COLUMN_NEXT:
-						runtime.sendInput(RIGHT_ARROW);
+						runtime.sendInput(NEXT_CHAR);
 						break;
 					case ST.DELETE_PREVIOUS:
-						runtime.sendInput(BACKSPACE);
+						runtime.sendInput(DELETE_PREV_CHAR);
+						break;
+					case ST.DELETE_NEXT:
+						runtime.sendInput(DELETE_NEXT_CHAR);
 						break;
 					default: super.invokeAction(action);
 				}
