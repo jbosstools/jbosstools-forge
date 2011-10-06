@@ -71,6 +71,7 @@ public class ForgeTextViewer extends TextViewer {
     private ForgeRuntime runtime;
     private Document document;
     private StyleRange currentStyleRange = null;     
+    private int caretOffset = 0;
     
     public ForgeTextViewer(Composite parent, ForgeRuntime runtime) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -106,10 +107,10 @@ public class ForgeTextViewer extends TextViewer {
 				}
 			}
 		});
-    	getTextWidget().addListener(SWT.MouseDown, new Listener() {
+    	getTextWidget().addListener(SWT.MouseUp, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				event.doit = false;
+				getTextWidget().setCaretOffset(caretOffset);
 			}    		
     	});
     }
@@ -161,9 +162,8 @@ public class ForgeTextViewer extends TextViewer {
 					public void run() {
 						try {
 							String filteredOutput = output.replaceAll("\r", "");
-							int caretOffset = getTextWidget().getCaretOffset();
 							document.replace(caretOffset, document.getLength() - caretOffset, filteredOutput);
-							getTextWidget().setCaretOffset(caretOffset + filteredOutput.length());
+							getTextWidget().setCaretOffset(caretOffset = caretOffset + filteredOutput.length());
 							if (currentStyleRange != null) {
 								currentStyleRange.length = currentStyleRange.length + filteredOutput.length();
 								getTextWidget().setStyleRange(currentStyleRange);
@@ -227,8 +227,8 @@ public class ForgeTextViewer extends TextViewer {
     private void moveCursorAbsoluteInLine(final String command) {
     	try {
     		int column = Integer.valueOf(command.substring(2, command.length() - 1));
-    		int lineStart = document.getLineOffset(document.getLineOfOffset(getTextWidget().getCaretOffset()));
-    		getTextWidget().setCaretOffset(lineStart + column - 1); 
+    		int lineStart = document.getLineOffset(document.getLineOfOffset(caretOffset));
+    		getTextWidget().setCaretOffset(caretOffset = lineStart + column - 1); 
     	} catch (BadLocationException e) {
     		ForgeUIPlugin.log(e);
     	}				
@@ -236,7 +236,6 @@ public class ForgeTextViewer extends TextViewer {
     
     private void clearCurrentLine(String command) {
     	try {
-        	int caretOffset = getTextWidget().getCaretOffset();
         	document.replace(caretOffset, document.getLength() - caretOffset, "");
         } catch (BadLocationException e) {
         	ForgeUIPlugin.log(e);
@@ -284,7 +283,7 @@ public class ForgeTextViewer extends TextViewer {
     	int offset = textWidget.getOffsetAtLine(line);
     	int maxColumn = textWidget.getLine(line).length();
     	offset += Math.min(maxColumn, column);
-    	getTextWidget().setCaretOffset(offset);
+    	getTextWidget().setCaretOffset(caretOffset = offset);
     }
     
     private void clearCurrentScreenPage(String command) {
