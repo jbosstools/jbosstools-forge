@@ -18,8 +18,6 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.jboss.tools.forge.core.io.ForgeAnsiCommandFilter;
 import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
@@ -107,12 +105,6 @@ public class ForgeTextViewer extends TextViewer {
 				}
 			}
 		});
-    	getTextWidget().addListener(SWT.MouseUp, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				getTextWidget().setCaretOffset(caretOffset);
-			}    		
-    	});
     }
     
 	protected StyledText createTextWidget(Composite parent, int styles) {
