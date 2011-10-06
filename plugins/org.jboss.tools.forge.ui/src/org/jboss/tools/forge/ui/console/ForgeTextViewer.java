@@ -5,6 +5,7 @@ import java.beans.PropertyChangeListener;
 
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.TextViewer;
@@ -17,6 +18,8 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.jboss.tools.forge.core.io.ForgeAnsiCommandFilter;
 import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
@@ -26,8 +29,8 @@ import org.jboss.tools.forge.ui.ForgeUIPlugin;
 public class ForgeTextViewer extends TextViewer {
 
 	private static String PREV_CHAR = new Character((char)2).toString();
-	private static String BLAH = new Character((char)3).toString();
-	private static String EXIT = new Character((char)4).toString();
+	private static String CTRL_C = new Character((char)3).toString();
+	private static String CTRL_D = new Character((char)4).toString();
 	private static String NEXT_CHAR = new Character((char)6).toString();
 	private static String DELETE_PREV_CHAR = new Character((char)8).toString();
 	private static String PREV_HISTORY = new Character((char)16).toString();
@@ -66,10 +69,8 @@ public class ForgeTextViewer extends TextViewer {
     private RuntimeStopListener stopListener;
     private ForgeOutputListener outputListener;
     private ForgeRuntime runtime;
-    private ForgeDocument document;
-    private StyleRange currentStyleRange = null; 
-    
-    
+    private Document document;
+    private StyleRange currentStyleRange = null;     
     
     public ForgeTextViewer(Composite parent, ForgeRuntime runtime) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -86,26 +87,31 @@ public class ForgeTextViewer extends TextViewer {
     }
         
     private void initDocument() {
-    	document = new ForgeDocument();
+    	document = new Document();
         document.addDocumentListener(new DocumentListener());
     	setDocument(document);
     }
     
     private void initViewer() {
     	getTextWidget().setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
-    	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {
-			
+    	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
 			@Override
 			public void verifyKey(VerifyEvent event) {
 				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
 					if (event.keyCode == 'd') {
-						runtime.sendInput(EXIT);
+						runtime.sendInput(CTRL_D);
 					} else if (event.keyCode == 'c') {
-						runtime.sendInput(BLAH);
+						runtime.sendInput(CTRL_C);
 					}
 				}
 			}
 		});
+    	getTextWidget().addListener(SWT.MouseDown, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				event.doit = false;
+			}    		
+    	});
     }
     
 	protected StyledText createTextWidget(Composite parent, int styles) {
