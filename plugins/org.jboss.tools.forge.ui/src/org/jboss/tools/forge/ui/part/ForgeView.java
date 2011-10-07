@@ -230,5 +230,5 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	public ForgeRuntime getRuntime() {
 		return runtime;
 	}
-
+	
 }

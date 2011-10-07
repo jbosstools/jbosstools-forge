@@ -176,7 +176,13 @@ public class ForgeTextViewer extends TextViewer {
 		outputListener = new ForgeHiddenOutputFilter(ansiCommandFilter) {
 			@Override
 			public void handleFilteredString(String str) {
-				System.out.println("handleHiddenOutput : " + str);
+				if (str.startsWith("Intercepted Command: ")) {
+					
+				} else if (str.startsWith("Executed Command: ")) {
+					
+				} else {
+					System.out.println("unhandled hidden output: " + str);
+				}
 			}
 		};
 		runtime.addOutputListener(outputListener);
