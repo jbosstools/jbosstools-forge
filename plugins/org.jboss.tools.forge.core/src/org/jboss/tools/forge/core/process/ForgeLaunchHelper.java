@@ -95,18 +95,41 @@ public class ForgeLaunchHelper {
 	
 	private static String createJBossModulesPathArgument(String location) {
 		StringBuffer buffer = new StringBuffer("-modulepath ");
-		buffer.append(location).append("/modules").append(File.pathSeparator);
-		buffer.append(System.getProperty("user.home")).append("/.forge/plugins").append(File.pathSeparator);
-		buffer.append(getExtLocation());
+		buffer.append(getMainModulesLocation(location)).append(File.pathSeparator);
+		buffer.append(getUserModulesLocation()).append(File.pathSeparator);
+		buffer.append(getExtraModulesLocation());
 		return buffer.toString();
 	}
 	
-	private static String getExtLocation() {
+	private static String encloseWithDoubleQuotes(String str) {
+		return "\"" + str + "\"";
+	}
+	
+	private static String getMainModulesLocation(String location) {
+		String result = location + "/modules";
+		if (result.contains(" ")) {
+			result = encloseWithDoubleQuotes(result);
+		}
+		return result;
+	}
+	
+	private static String getUserModulesLocation() {
+		String result = System.getProperty("user.home") + "/.forge/plugins";
+		if (result.contains(" ")) {
+			result = encloseWithDoubleQuotes(result);
+		}
+		return result;
+	}
+	
+	private static String getExtraModulesLocation() {
 		String result = "";
 		try {
 			result = FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime.ext")).getAbsolutePath() + "/modules";
 		} catch (IOException e) {
 			ForgeCorePlugin.log(new RuntimeException("Problem while obtaining location of extra runtime classes.", e));
+		}
+		if (result.contains(" ")) {
+			result = encloseWithDoubleQuotes(result);
 		}
 		return result;
 	}
