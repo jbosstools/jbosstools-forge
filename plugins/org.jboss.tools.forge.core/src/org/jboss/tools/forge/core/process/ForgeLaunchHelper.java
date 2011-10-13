@@ -94,31 +94,27 @@ public class ForgeLaunchHelper {
 	}
 	
 	private static String createJBossModulesPathArgument(String location) {
-		StringBuffer buffer = new StringBuffer("-modulepath ");
+		StringBuffer buffer = new StringBuffer();
 		buffer.append(getMainModulesLocation(location)).append(File.pathSeparator);
 		buffer.append(getUserModulesLocation()).append(File.pathSeparator);
 		buffer.append(getExtraModulesLocation());
-		return buffer.toString();
+		return "-modulepath " + encloseWithDoubleQuotesIfNeeded(buffer.toString());
 	}
 	
-	private static String encloseWithDoubleQuotes(String str) {
-		return "\"" + str + "\"";
+	private static String encloseWithDoubleQuotesIfNeeded(String str) {
+		if (str.contains(" ")) { 
+			return "\"" + str + "\"";
+		} else {
+			return str;
+		}
 	}
 	
 	private static String getMainModulesLocation(String location) {
-		String result = location + "/modules";
-		if (result.contains(" ")) {
-			result = encloseWithDoubleQuotes(result);
-		}
-		return result;
+		return  location + "/modules";
 	}
 	
 	private static String getUserModulesLocation() {
-		String result = System.getProperty("user.home") + "/.forge/plugins";
-		if (result.contains(" ")) {
-			result = encloseWithDoubleQuotes(result);
-		}
-		return result;
+		return System.getProperty("user.home") + "/.forge/plugins";
 	}
 	
 	private static String getExtraModulesLocation() {
@@ -128,19 +124,20 @@ public class ForgeLaunchHelper {
 		} catch (IOException e) {
 			ForgeCorePlugin.log(new RuntimeException("Problem while obtaining location of extra runtime classes.", e));
 		}
-		if (result.contains(" ")) {
-			result = encloseWithDoubleQuotes(result);
-		}
 		return result;
 	}
 	
 	private static String createVmArguments(String location) {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("-Dforge.home=").append(location).append(' ');
+		buffer.append("-Dforge.home=").append(encloseWithDoubleQuotesIfNeeded(location)).append(' ');
 		buffer.append("-Dforge.shell.colorEnabled=true").append(' ');
 		buffer.append("-Dforge.compatibility.IDE=true").append(' ');
-		buffer.append("-cp ").append(location).append("/jboss-modules.jar ");
+		buffer.append(getClassPathArgument(location));
 		return buffer.toString();
+	}
+	
+	private static String getClassPathArgument(String location) {
+		return "-cp " + encloseWithDoubleQuotesIfNeeded(location + "/jboss-modules.jar");
 	}
 	
 }
