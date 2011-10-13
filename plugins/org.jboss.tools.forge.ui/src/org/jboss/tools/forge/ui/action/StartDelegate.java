@@ -8,9 +8,13 @@ import org.jboss.tools.forge.ui.part.ForgeView;
 
 public class StartDelegate implements IViewActionDelegate {
 	
+	private IViewPart part = null;
+	
 	@Override
 	public void run(IAction action) {
-		ForgeView.INSTANCE.startForge();
+		if (part != null && part instanceof ForgeView) {
+			((ForgeView)part).startForge();
+		}
 	}
 
 	@Override
@@ -21,8 +25,7 @@ public class StartDelegate implements IViewActionDelegate {
 
 	@Override
 	public void init(IViewPart view) {
-		// TODO Auto-generated method stub
-		
+		part = view;
 	}
 
 }

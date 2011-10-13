@@ -28,8 +28,6 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	private static final String NOT_RUNNING_MESSAGE = "Forge is not running.";
 	private static final String STARTING_MESSAGE = "Please wait while Forge is starting";
 	
-	public static ForgeView INSTANCE;
-	
 	private class ForgePage extends Page {
 		
 		private ForgeTextViewer viewer;
@@ -65,12 +63,12 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	
 	private ForgeRuntime runtime;
 	
-	public ForgeView() {
-		if (INSTANCE == null) {
-			INSTANCE = this;
-		}
-	}
-
+//	public ForgeView() {
+//		if (INSTANCE == null) {
+//			INSTANCE = this;
+//		}
+//	}
+//
 	@Override
 	public void createPartControl(Composite parent) {
 		pageBook = new PageBook(parent, SWT.NONE);
@@ -130,7 +128,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	
 	private void handleStateNotRunning() {
 		if (runtime != null) {
-			runtime.removePropertyChangeListener(INSTANCE);
+			runtime.removePropertyChangeListener(this);
 			runtime = null;
 		}
 		getDisplay().asyncExec(new Runnable() {
@@ -172,9 +170,8 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	}
 	
 	public void dispose() {
-		if (runtime != null) {
-			runtime.stop(null);
-			runtime = null;
+		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
+			stopForge();
 		}
 		super.dispose();
 	}
@@ -182,7 +179,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	public void startForge() {
 		if (runtime != null) return;
 		runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
-		runtime.addPropertyChangeListener(INSTANCE);
+		runtime.addPropertyChangeListener(this);
 		Job job = new Job("Starting Forge") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -221,6 +218,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 		if (runtime == null) return;
 		final IProgressMonitor progressMonitor = getViewSite().getActionBars().getStatusLineManager().getProgressMonitor();
 		runtime.stop(progressMonitor);
+		runtime = null;
 	}
 	
 	private Display getDisplay() {
