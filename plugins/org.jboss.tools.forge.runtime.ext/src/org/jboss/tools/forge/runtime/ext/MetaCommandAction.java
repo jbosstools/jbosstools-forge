@@ -2,8 +2,6 @@ package org.jboss.tools.forge.runtime.ext;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -46,16 +44,16 @@ public class MetaCommandAction implements TriggeredAction {
 	
 	private void handleHiddenCommand(String text) {	
 		try {
-			FileWriter fileWriter = new FileWriter("/Users/koen/Temp/handleHiddenCommand.txt", true);
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write("handleHiddenCommand(" + text + ")\n");
+//			FileWriter fileWriter = new FileWriter("/Users/koen/Temp/handleHiddenCommand.txt", true);
+//			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+//			bufferedWriter.write("handleHiddenCommand(" + text + ")\n");
 			if ("plugin-candidates-query".equals(text)) {
-				bufferedWriter.write("query is plugin-candidates-query\n");
+//				bufferedWriter.write("query is plugin-candidates-query\n");
 				shell.print(ESCAPE + "plugin-candidates-answer: " + getPluginCandidates() + ESCAPE);
-				bufferedWriter.write("response sent back to tools\n");
+//				bufferedWriter.write("response sent back to tools\n");
 			}
-			bufferedWriter.write("about to exit handleHiddenCommand\n");
-			bufferedWriter.flush();
+//			bufferedWriter.write("about to exit handleHiddenCommand\n");
+//			bufferedWriter.flush();
 //			fileWriter.close();
 		} catch (Exception e) {
 			// ignored
@@ -64,35 +62,35 @@ public class MetaCommandAction implements TriggeredAction {
 	
 	private String getPluginCandidates() {
 		try {
-			FileWriter fileWriter = new FileWriter("/Users/koen/Temp/getPluginCandidates.txt", true);
-			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-			bufferedWriter.write("getPluginCandidates()\n");
+//			FileWriter fileWriter = new FileWriter("/Users/koen/Temp/getPluginCandidates.txt", true);
+//			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+//			bufferedWriter.write("getPluginCandidates()\n");
 			StringBuffer resultBuffer = new StringBuffer();
 			Map<String, List<PluginMetadata>> plugins = registry.getPlugins();
-			bufferedWriter.write("got the plugins\n");
+//			bufferedWriter.write("got the plugins\n");
 			for (Entry<String, List<PluginMetadata>> entry : plugins.entrySet()) {
-				bufferedWriter.write("processing entry : " + entry.getKey() + "\n");
+//				bufferedWriter.write("processing entry : " + entry.getKey() + "\n");
 				for (PluginMetadata pluginMeta : entry.getValue()) {
-					bufferedWriter.write("processing pluginMeta : " + pluginMeta.getName());
+//					bufferedWriter.write("processing pluginMeta : " + pluginMeta.getName());
 					if (pluginMeta.constrantsSatisfied(shell)) {
-						bufferedWriter.write("pluginMeta : " + pluginMeta.getName() + " satisfies constraints\n");
+//						bufferedWriter.write("pluginMeta : " + pluginMeta.getName() + " satisfies constraints\n");
 						List<CommandMetadata> commands = pluginMeta.getAllCommands();
-						bufferedWriter.write("got the commands\n");
+//						bufferedWriter.write("got the commands\n");
 						if (!commands.isEmpty()) {
-							bufferedWriter.write("commands is not empty\n");
+//							bufferedWriter.write("commands is not empty\n");
 							resultBuffer.append("p:").append(pluginMeta.getName()).append(' ');
-							bufferedWriter.write("result becomes : " + resultBuffer.toString() + "\n");
+//							bufferedWriter.write("result becomes : " + resultBuffer.toString() + "\n");
 							for (CommandMetadata commandMeta : commands) {
-								bufferedWriter.write("processing command : " + commandMeta.getName() + "\n");
+//								bufferedWriter.write("processing command : " + commandMeta.getName() + "\n");
 								resultBuffer.append("c:").append(commandMeta.getName()).append(' ');
-								bufferedWriter.write("result becomes : " + resultBuffer.toString() + "\n");
+//								bufferedWriter.write("result becomes : " + resultBuffer.toString() + "\n");
 							}
 						}
 					}
 				}
 			}
-			bufferedWriter.write("about to return result : " + resultBuffer.toString() + "\n");
-			bufferedWriter.flush();
+//			bufferedWriter.write("about to return result : " + resultBuffer.toString() + "\n");
+//			bufferedWriter.flush();
 			return resultBuffer.toString();
 		} catch (Exception e) {
 			return null;
