@@ -64,6 +64,7 @@ public class ForgeTextViewer extends TextViewer {
         }
     }
 	
+    private ForgeCommandProcessor commandProcessor;
     private RuntimeStopListener stopListener;
     private ForgeOutputListener outputListener;
     private ForgeRuntime runtime;
@@ -80,7 +81,7 @@ public class ForgeTextViewer extends TextViewer {
     private void initialize() {
         initDocument();
         initViewer();
-        initCommandRecorder();
+        initForgeCommandProcessor();
         initOutputListener();
         initStopListener();
     }
@@ -141,14 +142,15 @@ public class ForgeTextViewer extends TextViewer {
     	return Display.getDefault().getSystemColor(colorCode);
     }
     
-    private void initCommandRecorder() {
-    	getDocument().addDocumentListener(new CommandRecorder());
+    private void initForgeCommandProcessor() {
+    	commandProcessor = new ForgeCommandProcessor();
     }
     
     private void initOutputListener() {
     	ForgeOutputListener target = new ForgeOutputListener() {			
 			@Override
 			public void outputAvailable(final String output) {
+				commandProcessor.log(output);
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -176,12 +178,13 @@ public class ForgeTextViewer extends TextViewer {
 		outputListener = new ForgeHiddenOutputFilter(ansiCommandFilter) {
 			@Override
 			public void handleFilteredString(String str) {
+//				System.out.println("handle filtered string: " + str);
 				if (str.startsWith("Intercepted Command: ")) {
-					
+					commandProcessor.startCommand(str.substring(21));
 				} else if (str.startsWith("Executed Command: ")) {
-					
-				} else {
-					System.out.println("unhandled hidden output: " + str);
+					commandProcessor.stopCurrentCommand();
+//				} else {
+//					System.out.println("unhandled hidden output: " + str);
 				}
 			}
 		};
