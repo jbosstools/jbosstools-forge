@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="modules/org/jboss/forge/shell-api/main/forge-shell-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="modules/javax/enterprise/cdi-api/main/cdi-api.jar"/>
 	<classpathentry exported="true" kind="lib" path="modules/javax/enterprise/cdi-api/main/javax.inject.jar"/>
