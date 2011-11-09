@@ -191,7 +191,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 		Thread waitThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				while (!ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
+				while (runtime != null && !ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
 					try {
 						Thread.sleep(1000);
 						updateNonRunningPage();

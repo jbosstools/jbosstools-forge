@@ -11,14 +11,8 @@ import org.eclipse.m2e.core.MavenPlugin;
 
 public class ProjectConfigurationUpdater {
 	
-	private IProject project;
-	
-	public ProjectConfigurationUpdater(IProject project) {
-		this.project = project;
-	}
-	
-	public void updateProject() {		
-	    Job job = new WorkspaceJob("Importing Forge project") {
+	public static void updateProject(final IProject project) {		
+	    Job job = new WorkspaceJob("Updating project configuration") {
 	        public IStatus runInWorkspace(IProgressMonitor monitor) {
 	          try {
 	        	  MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration(

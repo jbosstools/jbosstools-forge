@@ -40,7 +40,14 @@ public class ForgeCommandProcessor {
 	
 	public void stopCurrentCommand() {
 		if (currentCommand != null) {
-			postProcessCommand(currentCommand, buffer.toString());
+			final String command = currentCommand;
+			final String output = buffer.toString();
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					postProcessCurrentCommand(command, output);
+				}				
+			});
 		}
 		currentCommand = null;
 	}
@@ -51,25 +58,21 @@ public class ForgeCommandProcessor {
 		}
 	}
 	
-	private void postProcessCommand(final String command, final String output) {
-		String mainCommand = command;
+	private void postProcessCurrentCommand(String currentCommand, String output) {
+		if (currentCommand == null) return;
+		String mainCommand = currentCommand;
 		int i = mainCommand.indexOf(' ');
 		if (i != -1) {
-			mainCommand = command.substring(0, i);
+			mainCommand = currentCommand.substring(0, i);
 		}
-		final ForgeCommandPostProcessor postProcessor = getPostProcessors().get(mainCommand);
+		refreshWorkspace();
+		ForgeCommandPostProcessor postProcessor = getPostProcessors().get(mainCommand);
 		if (postProcessor != null) {
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					refreshWorkspace();
-					postProcessor.postProcessCommand(command, output);
-					showForgeConsole();
-				}				
-			});
+			postProcessor.postProcessCommand(mainCommand, output);
 		}
+		showForgeConsole();
 	}
-		
+	
 	private void refreshWorkspace() {
 		try {
 			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);

@@ -8,7 +8,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
-import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 
 public class PrettyFacesPostProcessor implements ForgeCommandPostProcessor {
@@ -30,7 +29,7 @@ public class PrettyFacesPostProcessor implements ForgeCommandPostProcessor {
 		IFile file = project.getFile(str);
 		if (file == null) return;
 		Object objectToSelect = file;
-		new ProjectConfigurationUpdater(project).updateProject();
+//		ProjectConfigurationUpdater.updateProject(project);
 		try {
 			IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();
 			IDE.openEditor(workbenchPage, file);
