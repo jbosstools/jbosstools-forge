@@ -20,7 +20,8 @@ public class EventHandler {
 		if (project != null) {
 			str = project.getProjectRoot().getName();
 		}
-		sendEscaped("Executed Command: " + event.getCommand().getName() + " Current Project Directory: " + str);
+		String command = event.getCommand().getParent().getName() + " " + event.getCommand().getName();
+		sendEscaped("Executed Command: " + command + " Current Project Directory: " + str);
 	}
 	
 	private void sendEscaped(String str) {

@@ -68,7 +68,7 @@ public class ForgeCommandProcessor {
 		refreshWorkspace();
 		ForgeCommandPostProcessor postProcessor = getPostProcessors().get(mainCommand);
 		if (postProcessor != null) {
-			postProcessor.postProcessCommand(mainCommand, output);
+			postProcessor.postProcessCommand(currentCommand, output);
 		}
 		showForgeConsole();
 	}

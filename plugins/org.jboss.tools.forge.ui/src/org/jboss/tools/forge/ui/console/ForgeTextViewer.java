@@ -181,13 +181,11 @@ public class ForgeTextViewer extends TextViewer {
 		outputListener = new ForgeHiddenOutputFilter(ansiCommandFilter) {
 			@Override
 			public void handleFilteredString(String str) {
-//				System.out.println("handle filtered string: " + str);
+				System.out.println("handle filtered string: " + str);
 				if (str.startsWith("Intercepted Command: ")) {
 					commandProcessor.startCommand(str.substring(21));
 				} else if (str.startsWith("Executed Command: ")) {
 					commandProcessor.stopCurrentCommand();
-//				} else {
-//					System.out.println("unhandled hidden output: " + str);
 				} else if (str.startsWith("POM File Modified: ")) {
 					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(str.substring(19));
 					if (project != null) {
