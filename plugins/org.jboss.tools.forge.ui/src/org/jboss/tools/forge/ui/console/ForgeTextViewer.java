@@ -186,6 +186,16 @@ public class ForgeTextViewer extends TextViewer {
 					commandProcessor.startCommand(str.substring(21));
 				} else if (str.startsWith("Executed Command: ")) {
 					commandProcessor.stopCurrentCommand();
+				} else if (str.startsWith("Execute Command: ")) {
+					str = str.substring(17);
+					int index = str.indexOf("Current Resource: ");
+					String line = "";
+					String resource = "";
+					if (index != -1) {
+						line = str.substring(0, index);
+						resource = str.substring(index + 18);
+						commandProcessor.executeCommand(line, resource);
+					}
 				} else if (str.startsWith("POM File Modified: ")) {
 					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(str.substring(19));
 					if (project != null) {

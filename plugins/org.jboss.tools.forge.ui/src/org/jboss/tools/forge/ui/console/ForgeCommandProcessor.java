@@ -52,6 +52,15 @@ public class ForgeCommandProcessor {
 		currentCommand = null;
 	}
 	
+	public void executeCommand(final String line, final String resourcePath) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				new OpenPostProcessor().postProcess(line, resourcePath);
+			}				
+		});
+	}
+	
 	public void log(String str) {
 		if (currentCommand != null) {
 			buffer.append(str);

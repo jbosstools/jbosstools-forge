@@ -21,6 +21,11 @@ public class AllCommandsInterceptor implements CommandInterceptor {
 			str = project.getProjectRoot().getName();
 		}
 		sendEscaped("Intercepted Command: " + line + " Current Project Directory: " + str);
+		if (line.startsWith("open ")) {
+			str = shell.getCurrentResource().getFullyQualifiedName();
+			sendEscaped("Execute Command: " + line + " Current Resource: " + str);
+			return null;
+		}
 		return line;
 	}
 
