@@ -10,6 +10,7 @@
       <view
             category="org.jboss.tools.forge"
             class="org.jboss.tools.forge.ui.part.ForgeView"
+            icon="icons/jbossforge_icon_16px.png"
             id="org.jboss.tools.forge.console"
             name="Forge Console"
             restorable="true">
