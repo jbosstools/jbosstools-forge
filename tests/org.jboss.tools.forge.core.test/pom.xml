@@ -9,5 +9,25 @@
 	<groupId>org.jboss.tools.forge.tests</groupId>
 	<artifactId>org.jboss.tools.forge.core.test</artifactId> 
 	
-	<packaging>eclipse-plugin</packaging>
+	<packaging>eclipse-test-plugin</packaging>
+	
+	<properties>
+		<emma.filter>org.jboss.tools.forge.core*</emma.filter>
+		<emma.instrument.bundles>org.jboss.tools.forge.core</emma.instrument.bundles>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-surefire-plugin</artifactId>
+				<version>${tychoVersion}</version>
+				<configuration>
+					<includes>
+						<include>**/*Test.class</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
