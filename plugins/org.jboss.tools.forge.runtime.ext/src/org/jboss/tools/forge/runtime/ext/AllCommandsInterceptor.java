@@ -15,16 +15,22 @@ public class AllCommandsInterceptor implements CommandInterceptor {
 	
 	@Override
 	public String intercept(String line) {
-		Project project = shell.getCurrentProject();
-		String str = "no project";
-		if (project != null) {
-			str = project.getProjectRoot().getName();
-		}
-		sendEscaped("Intercepted Command: " + line + " Current Project Directory: " + str);
 		if (line.startsWith("open ")) {
-			str = shell.getCurrentResource().getFullyQualifiedName();
-			sendEscaped("Execute Command: " + line + " Current Resource: " + str);
-			return null;
+			String crn = shell.getCurrentResource().getFullyQualifiedName();
+			String crt = shell.getCurrentResource().getClass().getSimpleName();
+			Project project = shell.getCurrentProject();
+			String cpn = "";
+			if (project != null) {
+				cpn = project.getProjectRoot().getFullyQualifiedName();
+			}
+			String par = line.substring(5);
+			sendEscaped(
+					" EC: " + line + 
+					" CRN: " + crn + 
+					" CRT: " + crt + 
+					" CPN: " + cpn +
+					" PAR: " + par);
+			return "\n";
 		}
 		return line;
 	}

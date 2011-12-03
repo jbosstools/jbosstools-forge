@@ -17,3 +17,5 @@ Export-Package: javax.enterprise.event,
  org.jboss.forge.shell.events,
  org.jboss.forge.shell.spi
 Bundle-Vendor: JBoss by Red Hat
+Eclipse-BundleShape: dir
+

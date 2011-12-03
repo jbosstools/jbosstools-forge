@@ -18,70 +18,59 @@ public class ForgeCommandProcessor {
 	
 	static Map<String, ForgeCommandPostProcessor> POST_PROCESSORS = null;
 	
-	public static Map<String, ForgeCommandPostProcessor> getPostProcessors() {
+	private static Map<String, ForgeCommandPostProcessor> getPostProcessors() {
 		if (POST_PROCESSORS == null) {
 			POST_PROCESSORS = new HashMap<String, ForgeCommandPostProcessor>();
-			POST_PROCESSORS.put("new-project", new NewProjectPostProcessor());
-			POST_PROCESSORS.put("persistence", new PersistencePostProcessor());
-			POST_PROCESSORS.put("pick-up", new PickUpPostProcessor());
+			POST_PROCESSORS.put("new-project", new NewProjectPostProcessor()); // OK
+			POST_PROCESSORS.put("persistence", new PersistencePostProcessor()); // OK
+			POST_PROCESSORS.put("pick-up", new PickUpPostProcessor()); // OK
+			POST_PROCESSORS.put("open", new OpenPostProcessor());
 			POST_PROCESSORS.put("field", new FieldPostProcessor());
-			POST_PROCESSORS.put("prettyfaces", new PrettyFacesPostProcessor());
 		}
 		return POST_PROCESSORS;
 	}
 	
-	private String currentCommand;
-	private StringBuffer buffer = new StringBuffer();
-	
-	public void startCommand(String command) {
-		buffer.setLength(0);
-		currentCommand = command;
-	}
-	
-	public void stopCurrentCommand() {
-		if (currentCommand != null) {
-			final String command = currentCommand;
-			final String output = buffer.toString();
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					postProcessCurrentCommand(command, output);
-				}				
-			});
+	private String getCommand(String commandString) {
+		String result = null;
+		int i = commandString.indexOf(' ', 5);
+		if (i != -1) {
+			result = commandString.substring(5, i);
 		}
-		currentCommand = null;
+		return result;
 	}
 	
-	public void executeCommand(final String line, final String resourcePath) {
+	public void postProcess(final String commandString) {
+		if (!commandString.startsWith(" EC: ")) return;
+		String command = getCommand(commandString);
+		if (command == null) return;
+		refreshWorkspace();
+		final ForgeCommandPostProcessor postProcessor = getPostProcessors().get(command);
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				new OpenPostProcessor().postProcess(line, resourcePath);
-			}				
+				if (postProcessor != null) {
+					postProcessor.postProcess(getCommandDetails(commandString));
+				}
+				showForgeConsole();
+			}			
 		});
 	}
 	
-	public void log(String str) {
-		if (currentCommand != null) {
-			buffer.append(str);
-		}
+	private Map<String, String> getCommandDetails(String commandString) {
+		Map<String, String> result  = new HashMap<String, String>();
+		int ec = commandString.indexOf(" EC: ");
+		int crn = commandString.indexOf(" CRN: ");
+		int crt = commandString.indexOf(" CRT: ");
+		int cpn = commandString.indexOf(" CPN: ");
+		int par = commandString.indexOf(" PAR: ");
+		result.put("ec", commandString.substring(ec + 5, crn));
+		result.put("crn", commandString.substring(crn + 6, crt));
+		result.put("crt", commandString.substring(crt + 6, cpn));
+		result.put("cpn", commandString.substring(cpn + 6, par));
+		result.put("par", commandString.substring(par + 6));		
+		return result;
 	}
-	
-	private void postProcessCurrentCommand(String currentCommand, String output) {
-		if (currentCommand == null) return;
-		String mainCommand = currentCommand;
-		int i = mainCommand.indexOf(' ');
-		if (i != -1) {
-			mainCommand = currentCommand.substring(0, i);
-		}
-		refreshWorkspace();
-		ForgeCommandPostProcessor postProcessor = getPostProcessors().get(mainCommand);
-		if (postProcessor != null) {
-			postProcessor.postProcessCommand(currentCommand, output);
-		}
-		showForgeConsole();
-	}
-	
+
 	private void refreshWorkspace() {
 		try {
 			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
@@ -90,15 +79,14 @@ public class ForgeCommandProcessor {
 		}
 	}
 	
-	private void showForgeConsole() {
+	private void showForgeConsole() {		
 		try {
 			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 			workbenchPage.showView("org.jboss.tools.forge.console").setFocus();
 		} catch (PartInitException e) {
 			ForgeUIPlugin.log(e);
-		}
-		
+		}		
 	}
 	
 }

@@ -1,7 +1,8 @@
 package org.jboss.tools.forge.ui.console;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -16,34 +17,21 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 
+
 public class FieldPostProcessor implements ForgeCommandPostProcessor {
 
 	@Override
-	public void postProcessCommand(String command, String output) {
+	public void postProcess(Map<String, String> commandDetails) {
 		try {
-			int index = output.lastIndexOf("Added field to ");
-			if (index == -1) return;
-			if (index + 15 > output.length()) return;
-			String str = output.substring(index + 15);
-			index = str.indexOf(':');
-			if (index == -1) return;
-			String entityName = str.substring(0, index);
-			str = str.substring(index);
-			index = str.lastIndexOf(';');
-			if (index == -1) return;
-			str = str.substring(0, index);
-			index = str.lastIndexOf(' ');
-			if (index == -1) return;
-			String fieldName = str.substring(index + 1);
-			IProject project = ForgeCommandPostProcessorHelper.getProject(command);
-			if (project == null) return;
-			IFile file = project.getFile("/src/main/java/" + entityName.replace('.', '/') + ".java");
+			String crn = commandDetails.get("crn");
+			String par = commandDetails.get("par").trim();
+			IFile file = ForgeCommandPostProcessorHelper.getFile(crn);
 			if (file == null) return;
 			IJavaElement javaElement = JavaCore.create(file);
 			if (javaElement != null && javaElement.getElementType() == IJavaElement.COMPILATION_UNIT) {
 				try {
 					IType type = ((ICompilationUnit)javaElement).getTypes()[0];
-					IField field = type.getField(fieldName);
+					IField field = type.getField(par);
 					if (field != null) {
 						ISourceRange sourceRange = field.getSourceRange();
 						IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();

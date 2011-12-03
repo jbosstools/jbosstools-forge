@@ -1,5 +1,7 @@
 package org.jboss.tools.forge.ui.console;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -13,17 +15,16 @@ import org.jboss.tools.forge.ui.ForgeUIPlugin;
 public class PersistencePostProcessor implements ForgeCommandPostProcessor {
 
 	@Override
-	public void postProcessCommand(String command, String output) {
+	public void postProcess(Map<String, String> commandDetails) {
+		String command = commandDetails.get("ec");
 		if (command.indexOf("setup") != -1) {
-			postProcessPersistenceSetup(command, output);
+			postProcessPersistenceSetup(commandDetails);
 		}
 	}
 	
-	private void postProcessPersistenceSetup(final String command, final String output) {
-			IProject project = ForgeCommandPostProcessorHelper.getProject(command);
+	private void postProcessPersistenceSetup(Map<String, String> commandDetails) {
+			IProject project = ForgeCommandPostProcessorHelper.getProject(commandDetails.get("cpn"));
 			if (project == null) return;
-			int index = output.lastIndexOf("***SUCCESS***");
-			if (index == -1) return;
 			try {
 				IFile file = project.getFile("/src/main/resources/META-INF/persistence.xml");
 				if (file == null) return;

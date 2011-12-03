@@ -3,8 +3,6 @@ package org.jboss.tools.forge.ui.console;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
@@ -21,10 +19,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.io.ForgeAnsiCommandFilter;
-import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
-import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 
 public class ForgeTextViewer extends TextViewer {
@@ -67,7 +63,6 @@ public class ForgeTextViewer extends TextViewer {
         }
     }
 	
-    private ForgeCommandProcessor commandProcessor;
     private RuntimeStopListener stopListener;
     private ForgeOutputListener outputListener;
     private ForgeRuntime runtime;
@@ -84,7 +79,6 @@ public class ForgeTextViewer extends TextViewer {
     private void initialize() {
         initDocument();
         initViewer();
-        initForgeCommandProcessor();
         initOutputListener();
         initStopListener();
     }
@@ -145,15 +139,10 @@ public class ForgeTextViewer extends TextViewer {
     	return Display.getDefault().getSystemColor(colorCode);
     }
     
-    private void initForgeCommandProcessor() {
-    	commandProcessor = new ForgeCommandProcessor();
-    }
-    
     private void initOutputListener() {
     	ForgeOutputListener target = new ForgeOutputListener() {			
 			@Override
 			public void outputAvailable(final String output) {
-				commandProcessor.log(output);
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -178,32 +167,33 @@ public class ForgeTextViewer extends TextViewer {
 				executeAnsiCommand(command);
 			}
 		};
-		outputListener = new ForgeHiddenOutputFilter(ansiCommandFilter) {
-			@Override
-			public void handleFilteredString(String str) {
-				System.out.println("handle filtered string: " + str);
-				if (str.startsWith("Intercepted Command: ")) {
-					commandProcessor.startCommand(str.substring(21));
-				} else if (str.startsWith("Executed Command: ")) {
-					commandProcessor.stopCurrentCommand();
-				} else if (str.startsWith("Execute Command: ")) {
-					str = str.substring(17);
-					int index = str.indexOf("Current Resource: ");
-					String line = "";
-					String resource = "";
-					if (index != -1) {
-						line = str.substring(0, index);
-						resource = str.substring(index + 18);
-						commandProcessor.executeCommand(line, resource);
-					}
-				} else if (str.startsWith("POM File Modified: ")) {
-					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(str.substring(19));
-					if (project != null) {
-						ProjectConfigurationUpdater.updateProject(project);
-					}
-				}
-			}
-		};
+		outputListener = new ForgeCommandFilter(ansiCommandFilter);
+//		outputListener = new ForgeHiddenOutputFilter(ansiCommandFilter) {
+//			@Override
+//			public void handleFilteredString(String str) {
+//				System.out.println("handle filtered string: " + str);
+//				if (str.startsWith("Intercepted Command: ")) {
+//					commandProcessor.startCommand(str.substring(21));
+//				} else if (str.startsWith("Executed Command: ")) {
+//					commandProcessor.stopCurrentCommand(str);
+//				} else if (str.startsWith("Execute Command: ")) {
+//					str = str.substring(17);
+//					int index = str.indexOf("Current Resource: ");
+//					String line = "";
+//					String resource = "";
+//					if (index != -1) {
+//						line = str.substring(0, index);
+//						resource = str.substring(index + 18);
+//						commandProcessor.executeCommand(line, resource);
+//					}
+//				} else if (str.startsWith("POM File Modified: ")) {
+//					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(str.substring(19));
+//					if (project != null) {
+//						ProjectConfigurationUpdater.updateProject(project);
+//					}
+//				}
+//			}
+//		};
 		runtime.addOutputListener(outputListener);
     }
     
