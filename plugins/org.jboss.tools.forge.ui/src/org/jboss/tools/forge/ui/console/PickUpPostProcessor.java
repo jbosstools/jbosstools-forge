@@ -149,13 +149,15 @@ public class PickUpPostProcessor implements ForgeCommandPostProcessor {
 		for (String name : names) {
 			if (input != null && input instanceof IAdaptable) {
 				ISystemViewElementAdapter adapter = SystemAdapterHelpers.getViewAdapter(input);
-				for (Object object : adapter.getChildren((IAdaptable)input, null)) {
-					if (object instanceof IAdaptable) {
-						adapter = SystemAdapterHelpers.getViewAdapter(object);
-						if (name.equals(adapter.getText(object))) {
-							input = object;
-							treeSegments.add(input);
-							break;
+				if (adapter != null) {
+					for (Object object : adapter.getChildren((IAdaptable)input, null)) {
+						if (object instanceof IAdaptable) {
+							adapter = SystemAdapterHelpers.getViewAdapter(object);
+							if (adapter != null && name.equals(adapter.getText(object))) {
+								input = object;
+								treeSegments.add(input);
+								break;
+							}
 						}
 					}
 				}

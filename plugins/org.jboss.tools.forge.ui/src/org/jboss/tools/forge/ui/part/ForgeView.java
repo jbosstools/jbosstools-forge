@@ -3,25 +3,35 @@ package org.jboss.tools.forge.ui.part;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.MessagePage;
 import org.eclipse.ui.part.Page;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageSite;
+import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.console.ForgeTextViewer;
 
-public class ForgeView extends ViewPart implements PropertyChangeListener {
+public class ForgeView extends ViewPart implements PropertyChangeListener, IShowInTarget {
 
 	public static final String ID = "org.jboss.tools.forge.console";
 	
@@ -62,18 +72,23 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	private String notRunningMessage;
 	
 	private ForgeRuntime runtime;
+	private ISelection selection;
 	
-//	public ForgeView() {
-//		if (INSTANCE == null) {
-//			INSTANCE = this;
-//		}
-//	}
-//
 	@Override
 	public void createPartControl(Composite parent) {
 		pageBook = new PageBook(parent, SWT.NONE);
 		createNotRunningPage(parent);
 		showPage(notRunning);
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(new ISelectionListener() {			
+			@Override
+			public void selectionChanged(IWorkbenchPart part, ISelection newSelection) {
+				selection = newSelection;
+			}
+		});
+	}
+	
+	public ISelection getSelection() {
+		return selection;
 	}
 	
 	private void createNotRunningPage(Composite parent) {
@@ -227,6 +242,32 @@ public class ForgeView extends ViewPart implements PropertyChangeListener {
 	
 	public ForgeRuntime getRuntime() {
 		return runtime;
+	}
+	
+	public boolean show(ShowInContext context) {
+        if (context == null) {
+		    return false;
+        }
+        if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
+    		ISelection sel = context.getSelection();
+    		if (sel instanceof IStructuredSelection) {
+    		    IStructuredSelection ss = (IStructuredSelection)sel;
+    		    Object first = ss.getFirstElement();
+    		    if (first instanceof IResource) {
+    		    	IPath path = ((IResource)first).getLocation();
+    		    	runtime.sendInput("pick-up " + path + "\n");
+    		    } else if (first instanceof IJavaElement) {
+    		    	try {
+						IPath path = ((IJavaElement)first).getCorrespondingResource().getLocation();
+	    		    	runtime.sendInput("pick-up " + path + "\n");
+					} catch (JavaModelException e) {
+						ForgeUIPlugin.log(e);
+					}
+    		    }
+    		    return true;
+    		}
+        }
+		return false;		   
 	}
 	
 }

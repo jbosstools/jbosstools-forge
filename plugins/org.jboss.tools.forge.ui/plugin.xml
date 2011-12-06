@@ -32,7 +32,7 @@
                id="org.jboss.tools.forge.menubar"
                label="Forge">
          </menu>
-<!--         <action
+         <action
                class="org.jboss.tools.forge.ui.action.StopDelegate"
                icon="icons/stop.gif"
                id="org.jboss.tools.forge.stop"
@@ -49,21 +49,12 @@
                menubarPath="org.jboss.tools.forge.menu"
                style="push"
                toolbarPath="org.jboss.tools.forge.toolbar">
-         </action> -->
-         <action
-               class="org.jboss.tools.forge.ui.action.StopDelegate"
-               icon="icons/stop.gif"
-               id="org.jboss.tools.forge.stop"
-               label="Stop Forge"
-               menubarPath="org.jboss.tools.forge.menubar"
-               style="push"
-               toolbarPath="org.jboss.tools.forge.toolbar">
          </action>
          <action
-               class="org.jboss.tools.forge.ui.action.StartDelegate"
-               icon="icons/start.gif"
-               id="org.jboss.tools.forge.start"
-               label="Start Forge"
+               class="org.jboss.tools.forge.ui.action.ShowInForgeDelegate"
+               icon="icons/jbossforge_icon_16px.png"
+               id="org.jboss.tools.forge.show"
+               label="Show In Forge"
                menubarPath="org.jboss.tools.forge.menu"
                style="push"
                toolbarPath="org.jboss.tools.forge.toolbar">
@@ -99,5 +90,22 @@
             sequence="M1+4"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration" />
 	</extension>
-
+    <extension
+            point="org.eclipse.ui.perspectiveExtensions">
+        <perspectiveExtension 
+                targetID = "org.eclipse.jst.j2ee.J2EEPerspective">
+            <showInPart 
+                    id = "org.jboss.tools.forge.console"/>
+        </perspectiveExtension>
+        <perspectiveExtension 
+                targetID = "org.eclipse.jdt.ui.JavaPerspective">
+            <showInPart 
+                    id = "org.jboss.tools.forge.console"/>
+        </perspectiveExtension>
+        <perspectiveExtension 
+                targetID = "org.jboss.tools.common.ui.JBossPerspective">
+            <showInPart 
+                    id = "org.jboss.tools.forge.console"/>
+        </perspectiveExtension>
+    </extension>
 </plugin>

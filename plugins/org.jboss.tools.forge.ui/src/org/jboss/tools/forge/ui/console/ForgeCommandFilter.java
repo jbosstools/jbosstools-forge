@@ -17,7 +17,6 @@ public class ForgeCommandFilter extends ForgeHiddenOutputFilter {
 
 	@Override
 	public void handleFilteredString(String str) {
-		System.out.println("handle filtered string: " + str);
 		if (str.startsWith(" EC: ")) {
 			commandProcessor.postProcess(str);
 		} else if (str.startsWith("POM File Modified: ")) {

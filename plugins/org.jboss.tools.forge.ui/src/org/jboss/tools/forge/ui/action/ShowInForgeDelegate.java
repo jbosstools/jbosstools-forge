@@ -4,26 +4,29 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.part.ShowInContext;
 import org.jboss.tools.forge.ui.part.ForgeView;
 
-public class StartDelegate implements IViewActionDelegate {
+public class ShowInForgeDelegate implements IViewActionDelegate {
 	
-	private IViewPart part = null;
+	private ForgeView forgeView = null;
 	
 	@Override
 	public void run(IAction action) {
-		if (part != null && part instanceof ForgeView) {
-			((ForgeView)part).startForge();
+		if (forgeView != null) {
+			forgeView.show(new ShowInContext(null, forgeView.getSelection()));
 		}
 	}
-
+	
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 	}
 
 	@Override
 	public void init(IViewPart view) {
-		part = view;
+		if (view != null && view instanceof ForgeView) {
+			forgeView = (ForgeView)view;
+		}
 	}
 
 }

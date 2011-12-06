@@ -168,32 +168,6 @@ public class ForgeTextViewer extends TextViewer {
 			}
 		};
 		outputListener = new ForgeCommandFilter(ansiCommandFilter);
-//		outputListener = new ForgeHiddenOutputFilter(ansiCommandFilter) {
-//			@Override
-//			public void handleFilteredString(String str) {
-//				System.out.println("handle filtered string: " + str);
-//				if (str.startsWith("Intercepted Command: ")) {
-//					commandProcessor.startCommand(str.substring(21));
-//				} else if (str.startsWith("Executed Command: ")) {
-//					commandProcessor.stopCurrentCommand(str);
-//				} else if (str.startsWith("Execute Command: ")) {
-//					str = str.substring(17);
-//					int index = str.indexOf("Current Resource: ");
-//					String line = "";
-//					String resource = "";
-//					if (index != -1) {
-//						line = str.substring(0, index);
-//						resource = str.substring(index + 18);
-//						commandProcessor.executeCommand(line, resource);
-//					}
-//				} else if (str.startsWith("POM File Modified: ")) {
-//					IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(str.substring(19));
-//					if (project != null) {
-//						ProjectConfigurationUpdater.updateProject(project);
-//					}
-//				}
-//			}
-//		};
 		runtime.addOutputListener(outputListener);
     }
     
