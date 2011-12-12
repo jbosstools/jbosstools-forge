@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Forge Runtime Plugin
+Bundle-SymbolicName: org.jboss.tools.forge.runtime
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: modules/javax/inject/api/main/javax.inject-1.jar,
+ modules/javax/enterprise/api/main/cdi-api-1.0-SP4.jar,
+ modules/org/jboss/forge/shell/api/main/forge-shell-api-1.0.0-SNAPSHOT.jar
+Bundle-Vendor: JBoss by Red Hat
+Eclipse-BundleShape: dir
+Export-Package: javax.enterprise.event,
+ javax.inject,
+ org.jboss.forge.project,
+ org.jboss.forge.resources,
+ org.jboss.forge.resources.events,
+ org.jboss.forge.shell,
+ org.jboss.forge.shell.command,
+ org.jboss.forge.shell.events,
+ org.jboss.forge.shell.spi
+

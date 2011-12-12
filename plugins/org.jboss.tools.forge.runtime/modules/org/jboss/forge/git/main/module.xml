@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module xmlns="urn:jboss:module:1.0" name="org.jboss.forge.git">
+
+   <resources>
+        <resource-root path="args4j-2.0.12.jar"/>
+        <resource-root path="jsch-0.1.41.jar"/>
+        <resource-root path="forge-git-tools-1.0.0-SNAPSHOT.jar"/>
+        <resource-root path="org.eclipse.jgit-0.10.1.jar"/>
+        <resource-root path="org.eclipse.jgit.console-0.10.1.jar"/>
+        <resource-root path="org.eclipse.jgit.iplog-0.10.1.jar"/>
+        <resource-root path="org.eclipse.jgit.pgm-0.10.1.jar"/>
+        <resource-root path="org.eclipse.jgit.ui-0.10.1.jar"/>
+        <!-- Insert resources here -->
+   </resources>
+
+   <dependencies>
+      <module name="javax.api" />
+      <module name="org.jboss.forge.shell.api"/>
+   </dependencies>
+   
+</module>

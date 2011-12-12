@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ JBoss, Home of Professional Open Source.
+  ~ Copyright 2010, Red Hat, Inc., and individual contributors
+  ~ as indicated by the @author tags. See the copyright.txt file in the
+  ~ distribution for a full listing of individual contributors.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<module xmlns="urn:jboss:module:1.0" name="org.eclipse.javaparser">
+  <resources>
+    <resource-root path="contenttype-3.2.100-v20070319.jar"/>
+        <resource-root path="jobs-3.3.0-v20070423.jar"/>
+        <resource-root path="resources-3.3.0-v20070604.jar"/>
+        <resource-root path="runtime-3.3.100-v20070530.jar"/>
+        <resource-root path="core-3.3.0-v_771.jar"/>
+        <resource-root path="osgi-3.4.3.R34x_v20081215-1030.jar"/>
+        <resource-root path="common-3.3.0-v20070426.jar"/>
+        <resource-root path="preferences-3.2.100-v20070522.jar"/>
+        <resource-root path="text-3.3.0-v20070606-0010.jar"/>
+        <!-- Insert resources here -->
+  </resources>
+  
+  <dependencies>
+      <module name="javax.api" />
+  </dependencies>
+</module>
