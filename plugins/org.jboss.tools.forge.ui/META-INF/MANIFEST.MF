@@ -21,7 +21,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.rse.ui;bundle-version="3.2.1",
  org.eclipse.rse.core;bundle-version="3.2.1",
  org.eclipse.rse.subsystems.files.core;bundle-version="3.2.101",
- org.eclipse.rse.subsystems.files.local;bundle-version="2.1.200"
+ org.eclipse.rse.subsystems.files.local;bundle-version="2.1.200",
+ org.eclipse.core.expressions;bundle-version="3.4.300"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.jboss.tools.forge.ui.ForgeUIPlugin

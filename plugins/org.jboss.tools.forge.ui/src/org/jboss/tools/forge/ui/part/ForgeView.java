@@ -26,14 +26,16 @@ import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.services.ISourceProviderService;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.commands.SourceProvider;
 import org.jboss.tools.forge.ui.console.ForgeTextViewer;
 
 public class ForgeView extends ViewPart implements PropertyChangeListener, IShowInTarget {
 
-	public static final String ID = "org.jboss.tools.forge.console";
+	public static final String ID = "org.jboss.tools.forge.ui.view";
 	
 	private static final String NOT_RUNNING_MESSAGE = "Forge is not running.";
 	private static final String STARTING_MESSAGE = "Please wait while Forge is starting";
@@ -137,6 +139,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		getDisplay().asyncExec(new Runnable() {
 			public void run() {
 				running.forceFocus();
+				updateCommands(ForgeRuntime.STATE_RUNNING);
 			}			
 		});
 	}
@@ -154,8 +157,17 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 					notRunningPage.setMessage(notRunningMessage);
 				}
 				showPage(notRunning);
+				updateCommands(ForgeRuntime.STATE_NOT_RUNNING);
 			}			
 		});
+	}
+	
+	private void updateCommands(String state) {
+		ISourceProviderService service = 
+				(ISourceProviderService)getViewSite().getService(ISourceProviderService.class);
+		SourceProvider sourceProvider = 
+				(SourceProvider) service.getSourceProvider(ForgeRuntime.PROPERTY_STATE); 
+		sourceProvider.setRuntimeState(state); 
 	}
 	
 	private void showPage(final Control control) {

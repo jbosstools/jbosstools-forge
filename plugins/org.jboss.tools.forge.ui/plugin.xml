@@ -4,62 +4,17 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="org.jboss.tools.forge"
+            id="org.jboss.tools.forge.ui"
             name="Forge">
       </category>
       <view
-            category="org.jboss.tools.forge"
+            category="org.jboss.tools.forge.ui"
             class="org.jboss.tools.forge.ui.part.ForgeView"
             icon="icons/jbossforge_icon_16px.png"
-            id="org.jboss.tools.forge.console"
+            id="org.jboss.tools.forge.ui.view"
             name="Forge Console"
             restorable="true">
       </view>
-<!--      <view
-            category="org.jboss.tools.forge"
-            class="org.jboss.tools.forge.ui.part.ConsoleView" 
-            id="org.jboss.tools.forge.console"
-            name="Forge Console"
-            restorable="true"> 
-      </view> -->
-   </extension>
-   <extension
-         point="org.eclipse.ui.viewActions">
-      <viewContribution
-            id="org.jboss.tools.forge.view"
-            targetID="org.jboss.tools.forge.console">
-         <menu
-               id="org.jboss.tools.forge.menubar"
-               label="Forge">
-         </menu>
-         <action
-               class="org.jboss.tools.forge.ui.action.StopDelegate"
-               icon="icons/stop.gif"
-               id="org.jboss.tools.forge.stop"
-               label="Stop Forge"
-               menubarPath="org.jboss.tools.forge.menubar"
-               style="push"
-               toolbarPath="org.jboss.tools.forge.toolbar">
-         </action>
-         <action
-               class="org.jboss.tools.forge.ui.action.StartDelegate"
-               icon="icons/start.gif"
-               id="org.jboss.tools.forge.start"
-               label="Start Forge"
-               menubarPath="org.jboss.tools.forge.menu"
-               style="push"
-               toolbarPath="org.jboss.tools.forge.toolbar">
-         </action>
-         <action
-               class="org.jboss.tools.forge.ui.action.ShowInForgeDelegate"
-               icon="icons/jbossforge_icon_16px.png"
-               id="org.jboss.tools.forge.show"
-               label="Show In Forge"
-               menubarPath="org.jboss.tools.forge.menu"
-               style="push"
-               toolbarPath="org.jboss.tools.forge.toolbar">
-         </action>
-      </viewContribution>
    </extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
@@ -76,12 +31,87 @@
 	</extension>
 	<extension 
 			point="org.eclipse.ui.commands">
+		<category
+               id="org.jboss.tools.forge.ui"
+               name="Forge Commands"/>
+        <command
+                categoryId="org.jboss.tools.forge.ui"
+                description="Start the default Forge runtime"
+                id="org.jboss.tools.forge.ui.start"
+                name="Start Forge"/>
+        <command
+                categoryId="org.jboss.tools.forge.ui"
+                description="Stop the default Forge runtime"
+                id="org.jboss.tools.forge.ui.stop"
+                name="Stop Forge"/>
+<!--        <command
+                categoryId="org.jboss.tools.forge.ui"
+                description="Link the currently selected item to the running Forge runtime"
+                id="org.jboss.tools.forge.ui.link"
+                name="Link To Selection"/> -->
 		<command
 				categoryId="org.eclipse.ui.category.window"
             	defaultHandler="org.jboss.tools.forge.ui.commands.ForgeCommandListHandler"
             	description="Quickly access the list of Forge commands"
             	id="org.jboss.tools.forge.ui.commandList"
             	name="Forge Command List"/>
+	</extension>
+	<extension
+	      point="org.eclipse.ui.menus">
+	   <menuContribution
+             locationURI="menu:org.jboss.tools.forge.ui.view">
+	       <command
+	             commandId="org.jboss.tools.forge.ui.start"
+	             icon="icons/start.gif"
+	             label="Start Forge"
+	             mnemonic="A"
+	             style="push"
+	             tooltip="Start the default Forge runtime">
+	       </command>
+	       <command
+	             commandId="org.jboss.tools.forge.ui.stop"
+	             icon="icons/stop.gif"
+	             label="Stop Forge"
+	             mnemonic="O"
+	             style="push"
+	             tooltip="Stop the running Forge runtime">
+	       </command>
+<!--	       <command
+	             commandId="org.jboss.tools.forge.ui.link"
+	             icon="icons/link.gif"
+	             label="Link To Forge"
+	             mnemonic="L"
+	             style="toggle"
+	             tooltip="Link the current selection to Forge">
+	       </command> -->
+	   </menuContribution>
+	   <menuContribution
+             locationURI="toolbar:org.jboss.tools.forge.ui.view">
+	       <command
+	             commandId="org.jboss.tools.forge.ui.start"
+	             icon="icons/start.gif"
+	             label="Start Forge"
+	             mnemonic="A"
+	             style="push"
+	             tooltip="Start the default Forge runtime">
+	       </command>
+	       <command
+	             commandId="org.jboss.tools.forge.ui.stop"
+	             icon="icons/stop.gif"
+	             label="Stop Forge"
+	             mnemonic="O"
+	             style="push"
+	             tooltip="Stop the running Forge runtime">
+	       </command>
+<!--	       <command
+	             commandId="org.jboss.tools.forge.ui.link"
+	             icon="icons/link.gif"
+	             label="Link To Forge"
+	             mnemonic="L"
+	             style="toggle"
+	             tooltip="Link the current selection to Forge">
+	       </command> -->
+	   </menuContribution>
 	</extension>
 	<extension
 			point="org.eclipse.ui.bindings">
@@ -107,5 +137,54 @@
             <showInPart 
                     id = "org.jboss.tools.forge.console"/>
         </perspectiveExtension>
+    </extension>
+    <extension
+          point="org.eclipse.ui.handlers">
+       <handler
+             class="org.jboss.tools.forge.ui.commands.StartHandler"
+             commandId="org.jboss.tools.forge.ui.start">
+          <enabledWhen>
+             <with
+                   variable="org.jboss.tools.forge.runtime.state">
+                <equals
+                      value="org.jboss.tools.forge.runtime.notRunning">
+                </equals>
+             </with>
+          </enabledWhen>
+       </handler>
+       <handler
+             class="org.jboss.tools.forge.ui.commands.StopHandler"
+             commandId="org.jboss.tools.forge.ui.stop">
+          <enabledWhen>
+             <with
+                   variable="org.jboss.tools.forge.runtime.state">
+                <equals
+                      value="org.jboss.tools.forge.runtime.running">
+                </equals>
+             </with>
+          </enabledWhen>
+       </handler>
+<!--       <handler
+             class="org.jboss.tools.forge.ui.commands.LinkHandler"
+             commandId="org.jboss.tools.forge.ui.link">
+          <enabledWhen>
+             <with
+                   variable="org.jboss.tools.forge.runtime.state">
+                <equals
+                      value="org.jboss.tools.forge.runtime.running">
+                </equals>
+             </with>
+          </enabledWhen>
+       </handler> -->
+    </extension>
+    <extension
+          point="org.eclipse.ui.services">
+       <sourceProvider
+             provider="org.jboss.tools.forge.ui.commands.SourceProvider">
+          <variable
+                name="org.jboss.tools.forge.runtime.state"
+                priorityLevel="workbench">
+          </variable>
+       </sourceProvider>
     </extension>
 </plugin>

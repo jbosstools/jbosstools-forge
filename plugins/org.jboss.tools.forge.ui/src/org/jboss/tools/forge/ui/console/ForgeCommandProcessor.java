@@ -12,6 +12,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.part.ForgeView;
 
 
 public class ForgeCommandProcessor {
@@ -83,7 +84,7 @@ public class ForgeCommandProcessor {
 		try {
 			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
-			workbenchPage.showView("org.jboss.tools.forge.console").setFocus();
+			workbenchPage.showView(ForgeView.ID).setFocus();
 		} catch (PartInitException e) {
 			ForgeUIPlugin.log(e);
 		}		
