@@ -44,11 +44,11 @@
                 description="Stop the default Forge runtime"
                 id="org.jboss.tools.forge.ui.stop"
                 name="Stop Forge"/>
-<!--        <command
+        <command
                 categoryId="org.jboss.tools.forge.ui"
                 description="Link the currently selected item to the running Forge runtime"
                 id="org.jboss.tools.forge.ui.link"
-                name="Link To Selection"/> -->
+                name="Link To Selection"/> 
 		<command
 				categoryId="org.eclipse.ui.category.window"
             	defaultHandler="org.jboss.tools.forge.ui.commands.ForgeCommandListHandler"
@@ -58,33 +58,6 @@
 	</extension>
 	<extension
 	      point="org.eclipse.ui.menus">
-	   <menuContribution
-             locationURI="menu:org.jboss.tools.forge.ui.view">
-	       <command
-	             commandId="org.jboss.tools.forge.ui.start"
-	             icon="icons/start.gif"
-	             label="Start Forge"
-	             mnemonic="A"
-	             style="push"
-	             tooltip="Start the default Forge runtime">
-	       </command>
-	       <command
-	             commandId="org.jboss.tools.forge.ui.stop"
-	             icon="icons/stop.gif"
-	             label="Stop Forge"
-	             mnemonic="O"
-	             style="push"
-	             tooltip="Stop the running Forge runtime">
-	       </command>
-<!--	       <command
-	             commandId="org.jboss.tools.forge.ui.link"
-	             icon="icons/link.gif"
-	             label="Link To Forge"
-	             mnemonic="L"
-	             style="toggle"
-	             tooltip="Link the current selection to Forge">
-	       </command> -->
-	   </menuContribution>
 	   <menuContribution
              locationURI="toolbar:org.jboss.tools.forge.ui.view">
 	       <command
@@ -103,14 +76,14 @@
 	             style="push"
 	             tooltip="Stop the running Forge runtime">
 	       </command>
-<!--	       <command
+	       <command
 	             commandId="org.jboss.tools.forge.ui.link"
 	             icon="icons/link.gif"
 	             label="Link To Forge"
 	             mnemonic="L"
 	             style="toggle"
 	             tooltip="Link the current selection to Forge">
-	       </command> -->
+	       </command> 
 	   </menuContribution>
 	</extension>
 	<extension
@@ -125,17 +98,17 @@
         <perspectiveExtension 
                 targetID = "org.eclipse.jst.j2ee.J2EEPerspective">
             <showInPart 
-                    id = "org.jboss.tools.forge.console"/>
+                    id = "org.jboss.tools.forge.ui.view"/>
         </perspectiveExtension>
         <perspectiveExtension 
                 targetID = "org.eclipse.jdt.ui.JavaPerspective">
             <showInPart 
-                    id = "org.jboss.tools.forge.console"/>
+                    id = "org.jboss.tools.forge.ui.view"/>
         </perspectiveExtension>
         <perspectiveExtension 
                 targetID = "org.jboss.tools.common.ui.JBossPerspective">
             <showInPart 
-                    id = "org.jboss.tools.forge.console"/>
+                    id = "org.jboss.tools.forge.ui.view"/>
         </perspectiveExtension>
     </extension>
     <extension
@@ -164,7 +137,7 @@
              </with>
           </enabledWhen>
        </handler>
-<!--       <handler
+       <handler
              class="org.jboss.tools.forge.ui.commands.LinkHandler"
              commandId="org.jboss.tools.forge.ui.link">
           <enabledWhen>
@@ -175,7 +148,7 @@
                 </equals>
              </with>
           </enabledWhen>
-       </handler> -->
+       </handler> 
     </extension>
     <extension
           point="org.eclipse.ui.services">

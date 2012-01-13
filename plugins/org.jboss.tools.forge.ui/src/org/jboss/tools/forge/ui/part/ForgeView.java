@@ -17,8 +17,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.MessagePage;
 import org.eclipse.ui.part.Page;
@@ -74,23 +72,29 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 	private String notRunningMessage;
 	
 	private ForgeRuntime runtime;
-	private ISelection selection;
+//	private ISelection selection;
+	private SelectionSynchronizer synchronizer;
 	
 	@Override
 	public void createPartControl(Composite parent) {
+		synchronizer = new SelectionSynchronizer(this);
 		pageBook = new PageBook(parent, SWT.NONE);
 		createNotRunningPage(parent);
-		showPage(notRunning);
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(new ISelectionListener() {			
-			@Override
-			public void selectionChanged(IWorkbenchPart part, ISelection newSelection) {
-				selection = newSelection;
-			}
-		});
+		showPage(notRunning);		
+//		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(new ISelectionListener() {			
+//			@Override
+//			public void selectionChanged(IWorkbenchPart part, ISelection newSelection) {
+//				selection = newSelection;
+//			}
+//		});
 	}
 	
-	public ISelection getSelection() {
-		return selection;
+//	public ISelection getSelection() {
+//		return selection;
+//	}
+	
+	public void setSynchronized(boolean synced) {
+		synchronizer.setEnabled(synced);
 	}
 	
 	private void createNotRunningPage(Composite parent) {
