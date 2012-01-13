@@ -46,9 +46,14 @@
                 name="Stop Forge"/>
         <command
                 categoryId="org.jboss.tools.forge.ui"
-                description="Link the currently selected item to the running Forge runtime"
+                description="Link the editor currently on top to the running Forge runtime"
                 id="org.jboss.tools.forge.ui.link"
-                name="Link To Selection"/> 
+                name="Link with Editor"/> 
+        <command
+                categoryId="org.jboss.tools.forge.ui"
+                description="Instruct the running Forge runtime to go to the current selection"
+                id="org.jboss.tools.forge.ui.goto"
+                name="Go To Selection"/> 
 		<command
 				categoryId="org.eclipse.ui.category.window"
             	defaultHandler="org.jboss.tools.forge.ui.commands.ForgeCommandListHandler"
@@ -77,12 +82,20 @@
 	             tooltip="Stop the running Forge runtime">
 	       </command>
 	       <command
+	             commandId="org.jboss.tools.forge.ui.goto"
+	             icon="icons/goto_obj.gif"
+	             label="Go to Selection"
+	             mnemonic="G"
+	             style="push"
+	             tooltip="Go to Selection">
+	       </command> 
+	       <command
 	             commandId="org.jboss.tools.forge.ui.link"
 	             icon="icons/link.gif"
-	             label="Link To Forge"
+	             label="Link with Editor"
 	             mnemonic="L"
 	             style="toggle"
-	             tooltip="Link the current selection to Forge">
+	             tooltip="Link with Editor">
 	       </command> 
 	   </menuContribution>
 	</extension>
@@ -137,6 +150,18 @@
              </with>
           </enabledWhen>
        </handler>
+       <handler
+             class="org.jboss.tools.forge.ui.commands.GoToHandler"
+             commandId="org.jboss.tools.forge.ui.goto">
+          <enabledWhen>
+             <with
+                   variable="org.jboss.tools.forge.runtime.state">
+                <equals
+                      value="org.jboss.tools.forge.runtime.running">
+                </equals>
+             </with>
+          </enabledWhen>
+       </handler> 
        <handler
              class="org.jboss.tools.forge.ui.commands.LinkHandler"
              commandId="org.jboss.tools.forge.ui.link">

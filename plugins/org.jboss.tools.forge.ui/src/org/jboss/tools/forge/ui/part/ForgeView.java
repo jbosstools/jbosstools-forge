@@ -4,7 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -13,10 +12,13 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.MessagePage;
 import org.eclipse.ui.part.Page;
@@ -72,7 +74,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 	private String notRunningMessage;
 	
 	private ForgeRuntime runtime;
-//	private ISelection selection;
+	private ISelection selection;
 	private SelectionSynchronizer synchronizer;
 	
 	@Override
@@ -81,17 +83,17 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		pageBook = new PageBook(parent, SWT.NONE);
 		createNotRunningPage(parent);
 		showPage(notRunning);		
-//		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(new ISelectionListener() {			
-//			@Override
-//			public void selectionChanged(IWorkbenchPart part, ISelection newSelection) {
-//				selection = newSelection;
-//			}
-//		});
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(new ISelectionListener() {			
+			@Override
+			public void selectionChanged(IWorkbenchPart part, ISelection newSelection) {
+				selection = newSelection;
+			}
+		});
 	}
 	
-//	public ISelection getSelection() {
-//		return selection;
-//	}
+	public ISelection getSelection() {
+		return selection;
+	}
 	
 	public void setSynchronized(boolean synced) {
 		synchronizer.setEnabled(synced);
@@ -265,25 +267,38 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		    return false;
         }
         if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
-    		ISelection sel = context.getSelection();
-    		if (sel instanceof IStructuredSelection) {
-    		    IStructuredSelection ss = (IStructuredSelection)sel;
-    		    Object first = ss.getFirstElement();
-    		    if (first instanceof IResource) {
-    		    	IPath path = ((IResource)first).getLocation();
-    		    	runtime.sendInput("pick-up " + path + "\n");
-    		    } else if (first instanceof IJavaElement) {
-    		    	try {
-						IPath path = ((IJavaElement)first).getCorrespondingResource().getLocation();
-	    		    	runtime.sendInput("pick-up " + path + "\n");
-					} catch (JavaModelException e) {
-						ForgeUIPlugin.log(e);
-					}
-    		    }
-    		    return true;
-    		}
+    		return goToSelection(context.getSelection());
         }
 		return false;		   
+	}
+	
+	public boolean goToSelection(ISelection sel) {
+		if (sel instanceof IStructuredSelection) {
+		    IStructuredSelection ss = (IStructuredSelection)sel;
+		    Object first = ss.getFirstElement();
+		    if (first instanceof IResource) {
+		    	goToPath(((IResource)first).getLocation().toOSString());
+		    } else if (first instanceof IJavaElement) {
+		    	try {
+					goToPath(((IJavaElement)first).getCorrespondingResource().getLocation().toOSString());
+				} catch (JavaModelException e) {
+					ForgeUIPlugin.log(e);
+					return false;
+				}
+		    } else if (first instanceof IRemoteFile) {
+		    	goToPath(((IRemoteFile)first).getAbsolutePath());
+		    }
+		    return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private void goToPath(String str) {
+		if (str.indexOf(' ') != -1) {
+			str = '\"' + str + '\"';
+		}
+		runtime.sendInput("pick-up " + str + "\n");
 	}
 	
 }
