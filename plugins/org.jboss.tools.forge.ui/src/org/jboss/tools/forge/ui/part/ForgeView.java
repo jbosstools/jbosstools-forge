@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
@@ -267,11 +268,39 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		    return false;
         }
         if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
-    		return goToSelection(context.getSelection());
+        	return goToSelection(context.getSelection());
+        } else {
+        	return startForgeIsOK(context);
         }
-		return false;		   
 	}
 	
+	private boolean startForgeIsOK(final ShowInContext context) {
+		boolean start = MessageDialog.open(
+				MessageDialog.QUESTION, 
+				null, 
+				"Forge Not Running", 
+				"Forge is not running. Do you want to start the Forge runtime?", 
+				SWT.NONE);
+		if (start) {
+			startForge();
+			Thread waitThread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while (runtime != null && !ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							ForgeUIPlugin.log(e);
+						}
+					}
+					goToSelection(context.getSelection());
+				}			
+			});
+			waitThread.start();
+		}
+		return start;
+	}
+
 	public boolean goToSelection(ISelection sel) {
 		if (sel instanceof IStructuredSelection) {
 		    IStructuredSelection ss = (IStructuredSelection)sel;

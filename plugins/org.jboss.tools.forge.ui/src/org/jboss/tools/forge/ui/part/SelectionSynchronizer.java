@@ -8,7 +8,6 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPartService;
 import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
@@ -17,29 +16,19 @@ import org.jboss.tools.forge.core.process.ForgeRuntime;
 public class SelectionSynchronizer implements ISelectionListener {
 
 	private ForgeView forgeView;
-	private ISelectionService selectionService;
 	private IEditorPart selectedPart;
 	private IPartService partService;
 	
 	private IPartListener partListener = new IPartListener() {
 		
 		@Override
-		public void partOpened(IWorkbenchPart part) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void partOpened(IWorkbenchPart part) {}
 		
 		@Override
-		public void partDeactivated(IWorkbenchPart part) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void partDeactivated(IWorkbenchPart part) {}
 		
 		@Override
-		public void partClosed(IWorkbenchPart part) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void partClosed(IWorkbenchPart part) {}
 		
 		@Override
 		public void partBroughtToTop(IWorkbenchPart part) {
@@ -69,17 +58,13 @@ public class SelectionSynchronizer implements ISelectionListener {
 	public SelectionSynchronizer(ForgeView forgeView) {
 		this.forgeView = forgeView;
 		IWorkbenchWindow workbenchWindow = forgeView.getSite().getWorkbenchWindow();
-		selectionService = 
-				forgeView.getSite().getWorkbenchWindow().getSelectionService();
 		partService = workbenchWindow.getPartService();
 	}
 	
 	public void setEnabled(boolean enabled) {
 		if (enabled) {
-//			selectionService.addSelectionListener(this);
 			partService.addPartListener(partListener);
 		} else  {
-//			selectionService.removeSelectionListener(this);
 			partService.removePartListener(partListener);
 		}
 	}
