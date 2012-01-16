@@ -42,10 +42,15 @@ public class ForgeCommandListHandler extends AbstractHandler {
 	}
 	
 	private ForgeRuntime getForgeRuntime(IWorkbenchWindow window) {
-		IViewPart part = window.getActivePage().findView(ForgeView.ID);
-		if (part != null && part instanceof ForgeView) {
-			return ((ForgeView)part).getRuntime();
-		} else {
+		try {
+			IViewPart part = window.getActivePage().showView(ForgeView.ID);
+			if (part != null && part instanceof ForgeView) {
+				return ((ForgeView)part).getRuntime();
+			} else {
+				return null;
+			}
+		} catch (PartInitException e) {
+			ForgeUIPlugin.log(e);
 			return null;
 		}
 	}
