@@ -14,12 +14,17 @@ import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 
 public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
+	
+	private String makePlatformIndependent(String path) {
+		int index = path.indexOf('/');
+		return (index != -1) ? path.substring(index) : path;
+	}
 
 	@Override
 	public void postProcess(Map<String, String> commandDetails) {
-		String projectPath = commandDetails.get("cpn");
+		String projectPath = makePlatformIndependent(commandDetails.get("cpn"));
 		IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		String workspacePath = workspaceRoot.getLocation().toOSString();
+		String workspacePath = makePlatformIndependent(workspaceRoot.getLocation().toString());
 		if (workspacePath.equals(projectPath)) {
 			if (MessageDialog.open(
 					MessageDialog.QUESTION, 
