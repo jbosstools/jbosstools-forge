@@ -32,7 +32,8 @@ public class ForgeLaunchHelper {
 			ILaunchConfiguration[] configurations = LAUNCH_MANAGER.getLaunchConfigurations(JAVA_LAUNCH_CONFIGURATION_TYPE);
 			for (int i = 0; i < configurations.length; i++) {
 				ILaunchConfiguration configuration = configurations[i];
-				if (configuration.getName().equals(name)) {
+				String configName = configuration.getName();
+				if (configName.startsWith(name)) {
 					configuration.delete();
 					break;
 				}
