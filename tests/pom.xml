@@ -9,12 +9,46 @@
 	</parent>
 	<groupId>org.jboss.tools.forge</groupId>
 	<artifactId>tests</artifactId>
-	
 	<name>forge.tests</name>
 	<packaging>pom</packaging>
-	<modules>
-		<module>org.jboss.tools.forge.core.test</module>
-		<module>org.jboss.tools.forge.ui.test</module>
-	</modules>
+	<profiles>
+		<profile>
+			<id>forge-tests-libs</id>
+			<activation>
+				<property>
+					<name>forge-coverage</name>
+				</property>
+			</activation>
+			<modules>
+				<module>../../build/libs</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>forge-tests-default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>forge-coverage</name>
+				</property>
+			</activation>
+			<modules>
+				<module>org.jboss.tools.forge.core.test</module>
+				<module>org.jboss.tools.forge.ui.test</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>forge-tests-coverage-report</id>
+			<activation>
+				<property>
+					<name>forge-coverage</name>
+				</property>
+			</activation>
+			<modules>
+				<module>../../build/reports/emma-coverage</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
 	
