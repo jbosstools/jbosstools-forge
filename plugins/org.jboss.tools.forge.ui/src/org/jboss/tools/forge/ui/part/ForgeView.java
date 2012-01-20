@@ -33,6 +33,7 @@ import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.commands.SourceProvider;
 import org.jboss.tools.forge.ui.console.ForgeTextViewer;
+import org.jboss.tools.forge.ui.document.ForgeDocument;
 
 public class ForgeView extends ViewPart implements PropertyChangeListener, IShowInTarget {
 
@@ -41,30 +42,20 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 	private static final String NOT_RUNNING_MESSAGE = "Forge is not running.";
 	private static final String STARTING_MESSAGE = "Please wait while Forge is starting";
 	
-	private class ForgePage extends Page {
-		
+	private class ForgePage extends Page {		
 		private ForgeTextViewer viewer;
-		private ForgeRuntime runtime;
-		
-		public ForgePage(ForgeRuntime runtime) {
-			this.runtime = runtime;
-		}
-		
 		@Override
 		public void createControl(Composite parent) {
-			viewer = new ForgeTextViewer(parent, runtime);
+			viewer = new ForgeTextViewer(parent);
 		}
-
 		@Override
 		public Control getControl() {
 			return viewer == null ? null : viewer.getControl();
 		}
-
 		@Override
 		public void setFocus() {
 			viewer.getControl().setFocus();
-		}
-		
+		}		
 	}
 
 	private PageBook pageBook = null;
@@ -74,7 +65,6 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 	private MessagePage notRunningPage;
 	private String notRunningMessage;
 	
-	private ForgeRuntime runtime;
 	private ISelection selection;
 	private SelectionSynchronizer synchronizer;
 	
@@ -82,7 +72,8 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 	public void createPartControl(Composite parent) {
 		synchronizer = new SelectionSynchronizer(this);
 		pageBook = new PageBook(parent, SWT.NONE);
-		createNotRunningPage(parent);
+		createRunningPage();
+		createNotRunningPage();
 		showPage(notRunning);		
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(new ISelectionListener() {			
 			@Override
@@ -100,7 +91,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		synchronizer.setEnabled(synced);
 	}
 	
-	private void createNotRunningPage(Composite parent) {
+	private void createNotRunningPage() {
 		MessagePage page = new MessagePage();
 		page.createControl(pageBook);
 		page.init(new PageSite(getViewSite()));
@@ -110,11 +101,16 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		notRunningPage = page;
 	}
 	
+	private void createRunningPage() {
+		runningPage = new ForgePage();
+		runningPage.createControl(pageBook);
+		runningPage.init(new PageSite(getViewSite()));
+		running = runningPage.getControl();
+	}
+	
 	@Override
 	public void setFocus() {
-		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
-			runningPage.setFocus();
-		}
+		runningPage.setFocus();
 	}
 
 	@Override
@@ -136,7 +132,6 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 			public void run() {
 				notRunningMessage = STARTING_MESSAGE;
 				notRunningPage.setMessage(notRunningMessage);
-				createRunningPage();
 			}			
 		});
 	}
@@ -152,9 +147,9 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 	}
 	
 	private void handleStateNotRunning() {
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
 		if (runtime != null) {
 			runtime.removePropertyChangeListener(this);
-			runtime = null;
 		}
 		getDisplay().asyncExec(new Runnable() {
 			@Override
@@ -188,31 +183,25 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		}
 	}
 	
-	private void createRunningPage() {
-		Control oldForgeIsRunning = running;
-		Page oldForgeIsRunningPage = runningPage;
-		runningPage = new ForgePage(runtime);
-		runningPage.createControl(pageBook);
-		runningPage.init(new PageSite(getViewSite()));
-		running = runningPage.getControl();
-		if (oldForgeIsRunningPage != null) {
-			oldForgeIsRunningPage.dispose();
-		}
-		if (oldForgeIsRunning != null) {			
-			oldForgeIsRunning.dispose();
-		}
-	}
-	
-	public void dispose() {
-		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
-			stopForge();
-		}
-		super.dispose();
-	}
+//	private void createRunningPage() {
+//		Control oldForgeIsRunning = running;
+//		Page oldForgeIsRunningPage = runningPage;
+//		runningPage = new ForgePage(runtime);
+//		runningPage.createControl(pageBook);
+//		runningPage.init(new PageSite(getViewSite()));
+//		running = runningPage.getControl();
+//		if (oldForgeIsRunningPage != null) {
+//			oldForgeIsRunningPage.dispose();
+//		}
+//		if (oldForgeIsRunning != null) {			
+//			oldForgeIsRunning.dispose();
+//		}
+//	}
 	
 	public void startForge() {
-		if (runtime != null) return;
-		runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
+		final ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
+		if (ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) return;
+ 		ForgeDocument.INSTANCE.connect(runtime);
 		runtime.addPropertyChangeListener(this);
 		Job job = new Job("Starting Forge") {
 			@Override
@@ -249,24 +238,20 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 	}
 	
 	public void stopForge() {
-		if (runtime == null) return;
-		final IProgressMonitor progressMonitor = getViewSite().getActionBars().getStatusLineManager().getProgressMonitor();
+		IProgressMonitor progressMonitor = getViewSite().getActionBars().getStatusLineManager().getProgressMonitor();
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
 		runtime.stop(progressMonitor);
-		runtime = null;
 	}
 	
 	private Display getDisplay() {
 		return getSite().getShell().getDisplay();
 	}
 	
-	public ForgeRuntime getRuntime() {
-		return runtime;
-	}
-	
 	public boolean show(ShowInContext context) {
         if (context == null) {
 		    return false;
         }
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
         if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
         	return goToSelection(context.getSelection());
         } else {
@@ -286,6 +271,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 			Thread waitThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
+					ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
 					while (runtime != null && !ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
 						try {
 							Thread.sleep(1000);
@@ -329,6 +315,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		if (str.indexOf(' ') != -1) {
 			str = '\"' + str + '\"';
 		}
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
 		runtime.sendInput("pick-up " + str + "\n");
 	}
 	

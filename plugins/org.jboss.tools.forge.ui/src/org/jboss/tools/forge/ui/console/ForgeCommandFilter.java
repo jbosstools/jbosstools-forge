@@ -26,5 +26,5 @@ public class ForgeCommandFilter extends ForgeHiddenOutputFilter {
 			}
 		}
 	}
-
+	
 }

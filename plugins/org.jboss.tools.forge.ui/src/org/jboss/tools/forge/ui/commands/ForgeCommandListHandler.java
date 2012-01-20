@@ -9,6 +9,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.dialog.ForgeCommandListDialog;
@@ -21,7 +22,7 @@ public class ForgeCommandListHandler extends AbstractHandler {
 		if (window == null) {
 			return null;
 		}				
-		ForgeRuntime runtime = getForgeRuntime(window);
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
 		if (isStarting(runtime)) {
 			showWaitUntilStartedMessage();
 		} else if (!(isRunning(runtime))) {
@@ -39,20 +40,6 @@ public class ForgeCommandListHandler extends AbstractHandler {
 	
 	private boolean isRunning(ForgeRuntime runtime) {
 		return runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState());
-	}
-	
-	private ForgeRuntime getForgeRuntime(IWorkbenchWindow window) {
-		try {
-			IViewPart part = window.getActivePage().showView(ForgeView.ID);
-			if (part != null && part instanceof ForgeView) {
-				return ((ForgeView)part).getRuntime();
-			} else {
-				return null;
-			}
-		} catch (PartInitException e) {
-			ForgeUIPlugin.log(e);
-			return null;
-		}
 	}
 	
 	private void showWaitUntilStartedMessage() {
