@@ -7,9 +7,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.part.ForgeView;
@@ -81,13 +81,17 @@ public class ForgeCommandProcessor {
 	}
 	
 	private void showForgeConsole() {		
-		try {
+//		try {
 			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
-			workbenchPage.showView(ForgeView.ID).setFocus();
-		} catch (PartInitException e) {
-			ForgeUIPlugin.log(e);
-		}		
+			IViewPart forgeView = workbenchPage.findView(ForgeView.ID);
+			if (forgeView != null) {
+				forgeView.setFocus();
+			}
+//			workbenchPage.showView(ForgeView.ID).setFocus();
+//		} catch (PartInitException e) {
+//			ForgeUIPlugin.log(e);
+//		}		
 	}
 	
 }

@@ -191,5 +191,5 @@ public class ForgeCommandListDialog extends PopupDialog {
 	protected Control getFocusControl() {
 		return filterText;
 	}
-
+	
 }

@@ -10,7 +10,7 @@ public class StartHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent executionEvent) {
 		ForgeView forgeView = ForgeHelper.getForgeView();
 		if (forgeView != null) {
-			forgeView.startForge();
+			ForgeHelper.startForge();
 		}
 		return null;		
 	}

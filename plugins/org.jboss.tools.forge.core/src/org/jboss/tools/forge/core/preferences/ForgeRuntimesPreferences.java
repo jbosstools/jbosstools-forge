@@ -35,6 +35,7 @@ import org.xml.sax.SAXException;
 public class ForgeRuntimesPreferences {
 	
 	static final String PREF_FORGE_RUNTIMES = "org.jboss.tools.forge.core.runtimes";
+	static final String PREF_FORGE_STARTUP = "org.jboss.tools.forge.core.startup";
 	
 	public static final ForgeRuntimesPreferences INSTANCE = new ForgeRuntimesPreferences();
 	
@@ -50,11 +51,16 @@ public class ForgeRuntimesPreferences {
 		return (ForgeRuntime[])runtimes.toArray(new ForgeRuntime[runtimes.size()]);
 	}
 	
-	public ForgeRuntime getDefault() {
+	public ForgeRuntime getDefaultRuntime() {
 		if (defaultRuntime == null) {
 			initializeRuntimes();
 		}
 		return defaultRuntime;
+	}
+	
+	public boolean getStartup() {
+		return getForgeCorePreferences().getBoolean(PREF_FORGE_STARTUP, false);
+		
 	}
 	
 	private IEclipsePreferences getForgeCorePreferences() {
@@ -141,6 +147,16 @@ public class ForgeRuntimesPreferences {
 		}
 		this.defaultRuntime = defaultRuntime;
 		saveRuntimes();
+	}
+	
+	public void setStartup(boolean startup) {
+		try {
+			IEclipsePreferences eclipsePreferences = getForgeCorePreferences();
+			eclipsePreferences.putBoolean(PREF_FORGE_STARTUP, startup);
+			eclipsePreferences.flush();
+		} catch (BackingStoreException e) {
+			ForgeCorePlugin.log(e);
+		}
 	}
 	
 	private void saveRuntimes() {

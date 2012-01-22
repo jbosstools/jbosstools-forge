@@ -43,7 +43,7 @@ public class SelectionSynchronizer implements ISelectionListener {
 			if (path.indexOf(' ') != -1) {
 				path = '\"' + path + '\"';
 			}
-			ForgeRuntime forgeRuntime = ForgeRuntimesPreferences.INSTANCE.getDefault();
+			ForgeRuntime forgeRuntime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 			if (forgeRuntime != null && ForgeRuntime.STATE_RUNNING.equals(forgeRuntime.getState())) {
 				forgeRuntime.sendInput("pick-up " + path + "\n");
 			}
@@ -84,7 +84,7 @@ public class SelectionSynchronizer implements ISelectionListener {
 		if (path.indexOf(' ') != -1) {
 			path = '\"' + path + '\"';
 		}
-		ForgeRuntime forgeRuntime = ForgeRuntimesPreferences.INSTANCE.getDefault();
+		ForgeRuntime forgeRuntime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 		if (forgeRuntime != null && ForgeRuntime.STATE_RUNNING.equals(forgeRuntime.getState())) {
 			forgeRuntime.sendInput("pick-up " + path + "\n");
 		}

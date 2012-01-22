@@ -5,7 +5,6 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -14,6 +13,7 @@ import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.dialog.ForgeCommandListDialog;
 import org.jboss.tools.forge.ui.part.ForgeView;
+import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ForgeCommandListHandler extends AbstractHandler {
 
@@ -22,31 +22,24 @@ public class ForgeCommandListHandler extends AbstractHandler {
 		if (window == null) {
 			return null;
 		}				
-		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
-		if (isStarting(runtime)) {
+		showForgeView(window);
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		if (ForgeHelper.isForgeStarting()) {
 			showWaitUntilStartedMessage();
-		} else if (!(isRunning(runtime))) {
-			askUserToStartRuntime(window); 
+		} else if (!ForgeHelper.isForgeRunning()) {
+			askUserToStartRuntime(); 
 		}
 		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
 			new ForgeCommandListDialog(window, runtime).open();
 		}
-		return null;		
-	}
-	
-	private boolean isStarting(ForgeRuntime runtime) {
-		return runtime != null && ForgeRuntime.STATE_STARTING.equals(runtime.getState());
-	}
-	
-	private boolean isRunning(ForgeRuntime runtime) {
-		return runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState());
+		return null;
 	}
 	
 	private void showWaitUntilStartedMessage() {
 		MessageDialog.openInformation(null, "Forge Starting", "Forge is starting. Please wait until the Forge runtime is started");
 	}
 	
-	private void askUserToStartRuntime(final IWorkbenchWindow window) {
+	private void askUserToStartRuntime() {
 		boolean start = MessageDialog.open(
 				MessageDialog.QUESTION, 
 				null, 
@@ -57,17 +50,18 @@ public class ForgeCommandListHandler extends AbstractHandler {
 			Display.getCurrent().asyncExec(new Runnable() {
 				@Override
 				public void run() {
-					try {
-						IViewPart part = window.getActivePage().showView(ForgeView.ID);
-						if (part != null && part instanceof ForgeView) {
-							((ForgeView)part).startForge();
-						}	 
-					} catch (PartInitException e) {
-						ForgeUIPlugin.log(e);
-					}						
+					ForgeHelper.startForge();
 				}				
 			});
 		}
+	}
+	
+	private void showForgeView(IWorkbenchWindow window) {
+		try {
+			window.getActivePage().showView(ForgeView.ID);
+		} catch (PartInitException e) {
+			ForgeUIPlugin.log(e);
+		}								
 	}
 
 }

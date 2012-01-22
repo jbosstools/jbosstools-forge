@@ -245,7 +245,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 			} else if (runtime instanceof ForgeExternalRuntime) {
 				copy = new ForgeExternalRuntime(runtime.getName(), runtime.getLocation());
 			}
-			if (runtime == ForgeRuntimesPreferences.INSTANCE.getDefault()) {
+			if (runtime == ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime()) {
 				defaultRuntime = copy;
 			}
 			runtimes.add(copy);

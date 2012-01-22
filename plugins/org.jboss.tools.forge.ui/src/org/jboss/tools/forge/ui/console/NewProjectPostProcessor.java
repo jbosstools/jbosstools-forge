@@ -69,7 +69,7 @@ public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
 	private void resetRuntime() {
 		ForgeView forgeView = ForgeHelper.getForgeView();
 		if (forgeView != null) {
-			ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
+			ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 			if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
 				runtime.sendInput("reset\n");
 			}

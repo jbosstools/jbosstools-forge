@@ -19,7 +19,7 @@
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			name="Forge"
-			class="org.jboss.tools.forge.ui.preferences.ForgeEmptyPreferencePage"
+			class="org.jboss.tools.forge.ui.preferences.ForgeStartupPreferencePage"
 			id="org.jboss.tools.forge">
 		</page>
 		<page
@@ -184,5 +184,11 @@
                 priorityLevel="workbench">
           </variable>
        </sourceProvider>
+    </extension>
+    <extension
+          point="org.eclipse.ui.startup">
+       <startup
+             class="org.jboss.tools.forge.ui.startup.ForgeStarter">
+       </startup>
     </extension>
 </plugin>

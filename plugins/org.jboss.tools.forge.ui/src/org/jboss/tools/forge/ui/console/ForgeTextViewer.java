@@ -129,7 +129,7 @@ public class ForgeTextViewer extends TextViewer {
     }
     
     private ForgeRuntime getRuntime() {
-		return ForgeRuntimesPreferences.INSTANCE.getDefault();    	
+		return ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();    	
     }
     
 }
