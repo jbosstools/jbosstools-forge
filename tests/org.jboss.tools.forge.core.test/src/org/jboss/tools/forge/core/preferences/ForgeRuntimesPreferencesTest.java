@@ -25,7 +25,7 @@ public class ForgeRuntimesPreferencesTest {
 	
 	@Test
 	public void testGetDefaultInitialCase() {
-		assertEquals(ForgeEmbeddedRuntime.INSTANCE, ForgeRuntimesPreferences.INSTANCE.getDefault());
+		assertEquals(ForgeEmbeddedRuntime.INSTANCE, ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime());
 	}
 	
 	@Test
@@ -41,7 +41,7 @@ public class ForgeRuntimesPreferencesTest {
 		runtimes[2] = new ForgeExternalRuntime("bar", "barbar");
 		ForgeRuntimesPreferences.INSTANCE.setRuntimes(runtimes, runtimes[1]);
 		assertArrayEquals(runtimes, ForgeRuntimesPreferences.INSTANCE.getRuntimes());
-		assertEquals(runtimes[1], ForgeRuntimesPreferences.INSTANCE.getDefault());
+		assertEquals(runtimes[1], ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime());
 		verifyForgeRuntimesPreferencesString();
 	}
 	
@@ -129,7 +129,7 @@ public class ForgeRuntimesPreferencesTest {
 				ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, 
 				ALTERNATIVE_FORGE_RUNTIMES);
 		// getDefault() will now trigger the initialization
-		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefault();
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 		assertEquals("foo", runtime.getName());
 		assertEquals("foofoo", runtime.getLocation());
 		assertEquals("external", runtime.getType());
