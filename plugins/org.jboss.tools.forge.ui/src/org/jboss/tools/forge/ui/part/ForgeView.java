@@ -4,6 +4,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -29,6 +31,7 @@ import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.commands.SourceProvider;
 import org.jboss.tools.forge.ui.console.ForgeTextViewer;
+import org.jboss.tools.forge.ui.document.ForgeDocument;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ForgeView extends ViewPart implements PropertyChangeListener, IShowInTarget {
@@ -60,6 +63,7 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 	private Page runningPage;
 	private MessagePage notRunningPage;
 	private String notRunningMessage;
+	private ForgeRuntime currentRuntime;
 	
 	private ISelection selection;
 	private SelectionSynchronizer synchronizer;
@@ -70,6 +74,24 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		}
 	};
 	
+	private IPreferenceChangeListener preferenceChangeListener = new IPreferenceChangeListener() {		
+		@Override
+		public void preferenceChange(PreferenceChangeEvent event) {
+			if (ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES.equals(event.getKey())) {
+				ForgeRuntime newRuntime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+				if (!newRuntime.getName().equals(currentRuntime.getName())) {
+					ForgeRuntime oldRuntime = currentRuntime;
+					oldRuntime.stop(null);
+					oldRuntime.removePropertyChangeListener(ForgeView.this);
+					currentRuntime = newRuntime;
+					currentRuntime.addPropertyChangeListener(ForgeView.this);
+					ForgeDocument.INSTANCE.connect(currentRuntime);
+					ForgeHelper.startForge();
+				}
+			}
+		}
+	};
+	
 	@Override
 	public void createPartControl(Composite parent) {
 		synchronizer = new SelectionSynchronizer(this);
@@ -77,11 +99,12 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 		createRunningPage();
 		createNotRunningPage();
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(selectionListener);
-		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
-		if (runtime != null) {
-			updatePages(runtime.getState());
-			runtime.addPropertyChangeListener(this);
+		currentRuntime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		if (currentRuntime != null) {
+			updatePages(currentRuntime.getState());
+			currentRuntime.addPropertyChangeListener(this);
 		}
+		ForgeRuntimesPreferences.INSTANCE.addPreferenceChangeListener(preferenceChangeListener);
 	}
 	
 	public ISelection getSelection() {

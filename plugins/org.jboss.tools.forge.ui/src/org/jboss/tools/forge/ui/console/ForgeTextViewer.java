@@ -51,7 +51,6 @@ public class ForgeTextViewer extends TextViewer {
 		}
     }
 	
-//    private ForgeRuntime runtime;
     private DocumentListener documentListener = new DocumentListener();
     
     public ForgeTextViewer(Composite parent) {

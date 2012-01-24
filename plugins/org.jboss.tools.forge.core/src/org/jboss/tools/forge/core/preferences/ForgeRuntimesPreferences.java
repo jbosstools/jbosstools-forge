@@ -20,6 +20,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.process.ForgeEmbeddedRuntime;
@@ -34,8 +35,8 @@ import org.xml.sax.SAXException;
 
 public class ForgeRuntimesPreferences {
 	
-	static final String PREF_FORGE_RUNTIMES = "org.jboss.tools.forge.core.runtimes";
-	static final String PREF_FORGE_STARTUP = "org.jboss.tools.forge.core.startup";
+	public static final String PREF_FORGE_RUNTIMES = "org.jboss.tools.forge.core.runtimes";
+	public static final String PREF_FORGE_STARTUP = "org.jboss.tools.forge.core.startup";
 	
 	public static final ForgeRuntimesPreferences INSTANCE = new ForgeRuntimesPreferences();
 	
@@ -157,6 +158,14 @@ public class ForgeRuntimesPreferences {
 		} catch (BackingStoreException e) {
 			ForgeCorePlugin.log(e);
 		}
+	}
+	
+	public void addPreferenceChangeListener(IPreferenceChangeListener listener) {
+		getForgeCorePreferences().addPreferenceChangeListener(listener);
+	}
+	
+	public void removePreferenceChangeListener(IPreferenceChangeListener listener) {
+		getForgeCorePreferences().removePreferenceChangeListener(listener);
 	}
 	
 	private void saveRuntimes() {

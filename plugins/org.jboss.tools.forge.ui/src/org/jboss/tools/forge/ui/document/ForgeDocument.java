@@ -1,7 +1,5 @@
 package org.jboss.tools.forge.ui.document;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -41,23 +39,7 @@ public class ForgeDocument extends Document {
 			});
 		}		
 	}
-	
-	private PropertyChangeListener pcl = new PropertyChangeListener() {		
-		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) {
-				if (ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getNewValue())) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							disconnect();
-						}						
-					});
-				}
-			}
-		}
-	};
-	
+		
 	private ForgeRuntime runtime;
 	private int cursorOffset = 0;
 	private StyleRange currentStyleRange;
@@ -76,8 +58,8 @@ public class ForgeDocument extends Document {
 	}
 	
 	public void connect(ForgeRuntime runtime) {
+		disconnect();
 		this.runtime = runtime;
-		runtime.addPropertyChangeListener(pcl);
 		ForgeOutputListener target = new ForgeOutputListener() {		
 			@Override
 			public void outputAvailable(String output) {
@@ -95,9 +77,10 @@ public class ForgeDocument extends Document {
 	}
 	
 	private void disconnect() {
-		runtime.removeOutputListener(outputListener);
-		runtime.removePropertyChangeListener(pcl);
-		runtime = null;
+		if (runtime != null) {
+			runtime.removeOutputListener(outputListener);
+			runtime = null;
+		}
 		reset();
 	}
 	
@@ -177,7 +160,6 @@ public class ForgeDocument extends Document {
     }
     
     private void clearCurrentScreenPage(String command) {
-    	System.out.println("clearCurrentScreenPage(" + command + ")");
     	String str = command.substring(2, command.length() - 1);
     	if ("2".equals(str)) {
     		reset();
