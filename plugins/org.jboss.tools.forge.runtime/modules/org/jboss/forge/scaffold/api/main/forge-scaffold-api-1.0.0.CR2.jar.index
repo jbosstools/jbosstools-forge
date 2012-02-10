@@ -1,0 +1,11 @@
+
+META-INF
+org
+org/jboss
+org/jboss/forge
+org/jboss/forge/scaffold
+org/jboss/forge/scaffold/events
+org/jboss/forge/scaffold/util
+META-INF/maven
+META-INF/maven/org.jboss.forge
+META-INF/maven/org.jboss.forge/forge-scaffold-api

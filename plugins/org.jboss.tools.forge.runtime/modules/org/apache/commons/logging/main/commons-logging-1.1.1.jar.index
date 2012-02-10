@@ -1,0 +1,10 @@
+
+META-INF
+org
+org/apache
+org/apache/commons
+org/apache/commons/logging
+org/apache/commons/logging/impl
+META-INF/maven
+META-INF/maven/commons-logging
+META-INF/maven/commons-logging/commons-logging

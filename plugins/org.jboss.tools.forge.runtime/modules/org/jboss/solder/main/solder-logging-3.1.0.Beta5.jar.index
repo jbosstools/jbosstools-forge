@@ -1,0 +1,12 @@
+
+META-INF
+META-INF/maven
+META-INF/maven/org.jboss.solder
+META-INF/maven/org.jboss.solder/solder-logging
+org
+org/jboss
+org/jboss/solder
+org/jboss/solder/logging
+org/jboss/solder/logging/internal
+META-INF/maven/org.jboss.logging
+META-INF/maven/org.jboss.logging/jboss-logging

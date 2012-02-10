@@ -1,0 +1,14 @@
+
+META-INF
+about_files
+org
+org/eclipse
+org/eclipse/core
+org/eclipse/core/internal
+org/eclipse/core/internal/preferences
+org/eclipse/core/internal/preferences/exchange
+org/eclipse/core/runtime
+org/eclipse/core/runtime/preferences
+org/osgi
+org/osgi/service
+org/osgi/service/prefs

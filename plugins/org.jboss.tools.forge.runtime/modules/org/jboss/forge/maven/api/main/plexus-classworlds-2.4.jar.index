@@ -1,0 +1,13 @@
+
+META-INF
+org
+org/codehaus
+org/codehaus/classworlds
+org/codehaus/plexus
+org/codehaus/plexus/classworlds
+org/codehaus/plexus/classworlds/launcher
+org/codehaus/plexus/classworlds/realm
+org/codehaus/plexus/classworlds/strategy
+META-INF/maven
+META-INF/maven/org.codehaus.plexus
+META-INF/maven/org.codehaus.plexus/plexus-classworlds

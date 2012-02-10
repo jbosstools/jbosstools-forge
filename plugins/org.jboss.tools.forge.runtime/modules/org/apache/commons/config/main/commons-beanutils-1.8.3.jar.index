@@ -1,0 +1,14 @@
+
+META-INF
+org
+org/apache
+org/apache/commons
+org/apache/commons/beanutils
+org/apache/commons/beanutils/converters
+org/apache/commons/beanutils/expression
+org/apache/commons/beanutils/locale
+org/apache/commons/beanutils/locale/converters
+org/apache/commons/collections
+META-INF/maven
+META-INF/maven/commons-beanutils
+META-INF/maven/commons-beanutils/commons-beanutils

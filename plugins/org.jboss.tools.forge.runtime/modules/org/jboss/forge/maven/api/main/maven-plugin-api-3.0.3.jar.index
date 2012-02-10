@@ -1,0 +1,16 @@
+
+META-INF
+org
+org/apache
+org/apache/maven
+org/apache/maven/monitor
+org/apache/maven/monitor/logging
+org/apache/maven/plugin
+org/apache/maven/plugin/descriptor
+org/apache/maven/plugin/lifecycle
+org/apache/maven/plugin/lifecycle/io
+org/apache/maven/plugin/lifecycle/io/xpp3
+org/apache/maven/plugin/logging
+META-INF/maven
+META-INF/maven/org.apache.maven
+META-INF/maven/org.apache.maven/maven-plugin-api

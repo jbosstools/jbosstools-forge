@@ -1,0 +1,12 @@
+
+META-INF
+org
+org/apache
+org/apache/maven
+org/apache/maven/model
+org/apache/maven/model/io
+org/apache/maven/model/io/xpp3
+org/apache/maven/model/merge
+META-INF/maven
+META-INF/maven/org.apache.maven
+META-INF/maven/org.apache.maven/maven-model

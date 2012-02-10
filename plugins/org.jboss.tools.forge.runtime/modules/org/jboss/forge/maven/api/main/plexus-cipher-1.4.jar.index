@@ -1,0 +1,11 @@
+
+META-INF
+META-INF/plexus
+org
+org/sonatype
+org/sonatype/plexus
+org/sonatype/plexus/components
+org/sonatype/plexus/components/cipher
+META-INF/maven
+META-INF/maven/org.sonatype.plexus
+META-INF/maven/org.sonatype.plexus/plexus-cipher

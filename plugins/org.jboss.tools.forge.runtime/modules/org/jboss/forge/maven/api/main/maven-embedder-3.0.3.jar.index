@@ -1,0 +1,9 @@
+
+META-INF
+org
+org/apache
+org/apache/maven
+org/apache/maven/cli
+META-INF/maven
+META-INF/maven/org.apache.maven
+META-INF/maven/org.apache.maven/maven-embedder

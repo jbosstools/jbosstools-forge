@@ -1,0 +1,12 @@
+
+META-INF
+org
+org/jboss
+org/jboss/forge
+org/jboss/forge/dev
+org/jboss/forge/dev/java
+org/jboss/forge/dev/mvn
+org/jboss/forge/dev/vcs
+META-INF/maven
+META-INF/maven/org.jboss.forge
+META-INF/maven/org.jboss.forge/forge-dev-plugins

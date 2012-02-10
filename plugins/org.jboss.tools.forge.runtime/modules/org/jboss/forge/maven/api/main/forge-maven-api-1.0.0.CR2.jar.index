@@ -1,0 +1,13 @@
+
+META-INF
+org
+org/jboss
+org/jboss/forge
+org/jboss/forge/maven
+org/jboss/forge/maven/dependencies
+org/jboss/forge/maven/plugins
+org/jboss/forge/maven/profiles
+org/jboss/forge/maven/resources
+META-INF/maven
+META-INF/maven/org.jboss.forge
+META-INF/maven/org.jboss.forge/forge-maven-api

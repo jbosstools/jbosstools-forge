@@ -1,0 +1,9 @@
+
+META-INF
+org
+org/jboss
+org/jboss/forge
+org/jboss/forge/git
+META-INF/maven
+META-INF/maven/org.jboss.forge
+META-INF/maven/org.jboss.forge/forge-git-tools

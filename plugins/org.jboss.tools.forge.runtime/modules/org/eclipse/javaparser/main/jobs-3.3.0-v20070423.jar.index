@@ -1,0 +1,9 @@
+
+META-INF
+org
+org/eclipse
+org/eclipse/core
+org/eclipse/core/internal
+org/eclipse/core/internal/jobs
+org/eclipse/core/runtime
+org/eclipse/core/runtime/jobs

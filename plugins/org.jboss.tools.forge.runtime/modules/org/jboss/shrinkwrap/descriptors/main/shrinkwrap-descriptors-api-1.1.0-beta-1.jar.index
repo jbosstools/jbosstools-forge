@@ -1,0 +1,10 @@
+
+META-INF
+org
+org/jboss
+org/jboss/shrinkwrap
+org/jboss/shrinkwrap/descriptor
+org/jboss/shrinkwrap/descriptor/api
+META-INF/maven
+META-INF/maven/org.jboss.shrinkwrap.descriptors
+META-INF/maven/org.jboss.shrinkwrap.descriptors/shrinkwrap-descriptors-api
