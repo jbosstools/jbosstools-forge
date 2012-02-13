@@ -9,6 +9,7 @@
    <dependencies>
       <module name="org.jboss.forge.shell.api" optional="true" />
       <module name="org.jboss.forge.shell-api" optional="true" />
+      <module name="sun.misc" />
       <module name="javax.api"/>
    </dependencies>
    
