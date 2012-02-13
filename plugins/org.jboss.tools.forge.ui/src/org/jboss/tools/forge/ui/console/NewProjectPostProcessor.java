@@ -50,10 +50,12 @@ public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
 			}
 		} else {
 			int index = projectPath.lastIndexOf('/');
-			String projectDirName = projectPath.substring(index + 1);
-			String projectBaseDirPath = projectPath.substring(0, index);
-			ProjectImporter importer = new ProjectImporter(projectBaseDirPath, projectDirName);
-			importer.importProject();
+			if (index != -1) {
+				String projectDirName = projectPath.substring(index + 1);
+				String projectBaseDirPath = projectPath.substring(0, index);
+				ProjectImporter importer = new ProjectImporter(projectBaseDirPath, projectDirName);
+				importer.importProject();
+			}
 		}
 	}
 	
