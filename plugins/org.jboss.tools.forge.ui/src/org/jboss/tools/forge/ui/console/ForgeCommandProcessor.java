@@ -27,6 +27,7 @@ public class ForgeCommandProcessor {
 			POST_PROCESSORS.put("pick-up", new PickUpPostProcessor()); // OK
 			POST_PROCESSORS.put("open", new OpenPostProcessor());
 			POST_PROCESSORS.put("field", new FieldPostProcessor());
+			POST_PROCESSORS.put("cd", new CdPostProcessor());
 		}
 		return POST_PROCESSORS;
 	}
