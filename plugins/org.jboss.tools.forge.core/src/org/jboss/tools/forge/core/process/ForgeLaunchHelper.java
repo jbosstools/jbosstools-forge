@@ -133,8 +133,14 @@ public class ForgeLaunchHelper {
 		buffer.append("-Dforge.home=").append(encloseWithDoubleQuotesIfNeeded(location)).append(' ');
 		buffer.append("-Dforge.shell.colorEnabled=true").append(' ');
 		buffer.append("-Dforge.compatibility.IDE=true").append(' ');
-		buffer.append(getClassPathArgument(location));
+		buffer.append(getClassPathArgument(location)).append(' ');
+		buffer.append("-Dforge.workspace=").append(getWorkspaceLocation());
 		return buffer.toString();
+	}
+	
+	private static String getWorkspaceLocation() {
+		return encloseWithDoubleQuotesIfNeeded(
+				ResourcesPlugin.getWorkspace().getRoot().getLocation().toString());
 	}
 	
 	private static String getClassPathArgument(String location) {
