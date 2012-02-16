@@ -4,5 +4,6 @@ Bundle-Name: Forge Runtime Extensions
 Bundle-SymbolicName: org.jboss.tools.forge.runtime.ext
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Eclipse-BundleShape: dir
 Bundle-Vendor: JBoss by Red Hat
 Bundle-ClassPath: bin/

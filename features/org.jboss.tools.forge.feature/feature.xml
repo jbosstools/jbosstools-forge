@@ -29,7 +29,8 @@ Copyright (c) 2006-2012 Red Hat, Inc., and individual contributors as indicated 
          id="org.jboss.tools.forge.runtime"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="org.jboss.tools.forge.core"
@@ -42,6 +43,7 @@ Copyright (c) 2006-2012 Red Hat, Inc., and individual contributors as indicated 
          id="org.jboss.tools.forge.runtime.ext"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
