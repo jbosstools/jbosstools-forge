@@ -7,3 +7,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Eclipse-BundleShape: dir
 Bundle-Vendor: JBoss by Red Hat
 Bundle-ClassPath: bin/
+Require-Bundle: org.jboss.tools.forge.runtime;bundle-version="1.0.0"
