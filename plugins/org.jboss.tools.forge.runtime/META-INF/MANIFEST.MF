@@ -17,5 +17,5 @@ Export-Package: javax.enterprise.event,
  org.jboss.forge.shell.spi
 Bundle-ClassPath: modules/javax/inject/api/main/javax.inject-1.jar,
  modules/javax/enterprise/api/main/cdi-api-1.0-SP4.jar,
- modules/org/jboss/forge/shell/api/main/forge-shell-api-1.0.0.CR2.jar
+ modules/org/jboss/forge/shell/api/main/forge-shell-api-1.0.0.Final.jar
 
