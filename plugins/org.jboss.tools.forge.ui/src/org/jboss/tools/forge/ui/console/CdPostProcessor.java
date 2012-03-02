@@ -54,13 +54,6 @@ public class CdPostProcessor implements ForgeCommandPostProcessor {
 	private void show(IFileStore fileStore) {
 		IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();
 		IViewPart remoteSystemView = workbenchPage.findView("org.eclipse.rse.ui.view.systemView");
-		if (remoteSystemView == null) {
-			try {
-				remoteSystemView = workbenchPage.showView("org.eclipse.rse.ui.view.systemView");
-			} catch (PartInitException e) {
-				ForgeUIPlugin.log(e);
-			}
-		}
 		if (remoteSystemView != null) {
 			expandInRemoteSystemView(remoteSystemView, fileStore);
 		}
