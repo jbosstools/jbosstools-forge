@@ -11,6 +11,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.navigator.CommonNavigator;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.part.ForgeView;
 
@@ -53,6 +54,7 @@ public class ForgeCommandProcessor {
 				if (postProcessor != null) {
 					postProcessor.postProcess(getCommandDetails(commandString));
 				}
+				refreshProjectExplorer();
 				showForgeConsole();
 			}			
 		});
@@ -82,17 +84,22 @@ public class ForgeCommandProcessor {
 	}
 	
 	private void showForgeConsole() {		
-//		try {
-			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
-			IViewPart forgeView = workbenchPage.findView(ForgeView.ID);
-			if (forgeView != null) {
-				forgeView.setFocus();
-			}
-//			workbenchPage.showView(ForgeView.ID).setFocus();
-//		} catch (PartInitException e) {
-//			ForgeUIPlugin.log(e);
-//		}		
+		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+		IViewPart forgeView = workbenchPage.findView(ForgeView.ID);
+		if (forgeView != null) {
+			forgeView.setFocus();
+		}
+	}
+	
+	private void refreshProjectExplorer() {
+		IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();
+		if (workbenchPage != null) {
+			IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
+			if (projectExplorer != null && projectExplorer instanceof CommonNavigator) {
+				((CommonNavigator)projectExplorer).getCommonViewer().refresh();
+			} 
+		}
 	}
 	
 }
