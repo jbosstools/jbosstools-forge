@@ -11,5 +11,5 @@
 	<artifactId>forge.site</artifactId>
 	<name>forge.site</name>
 	
-	<packaging>eclipse-update-site</packaging>
+	<packaging>eclipse-repository</packaging>
 </project>
