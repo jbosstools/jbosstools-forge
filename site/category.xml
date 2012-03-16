@@ -11,4 +11,11 @@
 	<feature url="features/org.jboss.tools.forge.test.feature_0.0.0.jar" id="org.jboss.tools.forge.test.feature" version="0.0.0">
 		<category name="JBoss Tools Forge Nightly Build Update Site"/>
 	</feature>
+	<!-- Sources -->
+	<feature url="features/org.jboss.tools.forge.feature.source_0.0.0.jar" id="org.jboss.tools.forge.feature.source" version="0.0.0">
+		<category name="JBoss Tools Forge Nightly Build Update Site"/>
+	</feature>
+	<feature url="features/org.jboss.tools.forge.test.feature.source_0.0.0.jar" id="org.jboss.tools.forge.test.feature.source" version="0.0.0">
+		<category name="JBoss Tools Forge Nightly Build Update Site"/>
+	</feature>
 </site>
