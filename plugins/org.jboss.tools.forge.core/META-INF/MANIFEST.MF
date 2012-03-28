@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Forge Core
+Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -13,4 +13,5 @@ Export-Package: org.jboss.tools.forge.core,
  org.jboss.tools.forge.core.preferences,
  org.jboss.tools.forge.core.process
 Bundle-Activator: org.jboss.tools.forge.core.ForgeCorePlugin
-Bundle-Vendor: JBoss by Red Hat
+Bundle-Vendor: %BundleProvider
+Bundle-Localization: plugin

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Forge Tools
+Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.ui,
@@ -28,4 +28,5 @@ Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.jboss.tools.forge.ui.ForgeUIPlugin
 Bundle-ClassPath: .
 Export-Package: org.jboss.tools.forge.ui.console
-Bundle-Vendor: JBoss by Red Hat
+Bundle-Vendor: %BundleProvider
+Bundle-Localization: plugin

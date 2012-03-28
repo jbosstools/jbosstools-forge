@@ -1,10 +1,11 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Forge Runtime Plugin
+Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.runtime
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-Vendor: JBoss by Red Hat
+Bundle-Vendor: %BundleProvider
+Bundle-Localization: plugin
 Eclipse-BundleShape: dir
 Export-Package: javax.enterprise.event,
  javax.inject,
