@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module xmlns="urn:jboss:module:1.0" name="org.jboss.forge.scaffold.api">
+
+   <resources>
+        <resource-root path="forge-scaffold-api-1.0.2.Final.jar"/>
+        <!-- Insert resources here -->
+   </resources>
+
+   <dependencies>
+      <module name="org.jboss.forge.shell.api" services="import">
+         <imports>
+            <include path="**" />
+            <include path="META-INF" />
+         </imports>
+      </module>
+      
+      <module name="javax.api" />
+   </dependencies>
+   
+</module>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module xmlns="urn:jboss:module:1.0" name="org.jboss.forge.git">
+
+   <resources>
+        <resource-root path="jsch-0.1.44-1.jar"/>
+        <resource-root path="forge-git-tools-1.0.2.Final.jar"/>
+        <resource-root path="org.eclipse.jgit-1.2.0.201112221803-r.jar"/>
+        <!-- Insert resources here -->
+   </resources>
+
+   <dependencies>
+      <module name="javax.api" />
+      <module name="org.jboss.forge.shell.api"/>
+   </dependencies>
+   
+</module>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module xmlns="urn:jboss:module:1.0" name="org.jboss.forge.parser.java.api">
+
+   <resources>
+        <resource-root path="forge-parser-java-api-1.0.2.Final.jar"/>
+        <!-- Insert resources here -->
+   </resources>
+
+   <dependencies>
+      <module name="javax.api" />
+   </dependencies>
+   
+</module>

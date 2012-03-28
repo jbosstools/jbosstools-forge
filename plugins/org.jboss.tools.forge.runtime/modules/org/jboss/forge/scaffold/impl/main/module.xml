@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module xmlns="urn:jboss:module:1.0" name="org.jboss.forge.scaffold.impl">
+
+   <resources>
+      <resource-root path="forge-scaffold-plugins-1.0.2.Final.jar"/>
+        <resource-root path="forge-scaffold-faces-1.0.2.Final.jar"/>
+        <resource-root path="metawidget-all-2.2.Beta1.jar"/>
+        <!-- Insert resources here -->
+   </resources>
+
+   <dependencies>
+      <module name="org.jboss.forge.shell.api" services="import">
+         <imports>
+            <include path="**" />
+            <include path="META-INF" />
+         </imports>
+      </module>
+      
+      <module name="org.jboss.forge.javaee.api" services="import">
+         <imports>
+            <include path="**" />
+            <include path="META-INF" />
+         </imports>
+      </module>
+      
+      <module name="org.jboss.forge.javaee.impl" services="import">
+         <imports>
+            <include path="**" />
+            <include path="META-INF" />
+         </imports>
+      </module>
+      
+      <module name="org.jboss.forge.scaffold.api" services="import">
+         <imports>
+            <include path="**" />
+            <include path="META-INF" />
+         </imports>
+      </module>
+      
+      <module name="org.jboss.seam.render" services="import">
+         <imports>
+            <include path="**" />
+            <include path="META-INF" />
+         </imports>
+      </module>
+      
+      <module name="org.mvel" />
+      <module name="javax.api" />
+   </dependencies>
+
+</module>
