@@ -8,6 +8,7 @@
 	</parent>
 	<groupId>org.jboss.tools.forge.tests</groupId>
 	<artifactId>org.jboss.tools.forge.ui.test</artifactId> 
-	
+
+	<!-- TODO: this is a test plugin. It needs test classes. -->	
 	<packaging>eclipse-plugin</packaging>
 </project>

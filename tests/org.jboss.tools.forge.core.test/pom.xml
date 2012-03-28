@@ -9,7 +9,7 @@
 	<groupId>org.jboss.tools.forge.tests</groupId>
 	<artifactId>org.jboss.tools.forge.core.test</artifactId> 
 	
-	<packaging>eclipse-plugin</packaging>
+	<packaging>eclipse-test-plugin</packaging>
 	
 	<properties>
 		<coverage.filter>org.jboss.tools.forge.core*</coverage.filter>
