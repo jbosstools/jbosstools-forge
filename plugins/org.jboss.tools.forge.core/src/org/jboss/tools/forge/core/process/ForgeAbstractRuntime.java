@@ -75,6 +75,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			}
 		} finally {
 			if (process != null) {
+				ForgeCorePlugin.addForgeProcess(process);
 				IStreamsProxy streamsProxy = process.getStreamsProxy();
 				if (streamsProxy != null) {
 					IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
@@ -155,6 +156,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 					}
 				}
 				process.terminate();
+				ForgeCorePlugin.removeForgeProcess(process);
 			}
 		} catch (DebugException e) {
 			ForgeCorePlugin.log(e);
@@ -227,6 +229,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 							@Override
 							public void run() {
 			                	setNewState(STATE_NOT_RUNNING);
+			                	ForgeCorePlugin.removeForgeProcess(process);
 			                	process = null;
 			                	DebugPlugin.getDefault().removeDebugEventListener(terminateListener);
 							}	                		
