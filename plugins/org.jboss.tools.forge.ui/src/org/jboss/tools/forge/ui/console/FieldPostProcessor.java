@@ -24,14 +24,14 @@ public class FieldPostProcessor implements ForgeCommandPostProcessor {
 	public void postProcess(Map<String, String> commandDetails) {
 		try {
 			String crn = commandDetails.get("crn");
-			String par = commandDetails.get("par").trim();
+			String par = commandDetails.get("par");
 			IFile file = ForgeCommandPostProcessorHelper.getFile(crn);
 			if (file == null) return;
 			IJavaElement javaElement = JavaCore.create(file);
 			if (javaElement != null && javaElement.getElementType() == IJavaElement.COMPILATION_UNIT) {
 				try {
 					IType type = ((ICompilationUnit)javaElement).getTypes()[0];
-					IField field = type.getField(par);
+					IField field = getFieldToPostProcess(par, type);
 					if (field != null) {
 						ISourceRange sourceRange = field.getSourceRange();
 						IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();
@@ -47,6 +47,17 @@ public class FieldPostProcessor implements ForgeCommandPostProcessor {
 		} catch (PartInitException e) {
 			ForgeUIPlugin.log(e);
 		}
+	}
+	
+	private IField getFieldToPostProcess(String par, IType type) {
+		String[] candidates = par.trim().split(" ");
+		for (String candidate : candidates) {
+			IField field = type.getField(candidate);
+			if (field != null && field.exists()) {
+				return field;
+			}
+		}
+		return null;
 	}
 
 }
