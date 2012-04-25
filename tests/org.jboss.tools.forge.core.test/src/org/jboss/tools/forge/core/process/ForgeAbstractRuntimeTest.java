@@ -19,7 +19,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.osgi.framework.Bundle;
 
 public class ForgeAbstractRuntimeTest {
 	
@@ -55,6 +57,7 @@ public class ForgeAbstractRuntimeTest {
 		propertyChangeEvents = null;
 	}
 
+	@Ignore
 	@Test
 	public void testStartComplete() {
 		runtime.start(null);
@@ -70,6 +73,7 @@ public class ForgeAbstractRuntimeTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testStartWithProgressMonitor() {
 		runtime.start(new TestProgressMonitor());
@@ -93,6 +97,7 @@ public class ForgeAbstractRuntimeTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testStopComplete() {
 		runtime.start(null);
@@ -108,6 +113,7 @@ public class ForgeAbstractRuntimeTest {
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testStopWithProgressMonitor() {
 		runtime.start(null);

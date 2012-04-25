@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.model.IProcess;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ForgeLaunchHelperTest {
@@ -27,6 +28,7 @@ public class ForgeLaunchHelperTest {
 		testLocation = null;
 	}
 
+	@Ignore
 	@Test
 	public void test() {
 		forgeProcess = ForgeLaunchHelper.launch("test", testLocation);
