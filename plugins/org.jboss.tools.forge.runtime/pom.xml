@@ -10,4 +10,42 @@
 	<artifactId>org.jboss.tools.forge.runtime</artifactId> 
 	
 	<packaging>eclipse-plugin</packaging>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>get-runtime</id>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<phase>generate-resources</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.jboss.forge</groupId>
+									<artifactId>forge-distribution</artifactId>
+									<version>1.0.3.Final</version>
+									<type>zip</type>
+							  	</artifactItem>
+							</artifactItems>
+							<outputDirectory>${basedir}</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+		
+	<repositories>
+		<repository>
+			<id>jboss-nexus</id>
+			<name>JBoss Maven repository</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
+	</repositories>
 </project>
