@@ -17,9 +17,11 @@ import org.jboss.tools.forge.ui.document.ForgeDocument;
 
 public class ForgeTextViewer extends TextViewer {
 
+	private static String START_LINE = new Character((char)1).toString();
 	private static String PREV_CHAR = new Character((char)2).toString();
 	private static String CTRL_C = new Character((char)3).toString();
 	private static String CTRL_D = new Character((char)4).toString();
+	private static String END_LINE = new Character((char)5).toString();
 	private static String NEXT_CHAR = new Character((char)6).toString();
 	private static String DELETE_PREV_CHAR = new Character((char)8).toString();
 	private static String PREV_HISTORY = new Character((char)16).toString();
@@ -96,6 +98,14 @@ public class ForgeTextViewer extends TextViewer {
 		StyledText styledText= new StyledText(parent, styles) {
 			public void invokeAction(int action) {
 				switch (action) {
+					case ST.LINE_END:
+						getRuntime().sendInput(END_LINE);
+						System.out.println("line end");
+						break;
+					case ST.LINE_START:
+						getRuntime().sendInput(START_LINE);
+						System.out.println("line start");
+						break;
 					case ST.LINE_UP:
 						getRuntime().sendInput(PREV_HISTORY);
 						break;
