@@ -144,7 +144,7 @@ public class ForgeLaunchHelper {
 	}
 	
 	private static String getClassPathArgument(String location) {
-		return "-cp " + encloseWithDoubleQuotesIfNeeded(location + "/jboss-modules.jar");
+		return "-cp " + encloseWithDoubleQuotesIfNeeded(location + File.separator + "jboss-modules.jar");
 	}
 	
 }
