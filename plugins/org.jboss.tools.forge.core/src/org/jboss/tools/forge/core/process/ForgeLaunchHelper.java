@@ -140,7 +140,7 @@ public class ForgeLaunchHelper {
 	
 	private static String getWorkspaceLocation() {
 		return encloseWithDoubleQuotesIfNeeded(
-				ResourcesPlugin.getWorkspace().getRoot().getLocation().toString());
+				ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString());
 	}
 	
 	private static String getClassPathArgument(String location) {
