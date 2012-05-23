@@ -100,11 +100,9 @@ public class ForgeTextViewer extends TextViewer {
 				switch (action) {
 					case ST.LINE_END:
 						getRuntime().sendInput(END_LINE);
-						System.out.println("line end");
 						break;
 					case ST.LINE_START:
 						getRuntime().sendInput(START_LINE);
-						System.out.println("line start");
 						break;
 					case ST.LINE_UP:
 						getRuntime().sendInput(PREV_HISTORY);

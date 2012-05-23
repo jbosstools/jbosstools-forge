@@ -48,7 +48,7 @@ public class ForgeCommandProcessor {
 		if (command == null) return;
 		refreshWorkspace();
 		final ForgeCommandPostProcessor postProcessor = getPostProcessors().get(command);
-		Display.getDefault().asyncExec(new Runnable() {
+		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				if (postProcessor != null) {
@@ -85,10 +85,14 @@ public class ForgeCommandProcessor {
 	
 	private void showForgeConsole() {		
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
-		IViewPart forgeView = workbenchPage.findView(ForgeView.ID);
-		if (forgeView != null) {
-			forgeView.setFocus();
+		if (workbenchWindow != null) {
+			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+			if (workbenchPage != null) {
+				IViewPart forgeView = workbenchPage.findView(ForgeView.ID);
+				if (forgeView != null) {
+					forgeView.setFocus();
+				}
+			}
 		}
 	}
 	

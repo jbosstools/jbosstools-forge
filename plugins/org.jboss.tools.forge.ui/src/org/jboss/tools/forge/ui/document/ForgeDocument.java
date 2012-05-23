@@ -26,15 +26,15 @@ public class ForgeDocument extends Document {
 		void cursorMoved();
 	}
 	
-	private class AsyncForgeCommandFilter extends ForgeCommandFilter {
-		public AsyncForgeCommandFilter(ForgeOutputListener listener) {
+	private class SyncForgeCommandFilter extends ForgeCommandFilter {
+		public SyncForgeCommandFilter(ForgeOutputListener listener) {
 			super(listener);
 		}
 		public void outputAvailable(final String output) {
-			Display.getDefault().asyncExec(new Runnable() {
+			Display.getDefault().syncExec(new Runnable() {
 				@Override
 				public void run() {
-					AsyncForgeCommandFilter.super.outputAvailable(output);
+					SyncForgeCommandFilter.super.outputAvailable(output);
 				}				
 			});
 		}		
@@ -72,7 +72,7 @@ public class ForgeDocument extends Document {
 				executeAnsiCommand(command);
 			}
 		};
-		outputListener = new AsyncForgeCommandFilter(facf);
+		outputListener = new SyncForgeCommandFilter(facf);
 		runtime.addOutputListener(outputListener);
 	}
 	

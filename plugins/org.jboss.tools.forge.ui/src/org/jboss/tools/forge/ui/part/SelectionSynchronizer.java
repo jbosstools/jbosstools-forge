@@ -51,8 +51,7 @@ public class SelectionSynchronizer implements ISelectionListener {
 		
 		@Override
 		public void partActivated(IWorkbenchPart part) {
-			// TODO Auto-generated method stub
-			
+			// Ignore
 		}
 	};
 	
