@@ -29,6 +29,7 @@ public class ForgeCommandProcessor {
 			POST_PROCESSORS.put("open", new OpenPostProcessor());
 			POST_PROCESSORS.put("field", new FieldPostProcessor());
 			POST_PROCESSORS.put("cd", new CdPostProcessor());
+			POST_PROCESSORS.put("rm", new RmPostProcessor());
 		}
 		return POST_PROCESSORS;
 	}
