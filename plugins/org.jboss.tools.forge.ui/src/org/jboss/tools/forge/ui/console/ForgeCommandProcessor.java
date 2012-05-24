@@ -47,7 +47,9 @@ public class ForgeCommandProcessor {
 		if (!commandString.startsWith(" EC: ")) return;
 		String command = getCommand(commandString);
 		if (command == null) return;
-		refreshWorkspace();
+		if (!("rm".equals(command))) {
+			refreshWorkspace();
+		}
 		final ForgeCommandPostProcessor postProcessor = getPostProcessors().get(command);
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
