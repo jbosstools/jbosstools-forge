@@ -52,14 +52,27 @@ public class AllCommandsInterceptor implements CommandInterceptor {
 	}
 	
 	private String handleWorkspaceShortCut(String str) {
-		if (str.startsWith("#")) {
-			return System.getProperty("forge.workspace") + str.substring(1);
+		String result = str;
+		if (str.startsWith("#")) {			
+			result = encloseWithDoubleQuotesIfNeeded(System.getProperty("forge.workspace")) + str.substring(1);
 		}
-		return str;
+		return result;
 	}
 
 	private void sendEscaped(String str) {
 		shell.print(ESCAPE + str + ESCAPE); 
 	}
 
+	private String encloseWithDoubleQuotesIfNeeded(String str) {
+		if (str.contains(" ") && !isEnclosedWithDoubleQuotes(str)) { 
+			return "\"" + str + "\"";
+		} else {
+			return str;
+		}
+	}
+	
+	private boolean isEnclosedWithDoubleQuotes(String str) {
+		return str.charAt(0) == '\"' && str.charAt(str.length() - 1) == '\"';
+	}
+	
 }
