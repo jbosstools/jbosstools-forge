@@ -17,6 +17,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
+import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 
 
 public class ForgeLaunchHelper {
@@ -65,7 +66,7 @@ public class ForgeLaunchHelper {
 		if (workingCopy != null) {
 			try {
 				LAUNCH_MANAGER.addLaunchListener(new ForgeLaunchListener(launchConfigurationName));
-				launch = workingCopy.doSave().launch(ILaunchManager.RUN_MODE, null, false, true);
+				launch = workingCopy.doSave().launch(getLaunchMode(), null, false, true);
 			} catch (CoreException e) {
 				ForgeCorePlugin.log(new RuntimeException("Problem while launching working copy.", e));
 			}
@@ -73,7 +74,10 @@ public class ForgeLaunchHelper {
 		return launch;
 	}
 	
-	
+	private static String getLaunchMode() {
+		return ForgeRuntimesPreferences.INSTANCE.getStartInDebug() ? 
+				ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE;
+	}
 	
 	private static ILaunchConfigurationWorkingCopy createWorkingCopy(String name, String location) {
 		ILaunchConfigurationWorkingCopy result = null;

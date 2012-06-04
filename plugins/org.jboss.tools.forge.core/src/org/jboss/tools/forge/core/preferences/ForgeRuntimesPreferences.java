@@ -37,6 +37,7 @@ public class ForgeRuntimesPreferences {
 	
 	public static final String PREF_FORGE_RUNTIMES = "org.jboss.tools.forge.core.runtimes";
 	public static final String PREF_FORGE_STARTUP = "org.jboss.tools.forge.core.startup";
+	public static final String PREF_FORGE_START_IN_DEBUG = "org.jboss.tools.forge.core.startInDebug";
 	
 	public static final ForgeRuntimesPreferences INSTANCE = new ForgeRuntimesPreferences();
 	
@@ -62,6 +63,10 @@ public class ForgeRuntimesPreferences {
 	public boolean getStartup() {
 		return getForgeCorePreferences().getBoolean(PREF_FORGE_STARTUP, false);
 		
+	}
+	
+	public boolean getStartInDebug() {
+		return getForgeCorePreferences().getBoolean(PREF_FORGE_START_IN_DEBUG, false);
 	}
 	
 	private IEclipsePreferences getForgeCorePreferences() {
@@ -152,12 +157,24 @@ public class ForgeRuntimesPreferences {
 	
 	public void setStartup(boolean startup) {
 		try {
-			IEclipsePreferences eclipsePreferences = getForgeCorePreferences();
-			eclipsePreferences.putBoolean(PREF_FORGE_STARTUP, startup);
-			eclipsePreferences.flush();
+			setBoolean(PREF_FORGE_STARTUP, startup);
 		} catch (BackingStoreException e) {
 			ForgeCorePlugin.log(e);
 		}
+	}
+
+	public void setStartInDebug(boolean startup) {
+		try {
+			setBoolean(PREF_FORGE_START_IN_DEBUG, startup);
+		} catch (BackingStoreException e) {
+			ForgeCorePlugin.log(e);
+		}
+	}
+
+	private void setBoolean(String prefKey, boolean startup) throws BackingStoreException {
+		IEclipsePreferences eclipsePreferences = getForgeCorePreferences();
+		eclipsePreferences.putBoolean(prefKey, startup);
+		eclipsePreferences.flush();
 	}
 	
 	public void addPreferenceChangeListener(IPreferenceChangeListener listener) {

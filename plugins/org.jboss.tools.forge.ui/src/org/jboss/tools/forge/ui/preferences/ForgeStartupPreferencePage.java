@@ -15,11 +15,13 @@ public class ForgeStartupPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 	
 	private Button startupButton;
+	private Button startInDebugButton;
 	  
 	protected Control createContents(Composite parent) {
 		noDefaultAndApplyButton();
 		Composite clientArea = createClientArea(parent);
 		createStartupButton(clientArea);
+		createStartInDebugButton(clientArea);
 		return null;
 	}
 	
@@ -30,12 +32,19 @@ public class ForgeStartupPreferencePage extends PreferencePage implements
 		startupButton.setSelection(ForgeRuntimesPreferences.INSTANCE.getStartup());
 	}
 	
+	private void createStartInDebugButton(Composite parent) {
+		startInDebugButton = new Button(parent, SWT.CHECK);
+		startInDebugButton.setText("Start Forge in Debug Mode." );
+		startInDebugButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		startInDebugButton.setSelection(ForgeRuntimesPreferences.INSTANCE.getStartInDebug());
+	}
+	
 	private Composite createClientArea(Composite parent) {
 		Composite clientArea = new Composite(parent, SWT.NONE);
 		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
+		layout.numColumns = 1;
 		clientArea.setLayout(layout);
-		GridData gridData = new GridData(GridData.FILL_BOTH);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		clientArea.setLayoutData(gridData);
 		return clientArea;
 	}
@@ -44,6 +53,7 @@ public class ForgeStartupPreferencePage extends PreferencePage implements
 	
 	public boolean performOk() {
 		ForgeRuntimesPreferences.INSTANCE.setStartup(startupButton.getSelection());
+		ForgeRuntimesPreferences.INSTANCE.setStartInDebug(startInDebugButton.getSelection());
 		return true;
 	}
 }
