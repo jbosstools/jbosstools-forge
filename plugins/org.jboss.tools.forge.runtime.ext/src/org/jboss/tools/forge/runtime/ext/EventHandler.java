@@ -1,8 +1,5 @@
 package org.jboss.tools.forge.runtime.ext;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -27,20 +24,7 @@ public class EventHandler {
 		if (project != null) {
 			projectName = project.getProjectRoot().getFullyQualifiedName();
 		}
-		String parameterString = "";
-		try {
-			Method method = event.getClass().getMethod("getParameters", new Class[] {});
-			Object object = method.invoke(event, new Object[] {});
-			if (object instanceof Object[]) {
-				Object[] parameters = (Object[])object;
-				for (Object parameter : parameters) {
-					parameterString += parameter + " ";
-				}
-			}
-		} catch (NoSuchMethodException e) {
-		} catch (InvocationTargetException e) {
-		} catch (IllegalAccessException e) {}
-		
+		String parameterString = getParameterString(event);
 		String command = event.getCommand().getParent().getName() + " " + event.getCommand().getName();
 		sendEscaped(
 				" EC: " + command + 
@@ -48,6 +32,23 @@ public class EventHandler {
 				" CRT: " + currentResourceType + 
 				" CPN: " + projectName +
 				" PAR: " + parameterString);
+	}
+	
+	private String getParameterString(CommandExecuted event) {
+		return flattenObjectArray(event.getParameters());
+	}
+	
+	private String flattenObjectArray(Object[] objects) {
+		String result = "";
+		for (Object object : objects) {
+			if (object instanceof Object[]) {
+				result += '[' + flattenObjectArray((Object[])object) + ']';
+			} else {
+				result += object;
+				result += ' ';
+			}
+		}
+		return result.trim();
 	}
 	
 	private void sendEscaped(String str) {
