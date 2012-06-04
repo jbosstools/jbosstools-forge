@@ -51,7 +51,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			if (process != null) {
 				setNewState(STATE_STARTING);
 				DebugPlugin.getDefault().addDebugEventListener(terminateListener);
-				IStreamsProxy streamsProxy = process.getStreamsProxy();
+				IStreamsProxy streamsProxy = getStreamsProxy();
 				if (streamsProxy != null) {
 					IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
 					if (streamMonitor != null) {
@@ -76,7 +76,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		} finally {
 			if (process != null) {
 				ForgeCorePlugin.addForgeProcess(process);
-				IStreamsProxy streamsProxy = process.getStreamsProxy();
+				IStreamsProxy streamsProxy = getStreamsProxy();
 				if (streamsProxy != null) {
 					IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
 					if (outputStreamMonitor != null) {
@@ -91,7 +91,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	public String sendCommand(String str) {
 		String result = null;
 		if (process != null && !process.isTerminated()) {
-			IStreamsProxy streamsProxy = process.getStreamsProxy();
+			IStreamsProxy streamsProxy = getStreamsProxy();
 			if (streamsProxy != null) {
 				IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
 				if (streamMonitor != null) {
@@ -122,7 +122,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	public void sendInput(String str) {
 		if (process != null && !process.isTerminated()) {
-			IStreamsProxy streamProxy = process.getStreamsProxy();
+			IStreamsProxy streamProxy = getStreamsProxy();
 			if (streamProxy != null) {
 				try {
 					streamProxy.write(str);
@@ -148,7 +148,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private void terminate() {
 		try {
 			if (process != null) {
-				IStreamsProxy streamsProxy = process.getStreamsProxy();
+				IStreamsProxy streamsProxy = getStreamsProxy();
 				if (streamsProxy != null) {
 					IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
 					if (streamMonitor != null) {
@@ -169,6 +169,13 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		propertyChangeSupport.firePropertyChange(PROPERTY_STATE, oldState, state);
 	}
 	
+	private IStreamsProxy getStreamsProxy() {
+		if (process instanceof ForgeRuntimeProcess) {
+			return ((ForgeRuntimeProcess) process).getForgeStreamsProxy();
+		}
+		return process.getStreamsProxy();
+	}
+
 	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
 	}
@@ -188,7 +195,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private class StartupListener implements IStreamListener {
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
-			process.getStreamsProxy().getOutputStreamMonitor().removeListener(this);
+			getStreamsProxy().getOutputStreamMonitor().removeListener(this);
 			setNewState(STATE_RUNNING);
 		}		
 	}

@@ -12,6 +12,7 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.core.ILaunchListener;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
@@ -32,10 +33,12 @@ public class ForgeLaunchHelper {
 			ILaunchConfiguration[] configurations = LAUNCH_MANAGER.getLaunchConfigurations(JAVA_LAUNCH_CONFIGURATION_TYPE);
 			for (int i = 0; i < configurations.length; i++) {
 				ILaunchConfiguration configuration = configurations[i];
-				String configName = configuration.getName();
-				if (configName.startsWith(name)) {
-					configuration.delete();
-					break;
+				if (configuration != null && configuration.exists()) {
+					String configName = configuration.getName();
+					if (configName.startsWith(name)) {
+						configuration.delete();
+						break;
+					}
 				}
 			}
 		} catch (CoreException e) {
@@ -47,7 +50,6 @@ public class ForgeLaunchHelper {
 		IProcess result = null;
 		String launchConfigurationName = name + System.currentTimeMillis();
 		ILaunch launch = doLaunch(launchConfigurationName, location);
-		removeLaunchConfiguration(launchConfigurationName);
 		if (launch != null) {
 			IProcess[] processes = launch.getProcesses();
 			if (processes.length == 1) {
@@ -62,7 +64,8 @@ public class ForgeLaunchHelper {
 		ILaunchConfigurationWorkingCopy workingCopy = createWorkingCopy(launchConfigurationName, location);
 		if (workingCopy != null) {
 			try {
-				launch = workingCopy.doSave().launch(ILaunchManager.RUN_MODE, null, false, false);
+				LAUNCH_MANAGER.addLaunchListener(new ForgeLaunchListener(launchConfigurationName));
+				launch = workingCopy.doSave().launch(ILaunchManager.RUN_MODE, null, false, true);
 			} catch (CoreException e) {
 				ForgeCorePlugin.log(new RuntimeException("Problem while launching working copy.", e));
 			}
@@ -77,6 +80,7 @@ public class ForgeLaunchHelper {
 		try {
 			String launchConfigurationName = name + System.currentTimeMillis();
 			result = JAVA_LAUNCH_CONFIGURATION_TYPE.newInstance(null, launchConfigurationName);
+			result.setAttribute(DebugPlugin.ATTR_PROCESS_FACTORY_ID, IForgeLaunchConfiguration.ID_FORGE_PROCESS_FACTORY);
 			result.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "org.jboss.modules.Main");
 			result.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, WORKING_DIR.getAbsolutePath());
 			result.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, createVmArguments(location));
@@ -147,4 +151,27 @@ public class ForgeLaunchHelper {
 		return "-cp " + encloseWithDoubleQuotesIfNeeded(location + File.separator + "jboss-modules.jar");
 	}
 	
+	static class ForgeLaunchListener implements ILaunchListener {
+		String launchConfigurationName;
+
+		public ForgeLaunchListener(String launchConfigruationName) {
+			this.launchConfigurationName = launchConfigruationName;
+		}
+
+		@Override
+		public void launchAdded(ILaunch launch) {
+		}
+
+		@Override
+		public void launchChanged(ILaunch launch) {
+		}
+
+		@Override
+		public void launchRemoved(ILaunch launch) {
+			if (launch.getLaunchConfiguration().getName().startsWith(launchConfigurationName)) {
+				ForgeLaunchHelper.removeLaunchConfiguration(launchConfigurationName);
+				LAUNCH_MANAGER.removeLaunchListener(this);
+			}
+		}
+	}
 }
