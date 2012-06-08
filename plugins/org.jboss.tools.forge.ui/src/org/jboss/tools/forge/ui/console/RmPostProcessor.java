@@ -34,6 +34,9 @@ public class RmPostProcessor implements ForgeCommandPostProcessor {
 		if (resourceNames == null) return;
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (String resourceName : resourceNames) {
+			if (resourceName.endsWith("/")) {
+				resourceName = resourceName.substring(0, resourceName.length() - 1);
+			}
 			for (IProject project : projects) {
 				if (project.exists() && resourceName.equals(project.getLocation().toOSString())) {
 					try {
