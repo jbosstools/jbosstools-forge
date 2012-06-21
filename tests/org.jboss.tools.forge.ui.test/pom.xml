@@ -10,5 +10,5 @@
 	<artifactId>org.jboss.tools.forge.ui.test</artifactId> 
 
 	<!-- TODO: this is a test plugin. It needs test classes. -->	
-	<packaging>eclipse-plugin</packaging>
+	<packaging>eclipse-test-plugin</packaging>
 </project>
