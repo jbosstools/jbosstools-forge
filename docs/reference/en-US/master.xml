@@ -4,6 +4,8 @@
 
 [
 <!ENTITY Introduction SYSTEM "Introduction.xml">
+<!ENTITY UsingForge SYSTEM "Using_Forge.xml">
+<!ENTITY Preferences SYSTEM "Preferences.xml">
 ]>
 
 <book>
@@ -38,5 +40,7 @@
     
     <toc/> 
 	&Introduction;
+	&UsingForge;
+	&Preferences;
 
 </book> 
