@@ -99,6 +99,38 @@
 		</mediaobject>
 	</figure>
 	<para>
+		If you find it easier to navigate your project via the <guilabel>Project Explorer</guilabel> view, you can right-click on a file from this view and select <menuchoice><guimenuitem>Show In</guimenuitem><guimenuitem>Forge Console</guimenuitem></menuchoice> from the context menu.
+	</para>
+	<figure id="using_forge_08">
+		<title>Opening a file in Forge from the Project Explorer</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_08.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Opening a file in Forge from the Project Explorer.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		This will automatically execute the <code>pick-up</code> command, changing the current Forge runtime context to the selected resource and opening the file or folder. For more on this command see: <xref linkend="chap-Forge_Reference_Guide-General_commands-pickup_command"/>
+	</para>
+	<figure id="using_forge_09">
+		<title>Executing the menu option on a file</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_09.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Having executed the menu option on a file, the file is now opened in an editor and the Forge runtime context has changed.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
 		If you close the <guilabel>Forge Console</guilabel> view, Forge will continue to run in the background. Re-opeing the <guilabel>Forge Console</guilabel> view will display the latest Forge state. 
 	</para>
 	<para>

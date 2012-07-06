@@ -46,7 +46,7 @@ open foo/pom.xml
 			</mediaobject>
 		</figure>
 	</section>
-	<section>
+	<section id="chap-Forge_Reference_Guide-General_commands-pickup_command">
 		<title>The pick-up command</title>
 		<para>
 			The command <code>pick-up</code> allows you to view the contents of a directory or navigate to a file and automatically open it.
