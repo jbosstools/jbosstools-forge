@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+   <chapter id="chap-Forge_Reference_Guide-General_commands">
+	<title>General commands</title>
+	<para>
+		Outlined in this chapter are general commands for interacting with the Forge runtime, your projects and the workspace.
+	</para>
+	<section>
+		<title>Opening a file or folder</title>
+		<para>
+			The command <code>open</code> allows you to open a file or folder. 
+		</para>
+		<para>
+			The format of the command is:
+		</para>
+<programlisting>
+open foo/pom.xml
+</programlisting>
+		<figure id="general_commands_01">
+			<title>open command execution</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/general_commands/general_commands_01.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Execution of the open command.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+		<para>
+			Using the command to open a file will open it in an editor. Executing the command on a folder in your workspace will expanded the folder in the Project Explorer view. If the resource is a folder outside the workspace it will be selected and expanded in the Remote Systems view.
+		</para>
+		<figure id="general_commands_02">
+			<title>File opened</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/general_commands/general_commands_02.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Having executed the command on a file, it is opened in its respective editor.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+	</section>
+	<section>
+		<title>The pick-up command</title>
+		<para>
+			The command <code>pick-up</code> allows you to view the contents of a directory or navigate to a file and automatically open it.
+		</para>
+		<para>
+			The format of the command for a directory is:
+		</para>
+<programlisting>
+pick-up foo/
+</programlisting>
+		<para>
+			Executing the command on a directory will write the contents of the directory to the screen.
+		</para>
+		<figure id="general_commands_03">
+			<title>open command execution</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/general_commands/general_commands_03.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Execution of the open command.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+		<para>
+			The format of the command for a file is:
+		</para>
+<programlisting>
+pick-up foo/pom.xml
+</programlisting>
+		<para>
+			Using the command to open a file will open it in an editor.
+		</para>
+		<figure id="general_commands_04">
+			<title>File opened</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/general_commands/general_commands_04.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Having executed the command on a file, it is opened in its respective editor.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+	</section>
+</chapter>
+

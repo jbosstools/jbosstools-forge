@@ -3,7 +3,7 @@
    <chapter id="chap-Forge_Reference_Guide-Project_commands">
 	<title>Project commands</title>
 	<para>
-		Outlined in this chapter are the commands you will use most often when interacting with the Forge runtime.
+		Outlined in this chapter are the commands you will use most often when developing projects with the Forge runtime.
 	</para>
 	<section>
 		<title>Creating a new project</title>

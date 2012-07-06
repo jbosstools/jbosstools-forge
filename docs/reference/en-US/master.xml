@@ -6,6 +6,7 @@
 <!ENTITY Introduction SYSTEM "Introduction.xml">
 <!ENTITY UsingForge SYSTEM "Using_Forge.xml">
 <!ENTITY ProjectCommands SYSTEM "Project_Commands.xml">
+<!ENTITY GeneralCommands SYSTEM "General_Commands.xml">
 <!ENTITY Preferences SYSTEM "Preferences.xml">
 ]>
 
@@ -43,6 +44,7 @@
 	&Introduction;
 	&UsingForge;
 	&ProjectCommands;
+	&GeneralCommands;
 	&Preferences;
 
 </book> 
