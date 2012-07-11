@@ -9,6 +9,7 @@
 	<groupId>org.jboss.tools.forge.tests</groupId>
 	<artifactId>org.jboss.tools.forge.ui.test</artifactId> 
 
-	<!-- TODO: this is a test plugin. It needs test classes. -->	
-	<packaging>eclipse-test-plugin</packaging>
+	<!-- TODO: this is a test plugin. It needs test classes. -->
+	<!-- TODO: change to eclipse-test-pugin when test classes are added -->	
+	<packaging>eclipse-plugin</packaging>
 </project>
