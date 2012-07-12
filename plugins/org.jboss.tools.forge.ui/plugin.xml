@@ -191,4 +191,17 @@
              class="org.jboss.tools.forge.ui.startup.ForgeStarter">
        </startup>
     </extension>
+    <extension
+          point="org.eclipse.ui.themes">
+       <fontDefinition
+             categoryId="org.jboss.tools.forge.ui"
+             defaultsTo="org.eclipse.debug.ui.consoleFont"
+             id="org.jboss.tools.forge.console.font"
+             label="Forge Console Font">
+       </fontDefinition>
+       <themeElementCategory
+             id="org.jboss.tools.forge.ui"
+             label="Forge ">
+       </themeElementCategory>
+    </extension>
 </plugin>

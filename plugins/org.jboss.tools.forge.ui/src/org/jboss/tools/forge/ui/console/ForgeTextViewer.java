@@ -4,6 +4,8 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyleRange;
@@ -27,6 +29,8 @@ public class ForgeTextViewer extends TextViewer {
 	private static String PREV_HISTORY = new Character((char)16).toString();
 	private static String NEXT_HISTORY = new Character((char)14).toString();
 	private static String DELETE_NEXT_CHAR = new Character((char)127).toString();
+	
+	private static final String FORGE_CONSOLE_FONT = "org.jboss.tools.forge.console.font";
 	
 	private class DocumentListener implements IDocumentListener, ForgeDocument.CursorListener {
     	@Override
@@ -63,6 +67,18 @@ public class ForgeTextViewer extends TextViewer {
     private void initialize() {
         initDocument();
         initViewer();
+        initFontListener();
+    }
+    
+    private void initFontListener() {
+    	JFaceResources.getFontRegistry().addListener(new IPropertyChangeListener() {			
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				if (FORGE_CONSOLE_FONT.equals(event.getProperty())) {
+					getTextWidget().setFont(JFaceResources.getFont(FORGE_CONSOLE_FONT));
+				}
+			}
+		});
     }
         
     private void initDocument() {
@@ -73,7 +89,7 @@ public class ForgeTextViewer extends TextViewer {
     
     private void initViewer() {
 		getTextWidget().setStyleRanges(ForgeDocument.INSTANCE.getStyleRanges());
-    	getTextWidget().setFont(JFaceResources.getFont(JFaceResources.TEXT_FONT));
+    	getTextWidget().setFont(JFaceResources.getFont(FORGE_CONSOLE_FONT));
     	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
 			@Override
 			public void verifyKey(VerifyEvent event) {
