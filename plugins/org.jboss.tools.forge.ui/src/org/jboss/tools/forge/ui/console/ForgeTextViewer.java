@@ -58,6 +58,14 @@ public class ForgeTextViewer extends TextViewer {
     }
 	
     private DocumentListener documentListener = new DocumentListener();
+    private IPropertyChangeListener fontListener = new IPropertyChangeListener() {		
+		@Override
+		public void propertyChange(PropertyChangeEvent event) {
+			if (FORGE_CONSOLE_FONT.equals(event.getProperty())) {
+				getTextWidget().setFont(JFaceResources.getFont(FORGE_CONSOLE_FONT));
+			}
+		}
+	};
     
     public ForgeTextViewer(Composite parent) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -71,14 +79,7 @@ public class ForgeTextViewer extends TextViewer {
     }
     
     private void initFontListener() {
-    	JFaceResources.getFontRegistry().addListener(new IPropertyChangeListener() {			
-			@Override
-			public void propertyChange(PropertyChangeEvent event) {
-				if (FORGE_CONSOLE_FONT.equals(event.getProperty())) {
-					getTextWidget().setFont(JFaceResources.getFont(FORGE_CONSOLE_FONT));
-				}
-			}
-		});
+    	JFaceResources.getFontRegistry().addListener(fontListener);
     }
         
     private void initDocument() {
@@ -107,6 +108,7 @@ public class ForgeTextViewer extends TextViewer {
     protected void handleDispose() {
     	ForgeDocument.INSTANCE.removeCursorListener(documentListener);
     	ForgeDocument.INSTANCE.removeDocumentListener(documentListener);
+    	JFaceResources.getFontRegistry().removeListener(fontListener);
     	super.handleDispose();
     }
     
