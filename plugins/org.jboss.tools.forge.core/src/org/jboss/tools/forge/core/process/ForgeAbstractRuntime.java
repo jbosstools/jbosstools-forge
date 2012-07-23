@@ -25,7 +25,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private IProcess process = null;
 	private String state = STATE_NOT_RUNNING;	
 	private final TerminateListener terminateListener = new TerminateListener();	
-	private MasterOutputListener masterOutputListener = new MasterOutputListener();
+	private MasterStreamListener masterStreamListener = new MasterStreamListener();
 	private CommandResultListener commandResultListener = new CommandResultListener();
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	private List<ForgeOutputListener> outputListeners = new ArrayList<ForgeOutputListener>();
@@ -53,10 +53,14 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				DebugPlugin.getDefault().addDebugEventListener(terminateListener);
 				IStreamsProxy streamsProxy = getStreamsProxy();
 				if (streamsProxy != null) {
-					IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
-					if (streamMonitor != null) {
-						streamMonitor.addListener(startupListener);
-						streamMonitor.addListener(masterOutputListener);
+					IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
+					if (outputStreamMonitor != null) {
+						outputStreamMonitor.addListener(startupListener);
+						outputStreamMonitor.addListener(masterStreamListener);
+					}
+					IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
+					if (errorStreamMonitor != null) {
+						errorStreamMonitor.addListener(masterStreamListener);
 					}
 				}
 			}
@@ -96,7 +100,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
 				if (streamMonitor != null) {
 					commandResultListener.command = str + '\n';
-					streamMonitor.removeListener(masterOutputListener);
+					streamMonitor.removeListener(masterStreamListener);
 					streamMonitor.addListener(commandResultListener);
 					try {
 						streamsProxy.write(new Character((char)31).toString() + str + '\n');
@@ -113,7 +117,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 					commandResultListener.result = null;
 					commandResultListener.command = null;
 					streamMonitor.removeListener(commandResultListener);
-					streamMonitor.addListener(masterOutputListener);
+					streamMonitor.addListener(masterStreamListener);
 				}
 			}
 		}
@@ -150,9 +154,13 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			if (process != null) {
 				IStreamsProxy streamsProxy = getStreamsProxy();
 				if (streamsProxy != null) {
-					IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
-					if (streamMonitor != null) {
-						streamMonitor.removeListener(masterOutputListener);
+					IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();
+					if (outputStreamMonitor != null) {
+						outputStreamMonitor.removeListener(masterStreamListener);
+					}
+					IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
+					if (errorStreamMonitor != null) {
+						errorStreamMonitor.removeListener(masterStreamListener);
 					}
 				}
 				process.terminate();
@@ -200,7 +208,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		}		
 	}
 	
-	private class MasterOutputListener implements IStreamListener {
+	private class MasterStreamListener implements IStreamListener {
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
 			for (ForgeOutputListener listener : outputListeners) {
