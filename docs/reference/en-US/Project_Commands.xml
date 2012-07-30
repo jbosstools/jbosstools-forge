@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+   <chapter id="chap-Forge_Reference_Guide-Project_commands">
+	<title>Project commands</title>
+	<para>
+		Outlined in this chapter are the commands you will use most often when developing projects with the Forge runtime.
+	</para>
+	<section>
+		<title>Creating a new project</title>
+		<para>
+			The command <code>new-project</code> allows you to create a new project and have it automatically imported into your workspace. 
+		</para>
+		<para>
+			The format of the command is:
+		</para>
+<programlisting>
+new-project --named example --topLevelPackage com.example
+</programlisting>
+		<figure id="project_commands_01">
+			<title>new-project command execution</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/project_commands/project_commands_01.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Execution of the new-project command.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+		<para>
+			Once the command has been executed, the new project will appear in your <guilabel>Project Explorer</guilabel>.
+		</para>
+		<figure id="project_commands_02">
+			<title>New project in Project Explorer</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/project_commands/project_commands_02.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Your new project has automatically appeared in the Project Explorer.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+	</section>
+	<section>
+		<title>Adding persistence</title>
+		<para>
+			Persistence can be added to a project through the use of the command <code>persistence setup</code>. 
+		</para>
+		<para>
+			The format of the command is:
+		</para>
+<programlisting>
+persistence setup --provider HIBERNATE --container JBOSS_AS6
+</programlisting>
+		<figure id="project_commands_03">
+			<title>persistence setup command execution</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/project_commands/project_commands_03.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Execution of the persistence setup command.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+		<para>
+			Once the command has been executed a new file will have been created called <filename>persistence.xml</filename>. The file will appear under your project in the <guilabel>Project Explorer</guilabel>, and will automatically open in an editor.
+		</para>
+		<figure id="project_commands_04">
+			<title>persistence.xml file open in an editor</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/project_commands/project_commands_04.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Your new persistence file has automatically been opened for editing.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+	</section>
+	<section>
+		<title>Creating a new entity</title>
+		<para>
+			A new entity can be created for a project  by using the command <code>entity</code>. 
+		</para>
+		<para>
+			The format of the command is:
+		</para>
+<programlisting>
+entity --named Customer
+</programlisting>
+		<figure id="project_commands_05">
+			<title>entity command execution</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/project_commands/project_commands_05.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Execution of the entity command.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+		<para>
+			Once the command has been executed a new entity will have been created. The entity will appear under your project's domain in the <guilabel>Project Explorer</guilabel>, and the Java file will automatically open in an editor.
+		</para>
+		<figure id="project_commands_06">
+			<title>Entity Java file open in an editor</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/project_commands/project_commands_06.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Your new entity has automatically been opened for editing.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+	</section>
+	<section>
+		<title>Creating a new field</title>
+		<para>
+			A new field can be created for an entity  by using the command <code>field string</code>. 
+		</para>
+		<para>
+			The format of the command is:
+		</para>
+<programlisting>
+field string --named firstName
+</programlisting>
+		<figure id="project_commands_07">
+			<title>field string command execution</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/project_commands/project_commands_07.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Execution of the field string command.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+		<para>
+			Once the command has been executed a new field will have been created in the selected entity. The field will appear in the Java editor and in the <guilabel>Outline</guilabel> view.
+		</para>
+		<figure id="project_commands_08">
+			<title>Field entry displayed in the entity file, within the Java editor</title>
+			<mediaobject>
+				<imageobject>
+					<imagedata fileref="images/project_commands/project_commands_08.png" format="PNG" />
+				</imageobject>
+				<textobject>
+					<phrase>
+						Your new field has been added to your entity file.
+					</phrase>
+				</textobject>
+			</mediaobject>
+		</figure>
+	</section>
+</chapter>
+

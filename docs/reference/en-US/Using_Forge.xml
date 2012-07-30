@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<chapter id="chap-Forge_Reference_Guide-Using_Forge">
+	<title>Using Forge</title>
+	<para>
+		To begin using Forge, launch the <guilabel>Forge Console</guilabel> view by navigating to <menuchoice><guimenuitem>Window</guimenuitem><guimenuitem>Show View</guimenuitem><guimenuitem>Other</guimenuitem><guimenuitem>Forge</guimenuitem><guimenuitem>Forge Console</guimenuitem></menuchoice>.
+	</para>
+	<figure id="using_forge_01">
+		<title>Forge Console selection</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_01.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Selecting the Forge Console from the Views menu.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		The <guilabel>Forge Console</guilabel> will launch in an inactive state. How and when Forge starts can be changed, see <xref linkend="chap-Forge_Reference_Guide-Preferences"/>.
+	</para>
+	<figure id="using_forge_02">
+		<title>The Forge Console</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_02.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Forge in an inactive state.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		To start Forge, click the green arrow in the <guilabel>Forge Console</guilabel>.
+	</para>
+	<figure id="using_forge_03">
+		<title>Starting Forge</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_03.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Starting Forge.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		Once Forge starts you will notice the name <emphasis>Forge</emphasis> appear in the <guilabel>Forge Console</guilabel> view and a command line currently in your root workspace directory, without a project selected.
+	</para>
+	<figure id="using_forge_04">
+		<title>Started Forge</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_04.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Started Forge.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		From the <guilabel>Forge Console</guilabel> command line you can type the command <code>cd</code> (change directory) followed by the directory to change to, and if a navigator view is opened, the navigator view will also change to the specified directory. If the resource is not in the local workspace and the <guilabel>Remote Systems</guilabel> view is open, the directory will be selected in the <guilabel>Remote Systems</guilabel> explorer.
+	</para>
+	<figure id="using_forge_05">
+		<title>Remote Systems view with the Forge Console</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_05.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Showing that the Remote Systems view is linked to what occurs in the Forge Console view.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		Through the <guilabel>Forge Console</guilabel> you can also link the console output to the currently open editor by clicking on the <guibutton>Link with Editor</guibutton> button.
+	</para>
+	<figure id="using_forge_06">
+		<title>Link with Editor button</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_06.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					The button to link the Forge Console output with the currently open Editor.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		If you find it easier to navigate your project via the <guilabel>Project Explorer</guilabel> view, you can right-click on a file from this view and select <menuchoice><guimenuitem>Show In</guimenuitem><guimenuitem>Forge Console</guimenuitem></menuchoice> from the context menu.
+	</para>
+	<figure id="using_forge_08">
+		<title>Opening a file in Forge from the Project Explorer</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_08.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Opening a file in Forge from the Project Explorer.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		This will automatically execute the <code>pick-up</code> command, changing the current Forge runtime context to the selected resource and opening the file or folder. For more on this command see: <xref linkend="chap-Forge_Reference_Guide-General_commands-pickup_command"/>
+	</para>
+	<figure id="using_forge_09">
+		<title>Executing the menu option on a file</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_09.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Having executed the menu option on a file, the file is now opened in an editor and the Forge runtime context has changed.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		If you close the <guilabel>Forge Console</guilabel> view, Forge will continue to run in the background. Re-opeing the <guilabel>Forge Console</guilabel> view will display the latest Forge state. 
+	</para>
+	<para>
+		To stop Forge, click on the red square in the <guilabel>Forge Console</guilabel>. 
+	</para>
+	<figure id="using_forge_07">
+		<title>Stopping Forge</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/using_forge/using_forge_07.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Stopping the Forge runtime.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+</chapter>
+

@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+   <chapter id="chap-Forge_Reference_Guide-Preferences">
+	<title>Preferences</title>
+	<para>
+		Forge preferences can be accessed by navigating to <menuchoice><guimenuitem>Window</guimenuitem><guimenuitem>Preferences</guimenuitem><guimenuitem>Forge</guimenuitem></menuchoice>.
+	</para>
+	<para>
+		From the main Forge preference page you can set how Forge should be started. If you select to <guilabel>Start Forge when Eclipse starts</guilabel> Forge will automatically run on launch. Setting the option to <guilabel>Start Forge in Debug Mode</guilabel> will force Forge to debug mode every time it is started.
+	</para>
+	<figure id="preferences_01">
+		<title>Forge preferences page</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/preferences/preferences_01.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Forge preferences page.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		Selecting <guimenuitem>Installed Forge Runtimes</guimenuitem> from the preferences menu will display the currently installed Forge runtimes and their location. the Forge runtime shipped with Forge Tools displays with the name <emphasis>embedded</emphasis>.
+	</para>
+	<figure id="preferences_02">
+		<title>Forge runtime preferences page</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/preferences/preferences_02.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Forge runtime preferences page.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+	<para>
+		You can have more than one Forge runtime installed at once. To install an alternate runtime to the one provided click on the <guibutton>Add</guibutton> button.
+	</para>
+	<para>
+		To add a new Forge runtime you will need to specify a name and provide the runtime location. Once the fields have been completed, click the <guibutton>OK</guibutton> button to return to the <guilabel>Installed Forge Runtimes</guilabel> page. Once successfully installed, the new Forge runtime will appear in the <guilabel>Installed Forge Runtimes</guilabel> list. 
+	</para>
+	<figure id="preferences_03">
+		<title>Adding a new Forge runtime</title>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/preferences/preferences_03.png" format="PNG" />
+			</imageobject>
+			<textobject>
+				<phrase>
+					Adding a new Forge runtime dialog box.
+				</phrase>
+			</textobject>
+		</mediaobject>
+	</figure>
+</chapter>
+
