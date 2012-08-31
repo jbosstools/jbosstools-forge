@@ -32,6 +32,7 @@
 									<type>zip</type>
 							  	</artifactItem>
 							</artifactItems>
+							<skip>false</skip>
 							<outputDirectory>${basedir}</outputDirectory>
 						</configuration>
 					</execution>

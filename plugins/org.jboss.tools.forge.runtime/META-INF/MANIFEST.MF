@@ -16,7 +16,6 @@ Export-Package: javax.enterprise.event,
  org.jboss.forge.shell.command,
  org.jboss.forge.shell.events,
  org.jboss.forge.shell.spi
-Bundle-ClassPath: forge-distribution-1.0.5.Final/modules/javax/inject/api/main/javax.inject-1.jar,
- forge-distribution-1.0.5.Final/modules/javax/enterprise/api/main/cdi-api-1.0-SP4.jar,
- forge-distribution-1.0.5.Final/modules/org/jboss/forge/shell/api/main/forge-shell-api-1.0.5.Final.jar
-
+Bundle-ClassPath: forge-distribution-1.0.6.Final/modules/javax/inject/api/main/javax.inject-1.jar,
+ forge-distribution-1.0.6.Final/modules/javax/enterprise/api/main/cdi-api-1.0-SP4.jar,
+ forge-distribution-1.0.6.Final/modules/org/jboss/forge/shell/api/main/forge-shell-api-1.0.6.Final.jar
