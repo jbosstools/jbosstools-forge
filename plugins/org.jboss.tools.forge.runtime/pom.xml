@@ -28,7 +28,7 @@
 								<artifactItem>
 									<groupId>org.jboss.forge</groupId>
 									<artifactId>forge-distribution</artifactId>
-									<version>1.0.6.Final</version>
+									<version>1.1.1.Final</version>
 									<type>zip</type>
 							  	</artifactItem>
 							</artifactItems>
