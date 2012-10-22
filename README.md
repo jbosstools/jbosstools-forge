@@ -1,5 +1,9 @@
 # The Forge Tools project
 
+## Summary
+
+Forge Tools provides easy access and integration with Forge from within a view in Eclipse. You can open this view by pressing Ctrl+4 (Linux/Windows) or Cmd+4 (Mac).
+
 ## Install
 
 _Forge Tools_ is part of [JBoss Tools](http://jboss.org/tools) from
