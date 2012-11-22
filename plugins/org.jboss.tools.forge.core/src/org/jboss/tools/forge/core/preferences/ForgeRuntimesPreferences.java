@@ -38,6 +38,7 @@ public class ForgeRuntimesPreferences {
 	public static final String PREF_FORGE_RUNTIMES = "org.jboss.tools.forge.core.runtimes";
 	public static final String PREF_FORGE_STARTUP = "org.jboss.tools.forge.core.startup";
 	public static final String PREF_FORGE_START_IN_DEBUG = "org.jboss.tools.forge.core.startInDebug";
+	public static final String PREF_FORGE_VM_ARGS = "org.jboss.tools.forge.core.vmArgs";
 	
 	public static final ForgeRuntimesPreferences INSTANCE = new ForgeRuntimesPreferences();
 	
@@ -69,6 +70,10 @@ public class ForgeRuntimesPreferences {
 		return getForgeCorePreferences().getBoolean(PREF_FORGE_START_IN_DEBUG, false);
 	}
 	
+	public String getVmArgs() {
+		return getForgeCorePreferences().get(PREF_FORGE_VM_ARGS, null);
+	}
+
 	private IEclipsePreferences getForgeCorePreferences() {
 		return InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
 	}
@@ -166,6 +171,20 @@ public class ForgeRuntimesPreferences {
 	public void setStartInDebug(boolean startup) {
 		try {
 			setBoolean(PREF_FORGE_START_IN_DEBUG, startup);
+		} catch (BackingStoreException e) {
+			ForgeCorePlugin.log(e);
+		}
+	}
+
+	public void setVmArgs(String vmArgsText) {
+		try {
+			IEclipsePreferences eclipsePreferences = getForgeCorePreferences();
+			if (vmArgsText == null) {
+				eclipsePreferences.remove(PREF_FORGE_VM_ARGS);
+			} else {
+				eclipsePreferences.put(PREF_FORGE_VM_ARGS, vmArgsText);
+			}
+			eclipsePreferences.flush();
 		} catch (BackingStoreException e) {
 			ForgeCorePlugin.log(e);
 		}

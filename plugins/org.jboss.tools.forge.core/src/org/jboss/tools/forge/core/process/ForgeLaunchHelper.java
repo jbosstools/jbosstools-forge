@@ -136,8 +136,19 @@ public class ForgeLaunchHelper {
 		return result;
 	}
 	
+	private static String getVmArgumentPrefs() {
+		String str = ForgeRuntimesPreferences.INSTANCE.getVmArgs();
+		if (str != null) {
+			str = str.trim() + " ";
+		} else {
+			str = "";
+		}
+		return str;
+	}
+	
 	private static String createVmArguments(String location) {
 		StringBuffer buffer = new StringBuffer();
+		buffer.append(getVmArgumentPrefs());
 		buffer.append("-Dforge.home=").append(encloseWithDoubleQuotesIfNeeded(location)).append(' ');
 		buffer.append("-Dforge.shell.colorEnabled=true").append(' ');
 		buffer.append("-Dforge.compatibility.IDE=true").append(' ');
