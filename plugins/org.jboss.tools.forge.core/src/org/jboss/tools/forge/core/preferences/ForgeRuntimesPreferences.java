@@ -71,7 +71,7 @@ public class ForgeRuntimesPreferences {
 	}
 	
 	public String getVmArgs() {
-		return getForgeCorePreferences().get(PREF_FORGE_VM_ARGS, null);
+		return getForgeCorePreferences().get(PREF_FORGE_VM_ARGS, "");
 	}
 
 	private IEclipsePreferences getForgeCorePreferences() {

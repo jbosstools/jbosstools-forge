@@ -138,10 +138,8 @@ public class ForgeLaunchHelper {
 	
 	private static String getVmArgumentPrefs() {
 		String str = ForgeRuntimesPreferences.INSTANCE.getVmArgs();
-		if (str != null) {
-			str = str.trim() + " ";
-		} else {
-			str = "";
+		if (!"".equals(str)) {
+			str += " ";
 		}
 		return str;
 	}
