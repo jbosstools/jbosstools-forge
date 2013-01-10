@@ -46,7 +46,7 @@ public class ForgeCorePlugin extends Plugin {
 	         public Forge call() throws Exception
 	         {
 	            BundleWiring wiring = context.getBundle().adapt(BundleWiring.class);
-	            Collection<String> entries = wiring.listResources("bootpath", "*.jar", BundleWiring.LISTRESOURCES_LOCAL);
+	            Collection<String> entries = wiring.listResources("bootpath", "*.jar", BundleWiring.LISTRESOURCES_RECURSE);
 	            Collection<URL> resources = new HashSet<URL>();
 	            File jarDir = File.createTempFile("forge", "jars");
 	            if (entries != null)

@@ -10,16 +10,9 @@
       </category>
       <wizard
             category="org.jboss.tools.forge.ui"
-            class="org.jboss.tools.forge.ui.wizards.SampleNewWizard"
+            class="org.jboss.tools.forge.ui.wizards.ForgeWizard"
             hasPages="true"
-            id="org.jboss.tools.forge.ui.wizard.SampleNew"
-            name="Sample">
-      </wizard>
-      <wizard
-            category="org.jboss.tools.forge.ui"
-            class="org.jboss.tools.forge.ui.wizards.RunCommandWizard"
-            hasPages="true"
-            icon="icons/forge.ico"
+            icon="icons/jbossforge_icon_16px.png"
             id="org.jboss.tools.forge.ui.wizard.RunCommand"
             name="Run a Forge Command">
       </wizard>

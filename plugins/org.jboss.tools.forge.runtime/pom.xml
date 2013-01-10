@@ -93,6 +93,7 @@
 										</versionRange>
 										<goals>
 											<goal>unpack</goal>
+											<goal>copy</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
