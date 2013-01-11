@@ -1,6 +1,6 @@
 /*
- 
-* Copyright 2012 Red Hat, Inc. and/or its affiliates.
+
+ * Copyright 2012 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Eclipse Public License version 1.0, available at
  * http://www.eclipse.org/legal/epl-v10.html
@@ -21,6 +21,7 @@ import org.jboss.tools.forge.core.ForgeService;
 
 public class ForgeWizard extends Wizard implements INewWizard
 {
+   private UICommand uiCommand;
 
    public ForgeWizard()
    {
@@ -31,8 +32,36 @@ public class ForgeWizard extends Wizard implements INewWizard
    public void init(IWorkbench workbench, IStructuredSelection selection)
    {
       AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
-      Set<RemoteInstance<UICommand>> remoteInstances = addonRegistry.getRemoteInstances(UICommand.class);
+      try
+      {
+         // TODO: Wait for Forge to init. This shouldn't be necessary
+         Thread.sleep(3000);
+      }
+      catch (InterruptedException e)
+      {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+      Set<RemoteInstance<UICommand>> remoteInstances = addonRegistry.getRemoteInstances(UICommand.class.getName());
       System.out.println("Remote Instances: " + remoteInstances);
+      if (!remoteInstances.isEmpty())
+      {
+         this.uiCommand = remoteInstances.iterator().next().get();
+      }
+   }
+
+   @Override
+   public void addPages()
+   {
+      if (this.uiCommand != null)
+      {
+         addPage(new ForgeWizardPage(this.uiCommand));
+      }
+      else
+      {
+         System.out.println("UI COMMAND IS NULL");
+      }
+
    }
 
    @Override

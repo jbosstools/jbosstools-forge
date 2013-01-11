@@ -42,7 +42,7 @@
             commandId="org.jboss.tools.forge.ui.command.runForgeCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+6">
+            sequence="CTRL+6">
       </key>
    </extension>
 
