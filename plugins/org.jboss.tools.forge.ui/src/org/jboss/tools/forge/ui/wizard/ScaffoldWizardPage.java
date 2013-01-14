@@ -1,7 +1,10 @@
 package org.jboss.tools.forge.ui.wizard;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -26,11 +29,24 @@ public class ScaffoldWizardPage extends WizardPage {
 	private void createProjectEditor(Composite parent) {
 		Label projectNameLabel = new Label(parent, SWT.NONE);
 		projectNameLabel.setText("JPA Project: ");
-		Text projectNameText = new Text(parent, SWT.BORDER);
+		final Text projectNameText = new Text(parent, SWT.BORDER);
 		projectNameText.setText("");
 		projectNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		Button projectSearchButton = new Button(parent, SWT.NONE);
 		projectSearchButton.setText("Search...");
+		projectSearchButton.addSelectionListener(new SelectionListener() {			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				JPAProjectSelectionDialog dialog = new JPAProjectSelectionDialog(getShell());
+				if (dialog.open() != SWT.CANCEL) {
+					projectNameText.setText(((IProject)dialog.getResult()[0]).getName());
+				}
+			}			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		});
 	}
 
 }
