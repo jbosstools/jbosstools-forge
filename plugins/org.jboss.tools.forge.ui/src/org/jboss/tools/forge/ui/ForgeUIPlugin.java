@@ -7,10 +7,10 @@ import org.osgi.framework.BundleContext;
 
 public class ForgeUIPlugin extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "org.jboss.tools.forge.ui"; 
+	public static final String PLUGIN_ID = "org.jboss.tools.forge.ui";
 
 	private static ForgeUIPlugin plugin;
-	
+
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
@@ -26,11 +26,11 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 	}
 
 	public static void log(Throwable t) {
-		getDefault().getLog().log(newErrorStatus("Error logged from Forge Plugin: ", t)); 
+		getDefault().getLog().log(newErrorStatus("Error logged from Forge Plugin: ", t));
 	}
-	
+
 	private static IStatus newErrorStatus(String message, Throwable exception) {
 		return new Status(IStatus.ERROR, PLUGIN_ID, IStatus.INFO, message, exception);
 	}
-	
+
 }

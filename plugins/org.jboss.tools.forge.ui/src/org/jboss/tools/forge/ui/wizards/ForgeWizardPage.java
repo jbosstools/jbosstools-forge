@@ -11,14 +11,13 @@ import java.util.List;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.context.UIContextImpl;
 
 /**
@@ -31,10 +30,12 @@ public class ForgeWizardPage extends WizardPage
 {
    private UICommand ui;
 
-
    public ForgeWizardPage(UICommand command)
    {
       super("Page Title");
+      setTitle("Wizard Page");
+      setDescription("A wizard page implementation");
+      setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ForgeUIPlugin.PLUGIN_ID, "icons/forge.png"));
       this.ui = command;
    }
 
@@ -54,29 +55,24 @@ public class ForgeWizardPage extends WizardPage
 
       List<UIInput<?>> inputs = ctx.getInputs();
 
+      createControls(parent, inputs);
+   }
+
+   protected void createControls(Composite parent, List<UIInput<?>> inputs)
+   {
       Composite container = new Composite(parent, SWT.NULL);
       GridLayout layout = new GridLayout();
       container.setLayout(layout);
-      layout.numColumns = 3;
+      layout.numColumns = 2;
       layout.verticalSpacing = 9;
 
       for (final UIInput<?> uiInput : inputs)
       {
          // Create the label
          Label label = new Label(container, SWT.NULL);
-         label.setText(uiInput.getLabel());
+         label.setText(uiInput.getLabel() == null ? uiInput.getName() : uiInput.getLabel());
 
-         // TODO: Each type should render a specific component (String = Text, Boolean = Checkbox, etc)
-         Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
-         txt.addModifyListener(new ModifyListener()
-         {
-            @SuppressWarnings("unchecked")
-            @Override
-            public void modifyText(ModifyEvent e)
-            {
-               ((UIInput<String>) uiInput).setValue(((Text) e.widget).getText());
-            }
-         });
+         ComponentFactory.createComponent(uiInput, container);
       }
       setControl(container);
    }
@@ -86,5 +82,4 @@ public class ForgeWizardPage extends WizardPage
       setErrorMessage(message);
       setPageComplete(message == null);
    }
-
 }
