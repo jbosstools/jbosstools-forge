@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="lib/forge-addon-container-api-2.0.0-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/forge-se-2.0.0-SNAPSHOT.jar" sourcepath="/org.jboss.forge.forge-se"/>
 	<classpathentry exported="true" kind="lib" path="lib/ui-api-2.0.0-SNAPSHOT.jar"/>
