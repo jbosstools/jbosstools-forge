@@ -15,7 +15,10 @@ public class EventHandler {
 	@Inject
 	private Shell shell;
 	
+	private boolean enabled = true;
+	
 	public void handleCommandExecuted(@Observes CommandExecuted event) {
+		if (!enabled) return;
 		Resource<?> currentResource = shell.getCurrentResource();
 		String currentResourceName = currentResource.getFullyQualifiedName();
 		String currentResourceType = currentResource.getClass().getSimpleName();
@@ -33,6 +36,11 @@ public class EventHandler {
 				" CPN: " + projectName +
 				" PAR: " + parameterString);
 	}
+	
+	public void setEnabled(boolean b) {
+		this.enabled = b;
+	}
+	
 	
 	private String getParameterString(CommandExecuted event) {
 		return flattenObjectArray(event.getParameters());

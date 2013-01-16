@@ -204,7 +204,7 @@
              label="Forge ">
        </themeElementCategory>
     </extension>
-    <extension
+<!--    <extension
           point="org.eclipse.ui.newWizards">
        <wizard
              name="Scaffold Entities"
@@ -215,5 +215,5 @@
                 Creates a holiday document
           </description>
        </wizard>
-    </extension>
+    </extension> -->
 </plugin>

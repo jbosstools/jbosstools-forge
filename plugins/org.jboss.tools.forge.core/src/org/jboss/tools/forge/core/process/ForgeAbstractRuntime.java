@@ -99,7 +99,6 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			if (streamsProxy != null) {
 				IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
 				if (streamMonitor != null) {
-					commandResultListener.command = str + '\n';
 					streamMonitor.removeListener(masterStreamListener);
 					streamMonitor.addListener(commandResultListener);
 					try {
@@ -115,7 +114,6 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 					} catch (InterruptedException e) {}
 					result = commandResultListener.result == null ? "" : commandResultListener.result;
 					commandResultListener.result = null;
-					commandResultListener.command = null;
 					streamMonitor.removeListener(commandResultListener);
 					streamMonitor.addListener(masterStreamListener);
 				}
@@ -219,16 +217,14 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	private class CommandResultListener extends ForgeHiddenOutputFilter implements IStreamListener {
 		String result = null;
-		String command = null;
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
-			System.out.println("streamAppended: " + text);
 			outputAvailable(text);
 		}
 		@Override
 		public void handleFilteredString(String str) {
-			if (!str.endsWith(command)) {
-				result = str;
+			if (str.startsWith("RESULT: ")) {
+				result = str.substring(8);
 			}
 		}
 	}

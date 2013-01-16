@@ -67,5 +67,15 @@ public class ForgeHelper {
 		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 		return runtime != null && ForgeRuntime.STATE_STARTING.equals(runtime.getState());
 	}
+	
+	public static boolean isHibernateToolsPluginAvailable() {
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		String str = runtime.sendCommand("forge list-plugins");
+		return str != null && str.contains("org.jboss.hibernate.forge.hibernate-tools-plugin");
+	}
+	
+	public static ForgeRuntime getDefaultRuntime() {
+		return ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+	}
 
 }

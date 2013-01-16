@@ -48,5 +48,9 @@ public class ScaffoldWizardPage extends WizardPage {
 			}
 		});
 	}
+	
+	public void test() {
+		
+	}
 
 }

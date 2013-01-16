@@ -23,7 +23,7 @@ public class MetaCommandAction implements TriggeredAction {
 	
 	@Inject PluginRegistry registry;
 	
-	
+	@Inject EventHandler eventHandler;
 
 	@Override
 	public ActionListener getListener() {
@@ -45,10 +45,23 @@ public class MetaCommandAction implements TriggeredAction {
 	private void handleHiddenCommand(String text) {	
 		try {
 			if ("plugin-candidates-query".equals(text)) {
-				shell.print(ESCAPE + "plugin-candidates-answer: " + getPluginCandidates() + ESCAPE);
+				shell.print(ESCAPE + "RESULT: plugin-candidates-answer: " + getPluginCandidates() + ESCAPE);
+			} else {
+				executeCommand(text);
 			}
 		} catch (Exception e) {
 			// ignored
+		}
+	}
+	
+	private void executeCommand(String text) throws Exception {
+		try {
+			eventHandler.setEnabled(false);
+			shell.print(ESCAPE + "RESULT: ");
+			shell.execute(text);
+			shell.print(ESCAPE);
+		} finally {
+			eventHandler.setEnabled(true);
 		}
 	}
 	
