@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/forge-classloader-adapter-2.0.0-SNAPSHOT.jar" sourcepath="/forge-classloader-adapter"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="lib" path="lib/javassist-3.15.0-GA.jar" sourcepath="/home/lb3/.m2/repository/org/javassist/javassist/3.15.0-GA/javassist-3.15.0-GA-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/forge-addon-container-api-2.0.0-SNAPSHOT.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/forge-se-2.0.0-SNAPSHOT.jar" sourcepath="/org.jboss.forge.forge-se"/>
+	<classpathentry exported="true" kind="lib" path="lib/forge-se-2.0.0-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ui-api-2.0.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -12,9 +12,9 @@ import java.util.HashSet;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.Plugin;
+import org.jboss.forge.classloader.ClassLoaderAdapterCallback;
 import org.jboss.forge.container.Forge;
 import org.jboss.forge.container.util.ClassLoaders;
-import org.jboss.forge.se.init.ClassLoaderAdapterCallback;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
 
