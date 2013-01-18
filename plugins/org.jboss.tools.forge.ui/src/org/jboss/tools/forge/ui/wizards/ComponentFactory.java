@@ -86,7 +86,20 @@ public class ComponentFactory
       }
       else
       {
-         control = null;
+         Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
+         txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+         txt.addModifyListener(new ModifyListener()
+         {
+            @Override
+            public void modifyText(ModifyEvent e)
+            {
+               String text = ((Text) e.widget).getText();
+               System.out.println("Set value " + text + " into custom component");
+               // TODO: Find a converter and call it to set the value
+               // ((UIInput<String>) input).setValue(text);
+            }
+         });
+         control = txt;
       }
       return control;
    }

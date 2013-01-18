@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.wizards.temp;
+package org.jboss.tools.forge.ui.wizards.mock;
 
 import java.util.concurrent.Callable;
 
