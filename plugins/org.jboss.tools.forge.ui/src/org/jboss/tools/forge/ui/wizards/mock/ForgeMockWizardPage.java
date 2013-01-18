@@ -5,12 +5,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.wizards;
+package org.jboss.tools.forge.ui.wizards.mock;
 
 import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class ForgeMockWizardPage extends ForgeWizardPage
 {
