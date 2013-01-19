@@ -16,7 +16,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
-import org.jboss.forge.converter.ConverterRegistry;
+import org.jboss.forge.convert.ConverterRegistry;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.tools.forge.core.ForgeService;
 
