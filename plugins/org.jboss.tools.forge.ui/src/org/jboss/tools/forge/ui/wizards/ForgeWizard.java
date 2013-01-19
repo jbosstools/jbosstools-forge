@@ -16,12 +16,14 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
+import org.jboss.forge.converter.ConverterRegistry;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.tools.forge.core.ForgeService;
 
 public class ForgeWizard extends Wizard implements INewWizard
 {
    private UICommand uiCommand;
+   private ConverterRegistry converterRegistry;
 
    public ForgeWizard()
    {
@@ -42,10 +44,18 @@ public class ForgeWizard extends Wizard implements INewWizard
          e.printStackTrace();
       }
       Set<ExportedInstance<UICommand>> remoteInstances = addonRegistry.getExportedInstances(UICommand.class.getName());
-      System.out.println("Remote Instances: " + remoteInstances);
+      System.out.println("Available UICommands: " + remoteInstances);
       if (!remoteInstances.isEmpty())
       {
          this.uiCommand = remoteInstances.iterator().next().get();
+      }
+      Set<ExportedInstance<ConverterRegistry>> registry = addonRegistry.getExportedInstances(ConverterRegistry.class
+               .getName());
+      System.out.println("Available ConverterRegistry: " + registry);
+      if (!registry.isEmpty())
+      {
+         // TODO: We need a method to return a single object instead of doing this
+         this.converterRegistry = registry.iterator().next().get();
       }
    }
 
