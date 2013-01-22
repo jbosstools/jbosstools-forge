@@ -18,6 +18,7 @@ Export-Package: bootpath,
  org.jboss.forge.container.services,
  org.jboss.forge.container.util,
  org.jboss.forge.convert,
+ org.jboss.forge.convert.exception,
  org.jboss.forge.se.init,
  org.jboss.forge.ui,
  org.jboss.forge.ui.wizard

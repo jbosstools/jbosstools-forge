@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class ForgeMockWizardPage extends ForgeWizardPage
@@ -20,7 +21,8 @@ public class ForgeMockWizardPage extends ForgeWizardPage
 
    public ForgeMockWizardPage(List<UIInput<?>> inputs)
    {
-      super(null);
+      //TODO: Mock a converter registry
+      super(null, new ControlBuilderRegistry(null));
       this.inputs = inputs;
    }
 

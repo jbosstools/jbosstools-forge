@@ -11,6 +11,7 @@ package org.jboss.tools.forge.ui.wizards;
 import java.util.Set;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
@@ -18,12 +19,16 @@ import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
 import org.jboss.forge.convert.ConverterRegistry;
 import org.jboss.forge.ui.UICommand;
+import org.jboss.forge.ui.wizard.UIWizard;
+import org.jboss.forge.ui.wizard.UIWizardEnd;
 import org.jboss.tools.forge.core.ForgeService;
+import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
 
 public class ForgeWizard extends Wizard implements INewWizard
 {
    private UICommand uiCommand;
-   private ConverterRegistry converterRegistry;
+   // private UICommand current;
+   private ControlBuilderRegistry controlBuilderRegistry;
 
    public ForgeWizard()
    {
@@ -32,6 +37,11 @@ public class ForgeWizard extends Wizard implements INewWizard
 
    @Override
    public void init(IWorkbench workbench, IStructuredSelection selection)
+   {
+      lookupServices();
+   }
+
+   private void lookupServices()
    {
       AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
       try
@@ -43,19 +53,19 @@ public class ForgeWizard extends Wizard implements INewWizard
       {
          e.printStackTrace();
       }
-      Set<ExportedInstance<UICommand>> remoteInstances = addonRegistry.getExportedInstances(UICommand.class.getName());
-      System.out.println("Available UICommands: " + remoteInstances);
-      if (!remoteInstances.isEmpty())
+      ExportedInstance<ConverterRegistry> convertInstance = addonRegistry
+               .getExportedInstance(ConverterRegistry.class);
+
+      if (convertInstance != null)
       {
-         this.uiCommand = remoteInstances.iterator().next().get();
+         ConverterRegistry converterRegistry = convertInstance.get();
+         controlBuilderRegistry = new ControlBuilderRegistry(converterRegistry);
       }
-      Set<ExportedInstance<ConverterRegistry>> registry = addonRegistry.getExportedInstances(ConverterRegistry.class
-               .getName());
-      System.out.println("Available ConverterRegistry: " + registry);
-      if (!registry.isEmpty())
+      Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry.getExportedInstances(UICommand.class);
+      System.out.println("Available UICommands: " + exportedInstances);
+      if (!exportedInstances.isEmpty())
       {
-         // TODO: We need a method to return a single object instead of doing this
-         this.converterRegistry = registry.iterator().next().get();
+         this.uiCommand = exportedInstances.iterator().next().get();
       }
    }
 
@@ -64,12 +74,33 @@ public class ForgeWizard extends Wizard implements INewWizard
    {
       if (this.uiCommand != null)
       {
-         addPage(new ForgeWizardPage(this.uiCommand));
+         addPage(new ForgeWizardPage(uiCommand, controlBuilderRegistry));
       }
       else
       {
          System.out.println("UI COMMAND IS NULL");
       }
+   }
+
+   @Override
+   public IWizardPage getStartingPage()
+   {
+      // TODO Auto-generated method stub
+      return super.getStartingPage();
+   }
+
+   @Override
+   public IWizardPage getNextPage(IWizardPage page)
+   {
+      // TODO Auto-generated method stub
+      return super.getNextPage(page);
+   }
+
+   @Override
+   public IWizardPage getPreviousPage(IWizardPage page)
+   {
+      // TODO Auto-generated method stub
+      return super.getPreviousPage(page);
    }
 
    @Override
@@ -81,7 +112,21 @@ public class ForgeWizard extends Wizard implements INewWizard
    @Override
    public boolean needsPreviousAndNextButtons()
    {
-      return false;
+      return isWizardCommand();
    }
 
+   private boolean isWizardCommand()
+   {
+      return uiCommand instanceof UIWizard;
+   }
+
+   @Override
+   public boolean canFinish()
+   {
+      if (isWizardCommand())
+      {
+         return (uiCommand instanceof UIWizardEnd);
+      }
+      return true;
+   }
 }

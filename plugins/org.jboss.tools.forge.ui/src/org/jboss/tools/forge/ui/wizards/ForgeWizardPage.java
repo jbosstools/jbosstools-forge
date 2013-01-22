@@ -19,6 +19,7 @@ import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.context.UIContextImpl;
+import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
 
 /**
  * A Forge Wizard Page
@@ -29,23 +30,26 @@ import org.jboss.tools.forge.ui.context.UIContextImpl;
 public class ForgeWizardPage extends WizardPage
 {
    private UICommand ui;
+   private UIContextImpl uiContext;
+   private ControlBuilderRegistry controlBuilderRegistry;
 
-   public ForgeWizardPage(UICommand command)
+   public ForgeWizardPage(UICommand command, ControlBuilderRegistry controlBuilderRegistry)
    {
       super("Page Title");
       setTitle("Wizard Page");
       setDescription("A wizard page implementation");
       setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ForgeUIPlugin.PLUGIN_ID, "icons/forge.png"));
       this.ui = command;
+      this.uiContext = new UIContextImpl();
+      this.controlBuilderRegistry = controlBuilderRegistry;
    }
 
    @Override
    public void createControl(Composite parent)
    {
-      UIContextImpl ctx = new UIContextImpl();
       try
       {
-         ui.initializeUI(ctx);
+         ui.initializeUI(uiContext);
       }
       catch (Exception e)
       {
@@ -53,7 +57,7 @@ public class ForgeWizardPage extends WizardPage
          e.printStackTrace();
       }
 
-      List<UIInput<?>> inputs = ctx.getInputs();
+      List<UIInput<?>> inputs = uiContext.getInputs();
 
       createControls(parent, inputs);
    }
@@ -71,10 +75,19 @@ public class ForgeWizardPage extends WizardPage
          // Create the label
          Label label = new Label(container, SWT.NULL);
          label.setText(uiInput.getLabel() == null ? uiInput.getName() : uiInput.getLabel());
-
-         ComponentFactory.createComponent(uiInput, container);
+         controlBuilderRegistry.build(uiInput, container);
       }
       setControl(container);
+   }
+
+   public UIContextImpl getUIContext()
+   {
+      return uiContext;
+   }
+
+   public UICommand getUICommand()
+   {
+      return ui;
    }
 
    public void updateStatus(String message)
