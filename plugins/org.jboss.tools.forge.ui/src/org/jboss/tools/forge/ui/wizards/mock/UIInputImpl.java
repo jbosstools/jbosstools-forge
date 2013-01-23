@@ -9,7 +9,9 @@ package org.jboss.tools.forge.ui.wizards.mock;
 
 import java.util.concurrent.Callable;
 
+import org.jboss.forge.ui.UICompleter;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.forge.ui.UIMetadata;
 
 /**
  * Implementation of a {@link UIInput} object
@@ -125,6 +127,27 @@ public class UIInputImpl<T> implements UIInput<T>
    {
       this.value = value;
       return this;
+   }
+
+   @Override
+   public UICompleter<T> getCompleter()
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   @Override
+   public UIMetadata getMetadata()
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   @Override
+   public UIInput<T> setCompleter(UICompleter<T> arg0)
+   {
+      // TODO Auto-generated method stub
+      return null;
    }
 
 }

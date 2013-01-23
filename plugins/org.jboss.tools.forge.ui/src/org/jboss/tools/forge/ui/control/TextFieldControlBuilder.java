@@ -14,15 +14,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.forge.convert.ConverterRegistry;
+import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 
 public class TextFieldControlBuilder extends ControlBuilder
 {
 
-   public TextFieldControlBuilder(ConverterRegistry converterRegistry)
+   public TextFieldControlBuilder(ConverterFactory converterFactory)
    {
-      super(converterRegistry);
+      super(converterFactory);
    }
 
    @Override

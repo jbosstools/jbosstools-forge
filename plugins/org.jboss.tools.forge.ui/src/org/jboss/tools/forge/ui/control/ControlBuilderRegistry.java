@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.forge.convert.ConverterRegistry;
+import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 
 /**
@@ -25,19 +25,19 @@ public class ControlBuilderRegistry
 {
    private List<ControlBuilder> controlBuilders = new ArrayList<ControlBuilder>();
 
-   public ControlBuilderRegistry(ConverterRegistry converterRegistry)
+   public ControlBuilderRegistry(ConverterFactory converterFactory)
    {
-      registerBuilders(converterRegistry);
+      registerBuilders(converterFactory);
    }
 
-   private void registerBuilders(ConverterRegistry converterRegistry)
+   private void registerBuilders(ConverterFactory converterFactory)
    {
-      controlBuilders.add(new TextFieldControlBuilder(converterRegistry));
-      controlBuilders.add(new CheckboxControlBuilder(converterRegistry));
-      controlBuilders.add(new ComboListControlBuilder(converterRegistry));
+      controlBuilders.add(new TextFieldControlBuilder(converterFactory));
+      controlBuilders.add(new CheckboxControlBuilder(converterFactory));
+      controlBuilders.add(new ComboListControlBuilder(converterFactory));
 
       // This must always be the last one in list
-      controlBuilders.add(new FallbackTextFieldControlBuilder(converterRegistry));
+      controlBuilders.add(new FallbackTextFieldControlBuilder(converterFactory));
    }
 
    @SuppressWarnings("unchecked")

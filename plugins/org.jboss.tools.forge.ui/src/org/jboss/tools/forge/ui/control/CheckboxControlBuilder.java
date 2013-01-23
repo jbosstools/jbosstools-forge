@@ -14,15 +14,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.forge.convert.ConverterRegistry;
+import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 
 public class CheckboxControlBuilder extends ControlBuilder
 {
 
-   public CheckboxControlBuilder(ConverterRegistry converterRegistry)
+   public CheckboxControlBuilder(ConverterFactory converterFactory)
    {
-      super(converterRegistry);
+      super(converterFactory);
    }
 
    @Override

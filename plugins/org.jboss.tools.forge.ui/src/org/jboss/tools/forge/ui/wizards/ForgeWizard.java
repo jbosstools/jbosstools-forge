@@ -17,7 +17,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
-import org.jboss.forge.convert.ConverterRegistry;
+import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.wizard.UIWizard;
 import org.jboss.forge.ui.wizard.UIWizardEnd;
@@ -53,13 +53,13 @@ public class ForgeWizard extends Wizard implements INewWizard
       {
          e.printStackTrace();
       }
-      ExportedInstance<ConverterRegistry> convertInstance = addonRegistry
-               .getExportedInstance(ConverterRegistry.class);
+      ExportedInstance<ConverterFactory> convertInstance = addonRegistry
+               .getExportedInstance(ConverterFactory.class);
 
       if (convertInstance != null)
       {
-         ConverterRegistry converterRegistry = convertInstance.get();
-         controlBuilderRegistry = new ControlBuilderRegistry(converterRegistry);
+         ConverterFactory converterFactory = convertInstance.get();
+         controlBuilderRegistry = new ControlBuilderRegistry(converterFactory);
       }
       Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry.getExportedInstances(UICommand.class);
       System.out.println("Available UICommands: " + exportedInstances);

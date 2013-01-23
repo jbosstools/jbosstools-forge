@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.convert.Converter;
-import org.jboss.forge.convert.ConverterRegistry;
+import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 
 /**
@@ -27,9 +27,9 @@ import org.jboss.forge.ui.UIInput;
 public class FallbackTextFieldControlBuilder extends ControlBuilder
 {
 
-   public FallbackTextFieldControlBuilder(ConverterRegistry converterRegistry)
+   public FallbackTextFieldControlBuilder(ConverterFactory converterFactory)
    {
-      super(converterRegistry);
+      super(converterFactory);
    }
 
    @Override
@@ -43,7 +43,7 @@ public class FallbackTextFieldControlBuilder extends ControlBuilder
          @Override
          public void modifyText(ModifyEvent e)
          {
-            Converter<String, ?> converter = getConverterRegistry().getConverter(String.class, input.getValueType());
+            Converter<String, ?> converter = getConverterFactory().getConverter(String.class, input.getValueType());
             Object convertedValue = converter.convert(txt.getText());
             input.setValue(convertedValue);
          }

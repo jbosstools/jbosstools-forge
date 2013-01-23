@@ -9,7 +9,7 @@ package org.jboss.tools.forge.ui.control;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.forge.convert.ConverterRegistry;
+import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 
 /**
@@ -21,11 +21,11 @@ import org.jboss.forge.ui.UIInput;
 public abstract class ControlBuilder
 {
 
-   private final ConverterRegistry converterRegistry;
+   private final ConverterFactory converterFactory;
 
-   protected ControlBuilder(ConverterRegistry converterRegistry)
+   protected ControlBuilder(ConverterFactory converterRegistry)
    {
-      this.converterRegistry = converterRegistry;
+      this.converterFactory = converterRegistry;
    }
 
    /**
@@ -46,8 +46,8 @@ public abstract class ControlBuilder
     */
    public abstract boolean handles(final UIInput<?> input);
 
-   protected ConverterRegistry getConverterRegistry()
+   protected ConverterFactory getConverterFactory()
    {
-      return converterRegistry;
+      return converterFactory;
    }
 }
