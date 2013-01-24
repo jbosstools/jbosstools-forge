@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class CheckboxControlBuilder extends ControlBuilder
 {
@@ -26,7 +27,7 @@ public class CheckboxControlBuilder extends ControlBuilder
    }
 
    @Override
-   public Control build(final UIInput<Object> input, final Composite container)
+   public Control build(ForgeWizardPage page, final UIInput<Object> input, final Composite container)
    {
       Button cmb = new Button(container, SWT.CHECK);
       cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

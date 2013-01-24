@@ -75,7 +75,7 @@ public class ForgeWizardPage extends WizardPage
          // Create the label
          Label label = new Label(container, SWT.NULL);
          label.setText(uiInput.getLabel() == null ? uiInput.getName() : uiInput.getLabel());
-         controlBuilderRegistry.build(uiInput, container);
+         controlBuilderRegistry.build(this, uiInput, container);
       }
       setControl(container);
    }

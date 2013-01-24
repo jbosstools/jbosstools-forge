@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class ComboListControlBuilder extends ControlBuilder
 {
@@ -26,7 +27,7 @@ public class ComboListControlBuilder extends ControlBuilder
 
    @Override
    @SuppressWarnings({ "unchecked", "rawtypes" })
-   public Control build(final UIInput<Object> input, final Composite container)
+   public Control build(ForgeWizardPage page, final UIInput<Object> input, final Composite container)
    {
       final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
       Enum[] enumConstants = input.getValueType().asSubclass(Enum.class).getEnumConstants();

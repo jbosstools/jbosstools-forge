@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 /**
  * A factory for {@link ControlBuilder} instances.
@@ -35,19 +36,20 @@ public class ControlBuilderRegistry
       controlBuilders.add(new TextFieldControlBuilder(converterFactory));
       controlBuilders.add(new CheckboxControlBuilder(converterFactory));
       controlBuilders.add(new ComboListControlBuilder(converterFactory));
+      controlBuilders.add(new FileChooserControlBuilder(converterFactory));
 
       // This must always be the last one in list
       controlBuilders.add(new FallbackTextFieldControlBuilder(converterFactory));
    }
 
    @SuppressWarnings("unchecked")
-   public Control build(UIInput<?> input, Composite parent)
+   public Control build(ForgeWizardPage page, UIInput<?> input, Composite parent)
    {
       for (ControlBuilder builder : controlBuilders)
       {
          if (builder.handles(input))
          {
-            return builder.build(((UIInput<Object>) input), parent);
+            return builder.build(page, ((UIInput<Object>) input), parent);
          }
       }
       throw new IllegalArgumentException("No UI component found for input type of " + input.getValueType());

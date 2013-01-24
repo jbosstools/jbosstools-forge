@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 /**
  * Builds a control
@@ -30,13 +31,13 @@ public abstract class ControlBuilder
 
    /**
     * Builds an Eclipse {@link Control} object based on the input
-    *
+    * @param page TODO
     * @param input
-    *
     * @param converterRegistry the converter registry to convert the inputed value from the Control to the UIInput
+    *
     * @return
     */
-   public abstract Control build(final UIInput<Object> input, final Composite container);
+   public abstract Control build(final ForgeWizardPage page, final UIInput<Object> input, final Composite container);
 
    /**
     * Tests if this builder may handle this specific input

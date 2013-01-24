@@ -11,5 +11,6 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",
  org.eclipse.ui;bundle-version="3.103.0",
  org.jboss.tools.forge.runtime;bundle-version="2.0.0",
- org.jboss.tools.forge.core;bundle-version="2.0.0"
+ org.jboss.tools.forge.core;bundle-version="2.0.0",
+ org.eclipse.ui.ide;bundle-version="3.8.1"
 Export-Package: org.jboss.tools.forge.ui

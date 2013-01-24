@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class TextFieldControlBuilder extends ControlBuilder
 {
@@ -26,7 +27,7 @@ public class TextFieldControlBuilder extends ControlBuilder
    }
 
    @Override
-   public Control build(final UIInput<Object> input, final Composite container)
+   public Control build(ForgeWizardPage page, final UIInput<Object> input, final Composite container)
    {
       final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
       txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
