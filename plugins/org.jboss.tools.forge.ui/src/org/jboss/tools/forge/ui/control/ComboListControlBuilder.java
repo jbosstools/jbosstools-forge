@@ -13,17 +13,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class ComboListControlBuilder extends ControlBuilder
 {
-
-   public ComboListControlBuilder(ConverterFactory converterFactory)
-   {
-      super(converterFactory);
-   }
 
    @Override
    @SuppressWarnings({ "unchecked", "rawtypes" })

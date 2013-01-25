@@ -9,6 +9,7 @@ package org.jboss.tools.forge.core;
 
 import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.Forge;
+import org.jboss.forge.container.services.ExportedInstance;
 
 /**
  * This is a singleton for the {@link Forge} class.
@@ -47,4 +48,9 @@ public enum ForgeService
       forge.stop();
    }
 
+   public <S> S lookup(Class<S> service)
+   {
+      ExportedInstance<S> exportedInstance = forge.getAddonRegistry().getExportedInstance(service);
+      return (exportedInstance == null) ? null : exportedInstance.get();
+   }
 }

@@ -15,7 +15,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.convert.Converter;
-import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
@@ -27,11 +26,6 @@ import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
  */
 public class FallbackTextFieldControlBuilder extends ControlBuilder
 {
-
-   public FallbackTextFieldControlBuilder(ConverterFactory converterFactory)
-   {
-      super(converterFactory);
-   }
 
    @Override
    public Control build(ForgeWizardPage page, final UIInput<Object> input, final Composite container)

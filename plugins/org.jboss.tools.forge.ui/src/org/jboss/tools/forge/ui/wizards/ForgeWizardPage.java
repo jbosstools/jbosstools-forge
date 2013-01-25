@@ -14,7 +14,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
@@ -31,17 +30,16 @@ public class ForgeWizardPage extends WizardPage
 {
    private UICommand ui;
    private UIContextImpl uiContext;
-   private ControlBuilderRegistry controlBuilderRegistry;
 
-   public ForgeWizardPage(UICommand command, ControlBuilderRegistry controlBuilderRegistry)
+   public ForgeWizardPage(ForgeWizard wizard, UICommand command, UIContextImpl contextImpl)
    {
       super("Page Title");
+      setWizard(wizard);
       setTitle("Wizard Page");
       setDescription("A wizard page implementation");
-      setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ForgeUIPlugin.PLUGIN_ID, "icons/forge.png"));
+      setImageDescriptor(ForgeUIPlugin.getForgeLogo());
       this.ui = command;
-      this.uiContext = new UIContextImpl();
-      this.controlBuilderRegistry = controlBuilderRegistry;
+      this.uiContext = contextImpl;
    }
 
    @Override
@@ -75,7 +73,7 @@ public class ForgeWizardPage extends WizardPage
          // Create the label
          Label label = new Label(container, SWT.NULL);
          label.setText(uiInput.getLabel() == null ? uiInput.getName() : uiInput.getLabel());
-         controlBuilderRegistry.build(this, uiInput, container);
+         ControlBuilderRegistry.INSTANCE.build(this, uiInput, container);
       }
       setControl(container);
    }
@@ -94,5 +92,11 @@ public class ForgeWizardPage extends WizardPage
    {
       setErrorMessage(message);
       setPageComplete(message == null);
+   }
+
+   @Override
+   public ForgeWizard getWizard()
+   {
+      return (ForgeWizard) super.getWizard();
    }
 }

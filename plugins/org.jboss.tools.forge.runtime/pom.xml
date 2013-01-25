@@ -45,6 +45,12 @@
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
+                           <artifactId>forge-se</artifactId>
+                           <version>${version.forge}</version>
+                        </artifactItem>
+                        <!-- Addons API needed -->
+                        <artifactItem>
+                           <groupId>org.jboss.forge</groupId>
                            <artifactId>ui-api</artifactId>
                            <version>${version.forge}</version>
                         </artifactItem>
@@ -55,8 +61,24 @@
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
-                           <artifactId>forge-se</artifactId>
+                           <artifactId>resources-api</artifactId>
                            <version>${version.forge}</version>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.jboss.forge</groupId>
+                           <artifactId>facets-api</artifactId>
+                           <version>${version.forge}</version>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.jboss.forge</groupId>
+                           <artifactId>environment-api</artifactId>
+                           <version>${version.forge}</version>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.jboss.forge</groupId>
+                           <artifactId>ui-hints</artifactId>
+                           <version>${version.forge}</version>
+                           <classifier>forge-addon</classifier>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>

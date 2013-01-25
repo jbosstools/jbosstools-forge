@@ -14,17 +14,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class TextFieldControlBuilder extends ControlBuilder
 {
-
-   public TextFieldControlBuilder(ConverterFactory converterFactory)
-   {
-      super(converterFactory);
-   }
 
    @Override
    public Control build(ForgeWizardPage page, final UIInput<Object> input, final Composite container)

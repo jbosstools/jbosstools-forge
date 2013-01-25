@@ -23,17 +23,11 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.convert.Converter;
-import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class FileChooserControlBuilder extends ControlBuilder
 {
-
-   public FileChooserControlBuilder(ConverterFactory converterFactory)
-   {
-      super(converterFactory);
-   }
 
    @Override
    public Control build(final ForgeWizardPage page, final UIInput<Object> input, final Composite parent)
@@ -62,7 +56,7 @@ public class FileChooserControlBuilder extends ControlBuilder
       });
 
       Button button = new Button(container, SWT.PUSH);
-      button.setText("&Browse...");
+      button.setText("Browse...");
       button.addSelectionListener(new SelectionAdapter()
       {
          @Override
@@ -95,7 +89,6 @@ public class FileChooserControlBuilder extends ControlBuilder
    @Override
    public boolean handles(UIInput<?> input)
    {
-      // FIXME: This will change later with the ui-hints-addon
       return true;
    }
 
@@ -105,7 +98,7 @@ public class FileChooserControlBuilder extends ControlBuilder
       if (text != null && !text.isEmpty())
       {
          File file = new File(text);
-         Converter<File, Object> converter = getConverterFactory()
+         Converter<File, ?> converter = getConverterFactory()
                   .getConverter(File.class, input.getValueType());
          convertedType = converter.convert(file);
       }

@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.core.ForgeService;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 /**
@@ -22,15 +23,13 @@ import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 public abstract class ControlBuilder
 {
 
-   private final ConverterFactory converterFactory;
-
-   protected ControlBuilder(ConverterFactory converterRegistry)
+   protected ControlBuilder()
    {
-      this.converterFactory = converterRegistry;
    }
 
    /**
     * Builds an Eclipse {@link Control} object based on the input
+    *
     * @param page TODO
     * @param input
     * @param converterRegistry the converter registry to convert the inputed value from the Control to the UIInput
@@ -47,8 +46,9 @@ public abstract class ControlBuilder
     */
    public abstract boolean handles(final UIInput<?> input);
 
-   protected ConverterFactory getConverterFactory()
+   public ConverterFactory getConverterFactory()
    {
-      return converterFactory;
+      return ForgeService.INSTANCE.lookup(ConverterFactory.class);
    }
+
 }

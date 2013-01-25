@@ -17,18 +17,19 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
-import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.wizard.UIWizard;
 import org.jboss.forge.ui.wizard.UIWizardEnd;
 import org.jboss.tools.forge.core.ForgeService;
-import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
+import org.jboss.tools.forge.ui.context.UIContextImpl;
 
 public class ForgeWizard extends Wizard implements INewWizard
 {
    private UICommand uiCommand;
-   // private UICommand current;
-   private ControlBuilderRegistry controlBuilderRegistry;
+
+   private UIContextImpl uiContext = new UIContextImpl();
+
+   private IStructuredSelection selection;
 
    public ForgeWizard()
    {
@@ -38,6 +39,7 @@ public class ForgeWizard extends Wizard implements INewWizard
    @Override
    public void init(IWorkbench workbench, IStructuredSelection selection)
    {
+      this.selection = selection;
       lookupServices();
    }
 
@@ -53,14 +55,6 @@ public class ForgeWizard extends Wizard implements INewWizard
       {
          e.printStackTrace();
       }
-      ExportedInstance<ConverterFactory> convertInstance = addonRegistry
-               .getExportedInstance(ConverterFactory.class);
-
-      if (convertInstance != null)
-      {
-         ConverterFactory converterFactory = convertInstance.get();
-         controlBuilderRegistry = new ControlBuilderRegistry(converterFactory);
-      }
       Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry.getExportedInstances(UICommand.class);
       System.out.println("Available UICommands: " + exportedInstances);
       if (!exportedInstances.isEmpty())
@@ -74,7 +68,8 @@ public class ForgeWizard extends Wizard implements INewWizard
    {
       if (this.uiCommand != null)
       {
-         addPage(new ForgeWizardPage(uiCommand, controlBuilderRegistry));
+         ForgeWizardPage page = new ForgeWizardPage(this, uiCommand, uiContext);
+         addPage(page);
       }
       else
       {
@@ -128,5 +123,10 @@ public class ForgeWizard extends Wizard implements INewWizard
          return (uiCommand instanceof UIWizardEnd);
       }
       return true;
+   }
+
+   public IStructuredSelection getSelection()
+   {
+      return selection;
    }
 }

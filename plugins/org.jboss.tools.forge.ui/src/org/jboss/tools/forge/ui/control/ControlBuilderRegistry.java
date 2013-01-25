@@ -12,7 +12,6 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
@@ -22,24 +21,21 @@ import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  *
  */
-public class ControlBuilderRegistry
+public enum ControlBuilderRegistry
 {
+   INSTANCE;
+
    private List<ControlBuilder> controlBuilders = new ArrayList<ControlBuilder>();
 
-   public ControlBuilderRegistry(ConverterFactory converterFactory)
+   private ControlBuilderRegistry()
    {
-      registerBuilders(converterFactory);
-   }
-
-   private void registerBuilders(ConverterFactory converterFactory)
-   {
-      controlBuilders.add(new TextFieldControlBuilder(converterFactory));
-      controlBuilders.add(new CheckboxControlBuilder(converterFactory));
-      controlBuilders.add(new ComboListControlBuilder(converterFactory));
-      controlBuilders.add(new FileChooserControlBuilder(converterFactory));
+      controlBuilders.add(new TextFieldControlBuilder());
+      controlBuilders.add(new CheckboxControlBuilder());
+      controlBuilders.add(new ComboListControlBuilder());
+      controlBuilders.add(new FileChooserControlBuilder());
 
       // This must always be the last one in list
-      controlBuilders.add(new FallbackTextFieldControlBuilder(converterFactory));
+      controlBuilders.add(new FallbackTextFieldControlBuilder());
    }
 
    @SuppressWarnings("unchecked")
