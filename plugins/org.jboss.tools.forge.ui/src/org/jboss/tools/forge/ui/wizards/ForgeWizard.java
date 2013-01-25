@@ -40,24 +40,9 @@ public class ForgeWizard extends Wizard implements INewWizard
       setNeedsProgressMonitor(true);
    }
 
-   protected void initForge()
-   {
-      ForgeService.INSTANCE.getAddonRegistry();
-      try
-      {
-         // TODO: Wait for Forge to init. This shouldn't be necessary
-         Thread.sleep(3000);
-      }
-      catch (InterruptedException e)
-      {
-         e.printStackTrace();
-      }
-   }
-
    @Override
    public void init(IWorkbench workbench, IStructuredSelection selection)
    {
-      initForge();
       this.selection = selection;
       lookupServices();
    }

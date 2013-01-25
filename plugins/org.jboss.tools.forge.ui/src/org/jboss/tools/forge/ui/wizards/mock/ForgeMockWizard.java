@@ -29,7 +29,6 @@ public class ForgeMockWizard extends ForgeWizard implements INewWizard
    @Override
    public void init(IWorkbench workbench, IStructuredSelection selection)
    {
-      initForge();
       inputs.add(new UIInputImpl<String>("First Name", String.class));
       inputs.add(new UIInputImpl<String>("Last Name", String.class));
       inputs.add(new UIInputImpl<GenderKind>("Gender", GenderKind.class));
