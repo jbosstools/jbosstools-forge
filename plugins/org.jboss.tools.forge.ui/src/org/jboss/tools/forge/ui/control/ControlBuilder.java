@@ -87,10 +87,23 @@ public abstract class ControlBuilder
    @SuppressWarnings({ "unchecked", "rawtypes" })
    protected void setInputValue(final UIInput<Object> input, Object value)
    {
-      // TODO: Cache Converter ?
-      Converter converter = getConverterFactory()
-               .getConverter(value.getClass(), input.getValueType());
-      Object convertedType = converter.convert(value);
+      Object convertedType = value;
+      if (value != null)
+      {
+         // TODO: Cache Converter ?
+         ConverterFactory converterFactory = getConverterFactory();
+         if (converterFactory != null)
+         {
+            Converter converter = converterFactory
+                     .getConverter(value.getClass(), input.getValueType());
+            convertedType = converter.convert(value);
+         }
+         else
+         {
+            System.out.println("Converter Factory was not deployed !! Cannot convert from " + value.getClass() + " to "
+                     + input.getValueType());
+         }
+      }
       input.setValue(convertedType);
    }
 
