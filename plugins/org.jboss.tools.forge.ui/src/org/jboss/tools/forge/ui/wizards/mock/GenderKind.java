@@ -7,7 +7,6 @@
 
 package org.jboss.tools.forge.ui.wizards.mock;
 
-public enum GenderKind
-{
-   MALE, FEMALE;
+public enum GenderKind {
+	MALE, FEMALE;
 }

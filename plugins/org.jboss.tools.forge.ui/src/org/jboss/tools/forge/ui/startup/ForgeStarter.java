@@ -10,7 +10,5 @@ public class ForgeStarter implements IStartup {
 		// reference the plugin class to start the Forge 2 runtime
 		ForgeCorePlugin.getDefault();
 	}
-	
-	
-	
+
 }

@@ -16,36 +16,31 @@ import org.jboss.forge.ui.UIInput;
 import org.jboss.forge.ui.UIValidationContext;
 import org.jboss.forge.ui.wizard.UIWizardContext;
 
-public class UIContextImpl implements UIWizardContext, UIValidationContext, UIContext, UIBuilder
-{
-   private List<UIInput<?>> inputs = new ArrayList<UIInput<?>>();
-   private List<String> errors = new ArrayList<String>();
+public class UIContextImpl implements UIWizardContext, UIValidationContext,
+		UIContext, UIBuilder {
+	private List<UIInput<?>> inputs = new ArrayList<UIInput<?>>();
+	private List<String> errors = new ArrayList<String>();
 
-   public UIContextImpl()
-   {
-   }
+	public UIContextImpl() {
+	}
 
-   @Override
-   public UIBuilder getUIBuilder()
-   {
-      return this;
-   }
+	@Override
+	public UIBuilder getUIBuilder() {
+		return this;
+	}
 
-   @Override
-   public UIBuilder add(UIInput<?> input)
-   {
-      inputs.add(input);
-      return this;
-   }
+	@Override
+	public UIBuilder add(UIInput<?> input) {
+		inputs.add(input);
+		return this;
+	}
 
-   public List<UIInput<?>> getInputs()
-   {
-      return inputs;
-   }
+	public List<UIInput<?>> getInputs() {
+		return inputs;
+	}
 
-   @Override
-   public void addValidationError(UIInput<?> input, String errorMessage)
-   {
-      errors.add(errorMessage);
-   }
+	@Override
+	public void addValidationError(UIInput<?> input, String errorMessage) {
+		errors.add(errorMessage);
+	}
 }

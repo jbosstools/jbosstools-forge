@@ -13,25 +13,21 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
-public class ForgeMockWizardPage extends ForgeWizardPage
-{
+public class ForgeMockWizardPage extends ForgeWizardPage {
 
-   private final List<UIInput<?>> inputs;
+	private final List<UIInput<?>> inputs;
 
-   public ForgeMockWizardPage(List<UIInput<?>> inputs)
-   {
-      super(null, null, null);
-      this.inputs = inputs;
-   }
+	public ForgeMockWizardPage(List<UIInput<?>> inputs) {
+		super(null, null, null);
+		this.inputs = inputs;
+	}
 
-   public List<UIInput<?>> getInputs()
-   {
-      return inputs;
-   }
+	public List<UIInput<?>> getInputs() {
+		return inputs;
+	}
 
-   @Override
-   public void createControl(Composite parent)
-   {
-      createControls(parent, inputs);
-   }
+	@Override
+	public void createControl(Composite parent) {
+		createControls(parent, inputs);
+	}
 }

@@ -19,36 +19,31 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
-public class CheckboxControlBuilder extends ControlBuilder
-{
+public class CheckboxControlBuilder extends ControlBuilder {
 
-   @Override
-   public Control build(ForgeWizardPage page, final UIInput<Object> input, final Composite container)
-   {
-      Button cmb = new Button(container, SWT.CHECK);
-      cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-      cmb.addSelectionListener(new SelectionAdapter()
-      {
-         @Override
-         public void widgetSelected(SelectionEvent e)
-         {
-            boolean selection = ((Button) e.widget).getSelection();
-            setInputValue(input, selection);
-         }
-      });
-      return cmb;
-   }
+	@Override
+	public Control build(ForgeWizardPage page, final UIInput<Object> input,
+			final Composite container) {
+		Button cmb = new Button(container, SWT.CHECK);
+		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		cmb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean selection = ((Button) e.widget).getSelection();
+				setInputValue(input, selection);
+			}
+		});
+		return cmb;
+	}
 
-   @Override
-   protected Class<?> getProducedType()
-   {
-      return Boolean.class;
-   }
+	@Override
+	protected Class<?> getProducedType() {
+		return Boolean.class;
+	}
 
-   @Override
-   protected InputType getSupportedInputType()
-   {
-      return InputTypes.CHECKBOX;
-   }
+	@Override
+	protected InputType getSupportedInputType() {
+		return InputTypes.CHECKBOX;
+	}
 
 }

@@ -11,16 +11,14 @@ import org.jboss.forge.ui.UIInput;
 
 /**
  * This component only renders any undefined input as a textbox.
- *
- *
+ * 
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
-public class FallbackTextBoxControlBuilder extends TextBoxControlBuilder
-{
-   @Override
-   public boolean handles(UIInput<?> input)
-   {
-      return true;
-   }
+public class FallbackTextBoxControlBuilder extends TextBoxControlBuilder {
+	@Override
+	public boolean handles(UIInput<?> input) {
+		return true;
+	}
 }

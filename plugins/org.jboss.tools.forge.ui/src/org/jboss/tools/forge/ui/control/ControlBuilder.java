@@ -20,96 +20,90 @@ import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 /**
  * Builds a control
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
-public abstract class ControlBuilder
-{
+public abstract class ControlBuilder {
 
-   /**
-    * Builds an Eclipse {@link Control} object based on the input
-    *
-    * @param page TODO
-    * @param input
-    * @param converterRegistry the converter registry to convert the inputed value from the Control to the UIInput
-    *
-    * @return
-    */
-   public abstract Control build(final ForgeWizardPage page, final UIInput<Object> input, final Composite container);
+	/**
+	 * Builds an Eclipse {@link Control} object based on the input
+	 * 
+	 * @param page
+	 *            TODO
+	 * @param input
+	 * @param converterRegistry
+	 *            the converter registry to convert the inputed value from the
+	 *            Control to the UIInput
+	 * 
+	 * @return
+	 */
+	public abstract Control build(final ForgeWizardPage page,
+			final UIInput<Object> input, final Composite container);
 
-   /**
-    * Returns the supported type this control may produce
-    *
-    * @return
-    */
-   protected abstract Class<?> getProducedType();
+	/**
+	 * Returns the supported type this control may produce
+	 * 
+	 * @return
+	 */
+	protected abstract Class<?> getProducedType();
 
-   /**
-    * Returns the supported input type for this component
-    *
-    * @return
-    */
-   protected abstract InputType getSupportedInputType();
+	/**
+	 * Returns the supported input type for this component
+	 * 
+	 * @return
+	 */
+	protected abstract InputType getSupportedInputType();
 
-   public ConverterFactory getConverterFactory()
-   {
-      return ForgeService.INSTANCE.lookup(ConverterFactory.class);
-   }
+	public ConverterFactory getConverterFactory() {
+		return ForgeService.INSTANCE.lookup(ConverterFactory.class);
+	}
 
-   /**
-    * Tests if this builder may handle this specific input
-    *
-    * @param input
-    * @return
-    */
-   public boolean handles(UIInput<?> input)
-   {
-      boolean handles = false;
-      InputType inputType = getInputType(input);
-      if (inputType != null)
-      {
-         handles = inputType.equals(getSupportedInputType());
-      }
-      else
-      {
-         // Fallback to standard type
-         handles = getProducedType().isAssignableFrom(input.getValueType());
-      }
-      return handles;
-   }
+	/**
+	 * Tests if this builder may handle this specific input
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public boolean handles(UIInput<?> input) {
+		boolean handles = false;
+		InputType inputType = getInputType(input);
+		if (inputType != null) {
+			handles = inputType.equals(getSupportedInputType());
+		} else {
+			// Fallback to standard type
+			handles = getProducedType().isAssignableFrom(input.getValueType());
+		}
+		return handles;
+	}
 
-   protected InputType getInputType(UIInput<?> input)
-   {
-      Environment env = ForgeService.INSTANCE.lookup(Environment.class);
-      HintsLookup hintsLookup = new HintsLookup(env);
-      // TODO: Check input metadata if type was re-defined
-      InputType inputType = hintsLookup.getInputType(input.getValueType());
-      return inputType;
-   }
+	protected InputType getInputType(UIInput<?> input) {
+		Environment env = ForgeService.INSTANCE.lookup(Environment.class);
+		HintsLookup hintsLookup = new HintsLookup(env);
+		// TODO: Check input metadata if type was re-defined
+		InputType inputType = hintsLookup.getInputType(input.getValueType());
+		return inputType;
+	}
 
-   @SuppressWarnings({ "unchecked", "rawtypes" })
-   protected void setInputValue(final UIInput<Object> input, Object value)
-   {
-      Object convertedType = value;
-      if (value != null)
-      {
-         // TODO: Cache Converter ?
-         ConverterFactory converterFactory = getConverterFactory();
-         Class<? extends Object> source = value.getClass();
-         Class<Object> target = input.getValueType();
-         if (converterFactory != null)
-         {
-            Converter converter = converterFactory.getConverter(source, target);
-            convertedType = converter.convert(value);
-         }
-         else
-         {
-            System.out.println("Converter Factory was not deployed !! Cannot convert from " + source + " to "
-                     + target);
-         }
-      }
-      input.setValue(convertedType);
-   }
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected void setInputValue(final UIInput<Object> input, Object value) {
+		Object convertedType = value;
+		if (value != null) {
+			// TODO: Cache Converter ?
+			ConverterFactory converterFactory = getConverterFactory();
+			Class<? extends Object> source = value.getClass();
+			Class<Object> target = input.getValueType();
+			if (converterFactory != null) {
+				Converter converter = converterFactory.getConverter(source,
+						target);
+				convertedType = converter.convert(value);
+			} else {
+				System.out
+						.println("Converter Factory was not deployed !! Cannot convert from "
+								+ source + " to " + target);
+			}
+		}
+		input.setValue(convertedType);
+	}
 
 }

@@ -19,34 +19,29 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
-public class TextBoxControlBuilder extends ControlBuilder
-{
+public class TextBoxControlBuilder extends ControlBuilder {
 
-   @Override
-   public Control build(ForgeWizardPage page, final UIInput<Object> input, final Composite container)
-   {
-      final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
-      txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-      txt.addModifyListener(new ModifyListener()
-      {
-         @Override
-         public void modifyText(ModifyEvent e)
-         {
-            setInputValue(input, txt.getText());
-         }
-      });
-      return txt;
-   }
+	@Override
+	public Control build(ForgeWizardPage page, final UIInput<Object> input,
+			final Composite container) {
+		final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
+		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		txt.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				setInputValue(input, txt.getText());
+			}
+		});
+		return txt;
+	}
 
-   @Override
-   protected Class<?> getProducedType()
-   {
-      return String.class;
-   }
+	@Override
+	protected Class<?> getProducedType() {
+		return String.class;
+	}
 
-   @Override
-   protected InputType getSupportedInputType()
-   {
-      return InputTypes.TEXTBOX;
-   }
+	@Override
+	protected InputType getSupportedInputType() {
+		return InputTypes.TEXTBOX;
+	}
 }

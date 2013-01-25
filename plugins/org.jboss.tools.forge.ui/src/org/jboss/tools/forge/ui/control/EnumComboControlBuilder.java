@@ -18,45 +18,40 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
-public class EnumComboControlBuilder extends ControlBuilder
-{
+public class EnumComboControlBuilder extends ControlBuilder {
 
-   @Override
-   @SuppressWarnings({ "unchecked", "rawtypes" })
-   public Control build(ForgeWizardPage page, final UIInput<Object> input, final Composite container)
-   {
-      final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
-      Enum[] enumConstants = input.getValueType().asSubclass(Enum.class).getEnumConstants();
-      for (Enum enum1 : enumConstants)
-      {
-         combo.add(enum1.name());
-      }
-      combo.addSelectionListener(new SelectionAdapter()
-      {
-         @Override
-         public void widgetSelected(SelectionEvent e)
-         {
-            int selectionIndex = combo.getSelectionIndex();
-            if (selectionIndex != -1)
-            {
-               String item = combo.getItem(selectionIndex);
-               Class enumType = input.getValueType();
-               input.setValue(Enum.valueOf(enumType, item));
-            }
-         }
-      });
-      return combo;
-   }
+	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Control build(ForgeWizardPage page, final UIInput<Object> input,
+			final Composite container) {
+		final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE
+				| SWT.READ_ONLY);
+		Enum[] enumConstants = input.getValueType().asSubclass(Enum.class)
+				.getEnumConstants();
+		for (Enum enum1 : enumConstants) {
+			combo.add(enum1.name());
+		}
+		combo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int selectionIndex = combo.getSelectionIndex();
+				if (selectionIndex != -1) {
+					String item = combo.getItem(selectionIndex);
+					Class enumType = input.getValueType();
+					input.setValue(Enum.valueOf(enumType, item));
+				}
+			}
+		});
+		return combo;
+	}
 
-   @Override
-   protected Class<?> getProducedType()
-   {
-      return Enum.class;
-   }
+	@Override
+	protected Class<?> getProducedType() {
+		return Enum.class;
+	}
 
-   @Override
-   protected InputType getSupportedInputType()
-   {
-      return InputTypes.SELECT_ONE;
-   }
+	@Override
+	protected InputType getSupportedInputType() {
+		return InputTypes.SELECT_ONE;
+	}
 }

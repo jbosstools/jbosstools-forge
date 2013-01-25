@@ -26,22 +26,19 @@ public class UICommandListDialog extends PopupDialog {
 	private String selectedCommandName = null;
 
 	public UICommandListDialog(IWorkbenchWindow window) {
-		super(window.getShell(), 
-				SWT.RESIZE, 
-				true, 
+		super(window.getShell(), SWT.RESIZE, true,
 				true, // persist size
 				false, // but not location
-				true, 
-				true, 
-				"Select the command you want Forge to execute",
+				true, true, "Select the command you want Forge to execute",
 				"Start typing to filter the list");
 		allCandidates = getAllCandidates();
 	}
-	
+
 	private SortedMap<String, UICommand> getAllCandidates() {
 		SortedMap<String, UICommand> result = new TreeMap<String, UICommand>();
-	    AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
-	    Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry.getExportedInstances(UICommand.class);
+		AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
+		Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry
+				.getExportedInstances(UICommand.class);
 		for (ExportedInstance<UICommand> instance : exportedInstances) {
 			UICommand uiCommand = instance.get();
 			result.put(uiCommand.getId().getName(), uiCommand);
@@ -50,7 +47,7 @@ public class UICommandListDialog extends PopupDialog {
 	}
 
 	protected Control createDialogArea(Composite parent) {
-		Composite result = (Composite)super.createDialogArea(parent);
+		Composite result = (Composite) super.createDialogArea(parent);
 		result.setLayout(new FillLayout());
 		final List list = new List(result, SWT.SINGLE | SWT.V_SCROLL);
 		for (String candidate : allCandidates.keySet()) {
@@ -70,7 +67,7 @@ public class UICommandListDialog extends PopupDialog {
 			public void mouseDoubleClick(MouseEvent e) {
 				System.out.println("executing " + selectedCommandName);
 			}
-		});		
+		});
 		return result;
 	}
 

@@ -10,16 +10,18 @@ import org.jboss.tools.forge.ui.dialog.UICommandListDialog;
 public class ForgeCommandHandler extends AbstractHandler {
 
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+		IWorkbenchWindow window = HandlerUtil
+				.getActiveWorkbenchWindowChecked(event);
 		UICommandListDialog dialog = new UICommandListDialog(window);
 		return dialog.open();
-//		String message = "";
-//		Set<Addon> addons = ForgeService.INSTANCE.getAddonRegistry().getRegisteredAddons();
-//		for (Addon addon : addons) {
-//			message += addon + "\n";
-//		}
-//		MessageDialog.openInformation(window.getShell(), "Uiview", message);
-//		return null;
+		// String message = "";
+		// Set<Addon> addons =
+		// ForgeService.INSTANCE.getAddonRegistry().getRegisteredAddons();
+		// for (Addon addon : addons) {
+		// message += addon + "\n";
+		// }
+		// MessageDialog.openInformation(window.getShell(), "Uiview", message);
+		// return null;
 	}
-	
+
 }
