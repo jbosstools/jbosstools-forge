@@ -18,6 +18,7 @@ import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.context.UIContextImpl;
+import org.jboss.tools.forge.ui.control.ControlBuilder;
 import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
 
 /**
@@ -60,6 +61,7 @@ public class ForgeWizardPage extends WizardPage
       createControls(parent, inputs);
    }
 
+   @SuppressWarnings("unchecked")
    protected void createControls(Composite parent, List<UIInput<?>> inputs)
    {
       Composite container = new Composite(parent, SWT.NULL);
@@ -73,7 +75,8 @@ public class ForgeWizardPage extends WizardPage
          // Create the label
          Label label = new Label(container, SWT.NULL);
          label.setText(uiInput.getLabel() == null ? uiInput.getName() : uiInput.getLabel());
-         ControlBuilderRegistry.INSTANCE.build(this, uiInput, container);
+         ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE.getBuilderFor(uiInput);
+         controlBuilder.build(this, (UIInput<Object>) uiInput, container);
       }
       setControl(container);
    }

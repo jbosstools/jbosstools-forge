@@ -15,9 +15,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.forge.ui.hints.InputType;
+import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
-public class TextFieldControlBuilder extends ControlBuilder
+public class TextBoxControlBuilder extends ControlBuilder
 {
 
    @Override
@@ -30,16 +32,21 @@ public class TextFieldControlBuilder extends ControlBuilder
          @Override
          public void modifyText(ModifyEvent e)
          {
-            // Probably will need some sort of validation
-            input.setValue(txt.getText());
+            setInputValue(input, txt.getText());
          }
       });
       return txt;
    }
 
    @Override
-   public boolean handles(UIInput<?> input)
+   protected Class<?> getProducedType()
    {
-      return (input.getValueType() == String.class);
+      return String.class;
+   }
+
+   @Override
+   protected InputType getSupportedInputType()
+   {
+      return InputTypes.TEXTBOX;
    }
 }

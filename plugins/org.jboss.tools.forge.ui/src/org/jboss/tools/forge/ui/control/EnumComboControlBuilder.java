@@ -14,9 +14,11 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.forge.ui.hints.InputType;
+import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
-public class ComboListControlBuilder extends ControlBuilder
+public class EnumComboControlBuilder extends ControlBuilder
 {
 
    @Override
@@ -47,9 +49,14 @@ public class ComboListControlBuilder extends ControlBuilder
    }
 
    @Override
-   public boolean handles(UIInput<?> input)
+   protected Class<?> getProducedType()
    {
-      return (Enum.class.isAssignableFrom(input.getValueType()));
+      return Enum.class;
    }
 
+   @Override
+   protected InputType getSupportedInputType()
+   {
+      return InputTypes.SELECT_ONE;
+   }
 }

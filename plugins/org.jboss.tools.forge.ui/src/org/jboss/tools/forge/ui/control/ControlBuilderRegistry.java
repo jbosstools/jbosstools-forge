@@ -7,13 +7,10 @@
 
 package org.jboss.tools.forge.ui.control;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.ui.UIInput;
-import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 /**
  * A factory for {@link ControlBuilder} instances.
@@ -25,27 +22,20 @@ public enum ControlBuilderRegistry
 {
    INSTANCE;
 
-   private List<ControlBuilder> controlBuilders = new ArrayList<ControlBuilder>();
+   private List<ControlBuilder> controlBuilders = Arrays.asList(
+            new TextBoxControlBuilder(),
+            new CheckboxControlBuilder(),
+            new EnumComboControlBuilder(),
+            new FileChooserControlBuilder(),
+            new FallbackTextBoxControlBuilder());
 
-   private ControlBuilderRegistry()
-   {
-      controlBuilders.add(new TextFieldControlBuilder());
-      controlBuilders.add(new CheckboxControlBuilder());
-      controlBuilders.add(new ComboListControlBuilder());
-      controlBuilders.add(new FileChooserControlBuilder());
-
-      // This must always be the last one in list
-      controlBuilders.add(new FallbackTextFieldControlBuilder());
-   }
-
-   @SuppressWarnings("unchecked")
-   public Control build(ForgeWizardPage page, UIInput<?> input, Composite parent)
+   public ControlBuilder getBuilderFor(UIInput<?> input)
    {
       for (ControlBuilder builder : controlBuilders)
       {
          if (builder.handles(input))
          {
-            return builder.build(page, ((UIInput<Object>) input), parent);
+            return builder;
          }
       }
       throw new IllegalArgumentException("No UI component found for input type of " + input.getValueType());

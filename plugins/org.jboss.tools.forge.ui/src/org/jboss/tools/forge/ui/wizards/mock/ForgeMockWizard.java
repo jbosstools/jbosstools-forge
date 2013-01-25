@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.tools.forge.ui.wizards.ForgeWizard;
 
-public class ForgeMockWizard extends Wizard implements INewWizard
+public class ForgeMockWizard extends ForgeWizard implements INewWizard
 {
    private List<UIInput<?>> inputs = new ArrayList<UIInput<?>>();
 
@@ -29,6 +29,7 @@ public class ForgeMockWizard extends Wizard implements INewWizard
    @Override
    public void init(IWorkbench workbench, IStructuredSelection selection)
    {
+      initForge();
       inputs.add(new UIInputImpl<String>("First Name", String.class));
       inputs.add(new UIInputImpl<String>("Last Name", String.class));
       inputs.add(new UIInputImpl<GenderKind>("Gender", GenderKind.class));

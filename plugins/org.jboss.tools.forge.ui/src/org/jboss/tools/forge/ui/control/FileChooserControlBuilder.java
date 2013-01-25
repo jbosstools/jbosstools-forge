@@ -22,8 +22,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.forge.convert.Converter;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.forge.ui.hints.InputType;
+import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class FileChooserControlBuilder extends ControlBuilder
@@ -51,7 +52,11 @@ public class FileChooserControlBuilder extends ControlBuilder
          public void modifyText(ModifyEvent e)
          {
             String text = containerText.getText();
-            setInputValue(input, text);
+            if (text != null)
+            {
+               File file = new File(text);
+               setInputValue(input, file);
+            }
          }
       });
 
@@ -80,6 +85,7 @@ public class FileChooserControlBuilder extends ControlBuilder
             if (selectedPath != null)
             {
                containerText.setText(selectedPath);
+
             }
          }
       });
@@ -87,21 +93,14 @@ public class FileChooserControlBuilder extends ControlBuilder
    }
 
    @Override
-   public boolean handles(UIInput<?> input)
+   protected Class<?> getProducedType()
    {
-      return true;
+      return File.class;
    }
 
-   private void setInputValue(final UIInput<Object> input, String text)
+   @Override
+   protected InputType getSupportedInputType()
    {
-      Object convertedType = null;
-      if (text != null && !text.isEmpty())
-      {
-         File file = new File(text);
-         Converter<File, ?> converter = getConverterFactory()
-                  .getConverter(File.class, input.getValueType());
-         convertedType = converter.convert(file);
-      }
-      input.setValue(convertedType);
+      return InputTypes.FILE_PICKER;
    }
 }

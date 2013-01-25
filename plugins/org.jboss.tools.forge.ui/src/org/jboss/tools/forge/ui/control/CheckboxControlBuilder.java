@@ -15,6 +15,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.ui.UIInput;
+import org.jboss.forge.ui.hints.InputType;
+import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class CheckboxControlBuilder extends ControlBuilder
@@ -30,16 +32,23 @@ public class CheckboxControlBuilder extends ControlBuilder
          @Override
          public void widgetSelected(SelectionEvent e)
          {
-            input.setValue(((Button) e.widget).getSelection());
+            boolean selection = ((Button) e.widget).getSelection();
+            setInputValue(input, selection);
          }
       });
       return cmb;
    }
 
    @Override
-   public boolean handles(UIInput<?> input)
+   protected Class<?> getProducedType()
    {
-      return (input.getValueType() == Boolean.class);
+      return Boolean.class;
+   }
+
+   @Override
+   protected InputType getSupportedInputType()
+   {
+      return InputTypes.CHECKBOX;
    }
 
 }

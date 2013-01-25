@@ -10,6 +10,7 @@ package org.jboss.tools.forge.ui.wizards;
 
 import java.util.Set;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -17,6 +18,9 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
+import org.jboss.forge.ui.Result;
+import org.jboss.forge.ui.ResultFail;
+import org.jboss.forge.ui.ResultSuccess;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.wizard.UIWizard;
 import org.jboss.forge.ui.wizard.UIWizardEnd;
@@ -36,16 +40,9 @@ public class ForgeWizard extends Wizard implements INewWizard
       setNeedsProgressMonitor(true);
    }
 
-   @Override
-   public void init(IWorkbench workbench, IStructuredSelection selection)
+   protected void initForge()
    {
-      this.selection = selection;
-      lookupServices();
-   }
-
-   private void lookupServices()
-   {
-      AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
+      ForgeService.INSTANCE.getAddonRegistry();
       try
       {
          // TODO: Wait for Forge to init. This shouldn't be necessary
@@ -55,6 +52,19 @@ public class ForgeWizard extends Wizard implements INewWizard
       {
          e.printStackTrace();
       }
+   }
+
+   @Override
+   public void init(IWorkbench workbench, IStructuredSelection selection)
+   {
+      initForge();
+      this.selection = selection;
+      lookupServices();
+   }
+
+   private void lookupServices()
+   {
+      AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
       Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry.getExportedInstances(UICommand.class);
       System.out.println("Available UICommands: " + exportedInstances);
       if (!exportedInstances.isEmpty())
@@ -101,6 +111,24 @@ public class ForgeWizard extends Wizard implements INewWizard
    @Override
    public boolean performFinish()
    {
+      System.out.println("Inputs :" + uiContext.getInputs());
+      try
+      {
+         Result result = uiCommand.execute(uiContext);
+         if (result instanceof ResultSuccess)
+         {
+            MessageDialog.openError(getShell(), "Success !",
+                     result.getMessage() == null ? "Command successfully executed !" : result.getMessage());
+         }
+         else if (result instanceof ResultFail)
+         {
+            MessageDialog.openError(getShell(), "Error", ((ResultFail) result).getMessage());
+         }
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+      }
       return true;
    }
 
