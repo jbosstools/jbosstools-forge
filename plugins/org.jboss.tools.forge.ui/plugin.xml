@@ -53,5 +53,11 @@
             sequence="CTRL+6">
       </key>
    </extension>
+    <extension
+          point="org.eclipse.ui.startup">
+       <startup
+             class="org.jboss.tools.forge.ui.startup.ForgeStarter">
+       </startup>
+    </extension>
 
 </plugin>
