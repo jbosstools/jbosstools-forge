@@ -67,9 +67,13 @@ public abstract class ControlBuilder
    {
       boolean handles = false;
       InputType inputType = getInputType(input);
-      if (inputType == null)
+      if (inputType != null)
       {
-         // Fallback to standard types
+         handles = inputType.equals(getSupportedInputType());
+      }
+      else
+      {
+         // Fallback to standard type
          handles = getProducedType().isAssignableFrom(input.getValueType());
       }
       return handles;
@@ -92,16 +96,17 @@ public abstract class ControlBuilder
       {
          // TODO: Cache Converter ?
          ConverterFactory converterFactory = getConverterFactory();
+         Class<? extends Object> source = value.getClass();
+         Class<Object> target = input.getValueType();
          if (converterFactory != null)
          {
-            Converter converter = converterFactory
-                     .getConverter(value.getClass(), input.getValueType());
+            Converter converter = converterFactory.getConverter(source, target);
             convertedType = converter.convert(value);
          }
          else
          {
-            System.out.println("Converter Factory was not deployed !! Cannot convert from " + value.getClass() + " to "
-                     + input.getValueType());
+            System.out.println("Converter Factory was not deployed !! Cannot convert from " + source + " to "
+                     + target);
          }
       }
       input.setValue(convertedType);
