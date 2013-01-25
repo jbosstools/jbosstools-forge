@@ -16,14 +16,6 @@
             id="org.jboss.tools.forge.ui.wizard.RunCommand"
             name="Run a Forge Command">
       </wizard>
-      <wizard
-            category="org.jboss.tools.forge.ui"
-            class="org.jboss.tools.forge.ui.wizards.mock.ForgeMockWizard"
-            hasPages="true"
-            icon="icons/jbossforge_icon_16px.png"
-            id="org.jboss.tools.forge.ui.wizard.RunCommand"
-            name="Run a Forge Command (Mock)">
-      </wizard>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
