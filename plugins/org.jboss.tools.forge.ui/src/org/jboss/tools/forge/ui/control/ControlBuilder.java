@@ -9,6 +9,7 @@ package org.jboss.tools.forge.ui.control;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.jboss.forge.classloader.ClassLoaderAdapterCallback;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
@@ -100,7 +101,7 @@ public abstract class ControlBuilder {
 								+ source + " to " + target);
 			}
 		}
-		input.setValue(convertedType);
+		input.setValue(ClassLoaderAdapterCallback.unwrap(convertedType));
 	}
 
 }
