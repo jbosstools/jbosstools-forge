@@ -68,7 +68,7 @@ public abstract class ControlBuilder {
 		boolean handles = false;
 		InputType inputType = getInputType(input);
 		if (inputType != null) {
-			handles = inputType.equals(getSupportedInputType());
+			handles = inputType.toString().equals(getSupportedInputType().toString());
 		} else {
 			// Fallback to standard type
 			handles = getProducedType().isAssignableFrom(input.getValueType());
@@ -78,7 +78,8 @@ public abstract class ControlBuilder {
 
 	protected InputType getInputType(UIInput<?> input) {
 		HintsFacet facet = input.getFacet(HintsFacet.class);
-		return facet.getInputType();
+		InputType inputType = facet.getInputType();
+		return inputType;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
