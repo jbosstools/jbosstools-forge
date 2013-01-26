@@ -9,7 +9,6 @@ package org.jboss.tools.forge.ui.control;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.forge.classloader.ClassLoaderAdapterCallback;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.UIInput;
@@ -69,6 +68,7 @@ public abstract class ControlBuilder {
 		boolean handles = false;
 		InputType inputType = getInputType(input);
 		if (inputType != null) {
+			//FIXME: Equals method not working on proxied types
 			handles = inputType.toString().equals(getSupportedInputType().toString());
 		} else {
 			// Fallback to standard type
@@ -101,7 +101,7 @@ public abstract class ControlBuilder {
 								+ source + " to " + target);
 			}
 		}
-		input.setValue(ClassLoaderAdapterCallback.unwrap(convertedType));
+		input.setValue(convertedType);
 	}
 
 }
