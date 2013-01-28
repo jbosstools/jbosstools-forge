@@ -9,6 +9,7 @@ package org.jboss.tools.forge.ui.wizards;
 
 import java.util.List;
 
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -32,7 +33,7 @@ public class ForgeWizardPage extends WizardPage {
 	private UICommand ui;
 	private UIContextImpl uiContext;
 
-	public ForgeWizardPage(ForgeWizard wizard, UICommand command,
+	public ForgeWizardPage(Wizard wizard, UICommand command,
 			UIContextImpl contextImpl) {
 		super("Page Title");
 		setWizard(wizard);

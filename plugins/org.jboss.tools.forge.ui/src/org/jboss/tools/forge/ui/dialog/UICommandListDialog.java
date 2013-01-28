@@ -5,6 +5,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.jface.dialogs.PopupDialog;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -19,6 +20,7 @@ import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.tools.forge.core.ForgeService;
+import org.jboss.tools.forge.ui.wizards.GenericForgeWizard;
 
 public class UICommandListDialog extends PopupDialog {
 
@@ -65,7 +67,10 @@ public class UICommandListDialog extends PopupDialog {
 		list.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				System.out.println("executing " + selectedCommandName);
+				UICommand selectedCommand = allCandidates.get(selectedCommandName);
+				GenericForgeWizard wizard = new GenericForgeWizard(selectedCommand);
+				WizardDialog wizardDialog = new WizardDialog(getParentShell(), wizard);
+				wizardDialog.open();
 			}
 		});
 		return result;
