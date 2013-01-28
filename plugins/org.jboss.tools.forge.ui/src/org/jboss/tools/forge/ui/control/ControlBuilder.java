@@ -11,31 +11,30 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
-import org.jboss.forge.environment.Environment;
 import org.jboss.forge.ui.UIInput;
-import org.jboss.forge.ui.hints.HintsLookup;
+import org.jboss.forge.ui.facets.HintsFacet;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.tools.forge.core.ForgeService;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 /**
  * Builds a control
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public abstract class ControlBuilder {
 
 	/**
 	 * Builds an Eclipse {@link Control} object based on the input
-	 * 
+	 *
 	 * @param page
 	 *            TODO
 	 * @param input
 	 * @param converterRegistry
 	 *            the converter registry to convert the inputed value from the
 	 *            Control to the UIInput
-	 * 
+	 *
 	 * @return
 	 */
 	public abstract Control build(final ForgeWizardPage page,
@@ -43,14 +42,14 @@ public abstract class ControlBuilder {
 
 	/**
 	 * Returns the supported type this control may produce
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract Class<?> getProducedType();
 
 	/**
 	 * Returns the supported input type for this component
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract InputType getSupportedInputType();
@@ -61,7 +60,7 @@ public abstract class ControlBuilder {
 
 	/**
 	 * Tests if this builder may handle this specific input
-	 * 
+	 *
 	 * @param input
 	 * @return
 	 */
@@ -69,7 +68,8 @@ public abstract class ControlBuilder {
 		boolean handles = false;
 		InputType inputType = getInputType(input);
 		if (inputType != null) {
-			handles = inputType.equals(getSupportedInputType());
+			//FIXME: Equals method not working on proxied types
+			handles = inputType.toString().equals(getSupportedInputType().toString());
 		} else {
 			// Fallback to standard type
 			handles = getProducedType().isAssignableFrom(input.getValueType());
@@ -78,10 +78,8 @@ public abstract class ControlBuilder {
 	}
 
 	protected InputType getInputType(UIInput<?> input) {
-		Environment env = ForgeService.INSTANCE.lookup(Environment.class);
-		HintsLookup hintsLookup = new HintsLookup(env);
-		// TODO: Check input metadata if type was re-defined
-		InputType inputType = hintsLookup.getInputType(input.getValueType());
+		HintsFacet facet = input.getFacet(HintsFacet.class);
+		InputType inputType = facet.getInputType();
 		return inputType;
 	}
 
@@ -98,7 +96,7 @@ public abstract class ControlBuilder {
 						target);
 				convertedType = converter.convert(value);
 			} else {
-				System.out
+				System.err
 						.println("Converter Factory was not deployed !! Cannot convert from "
 								+ source + " to " + target);
 			}

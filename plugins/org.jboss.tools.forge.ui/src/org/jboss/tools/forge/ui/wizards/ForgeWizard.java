@@ -88,17 +88,18 @@ public class ForgeWizard extends Wizard implements INewWizard {
 		System.out.println("Inputs :" + uiContext.getInputs());
 		try {
 			Result result = uiCommand.execute(uiContext);
-			if (result instanceof ResultSuccess) {
-				MessageDialog
-						.openError(
-								getShell(),
-								"Success !",
-								result.getMessage() == null ? "Command successfully executed !"
-										: result.getMessage());
-			} else if (result instanceof ResultFail) {
-				MessageDialog.openError(getShell(), "Error",
-						((ResultFail) result).getMessage());
-			}
+			MessageDialog.openInformation(getShell(), "Command result", result.getMessage());
+			//			if (result instanceof ResultSuccess) {
+//				MessageDialog
+//						.openInformation(
+//								getShell(),
+//								"Success !",
+//								result.getMessage() == null ? "Command successfully executed !"
+//										: result.getMessage());
+//			} else if (result instanceof ResultFail) {
+//				MessageDialog.openError(getShell(), "Error",
+//						((ResultFail) result).getMessage());
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
