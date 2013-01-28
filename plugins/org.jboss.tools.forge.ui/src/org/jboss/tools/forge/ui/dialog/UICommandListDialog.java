@@ -1,5 +1,6 @@
 package org.jboss.tools.forge.ui.dialog;
 
+
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -57,6 +58,10 @@ public class UICommandListDialog extends PopupDialog {
 		}
 		list.addSelectionListener(new SelectionAdapter() {
 			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				openWizard();
+			}
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String[] selection = list.getSelection();
 				if (selection.length == 1) {
@@ -67,13 +72,17 @@ public class UICommandListDialog extends PopupDialog {
 		list.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
-				UICommand selectedCommand = allCandidates.get(selectedCommandName);
-				ForgeWizard wizard = new ForgeWizard(selectedCommand);
-				WizardDialog wizardDialog = new WizardDialog(getParentShell(), wizard);
-				wizardDialog.open();
+				openWizard();
 			}
 		});
 		return result;
+	}
+
+	private void openWizard() {
+		UICommand selectedCommand = allCandidates.get(selectedCommandName);
+		ForgeWizard wizard = new ForgeWizard(selectedCommand);
+		WizardDialog wizardDialog = new WizardDialog(getParentShell(), wizard);
+		wizardDialog.open();
 	}
 
 }
