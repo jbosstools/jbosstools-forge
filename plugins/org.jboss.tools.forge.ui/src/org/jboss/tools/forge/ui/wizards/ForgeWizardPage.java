@@ -35,7 +35,7 @@ public class ForgeWizardPage extends WizardPage {
 
 	public ForgeWizardPage(Wizard wizard, UICommand command,
 			UIContextImpl contextImpl) {
-		super("Page Title");
+		super("Page Name");
 		setWizard(wizard);
 		UICommandID id = command.getId();
 		setTitle(id.getName());
@@ -90,10 +90,5 @@ public class ForgeWizardPage extends WizardPage {
 	public void updateStatus(String message) {
 		setErrorMessage(message);
 		setPageComplete(message == null);
-	}
-
-	@Override
-	public ForgeWizard getWizard() {
-		return (ForgeWizard) super.getWizard();
 	}
 }
