@@ -20,7 +20,7 @@ import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.tools.forge.core.ForgeService;
-import org.jboss.tools.forge.ui.wizards.GenericForgeWizard;
+import org.jboss.tools.forge.ui.wizards.ForgeWizard;
 
 public class UICommandListDialog extends PopupDialog {
 
@@ -68,7 +68,7 @@ public class UICommandListDialog extends PopupDialog {
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
 				UICommand selectedCommand = allCandidates.get(selectedCommandName);
-				GenericForgeWizard wizard = new GenericForgeWizard(selectedCommand);
+				ForgeWizard wizard = new ForgeWizard(selectedCommand);
 				WizardDialog wizardDialog = new WizardDialog(getParentShell(), wizard);
 				wizardDialog.open();
 			}

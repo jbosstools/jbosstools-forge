@@ -3,21 +3,6 @@
 <plugin>
 
    <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            name="JBoss Forge"
-            id="org.jboss.tools.forge.ui">
-      </category>
-      <wizard
-            category="org.jboss.tools.forge.ui"
-            class="org.jboss.tools.forge.ui.wizards.ForgeWizard"
-            hasPages="true"
-            icon="icons/jbossforge_icon_16px.png"
-            id="org.jboss.tools.forge.ui.wizard.RunCommand"
-            name="Run a Forge Command">
-      </wizard>
-   </extension>
-   <extension
          point="org.eclipse.ui.commands">
       <category
             id="org.jboss.tools.forge.ui"
