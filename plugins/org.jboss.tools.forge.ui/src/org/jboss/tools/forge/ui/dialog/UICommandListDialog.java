@@ -8,8 +8,6 @@ import java.util.TreeMap;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
@@ -67,12 +65,6 @@ public class UICommandListDialog extends PopupDialog {
 				if (selection.length == 1) {
 					selectedCommandName = selection[0];
 				}
-			}
-		});
-		list.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				openWizard();
 			}
 		});
 		return result;
