@@ -3,6 +3,7 @@ package org.jboss.tools.forge.ui.wizards;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
@@ -51,7 +52,7 @@ public class ForgeWizard extends Wizard {
 		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 		if (window == null) return;
 		IWorkbenchPage page = window.getActivePage();
-		IViewPart view = page.findView("org.eclipse.ui.views.ResourceNavigator");
+		IViewPart view = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
 		if (view == null) return;
 		IViewSite site = view.getViewSite();
 		IActionBars actionBars =  site.getActionBars();
