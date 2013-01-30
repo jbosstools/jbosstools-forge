@@ -36,7 +36,7 @@ public class ForgeWizard extends Wizard {
 			Result result = uiCommand.execute(uiContext);
 			String message = result.getMessage();
 			if (message == null) {
-				message = "Command " + uiCommand.getId().getName() + " is executed.";
+				message = "Command " + uiCommand.getMetadata().getName() + " is executed.";
 			}
 			writeToStatusBar(message);
 			return true;

@@ -42,7 +42,7 @@ public class UICommandListDialog extends PopupDialog {
 				.getExportedInstances(UICommand.class);
 		for (ExportedInstance<UICommand> instance : exportedInstances) {
 			UICommand uiCommand = instance.get();
-			result.put(uiCommand.getId().getName(), uiCommand);
+			result.put(uiCommand.getMetadata().getName(), uiCommand);
 		}
 		return result;
 	}

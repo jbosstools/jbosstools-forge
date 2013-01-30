@@ -16,7 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.ui.UICommand;
-import org.jboss.forge.ui.UICommandID;
+import org.jboss.forge.ui.UICommandMetadata;
 import org.jboss.forge.ui.UIInput;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.context.UIContextImpl;
@@ -25,9 +25,9 @@ import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
 
 /**
  * A Forge Wizard Page
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 public class ForgeWizardPage extends WizardPage {
 	private UICommand ui;
@@ -37,7 +37,7 @@ public class ForgeWizardPage extends WizardPage {
 			UIContextImpl contextImpl) {
 		super("Page Name");
 		setWizard(wizard);
-		UICommandID id = command.getId();
+		UICommandMetadata id = command.getMetadata();
 		setTitle(id.getName());
 		setDescription(id.getDescription());
 		setImageDescriptor(ForgeUIPlugin.getForgeLogo());
