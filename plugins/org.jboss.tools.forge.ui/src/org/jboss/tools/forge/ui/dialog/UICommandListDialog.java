@@ -1,6 +1,5 @@
 package org.jboss.tools.forge.ui.dialog;
 
-
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -30,7 +29,7 @@ public class UICommandListDialog extends PopupDialog {
 		super(window.getShell(), SWT.RESIZE, true,
 				true, // persist size
 				false, // but not location
-				true, true, "Select the command you want Forge to execute",
+				true, true, "Run a Forge command",
 				"Start typing to filter the list");
 		allCandidates = getAllCandidates();
 	}
@@ -47,6 +46,7 @@ public class UICommandListDialog extends PopupDialog {
 		return result;
 	}
 
+	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite result = (Composite) super.createDialogArea(parent);
 		result.setLayout(new FillLayout());
@@ -59,6 +59,7 @@ public class UICommandListDialog extends PopupDialog {
 			public void widgetDefaultSelected(SelectionEvent e) {
 				openWizard();
 			}
+
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				String[] selection = list.getSelection();

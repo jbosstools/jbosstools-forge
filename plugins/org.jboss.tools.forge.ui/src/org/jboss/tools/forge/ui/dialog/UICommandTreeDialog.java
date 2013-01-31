@@ -38,7 +38,7 @@ public class UICommandTreeDialog extends PopupDialog {
 		super(window.getShell(), SWT.RESIZE, true,
 				true, // persist size
 				false, // but not location
-				true, true, "Select the command you want Forge to execute",
+				true, true, "Run a Forge command",
 				"Start typing to filter the list");
 	}
 
@@ -54,6 +54,7 @@ public class UICommandTreeDialog extends PopupDialog {
 		return result;
 	}
 
+	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite result = (Composite) super.createDialogArea(parent);
 		result.setLayout(new FillLayout());
