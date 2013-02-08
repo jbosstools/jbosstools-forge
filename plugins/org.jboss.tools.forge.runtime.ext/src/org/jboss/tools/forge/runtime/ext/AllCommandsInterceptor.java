@@ -60,7 +60,9 @@ public class AllCommandsInterceptor implements CommandInterceptor {
 	}
 
 	private void sendEscaped(String str) {
-		shell.print(ESCAPE + str + ESCAPE); 
+		synchronized(shell) {
+			shell.print(ESCAPE + str + ESCAPE); 
+		}
 	}
 
 	private String encloseWithDoubleQuotesIfNeeded(String str) {

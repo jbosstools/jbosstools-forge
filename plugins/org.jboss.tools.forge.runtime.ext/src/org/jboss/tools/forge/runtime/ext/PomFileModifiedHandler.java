@@ -14,13 +14,16 @@ public class PomFileModifiedHandler {
 	private Shell shell;
 	
 	public void handleResourceChanged(@Observes ResourceEvent event) {
+		if (!EventHandler.isEnabled()) return;
 		if (event.getResource() != null && "pom.xml".equals(event.getResource().getName())) {
 			sendEscaped("POM File Modified: " + event.getResource().getParent().getName()); 
 		}
 	}
 	
 	private void sendEscaped(String str) {
-		shell.print(ESCAPE + str + ESCAPE); 
+		synchronized(shell) {
+			shell.print(ESCAPE + str + ESCAPE); 
+		}
 	}
 
 }

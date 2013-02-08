@@ -7,6 +7,7 @@ public abstract class ForgeHiddenOutputFilter implements ForgeOutputFilter {
 	private StringBuffer hiddenBuffer = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();	
 	private StringBuffer escapeSequence = new StringBuffer(); 
+//	private StringBuffer restBuffer = new StringBuffer();
 	
 	public ForgeHiddenOutputFilter() {}
 	
@@ -14,8 +15,17 @@ public abstract class ForgeHiddenOutputFilter implements ForgeOutputFilter {
 		this.target = target;
 	}
 	
+	protected ForgeOutputListener getTarget() {
+		return target;
+	}
+	
+//	public StringBuffer getRestBuffer() {
+//		return restBuffer;
+//	}
+	
 	@Override
 	public void outputAvailable(String output) {
+//		System.out.println("outputAvailable(" + output + ")");
 		for (int i = 0; i < output.length(); i++) {
 			char c = output.charAt(i);
 			if (c == 27) {
@@ -33,8 +43,11 @@ public abstract class ForgeHiddenOutputFilter implements ForgeOutputFilter {
 			} else if (c == '%') {
 				if (escapeSequence.length() == 1) {
 					if (hidden) {
-						handleFilteredString(hiddenBuffer.toString());
+						String toHandle = hiddenBuffer.toString();
 						hiddenBuffer.setLength(0);
+//						restBuffer.append(output.substring(i + 1));
+						handleFilteredString(toHandle);
+//						return;
 					} else {
 						String out = targetBuffer.toString();
 						targetBuffer.setLength(0);

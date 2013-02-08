@@ -30,13 +30,18 @@ public class MetaCommandAction implements TriggeredAction {
 		return new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					shell.print(ESCAPE);
-					String text = shell.readLine();
-					shell.print(ESCAPE);
-					handleHiddenCommand(text);
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				synchronized(shell) {
+					EventHandler.setEnabled(false);
+					try {
+						shell.print(ESCAPE);
+						String text = shell.readLine();
+						shell.print(ESCAPE);
+						handleHiddenCommand(text);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} finally {
+						EventHandler.setEnabled(true);
+					}
 				}
 			}
 		};
@@ -56,12 +61,12 @@ public class MetaCommandAction implements TriggeredAction {
 	
 	private void executeCommand(String text) throws Exception {
 		try {
-			eventHandler.setEnabled(false);
+//			eventHandler.setEnabled(false);
 			shell.print(ESCAPE + "RESULT: ");
 			shell.execute(text);
 			shell.print(ESCAPE);
 		} finally {
-			eventHandler.setEnabled(true);
+//			eventHandler.setEnabled(true);
 		}
 	}
 	

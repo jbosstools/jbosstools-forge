@@ -57,6 +57,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 					if (outputStreamMonitor != null) {
 						outputStreamMonitor.addListener(startupListener);
 						outputStreamMonitor.addListener(masterStreamListener);
+						outputStreamMonitor.addListener(commandResultListener);
 					}
 					IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
 					if (errorStreamMonitor != null) {
@@ -92,30 +93,34 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		}
 	}
 	
+	private boolean commandResultAvailable = false;
+	private String commandResult = null;
+	private Object infoMutex = new Object();
+	
 	public String sendCommand(String str) {
 		String result = null;
 		if (process != null && !process.isTerminated()) {
 			IStreamsProxy streamsProxy = getStreamsProxy();
 			if (streamsProxy != null) {
+				IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
+				errorStreamMonitor.removeListener(masterStreamListener);
 				IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
 				if (streamMonitor != null) {
-					streamMonitor.removeListener(masterStreamListener);
-					streamMonitor.addListener(commandResultListener);
-					try {
-						streamsProxy.write(new Character((char)31).toString() + str + '\n');
-					} catch (IOException e) {
-						ForgeCorePlugin.log(e);
-					}
-					try {
-						int count = 0; // give up after 5 seconds
-						while (commandResultListener.result == null && count++ < 50) {
-							Thread.sleep(100);
+					synchronized(infoMutex) {
+						try {
+							streamsProxy.write(new Character((char)31).toString() + str + '\n');
+						} catch (IOException e) {
+							ForgeCorePlugin.log(e);
 						}
-					} catch (InterruptedException e) {}
-					result = commandResultListener.result == null ? "" : commandResultListener.result;
-					commandResultListener.result = null;
-					streamMonitor.removeListener(commandResultListener);
-					streamMonitor.addListener(masterStreamListener);
+						while (!commandResultAvailable) {
+							try {
+								infoMutex.wait();
+							} catch (InterruptedException e) {}
+						}
+					}
+					result = commandResult;
+					commandResult = null;
+					commandResultAvailable = false;
 				}
 			}
 		}
@@ -216,15 +221,18 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	}
 	
 	private class CommandResultListener extends ForgeHiddenOutputFilter implements IStreamListener {
-		String result = null;
 		@Override
-		public void streamAppended(String text, IStreamMonitor monitor) {
+		public void streamAppended(String text, IStreamMonitor monitor) {		
 			outputAvailable(text);
 		}
 		@Override
 		public void handleFilteredString(String str) {
 			if (str.startsWith("RESULT: ")) {
-				result = str.substring(8);
+				commandResult = str.substring(8);
+				commandResultAvailable = true;
+				synchronized (infoMutex) {
+					infoMutex.notifyAll();
+				}
 			}
 		}
 	}

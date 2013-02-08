@@ -13,6 +13,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class ScaffoldWizardPage extends WizardPage {
+	
+	private IProject targetProject;
 
 	protected ScaffoldWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.scaffold", "Scaffold JPA Entities", null);
@@ -39,7 +41,8 @@ public class ScaffoldWizardPage extends WizardPage {
 			public void widgetSelected(SelectionEvent arg0) {
 				JPAProjectSelectionDialog dialog = new JPAProjectSelectionDialog(getShell());
 				if (dialog.open() != SWT.CANCEL) {
-					projectNameText.setText(((IProject)dialog.getResult()[0]).getName());
+					targetProject = (IProject)dialog.getResult()[0];
+					projectNameText.setText(targetProject.getName());
 				}
 			}			
 			@Override
@@ -47,10 +50,20 @@ public class ScaffoldWizardPage extends WizardPage {
 				widgetSelected(e);
 			}
 		});
+		Label generationModeLabel = new Label(parent, SWT.NONE);
+		generationModeLabel.setText("Generation Mode: ");
+		Button useExistingButton = new Button(parent, SWT.RADIO);
+		useExistingButton.setText("Use existing entities");
+		Label filler1 = new Label(parent, SWT.NONE);
+		filler1.setText("");
+		Label filler2 = new Label(parent, SWT.NONE);
+		filler2.setText("");
+		Button reverseEngineerButton = new Button(parent, SWT.RADIO);
+		reverseEngineerButton.setText("Reverse engineer from database");
 	}
 	
-	public void test() {
-		
+	public IProject getTargetProject() {
+		return targetProject;
 	}
-
+	
 }

@@ -15,10 +15,10 @@ public class EventHandler {
 	@Inject
 	private Shell shell;
 	
-	private boolean enabled = true;
+	private static boolean ENABLED = true;
 	
 	public void handleCommandExecuted(@Observes CommandExecuted event) {
-		if (!enabled) return;
+		if (!ENABLED) return;
 		Resource<?> currentResource = shell.getCurrentResource();
 		String currentResourceName = currentResource.getFullyQualifiedName();
 		String currentResourceType = currentResource.getClass().getSimpleName();
@@ -37,8 +37,12 @@ public class EventHandler {
 				" PAR: " + parameterString);
 	}
 	
-	public void setEnabled(boolean b) {
-		this.enabled = b;
+	public static void setEnabled(boolean b) {
+		ENABLED = b;
+	}
+	
+	public static boolean isEnabled() {
+		return ENABLED;
 	}
 	
 	
@@ -60,7 +64,9 @@ public class EventHandler {
 	}
 	
 	private void sendEscaped(String str) {
-		shell.print(ESCAPE + str + ESCAPE); 
+		synchronized(shell) {
+			shell.print(ESCAPE + str + ESCAPE); 
+		}
 	}
 
 }
