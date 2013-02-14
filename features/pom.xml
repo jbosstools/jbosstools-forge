@@ -14,7 +14,9 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.jboss.tools.forge.feature</module>
+		<module>org.jboss.tools.forge.ext.feature</module>
 		<module>org.jboss.tools.forge.test.feature</module>
+		<module>org.jboss.tools.forge.ext.test.feature</module>
 	</modules>
 </project>
 	
