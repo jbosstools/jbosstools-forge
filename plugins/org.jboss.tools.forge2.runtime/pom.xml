@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
@@ -10,152 +8,11 @@
       <version>1.2.0-SNAPSHOT</version>
    </parent>
    <groupId>org.jboss.tools.forge.plugins</groupId>
-   <artifactId>org.jboss.tools.forge.runtime</artifactId>
-   <packaging>bundle</packaging>
-
-   <properties>
-      <forge.version>2.0.0-SNAPSHOT</forge.version>
-      <javassist.version>3.15.0-GA</javassist.version>
-      <osgi-version-qualifier>${maven.build.timestamp}</osgi-version-qualifier>
-   </properties>
-
-   <dependencies>
-      <dependency>
-         <groupId>org.javassist</groupId>
-         <artifactId>javassist</artifactId>
-         <version>${javassist.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>forge-addon-container-api</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>forge-proxy</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>forge-se</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>ui-api</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>convert-api</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>facets-api</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>resources-api</artifactId>
-         <version>${forge.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.forge</groupId>
-         <artifactId>ui-hints</artifactId>
-         <version>${forge.version}</version>
-         <classifier>forge-addon</classifier>
-      </dependency>
-   </dependencies>
-
-   <build>
-      <pluginManagement>
-         <plugins>
-            <plugin>
-               <groupId>org.apache.felix</groupId>
-               <artifactId>maven-bundle-plugin</artifactId>
-               <version>2.3.7</version>
-               <extensions>true</extensions>
-               <configuration>
-                  <manifestLocation>META-INF</manifestLocation>
-                  <instructions>
-                     <Embed-Transitive>true</Embed-Transitive>
-                     <_failok>true</_failok>
-                     <_nouses>true</_nouses>
-                     <_nodefaultversion>true</_nodefaultversion>
-                     <_snapshot>${osgi-version-qualifier}</_snapshot>
-                     <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
-                     <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
-                     <Bundle-Name>%BundleName</Bundle-Name>
-                     <Bundle-Vendor>%BundleProvider</Bundle-Vendor>
-                     <Bundle-ClassPath>{maven-dependencies}</Bundle-ClassPath>
-                  </instructions>
-               </configuration>
-            </plugin>
-         </plugins>
-      </pluginManagement>
-
-      <plugins>
-         <plugin>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>maven-bundle-plugin</artifactId>
-            <extensions>true</extensions>
-            <configuration>
-               <instructions>
-                  <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
-                  <_exportcontents>
-                     org.jboss.forge.*,
-                     bootpath
-                  </_exportcontents>
-                  <Import-Package>!*</Import-Package>
-               </instructions>
-            </configuration>
-         </plugin>
-      </plugins>
-   </build>
-
-   <profiles>
-      <profile>
-         <activation>
-            <property>
-               <name>m2e.version</name>
-            </property>
-         </activation>
-         <properties>
-            <osgi-version-qualifier>qualifier</osgi-version-qualifier>
-         </properties>
-         <build>
-            <pluginManagement>
-               <plugins>
-                  <plugin>
-                     <groupId>org.apache.felix</groupId>
-                     <artifactId>maven-bundle-plugin</artifactId>
-                     <configuration>
-                         PDE does not honour custom manifest location 
-                        <manifestLocation>META-INF</manifestLocation>
-                     </configuration>
-                  </plugin>
-               </plugins>
-            </pluginManagement>
-         </build>
-      </profile>
-   </profiles>
-</project> -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <parent>
-      <groupId>org.jboss.tools.forge</groupId>
-      <artifactId>plugins</artifactId>
-      <version>2.0.0-SNAPSHOT</version>
-   </parent>
-   <groupId>org.jboss.tools.forge.plugins</groupId>
    <artifactId>org.jboss.tools.forge2.runtime</artifactId>
 
    <packaging>eclipse-plugin</packaging>
    <properties>
-      <version.forge>1.2.0-SNAPSHOT</version.forge>
+      <version.forge>2.0.0-SNAPSHOT</version.forge>
    </properties>
    <build>
       <plugins>
