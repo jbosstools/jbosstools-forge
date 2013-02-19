@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UICommandMetadata;
-import org.jboss.forge.ui.UIInputComponent;
+import org.jboss.forge.ui.input.UIInputComponent;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.context.UIBuilderImpl;
 import org.jboss.tools.forge.ui.context.UIContextImpl;

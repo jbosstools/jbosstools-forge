@@ -10,9 +10,9 @@ package org.jboss.tools.forge.ui.context;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.forge.ui.UIContext;
-import org.jboss.forge.ui.UIInputComponent;
-import org.jboss.forge.ui.UIValidationContext;
+import org.jboss.forge.ui.context.UIContext;
+import org.jboss.forge.ui.context.UIValidationContext;
+import org.jboss.forge.ui.input.UIInputComponent;
 
 public class UIValidationContextImpl implements UIValidationContext {
 	private List<String> errors = new ArrayList<String>();

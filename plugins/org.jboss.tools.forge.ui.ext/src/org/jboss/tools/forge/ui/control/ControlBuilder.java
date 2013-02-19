@@ -15,34 +15,34 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
-import org.jboss.forge.ui.UIInput;
-import org.jboss.forge.ui.UIInputComponent;
-import org.jboss.forge.ui.UISelectMany;
-import org.jboss.forge.ui.UISelectOne;
 import org.jboss.forge.ui.facets.HintsFacet;
 import org.jboss.forge.ui.hints.InputType;
+import org.jboss.forge.ui.input.UIInput;
+import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.UISelectMany;
+import org.jboss.forge.ui.input.UISelectOne;
 import org.jboss.tools.forge.core.ForgeService;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 /**
  * Builds a control
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class ControlBuilder {
 
 	/**
 	 * Builds an Eclipse {@link Control} object based on the input
-	 * 
+	 *
 	 * @param page
 	 *            TODO
 	 * @param input
 	 * @param converterRegistry
 	 *            the converter registry to convert the inputed value from the
 	 *            Control to the UIInput
-	 * 
+	 *
 	 * @return
 	 */
 	public abstract Control build(final ForgeWizardPage page,
@@ -50,21 +50,21 @@ public abstract class ControlBuilder {
 
 	/**
 	 * Returns the supported type this control may produce
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract Class<?> getProducedType();
 
 	/**
 	 * Returns the supported input type for this component
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract InputType getSupportedInputType();
 
 	/**
 	 * Tests if this builder may handle this specific input
-	 * 
+	 *
 	 * @param input
 	 * @return
 	 */
@@ -206,7 +206,7 @@ public abstract class ControlBuilder {
 
 	/**
 	 * Utility method
-	 * 
+	 *
 	 * @return the converter factory or null if not found
 	 */
 	protected ConverterFactory getConverterFactory() {

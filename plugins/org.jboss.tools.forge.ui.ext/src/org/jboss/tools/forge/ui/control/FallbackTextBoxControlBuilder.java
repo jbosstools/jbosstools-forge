@@ -7,7 +7,8 @@
 
 package org.jboss.tools.forge.ui.control;
 
-import org.jboss.forge.ui.UIInputComponent;
+import org.jboss.forge.ui.input.UIInputComponent;
+
 
 /**
  * This component only renders any undefined input as a textbox.

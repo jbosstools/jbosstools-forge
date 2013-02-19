@@ -26,10 +26,10 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
-import org.jboss.forge.ui.UIInput;
-import org.jboss.forge.ui.UIInputComponent;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
+import org.jboss.forge.ui.input.UIInput;
+import org.jboss.forge.ui.input.UIInputComponent;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class FileChooserControlBuilder extends ControlBuilder {

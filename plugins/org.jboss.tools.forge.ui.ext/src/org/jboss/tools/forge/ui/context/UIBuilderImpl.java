@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.forge.ui.UIBuilder;
-import org.jboss.forge.ui.UIContext;
-import org.jboss.forge.ui.UIInputComponent;
+import org.jboss.forge.ui.context.UIContext;
+import org.jboss.forge.ui.input.UIInputComponent;
 
 public class UIBuilderImpl implements UIBuilder {
 	private List<UIInputComponent<?, ?>> inputs = new ArrayList<UIInputComponent<?, ?>>();

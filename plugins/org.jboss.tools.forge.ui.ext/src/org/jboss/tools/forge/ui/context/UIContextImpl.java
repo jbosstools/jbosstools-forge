@@ -7,7 +7,8 @@
 
 package org.jboss.tools.forge.ui.context;
 
-import org.jboss.forge.ui.UIContext;
+import org.jboss.forge.ui.context.UIContext;
+
 
 public class UIContextImpl implements UIContext {
 	private UISelectionImpl<?> currentSelection;
