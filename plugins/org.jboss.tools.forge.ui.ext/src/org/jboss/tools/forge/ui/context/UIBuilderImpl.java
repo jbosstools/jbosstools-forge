@@ -11,29 +11,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jboss.forge.ui.UIBuilder;
-import org.jboss.forge.ui.UIContext;
-import org.jboss.forge.ui.UIInputComponent;
+import org.jboss.forge.ui.context.UIContext;
+import org.jboss.forge.ui.input.UIInputComponent;
 
 public class UIBuilderImpl implements UIBuilder {
-	private List<UIInputComponent<?, ?>> inputs = new ArrayList<UIInputComponent<?, ?>>();
-	private UIContext context;
+    private List<UIInputComponent<?, ?>> inputs = new ArrayList<UIInputComponent<?, ?>>();
+    private UIContext context;
 
-	public UIBuilderImpl(UIContext context) {
-		this.context = context;
-	}
+    public UIBuilderImpl(UIContext context) {
+        this.context = context;
+    }
 
-	@Override
-	public UIBuilder add(UIInputComponent<?, ?> input) {
-		inputs.add(input);
-		return this;
-	}
+    @Override
+    public UIBuilder add(UIInputComponent<?, ?> input) {
+        inputs.add(input);
+        return this;
+    }
 
-	public List<UIInputComponent<?, ?>> getInputs() {
-		return inputs;
-	}
+    public List<UIInputComponent<?, ?>> getInputs() {
+        return inputs;
+    }
 
-	@Override
-	public UIContext getUIContext() {
-		return context;
-	}
+    @Override
+    public UIContext getUIContext() {
+        return context;
+    }
 }

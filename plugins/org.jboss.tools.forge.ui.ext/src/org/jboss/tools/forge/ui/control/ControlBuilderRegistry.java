@@ -7,7 +7,7 @@
 
 package org.jboss.tools.forge.ui.control;
 
-import org.jboss.forge.ui.UIInputComponent;
+import org.jboss.forge.ui.input.UIInputComponent;
 
 /**
  * A factory for {@link ControlBuilder} instances.
@@ -16,25 +16,18 @@ import org.jboss.forge.ui.UIInputComponent;
  * 
  */
 public enum ControlBuilderRegistry {
-	INSTANCE;
+    INSTANCE;
 
-	private ControlBuilder[] controlBuilders = { 
-			new CheckboxControlBuilder(),
-			new EnumComboControlBuilder(), 
-			new FileChooserControlBuilder(),
-			new CheckboxTableControlBuilder(),
-			new TextBoxControlBuilder(), 
-			new FallbackTextBoxControlBuilder() 
-			};
+    private ControlBuilder[] controlBuilders = { new CheckboxControlBuilder(), new EnumComboControlBuilder(),
+        new FileChooserControlBuilder(), new CheckboxTableControlBuilder(), new TextBoxControlBuilder(),
+        new FallbackTextBoxControlBuilder() };
 
-	public ControlBuilder getBuilderFor(UIInputComponent<?, ?> input) {
-		for (ControlBuilder builder : controlBuilders) {
-			if (builder.handles(input)) {
-				return builder;
-			}
-		}
-		throw new IllegalArgumentException(
-				"No UI component found for input type of "
-						+ input.getValueType());
-	}
+    public ControlBuilder getBuilderFor(UIInputComponent<?, ?> input) {
+        for (ControlBuilder builder : controlBuilders) {
+            if (builder.handles(input)) {
+                return builder;
+            }
+        }
+        throw new IllegalArgumentException("No UI component found for input type of " + input.getValueType());
+    }
 }
