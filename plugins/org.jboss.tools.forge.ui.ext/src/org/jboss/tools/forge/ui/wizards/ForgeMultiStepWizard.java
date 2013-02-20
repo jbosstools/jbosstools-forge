@@ -1,5 +1,7 @@
 package org.jboss.tools.forge.ui.wizards;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.jboss.forge.ui.UICommand;
@@ -48,8 +50,15 @@ public class ForgeMultiStepWizard extends ForgeWizard
          // already ?)
          ForgeWizardPage nextPage = (ForgeWizardPage) super
                   .getNextPage(page);
-         if (nextPage == null)
+         if (nextPage == null || !nextPage.getUICommand().getClass().equals(successor))
          {
+            if (nextPage != null)
+            {
+               List<ForgeWizardPage> pageList = getPageList();
+               int idx = pageList.indexOf(nextPage);
+               // Clean the old pages
+               pageList.subList(idx, pageList.size()).clear();
+            }
             UICommand nextStep = ForgeService.INSTANCE.lookup(successor);
             nextPage = new ForgeWizardPage(this, nextStep, getUiContext());
             addPage(nextPage);
