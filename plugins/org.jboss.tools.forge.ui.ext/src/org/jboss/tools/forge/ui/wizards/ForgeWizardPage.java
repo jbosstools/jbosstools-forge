@@ -112,11 +112,13 @@ public class ForgeWizardPage extends WizardPage {
         setErrorMessage(null);
 
         // Validate required
-        for (UIInputComponent<?, ?> input : uiBuilder.getInputs()) {
-            String requiredMsg = Inputs.validateRequired(input);
-            if (requiredMsg != null) {
-                setErrorMessage(requiredMsg);
-                return false;
+        if (uiBuilder != null) {
+            for (UIInputComponent<?, ?> input : uiBuilder.getInputs()) {
+                String requiredMsg = Inputs.validateRequired(input);
+                if (requiredMsg != null) {
+                    setErrorMessage(requiredMsg);
+                    return false;
+                }
             }
         }
 
