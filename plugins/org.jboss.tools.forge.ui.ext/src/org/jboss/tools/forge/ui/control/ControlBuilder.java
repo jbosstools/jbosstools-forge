@@ -9,6 +9,7 @@ package org.jboss.tools.forge.ui.control;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.jboss.forge.proxy.Proxies;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.input.UIInputComponent;
 import org.jboss.tools.forge.ui.Inputs;
@@ -70,8 +71,7 @@ public abstract class ControlBuilder {
 
         if (handles) {
             if (inputTypeHint != null) {
-                // FIXME: Equals method not working on proxied types
-                handles = inputTypeHint.toString().equals(getSupportedInputType().toString());
+                handles = Proxies.areEquivalent(inputTypeHint, getSupportedInputType());
             } else {
                 // Fallback to standard type
                 handles = getProducedType().isAssignableFrom(input.getValueType());
@@ -82,6 +82,5 @@ public abstract class ControlBuilder {
     }
 
     protected abstract Iterable<Class<?>> getSupportedInputComponentTypes();
-
 
 }

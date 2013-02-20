@@ -148,10 +148,8 @@ public class ForgeWizard extends MutableWizard {
         }
     }
 
-    // XXX: This method is not working correctly. It ALWAYS returns false. Fix Proxy issue
     private boolean isNextPageAssignableFrom(ForgeWizardPage nextPage, Class<? extends UICommand> successor) {
-        return nextPage.getUICommand().toString().contains(successor.getName());
-//        return successor.isInstance(nextPage.getUICommand());
+        return Proxies.isInstance(successor, nextPage.getUICommand());
     }
 
     @Override
