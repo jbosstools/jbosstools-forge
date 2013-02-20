@@ -83,6 +83,8 @@ public class UICommandListDialog extends PopupDialog {
         UICommand selectedCommand = allCandidates.get(selectedCommandName);
         ForgeWizard wizard = new ForgeWizard(selectedCommand, currentSelection);
         WizardDialog wizardDialog = new WizardDialog(getParentShell(), wizard);
+        // TODO: Show help button when it's possible to display the docs for each UICommand
+        wizardDialog.setHelpAvailable(false);
         wizardDialog.open();
     }
 

@@ -28,9 +28,9 @@ import org.jboss.tools.forge.ui.wizards.ForgeWizard;
 
 /**
  * Creates a tree
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public class UICommandTreeDialog extends PopupDialog {
 
@@ -133,6 +133,8 @@ public class UICommandTreeDialog extends PopupDialog {
     private void openWizard(UICommand selectedCommand) {
         ForgeWizard wizard = new ForgeWizard(selectedCommand, null);
         WizardDialog wizardDialog = new WizardDialog(getParentShell(), wizard);
+        // TODO: Show help button when it's possible to display the docs for each UICommand
+        wizardDialog.setHelpAvailable(false);
         wizardDialog.open();
     }
 
