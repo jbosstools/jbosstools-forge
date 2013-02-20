@@ -25,73 +25,68 @@ import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
 
 /**
  * A Forge Wizard Page
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 public class ForgeWizardPage extends WizardPage {
-	private UICommand ui;
-	private UIContextImpl uiContext;
+    private UICommand ui;
+    private UIContextImpl uiContext;
 
-	public ForgeWizardPage(Wizard wizard, UICommand command,
-			UIContextImpl contextImpl) {
-		super("Page Name");
-		setWizard(wizard);
-		UICommandMetadata id = command.getMetadata();
-		setTitle(id.getName());
-		setDescription(id.getDescription());
-		setImageDescriptor(ForgeUIPlugin.getForgeLogo());
-		this.ui = command;
-		this.uiContext = contextImpl;
-	}
+    public ForgeWizardPage(Wizard wizard, UICommand command, UIContextImpl contextImpl) {
+        super("Page Name");
+        setWizard(wizard);
+        UICommandMetadata id = command.getMetadata();
+        setTitle(id.getName());
+        setDescription(id.getDescription());
+        setImageDescriptor(ForgeUIPlugin.getForgeLogo());
+        this.ui = command;
+        this.uiContext = contextImpl;
+    }
 
-	@Override
-	public void createControl(Composite parent) {
-		UIBuilderImpl builder = new UIBuilderImpl(uiContext);
-		try {
-			ui.initializeUI(builder);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    @Override
+    public void createControl(Composite parent) {
+        UIBuilderImpl builder = new UIBuilderImpl(uiContext);
+        try {
+            ui.initializeUI(builder);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		List<UIInputComponent<?, ?>> inputs = builder.getInputs();
+        List<UIInputComponent<?, ?>> inputs = builder.getInputs();
 
-		createControls(parent, inputs);
-	}
+        createControls(parent, inputs);
+    }
 
-	@SuppressWarnings("unchecked")
-	protected void createControls(Composite parent,
-			List<UIInputComponent<?, ?>> inputs) {
-		Composite container = new Composite(parent, SWT.NULL);
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		layout.numColumns = 2;
-		layout.verticalSpacing = 9;
+    @SuppressWarnings("unchecked")
+    protected void createControls(Composite parent, List<UIInputComponent<?, ?>> inputs) {
+        Composite container = new Composite(parent, SWT.NULL);
+        GridLayout layout = new GridLayout();
+        container.setLayout(layout);
+        layout.numColumns = 2;
+        layout.verticalSpacing = 9;
 
-		for (final UIInputComponent<?, ?> input : inputs) {
-			// Create the label
-			Label label = new Label(container, SWT.NULL);
-			label.setText(input.getLabel() == null ? input.getName() : input
-					.getLabel());
-			ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE
-					.getBuilderFor(input);
-			controlBuilder.build(this, (UIInputComponent<?, Object>) input,
-					container);
-		}
-		setControl(container);
-	}
+        for (final UIInputComponent<?, ?> input : inputs) {
+            // Create the label
+            Label label = new Label(container, SWT.NULL);
+            label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+            ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE.getBuilderFor(input);
+            controlBuilder.build(this, (UIInputComponent<?, Object>) input, container);
+        }
+        setControl(container);
+    }
 
-	public UIContextImpl getUIContext() {
-		return uiContext;
-	}
+    public UIContextImpl getUIContext() {
+        return uiContext;
+    }
 
-	public UICommand getUICommand() {
-		return ui;
-	}
+    public UICommand getUICommand() {
+        return ui;
+    }
 
-	public void updateStatus(String message) {
-		setErrorMessage(message);
-		setPageComplete(message == null);
-	}
+    public void updateStatus(String message) {
+        setErrorMessage(message);
+        setPageComplete(message == null);
+    }
 }

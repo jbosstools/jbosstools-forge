@@ -34,87 +34,83 @@ import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class FileChooserControlBuilder extends ControlBuilder {
 
-	@Override
-	public Control build(final ForgeWizardPage page,
-			final UIInputComponent<?, Object> input, final Composite parent) {
-		Composite container = new Composite(parent, SWT.NULL);
-		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    @Override
+    public Control build(final ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite parent) {
+        Composite container = new Composite(parent, SWT.NULL);
+        container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		layout.numColumns = 2;
-		layout.verticalSpacing = 9;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
+        GridLayout layout = new GridLayout();
+        container.setLayout(layout);
+        layout.numColumns = 2;
+        layout.verticalSpacing = 9;
+        layout.marginWidth = 0;
+        layout.marginHeight = 0;
 
-		final Text containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		containerText.setLayoutData(gd);
+        final Text containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
+        GridData gd = new GridData(GridData.FILL_HORIZONTAL);
+        containerText.setLayoutData(gd);
 
-		// Set Default Value
-		ConverterFactory converterFactory = getConverterFactory();
-		if (converterFactory != null) {
-			Converter<Object, String> converter = converterFactory
-					.getConverter(input.getValueType(), String.class);
-			String value = converter.convert(getValueFor(input));
-			containerText.setText(value == null ? "" : value);
-		}
+        // Set Default Value
+        ConverterFactory converterFactory = getConverterFactory();
+        if (converterFactory != null) {
+            Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
+            String value = converter.convert(getValueFor(input));
+            containerText.setText(value == null ? "" : value);
+        }
 
-		containerText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				String text = containerText.getText();
-				if (text != null) {
-					File file = new File(text);
-					setValueFor(input, file);
-				}
-			}
-		});
+        containerText.addModifyListener(new ModifyListener() {
+            @Override
+            public void modifyText(ModifyEvent e) {
+                String text = containerText.getText();
+                if (text != null) {
+                    File file = new File(text);
+                    setValueFor(input, file);
+                }
+            }
+        });
 
-		Button button = new Button(container, SWT.PUSH);
-		button.setText("Browse...");
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				// TODO: Check if it is a Directory or a file selection
-				boolean directory = true;
-				String selectedPath;
-				if (directory) {
-					DirectoryDialog dialog = new DirectoryDialog(page
-							.getShell(), SWT.OPEN);
-					dialog.setText("Select a directory");
-					dialog.setFilterPath(containerText.getText());
-					selectedPath = dialog.open();
-				} else {
-					FileDialog dialog = new FileDialog(page.getShell(),
-							SWT.OPEN);
-					dialog.setText("Select a file");
-					dialog.setFileName(containerText.getText());
-					selectedPath = dialog.open();
-				}
-				if (selectedPath != null) {
-					containerText.setText(selectedPath);
+        Button button = new Button(container, SWT.PUSH);
+        button.setText("Browse...");
+        button.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                // TODO: Check if it is a Directory or a file selection
+                boolean directory = true;
+                String selectedPath;
+                if (directory) {
+                    DirectoryDialog dialog = new DirectoryDialog(page.getShell(), SWT.OPEN);
+                    dialog.setText("Select a directory");
+                    dialog.setFilterPath(containerText.getText());
+                    selectedPath = dialog.open();
+                } else {
+                    FileDialog dialog = new FileDialog(page.getShell(), SWT.OPEN);
+                    dialog.setText("Select a file");
+                    dialog.setFileName(containerText.getText());
+                    selectedPath = dialog.open();
+                }
+                if (selectedPath != null) {
+                    containerText.setText(selectedPath);
 
-				}
-			}
-		});
-		return containerText;
-	}
+                }
+            }
+        });
+        return containerText;
+    }
 
-	@Override
-	protected Class<File> getProducedType() {
-		return File.class;
-	}
+    @Override
+    protected Class<File> getProducedType() {
+        return File.class;
+    }
 
-	@Override
-	protected InputType getSupportedInputType() {
-		return InputTypes.FILE_PICKER;
-	}
+    @Override
+    protected InputType getSupportedInputType() {
+        return InputTypes.FILE_PICKER;
+    }
 
-	@Override
-	protected Iterable<Class<?>> getSupportedInputComponentTypes() {
-		List<Class<?>> result = new ArrayList<Class<?>>();
-		result.add(UIInput.class);
-		return result;
-	}
+    @Override
+    protected Iterable<Class<?>> getSupportedInputComponentTypes() {
+        List<Class<?>> result = new ArrayList<Class<?>>();
+        result.add(UIInput.class);
+        return result;
+    }
 }

@@ -27,43 +27,41 @@ import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class TextBoxControlBuilder extends ControlBuilder {
 
-	@Override
-	public Control build(ForgeWizardPage page,
-			final UIInputComponent<?, Object> input, final Composite container) {
-		final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
-		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		// Set Default Value
-		ConverterFactory converterFactory = getConverterFactory();
-		if (converterFactory != null) {
-			Converter<Object, String> converter = converterFactory
-					.getConverter(input.getValueType(), String.class);
-			String value = converter.convert(getValueFor(input));
-			txt.setText(value == null ? "" : value);
-		}
+    @Override
+    public Control build(ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite container) {
+        final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
+        txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        // Set Default Value
+        ConverterFactory converterFactory = getConverterFactory();
+        if (converterFactory != null) {
+            Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
+            String value = converter.convert(getValueFor(input));
+            txt.setText(value == null ? "" : value);
+        }
 
-		txt.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				setValueFor(input, txt.getText());
-			}
-		});
-		return txt;
-	}
+        txt.addModifyListener(new ModifyListener() {
+            @Override
+            public void modifyText(ModifyEvent e) {
+                setValueFor(input, txt.getText());
+            }
+        });
+        return txt;
+    }
 
-	@Override
-	protected Class<String> getProducedType() {
-		return String.class;
-	}
+    @Override
+    protected Class<String> getProducedType() {
+        return String.class;
+    }
 
-	@Override
-	protected InputType getSupportedInputType() {
-		return InputTypes.TEXTBOX;
-	}
+    @Override
+    protected InputType getSupportedInputType() {
+        return InputTypes.TEXTBOX;
+    }
 
-	@Override
-	protected Iterable<Class<?>> getSupportedInputComponentTypes() {
-		List<Class<?>> result = new ArrayList<Class<?>>();
-		result.add(UIInput.class);
-		return result;
-	}
+    @Override
+    protected Iterable<Class<?>> getSupportedInputComponentTypes() {
+        List<Class<?>> result = new ArrayList<Class<?>>();
+        result.add(UIInput.class);
+        return result;
+    }
 }

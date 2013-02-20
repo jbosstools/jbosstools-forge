@@ -5,10 +5,10 @@ import org.jboss.tools.forge.core.ForgeCorePlugin;
 
 public class ForgeStarter implements IStartup {
 
-	@Override
-	public void earlyStartup() {
-		// reference the plugin class to start the Forge 2 runtime
-		ForgeCorePlugin.getDefault();
-	}
+    @Override
+    public void earlyStartup() {
+        // reference the plugin class to start the Forge 2 runtime
+        ForgeCorePlugin.getDefault();
+    }
 
 }

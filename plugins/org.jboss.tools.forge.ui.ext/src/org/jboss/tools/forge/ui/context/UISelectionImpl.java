@@ -16,26 +16,26 @@ import org.jboss.forge.ui.input.UISelection;
 
 public class UISelectionImpl<T> implements UISelection<T> {
 
-	private final List<T> selection;
+    private final List<T> selection;
 
-	public UISelectionImpl(List<T> selection) {
-		Assert.notNull(selection, "Selection must not be null.");
-		Assert.isTrue(!selection.isEmpty(), "Selection must not be empty.");
-		this.selection = Collections.unmodifiableList(selection);
-	}
+    public UISelectionImpl(List<T> selection) {
+        Assert.notNull(selection, "Selection must not be null.");
+        Assert.isTrue(!selection.isEmpty(), "Selection must not be empty.");
+        this.selection = Collections.unmodifiableList(selection);
+    }
 
-	@Override
-	public T get() {
-		return selection.get(0);
-	}
+    @Override
+    public T get() {
+        return selection.get(0);
+    }
 
-	@Override
-	public Iterator<T> iterator() {
-		return selection.iterator();
-	}
+    @Override
+    public Iterator<T> iterator() {
+        return selection.iterator();
+    }
 
-	@Override
-	public int size() {
-		return selection.size();
-	}
+    @Override
+    public int size() {
+        return selection.size();
+    }
 }
