@@ -8,6 +8,7 @@
 	</parent>
 	<groupId>org.jboss.tools.forge.tests</groupId>
 	<artifactId>org.jboss.tools.forge.core.ext.test</artifactId> 
+	<version>1.0.0-SNAPSHOT</version>
 	
 	<packaging>eclipse-test-plugin</packaging>
 	

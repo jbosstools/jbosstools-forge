@@ -9,6 +9,7 @@
 	</parent>
 	<groupId>org.jboss.tools.forge.features</groupId>
 	<artifactId>org.jboss.tools.forge.ext.feature</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 	
 	<packaging>eclipse-feature</packaging>
 

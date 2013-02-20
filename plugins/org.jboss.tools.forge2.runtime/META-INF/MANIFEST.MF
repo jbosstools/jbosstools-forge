@@ -12,7 +12,7 @@ Bundle-ClassPath: lib/javassist-3.15.0-GA.jar,
  lib/forge-se-2.0.0-SNAPSHOT.jar,
  lib/ui-api-2.0.0-SNAPSHOT.jar,
  lib/convert-api-2.0.0-SNAPSHOT.jar,
- lib/ui-hints-2.0.0-SNAPSHOT-forge-addon.jar,
+ lib/ui-hints-2.0.0-SNAPSHOT.jar,
  lib/facets-api-2.0.0-SNAPSHOT.jar,
  lib/resources-api-2.0.0-SNAPSHOT.jar
 Export-Package: bootpath,

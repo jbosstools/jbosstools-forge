@@ -37,43 +37,51 @@
                            <groupId>org.jboss.forge</groupId>
                            <artifactId>forge-addon-container-api</artifactId>
                            <version>${version.forge}</version>
+                           <destFileName>forge-addon-container-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
                            <artifactId>forge-proxy</artifactId>
                            <version>${version.forge}</version>
+                           <destFileName>forge-proxy-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
                            <artifactId>forge-se</artifactId>
                            <version>${version.forge}</version>
+                           <destFileName>forge-se-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <!-- Addons API needed -->
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
                            <artifactId>ui-api</artifactId>
                            <version>${version.forge}</version>
+                           <destFileName>ui-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
                            <artifactId>convert-api</artifactId>
                            <version>${version.forge}</version>
+                           <destFileName>convert-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
                            <artifactId>facets-api</artifactId>
                            <version>${version.forge}</version>
+                           <destFileName>facets-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
                            <artifactId>resources-api</artifactId>
                            <version>${version.forge}</version>
+                           <destFileName>resources-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
                            <artifactId>ui-hints</artifactId>
                            <version>${version.forge}</version>
                            <classifier>forge-addon</classifier>
+                           <destFileName>ui-hints-${version.forge}.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>
