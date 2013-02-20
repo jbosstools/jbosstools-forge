@@ -23,6 +23,7 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.UIInput;
 import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.tools.forge.ui.Inputs;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class CheckboxControlBuilder extends ControlBuilder {
@@ -32,10 +33,10 @@ public class CheckboxControlBuilder extends ControlBuilder {
         Button cmb = new Button(container, SWT.CHECK);
         cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         // Set Default Value
-        ConverterFactory converterFactory = getConverterFactory();
+        ConverterFactory converterFactory = Inputs.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, Boolean> converter = converterFactory.getConverter(input.getValueType(), Boolean.class);
-            Boolean value = converter.convert(getValueFor(input));
+            Boolean value = converter.convert(Inputs.getValueFor(input));
             cmb.setSelection(value == null ? false : value);
         }
 
@@ -44,7 +45,7 @@ public class CheckboxControlBuilder extends ControlBuilder {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 boolean selection = ((Button) e.widget).getSelection();
-                setValueFor(input, selection);
+                Inputs.setValueFor(input, selection);
             }
         });
         return cmb;

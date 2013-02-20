@@ -22,6 +22,7 @@ import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UICommandMetadata;
 import org.jboss.forge.ui.input.UIInputComponent;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.Inputs;
 import org.jboss.tools.forge.ui.context.UIBuilderImpl;
 import org.jboss.tools.forge.ui.context.UIContextImpl;
 import org.jboss.tools.forge.ui.context.UIValidationContextImpl;
@@ -37,6 +38,7 @@ import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
 public class ForgeWizardPage extends WizardPage {
     private UICommand uiCommand;
     private UIContextImpl uiContext;
+    private UIBuilderImpl uiBuilder;
 
     public ForgeWizardPage(Wizard wizard, UICommand command, UIContextImpl contextImpl) {
         super("Page Name");
@@ -55,16 +57,15 @@ public class ForgeWizardPage extends WizardPage {
 
     @Override
     public void createControl(Composite parent) {
-        UIBuilderImpl builder = new UIBuilderImpl(uiContext);
+        uiBuilder = new UIBuilderImpl(uiContext);
         try {
-            uiCommand.initializeUI(builder);
+            uiCommand.initializeUI(uiBuilder);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        List<UIInputComponent<?, ?>> inputs = builder.getInputs();
-
+        List<UIInputComponent<?, ?>> inputs = uiBuilder.getInputs();
         createControls(parent, inputs);
     }
 
@@ -109,6 +110,17 @@ public class ForgeWizardPage extends WizardPage {
     public boolean isPageComplete() {
         // clear error message
         setErrorMessage(null);
+
+        // Validate required
+        for (UIInputComponent<?, ?> input : uiBuilder.getInputs()) {
+            String requiredMsg = Inputs.validateRequired(input);
+            if (requiredMsg != null) {
+                setErrorMessage(requiredMsg);
+                return false;
+            }
+        }
+
+        // Invoke custom validation
         UIValidationContextImpl validationContext = new UIValidationContextImpl(uiContext);
         // invokes the validation in the current UICommand
         uiCommand.validate(validationContext);
@@ -126,7 +138,7 @@ public class ForgeWizardPage extends WizardPage {
         UICommandMetadata metadata = uiCommand.getMetadata();
         URL docLocation = metadata.getDocLocation();
         if (docLocation != null) {
-//            PlatformUI.getWorkbench().getHelpSystem().displayHelp(docLocation.toExternalForm());
+            // PlatformUI.getWorkbench().getHelpSystem().displayHelp(docLocation.toExternalForm());
         }
     }
 }

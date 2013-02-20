@@ -23,6 +23,7 @@ import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.UIInput;
 import org.jboss.forge.ui.input.UIInputComponent;
 import org.jboss.forge.ui.input.UISelectOne;
+import org.jboss.tools.forge.ui.Inputs;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 @SuppressWarnings("rawtypes")
@@ -37,10 +38,10 @@ public class EnumComboControlBuilder extends ControlBuilder {
             combo.add(enum1.name());
         }
         // Set Default Value
-        ConverterFactory converterFactory = getConverterFactory();
+        ConverterFactory converterFactory = Inputs.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(getValueFor(input));
+            String value = converter.convert(Inputs.getValueFor(input));
             combo.setText(value == null ? "" : value);
         }
 
@@ -51,7 +52,7 @@ public class EnumComboControlBuilder extends ControlBuilder {
                 if (selectionIndex != -1) {
                     String item = combo.getItem(selectionIndex);
                     Class valueType = input.getValueType();
-                    setValueFor(input, Enum.valueOf(valueType, item));
+                    Inputs.setValueFor(input, Enum.valueOf(valueType, item));
                 }
             }
         });

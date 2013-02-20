@@ -23,6 +23,7 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.UIInputComponent;
 import org.jboss.forge.ui.input.UISelectMany;
+import org.jboss.tools.forge.ui.Inputs;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class CheckboxTableControlBuilder extends ControlBuilder {
@@ -34,7 +35,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
         table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         UISelectMany<Object> selectMany = (UISelectMany) input;
         final List<Object> data = new ArrayList<Object>();
-        setValueFor(input, data);
+        Inputs.setValueFor(input, data);
         Iterator<Object> iterator = selectMany.getValueChoices().iterator();
         while (iterator.hasNext()) {
             Object next = iterator.next();

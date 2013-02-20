@@ -30,6 +30,7 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.UIInput;
 import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.tools.forge.ui.Inputs;
 import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
 
 public class FileChooserControlBuilder extends ControlBuilder {
@@ -51,10 +52,10 @@ public class FileChooserControlBuilder extends ControlBuilder {
         containerText.setLayoutData(gd);
 
         // Set Default Value
-        ConverterFactory converterFactory = getConverterFactory();
+        ConverterFactory converterFactory = Inputs.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(getValueFor(input));
+            String value = converter.convert(Inputs.getValueFor(input));
             containerText.setText(value == null ? "" : value);
         }
 
@@ -64,7 +65,7 @@ public class FileChooserControlBuilder extends ControlBuilder {
                 String text = containerText.getText();
                 if (text != null) {
                     File file = new File(text);
-                    setValueFor(input, file);
+                    Inputs.setValueFor(input, file);
                 }
             }
         });
