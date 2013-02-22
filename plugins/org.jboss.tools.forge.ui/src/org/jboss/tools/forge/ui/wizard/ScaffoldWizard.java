@@ -1,5 +1,7 @@
 package org.jboss.tools.forge.ui.wizard;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
@@ -9,15 +11,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
@@ -27,8 +32,8 @@ public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
 
 	public ScaffoldWizard() {
 		setWindowTitle("Scaffold JPA Entities");
-		setDefaultPageImageDescriptor(ImageDescriptor.createFromFile(
-				ScaffoldWizard.class, "ScaffoldEntitiesWizBan.png"));
+//		setDefaultPageImageDescriptor(ImageDescriptor.createFromFile(
+//				ScaffoldWizard.class, "ScaffoldEntitiesWizBan.png"));
 	}
 
 	@Override
@@ -101,6 +106,40 @@ public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection sel) {
+		if (!ForgeHelper.isForgeRunning()) {
+			try {
+				startForge();
+			} catch (Exception e) {
+				ForgeUIPlugin.log(e);
+			}
+		}
 	}
+	
+	private void startForge() throws Exception {
+		ProgressMonitorDialog pmd = new ProgressMonitorDialog(getShell());
+		pmd.run(true, true, new IRunnableWithProgress() {
+			
+			@Override
+			public void run(IProgressMonitor monitor) throws InvocationTargetException,
+					InterruptedException {
+				String taskName = "Please wait while the scaffold generator is starting";
+				monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
+				Display.getDefault().syncExec(new Runnable() {
 
+					@Override
+					public void run() {
+						ForgeHelper.startForge();
+					}
+					
+				});
+				
+				while (!ForgeHelper.isForgeRunning()) {
+					taskName += ".";
+					monitor.setTaskName(taskName);
+					Thread.sleep(1000);
+				}
+			}
+		});
+	}
+	
 }
