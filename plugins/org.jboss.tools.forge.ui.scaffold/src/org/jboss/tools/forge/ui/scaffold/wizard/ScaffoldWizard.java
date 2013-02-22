@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.wizard;
+package org.jboss.tools.forge.ui.scaffold.wizard;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -14,7 +14,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.widgets.Display;
@@ -22,38 +21,27 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
-import org.jboss.tools.forge.ui.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.scaffold.ScaffoldPlugin;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
 
 	private ScaffoldWizardPage scaffoldWizardPage = new ScaffoldWizardPage();
-	private StartForgePage startForgePage = new StartForgePage();
 
 	public ScaffoldWizard() {
 		setWindowTitle("Scaffold JPA Entities");
-//		setDefaultPageImageDescriptor(ImageDescriptor.createFromFile(
-//				ScaffoldWizard.class, "ScaffoldEntitiesWizBan.png"));
+		// setDefaultPageImageDescriptor(ImageDescriptor.createFromFile(
+		// ScaffoldWizard.class, "ScaffoldEntitiesWizBan.png"));
 	}
 
 	@Override
 	public void addPages() {
-		addPage(startForgePage);
 		addPage(scaffoldWizardPage);
 	}
 
 	@Override
-	public IWizardPage getStartingPage() {
-		if (ForgeHelper.isForgeRunning()) {
-//				&& ForgeHelper.isHibernateToolsPluginAvailable()) {
-			return scaffoldWizardPage;
-		}
-		return startForgePage;
-	}
-
-	@Override
 	public boolean performFinish() {
-		Job job = new WorkspaceJob("Scaffolding JPA Entities") {			
+		Job job = new WorkspaceJob("Scaffolding JPA Entities") {
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor)
 					throws CoreException {
@@ -84,44 +72,44 @@ public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
 		runtime.sendCommand("scaffold setup");
 		runtime.sendCommand("scaffold from-entity ~.model.* --overwrite");
 		runtime.sendCommand("cd " + currentDir);
-		runtime.sendCommand("set ACCEPT_DEFAULTS " + (acceptDefaults ? "true" : "false"));
+		runtime.sendCommand("set ACCEPT_DEFAULTS "
+				+ (acceptDefaults ? "true" : "false"));
 		refreshProject(project);
 	}
-	
+
 	private void refreshProject(IProject project) {
 		try {
-			project.getWorkspace().getRoot().refreshLocal(
-					IResource.DEPTH_INFINITE, 
-					new NullProgressMonitor());
-//			project.refreshLocal(IResource.DEPTH_INFINITE, null);
-      	  	MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration(
-    			  project, 
-    			  new NullProgressMonitor());
+			project.getWorkspace()
+					.getRoot()
+					.refreshLocal(IResource.DEPTH_INFINITE,
+							new NullProgressMonitor());
+			// project.refreshLocal(IResource.DEPTH_INFINITE, null);
+			MavenPlugin.getProjectConfigurationManager()
+					.updateProjectConfiguration(project,
+							new NullProgressMonitor());
 		} catch (CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection sel) {
-		if (!ForgeHelper.isForgeRunning()) {
-			try {
-				startForge();
-			} catch (Exception e) {
-				ForgeUIPlugin.log(e);
-			}
+		try {
+			startForge();
+		} catch (Exception e) {
+			ScaffoldPlugin.log(e);
 		}
 	}
-	
+
 	private void startForge() throws Exception {
 		ProgressMonitorDialog pmd = new ProgressMonitorDialog(getShell());
 		pmd.run(true, true, new IRunnableWithProgress() {
-			
+
 			@Override
-			public void run(IProgressMonitor monitor) throws InvocationTargetException,
-					InterruptedException {
+			public void run(IProgressMonitor monitor)
+					throws InvocationTargetException, InterruptedException {
 				String taskName = "Please wait while the scaffold generator is starting";
 				monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
 				Display.getDefault().syncExec(new Runnable() {
@@ -130,9 +118,9 @@ public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
 					public void run() {
 						ForgeHelper.startForge();
 					}
-					
+
 				});
-				
+
 				while (!ForgeHelper.isForgeRunning()) {
 					taskName += ".";
 					monitor.setTaskName(taskName);
@@ -141,5 +129,5 @@ public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
 			}
 		});
 	}
-	
+
 }

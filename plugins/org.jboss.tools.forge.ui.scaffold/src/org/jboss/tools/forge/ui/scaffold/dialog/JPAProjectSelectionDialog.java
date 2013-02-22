@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.wizard;
+package org.jboss.tools.forge.ui.scaffold.dialog;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ListDialog;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
+import org.jboss.tools.forge.ui.scaffold.util.ScaffoldHelper;
 
 public class JPAProjectSelectionDialog extends ListDialog implements ISelectionChangedListener {
 
@@ -35,7 +36,7 @@ public class JPAProjectSelectionDialog extends ListDialog implements ISelectionC
 				for (IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
 						if(project.isAccessible() 
 						   && (check != null && (check.getSelection())
-						       || (ScaffoldUtil.isJPAProject(project)))) { 
+						       || (ScaffoldHelper.isJPAProject(project)))) { 
 							jpaProjects.add(project);
 						}
 				}

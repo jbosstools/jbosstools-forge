@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+          point="org.eclipse.ui.newWizards">
+       <wizard
+             name="Scaffold Entities"
+             category="org.jboss.ide.eclipse.ui.wizards"
+             class="org.jboss.tools.forge.ui.scaffold.wizard.ScaffoldWizard"
+             id="org.jboss.tools.forge.ui.scaffold.jsf">
+          <description>
+                Scaffolds entities
+          </description>
+       </wizard>
+    </extension> 
+</plugin>

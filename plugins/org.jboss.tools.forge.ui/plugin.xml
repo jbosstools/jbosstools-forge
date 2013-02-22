@@ -204,16 +204,4 @@
              label="Forge ">
        </themeElementCategory>
     </extension>
-<!--    <extension
-          point="org.eclipse.ui.newWizards">
-       <wizard
-             name="Scaffold Entities"
-             category="org.jboss.ide.eclipse.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.ScaffoldWizard"
-             id="org.jboss.tools.forge.ui.scaffold.jsf">
-          <description>
-                Scaffolds entities
-          </description>
-       </wizard>
-    </extension> -->
 </plugin>
