@@ -7,15 +7,13 @@
 
 package org.jboss.tools.forge.ui.control;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.hints.InputType;
@@ -32,6 +30,10 @@ public class EnumComboControlBuilder extends ControlBuilder {
     @Override
     @SuppressWarnings({ "unchecked" })
     public Control build(ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite container) {
+        // Create the label
+        Label label = new Label(container, SWT.NULL);
+        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+
         final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
         Enum[] enumConstants = input.getValueType().asSubclass(Enum.class).getEnumConstants();
         for (Enum enum1 : enumConstants) {
@@ -70,10 +72,7 @@ public class EnumComboControlBuilder extends ControlBuilder {
     }
 
     @Override
-    protected Iterable<Class<?>> getSupportedInputComponentTypes() {
-        List<Class<?>> result = new ArrayList<Class<?>>();
-        result.add(UISelectOne.class);
-        result.add(UIInput.class);
-        return result;
+    protected Class<?>[] getSupportedInputComponentTypes() {
+        return new Class<?>[] { UISelectOne.class, UIInput.class };
     }
 }

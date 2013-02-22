@@ -7,9 +7,6 @@
 
 package org.jboss.tools.forge.ui.control;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,6 +14,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.hints.InputType;
@@ -30,6 +28,10 @@ public class CheckboxControlBuilder extends ControlBuilder {
 
     @Override
     public Control build(ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite container) {
+        // Create the label
+        Label label = new Label(container, SWT.NULL);
+        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+
         Button cmb = new Button(container, SWT.CHECK);
         cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         // Set Default Value
@@ -62,9 +64,7 @@ public class CheckboxControlBuilder extends ControlBuilder {
     }
 
     @Override
-    protected Iterable<Class<?>> getSupportedInputComponentTypes() {
-        List<Class<?>> result = new ArrayList<Class<?>>();
-        result.add(UIInput.class);
-        return result;
+    protected Class<?>[] getSupportedInputComponentTypes() {
+        return new Class<?>[] { UIInput.class };
     }
 }
