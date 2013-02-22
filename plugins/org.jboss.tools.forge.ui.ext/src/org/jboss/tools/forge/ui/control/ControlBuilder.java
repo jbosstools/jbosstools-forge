@@ -61,8 +61,7 @@ public abstract class ControlBuilder {
         boolean handles = false;
         InputType inputTypeHint = Inputs.getInputType(input);
 
-        Iterable<Class<?>> supportedTypes = getSupportedInputComponentTypes();
-        for (Class<?> inputType : supportedTypes) {
+        for (Class<?> inputType : getSupportedInputComponentTypes()) {
             if (inputType.isAssignableFrom(input.getClass())) {
                 handles = true;
                 break;
@@ -81,6 +80,6 @@ public abstract class ControlBuilder {
         return handles;
     }
 
-    protected abstract Iterable<Class<?>> getSupportedInputComponentTypes();
+    protected abstract Class<?>[] getSupportedInputComponentTypes();
 
 }

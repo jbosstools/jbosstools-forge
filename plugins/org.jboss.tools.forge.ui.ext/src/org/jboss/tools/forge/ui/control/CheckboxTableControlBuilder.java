@@ -17,6 +17,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.jboss.forge.ui.hints.InputType;
@@ -31,6 +32,10 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public Control build(ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite container) {
+        // Create the label
+        Label label = new Label(container, SWT.NULL);
+        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+
         final Table table = new Table(container, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
         table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         UISelectMany<Object> selectMany = (UISelectMany) input;
@@ -70,9 +75,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
     }
 
     @Override
-    protected Iterable<Class<?>> getSupportedInputComponentTypes() {
-        List<Class<?>> result = new ArrayList<Class<?>>();
-        result.add(UISelectMany.class);
-        return result;
+    protected Class<?>[] getSupportedInputComponentTypes() {
+        return new Class<?>[] { UISelectMany.class };
     }
 }

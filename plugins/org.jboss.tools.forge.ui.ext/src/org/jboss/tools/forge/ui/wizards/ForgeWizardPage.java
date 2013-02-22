@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UICommandMetadata;
@@ -78,9 +77,6 @@ public class ForgeWizardPage extends WizardPage {
         layout.verticalSpacing = 9;
 
         for (final UIInputComponent<?, ?> input : inputs) {
-            // Create the label
-            Label label = new Label(container, SWT.NULL);
-            label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
             ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE.getBuilderFor(input);
             Control control = controlBuilder.build(this, (UIInputComponent<?, Object>) input, container);
 

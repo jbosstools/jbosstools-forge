@@ -8,8 +8,6 @@
 package org.jboss.tools.forge.ui.control;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -23,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
@@ -37,6 +36,10 @@ public class FileChooserControlBuilder extends ControlBuilder {
 
     @Override
     public Control build(final ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite parent) {
+        // Create the label
+        Label label = new Label(parent, SWT.NULL);
+        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+
         Composite container = new Composite(parent, SWT.NULL);
         container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -109,9 +112,7 @@ public class FileChooserControlBuilder extends ControlBuilder {
     }
 
     @Override
-    protected Iterable<Class<?>> getSupportedInputComponentTypes() {
-        List<Class<?>> result = new ArrayList<Class<?>>();
-        result.add(UIInput.class);
-        return result;
+    protected Class<?>[] getSupportedInputComponentTypes() {
+        return new Class<?>[] { UIInput.class };
     }
 }
