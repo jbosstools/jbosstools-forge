@@ -1,7 +1,7 @@
 package org.jboss.tools.forge.ui.startup;
 
 import org.eclipse.ui.IStartup;
-import org.jboss.tools.forge.core.ForgeCorePlugin;
+import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
 
 public class ForgeStarter implements IStartup {
 

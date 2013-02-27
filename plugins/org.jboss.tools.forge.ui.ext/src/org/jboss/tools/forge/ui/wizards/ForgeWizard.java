@@ -31,7 +31,7 @@ import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.result.NavigationResult;
 import org.jboss.forge.ui.result.Result;
 import org.jboss.forge.ui.wizard.UIWizard;
-import org.jboss.tools.forge.core.ForgeService;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.context.UIContextImpl;
 import org.jboss.tools.forge.ui.context.UISelectionImpl;

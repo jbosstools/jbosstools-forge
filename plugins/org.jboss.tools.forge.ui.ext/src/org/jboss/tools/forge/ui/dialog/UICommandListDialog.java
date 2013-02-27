@@ -21,7 +21,7 @@ import org.jboss.forge.container.services.ExportedInstance;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UICommandMetadata;
 import org.jboss.forge.ui.wizard.UIWizardStep;
-import org.jboss.tools.forge.core.ForgeService;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.wizards.ForgeWizard;
 
 public class UICommandListDialog extends PopupDialog {
