@@ -19,7 +19,7 @@ import org.jboss.forge.ui.input.UIInput;
 import org.jboss.forge.ui.input.UIInputComponent;
 import org.jboss.forge.ui.input.UISelectMany;
 import org.jboss.forge.ui.input.UISelectOne;
-import org.jboss.tools.forge.core.ForgeService;
+import org.jboss.tools.forge.ext.core.ForgeService;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class Inputs {

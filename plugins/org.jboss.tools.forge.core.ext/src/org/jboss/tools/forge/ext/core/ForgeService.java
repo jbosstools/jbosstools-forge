@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.core;
+package org.jboss.tools.forge.ext.core;
 
 import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.Forge;

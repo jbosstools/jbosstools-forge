@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.core;
+package org.jboss.tools.forge.ext.core;
 
 import java.io.Closeable;
 import java.io.File;
