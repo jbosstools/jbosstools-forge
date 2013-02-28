@@ -21,7 +21,8 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UIInput;
-import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.forge.ui.util.InputComponents;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class CheckboxControlBuilder extends ControlBuilder {
@@ -35,10 +36,10 @@ public class CheckboxControlBuilder extends ControlBuilder {
         Button cmb = new Button(container, SWT.CHECK);
         cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         // Set Default Value
-        ConverterFactory converterFactory = Inputs.getConverterFactory();
+        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, Boolean> converter = converterFactory.getConverter(input.getValueType(), Boolean.class);
-            Boolean value = converter.convert(Inputs.getValueFor(input));
+            Boolean value = converter.convert(InputComponents.getValueFor(input));
             cmb.setSelection(value == null ? false : value);
         }
 
@@ -47,7 +48,7 @@ public class CheckboxControlBuilder extends ControlBuilder {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 boolean selection = ((Button) e.widget).getSelection();
-                Inputs.setValueFor(input, selection);
+                InputComponents.setValueFor(converterFactory, input, selection);
             }
         });
         return cmb;

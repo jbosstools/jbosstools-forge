@@ -20,11 +20,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UISelectMany;
-import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.forge.ui.util.InputComponents;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class CheckboxTableControlBuilder extends ControlBuilder {
@@ -40,7 +42,8 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
         table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         UISelectMany<Object> selectMany = (UISelectMany) input;
         final List<Object> data = new ArrayList<Object>();
-        Inputs.setValueFor(input, data);
+        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
+        InputComponents.setValueFor(converterFactory, input, data);
         Iterator<Object> iterator = selectMany.getValueChoices().iterator();
         while (iterator.hasNext()) {
             Object next = iterator.next();

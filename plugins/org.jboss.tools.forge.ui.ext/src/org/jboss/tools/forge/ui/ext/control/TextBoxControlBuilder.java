@@ -21,7 +21,8 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UIInput;
-import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.forge.ui.util.InputComponents;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class TextBoxControlBuilder extends ControlBuilder {
@@ -34,18 +35,19 @@ public class TextBoxControlBuilder extends ControlBuilder {
 
         final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
         txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
         // Set Default Value
-        ConverterFactory converterFactory = Inputs.getConverterFactory();
+        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(Inputs.getValueFor(input));
+            String value = converter.convert(InputComponents.getValueFor(input));
             txt.setText(value == null ? "" : value);
         }
 
         txt.addModifyListener(new ModifyListener() {
             @Override
             public void modifyText(ModifyEvent e) {
-                Inputs.setValueFor(input, txt.getText());
+                InputComponents.setValueFor(converterFactory, input, txt.getText());
             }
         });
         return txt;

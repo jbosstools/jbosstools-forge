@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.metadata.UICommandMetadata;
+import org.jboss.forge.ui.util.InputComponents;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.ext.Inputs;
 import org.jboss.tools.forge.ui.ext.context.UIBuilderImpl;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UIValidationContextImpl;
@@ -110,7 +110,7 @@ public class ForgeWizardPage extends WizardPage {
         // Validate required
         if (uiBuilder != null) {
             for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
-                String requiredMsg = Inputs.validateRequired(input);
+                String requiredMsg = InputComponents.validateRequired(input);
                 if (requiredMsg != null) {
                     setErrorMessage(requiredMsg);
                     return false;

@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.proxy.Proxies;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.input.InputComponent;
-import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.forge.ui.util.InputComponents;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**
@@ -52,6 +52,13 @@ public abstract class ControlBuilder {
     protected abstract InputType getSupportedInputType();
 
     /**
+     * Returns the subclasses of {@link InputComponent}
+     *
+     * @return
+     */
+    protected abstract Class<?>[] getSupportedInputComponentTypes();
+
+    /**
      * Tests if this builder may handle this specific input
      *
      * @param input
@@ -59,7 +66,7 @@ public abstract class ControlBuilder {
      */
     public boolean handles(InputComponent<?, ?> input) {
         boolean handles = false;
-        InputType inputTypeHint = Inputs.getInputType(input);
+        InputType inputTypeHint = InputComponents.getInputType(input);
 
         for (Class<?> inputType : getSupportedInputComponentTypes()) {
             if (inputType.isAssignableFrom(input.getClass())) {
@@ -79,7 +86,5 @@ public abstract class ControlBuilder {
 
         return handles;
     }
-
-    protected abstract Class<?>[] getSupportedInputComponentTypes();
 
 }

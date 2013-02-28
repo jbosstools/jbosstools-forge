@@ -20,7 +20,8 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UISelectOne;
-import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.forge.ui.util.InputComponents;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class ComboControlBuilder extends ControlBuilder {
@@ -35,10 +36,10 @@ public class ComboControlBuilder extends ControlBuilder {
         final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
 
         // Set Default Value
-        ConverterFactory converterFactory = Inputs.getConverterFactory();
+        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(Inputs.getValueFor(input));
+            String value = converter.convert(InputComponents.getValueFor(input));
             UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
             for (Object choice : selectOne.getValueChoices()) {
                 combo.add(converter.convert(choice));
@@ -52,7 +53,7 @@ public class ComboControlBuilder extends ControlBuilder {
                 int selectionIndex = combo.getSelectionIndex();
                 if (selectionIndex != -1) {
                     String item = combo.getItem(selectionIndex);
-                    Inputs.setValueFor(input, item);
+                    InputComponents.setValueFor(converterFactory, input, item);
                 }
             }
         });
