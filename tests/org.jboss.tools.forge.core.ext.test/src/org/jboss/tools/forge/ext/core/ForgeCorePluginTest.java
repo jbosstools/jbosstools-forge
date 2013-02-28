@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.core;
+package org.jboss.tools.forge.ext.core;
 
 import static org.junit.Assert.*;
 
