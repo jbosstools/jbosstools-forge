@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.control;
+package org.jboss.tools.forge.ui.ext.control;
 
 import org.jboss.forge.ui.input.UIInputComponent;
 

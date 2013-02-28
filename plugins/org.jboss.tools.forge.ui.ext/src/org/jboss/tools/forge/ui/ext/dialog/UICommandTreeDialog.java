@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.dialog;
+package org.jboss.tools.forge.ui.ext.dialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +24,7 @@ import org.jboss.forge.ui.UICategory;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UICommandMetadata;
 import org.jboss.tools.forge.ext.core.ForgeService;
-import org.jboss.tools.forge.ui.wizards.ForgeWizard;
+import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 
 /**
  * Creates a tree

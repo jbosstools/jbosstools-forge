@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui;
+package org.jboss.tools.forge.ui.ext;
 
 import java.util.ArrayList;
 import java.util.Arrays;

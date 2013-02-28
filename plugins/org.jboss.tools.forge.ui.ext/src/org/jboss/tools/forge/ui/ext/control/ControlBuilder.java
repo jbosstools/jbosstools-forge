@@ -5,15 +5,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.control;
+package org.jboss.tools.forge.ui.ext.control;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.proxy.Proxies;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.input.UIInputComponent;
-import org.jboss.tools.forge.ui.Inputs;
-import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
+import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**
  * Builds a control

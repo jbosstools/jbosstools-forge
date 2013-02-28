@@ -4,7 +4,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.wizards;
+package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.net.URL;
 import java.util.List;
@@ -20,13 +20,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.UICommandMetadata;
 import org.jboss.forge.ui.input.UIInputComponent;
-import org.jboss.tools.forge.ui.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.Inputs;
-import org.jboss.tools.forge.ui.context.UIBuilderImpl;
-import org.jboss.tools.forge.ui.context.UIContextImpl;
-import org.jboss.tools.forge.ui.context.UIValidationContextImpl;
-import org.jboss.tools.forge.ui.control.ControlBuilder;
-import org.jboss.tools.forge.ui.control.ControlBuilderRegistry;
+import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.tools.forge.ui.ext.context.UIBuilderImpl;
+import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
+import org.jboss.tools.forge.ui.ext.context.UIValidationContextImpl;
+import org.jboss.tools.forge.ui.ext.control.ControlBuilder;
+import org.jboss.tools.forge.ui.ext.control.ControlBuilderRegistry;
 
 /**
  * A Forge Wizard Page

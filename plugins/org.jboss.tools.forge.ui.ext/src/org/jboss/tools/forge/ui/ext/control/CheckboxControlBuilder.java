@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.control;
+package org.jboss.tools.forge.ui.ext.control;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -21,8 +21,8 @@ import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.UIInput;
 import org.jboss.forge.ui.input.UIInputComponent;
-import org.jboss.tools.forge.ui.Inputs;
-import org.jboss.tools.forge.ui.wizards.ForgeWizardPage;
+import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class CheckboxControlBuilder extends ControlBuilder {
 

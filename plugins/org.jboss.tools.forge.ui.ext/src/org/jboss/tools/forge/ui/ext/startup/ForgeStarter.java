@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.startup;
+package org.jboss.tools.forge.ui.ext.startup;
 
 import org.eclipse.ui.IStartup;
 import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
