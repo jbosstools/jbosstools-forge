@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.wizards;
+package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.lang.reflect.Field;
 import java.util.List;

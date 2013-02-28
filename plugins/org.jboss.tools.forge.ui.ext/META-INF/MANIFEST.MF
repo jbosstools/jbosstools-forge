@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.jboss.tools.forge.ui.ext;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.jboss.tools.forge.ui.ForgeUIPlugin
+Bundle-Activator: org.jboss.tools.forge.ui.ext.ForgeUIPlugin
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
@@ -15,4 +15,4 @@ Require-Bundle: org.eclipse.core.runtime,
  org.jboss.tools.forge.core.ext,
  org.eclipse.ui.ide,
  org.eclipse.jdt.core
-Export-Package: org.jboss.tools.forge.ui
+Export-Package: org.jboss.tools.forge.ui.ext

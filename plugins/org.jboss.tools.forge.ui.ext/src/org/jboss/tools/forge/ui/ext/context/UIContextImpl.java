@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.context;
+package org.jboss.tools.forge.ui.ext.context;
 
 import org.jboss.forge.ui.context.UIContext;
 

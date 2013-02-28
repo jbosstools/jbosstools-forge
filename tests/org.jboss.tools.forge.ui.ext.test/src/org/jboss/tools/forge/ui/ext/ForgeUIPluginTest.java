@@ -1,7 +1,8 @@
-package org.jboss.tools.forge.ui;
+package org.jboss.tools.forge.ui.ext;
 
 import static org.junit.Assert.*;
 
+import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.junit.Ignore;
 import org.junit.Test;
 

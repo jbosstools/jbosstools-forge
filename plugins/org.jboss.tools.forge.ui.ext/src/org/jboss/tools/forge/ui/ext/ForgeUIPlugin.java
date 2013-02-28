@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui;
+package org.jboss.tools.forge.ui.ext;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
