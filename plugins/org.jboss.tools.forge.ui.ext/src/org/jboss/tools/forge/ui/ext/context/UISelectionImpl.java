@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jboss.forge.container.util.Assert;
-import org.jboss.forge.ui.input.UISelection;
+import org.jboss.forge.ui.context.UISelection;
 
 public class UISelectionImpl<T> implements UISelection<T> {
 

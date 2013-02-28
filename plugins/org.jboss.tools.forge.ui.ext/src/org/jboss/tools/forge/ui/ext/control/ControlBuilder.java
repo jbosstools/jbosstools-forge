@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.proxy.Proxies;
 import org.jboss.forge.ui.hints.InputType;
-import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.tools.forge.ui.ext.Inputs;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
@@ -34,7 +34,7 @@ public abstract class ControlBuilder {
      *
      * @return
      */
-    public abstract Control build(final ForgeWizardPage page, final UIInputComponent<?, Object> input,
+    public abstract Control build(final ForgeWizardPage page, final InputComponent<?, Object> input,
         final Composite container);
 
     /**
@@ -57,7 +57,7 @@ public abstract class ControlBuilder {
      * @param input
      * @return
      */
-    public boolean handles(UIInputComponent<?, ?> input) {
+    public boolean handles(InputComponent<?, ?> input) {
         boolean handles = false;
         InputType inputTypeHint = Inputs.getInputType(input);
 

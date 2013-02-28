@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
-import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UISelectMany;
 import org.jboss.tools.forge.ui.ext.Inputs;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
@@ -31,7 +31,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public Control build(ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite container) {
+    public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
         // Create the label
         Label label = new Label(container, SWT.NULL);
         label.setText(input.getLabel() == null ? input.getName() : input.getLabel());

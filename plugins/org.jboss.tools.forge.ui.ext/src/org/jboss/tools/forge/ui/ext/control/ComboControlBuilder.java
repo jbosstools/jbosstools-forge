@@ -19,13 +19,11 @@ import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.InputComponent;
-import org.jboss.forge.ui.input.UIInput;
 import org.jboss.forge.ui.input.UISelectOne;
 import org.jboss.tools.forge.ui.ext.Inputs;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-@SuppressWarnings("rawtypes")
-public class ComboEnumControlBuilder extends ControlBuilder {
+public class ComboControlBuilder extends ControlBuilder {
 
     @Override
     @SuppressWarnings({ "unchecked" })
@@ -35,15 +33,16 @@ public class ComboEnumControlBuilder extends ControlBuilder {
         label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
 
         final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
-        Enum[] enumConstants = input.getValueType().asSubclass(Enum.class).getEnumConstants();
-        for (Enum enum1 : enumConstants) {
-            combo.add(enum1.name());
-        }
+
         // Set Default Value
         ConverterFactory converterFactory = Inputs.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
             String value = converter.convert(Inputs.getValueFor(input));
+            UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+            for (Object choice : selectOne.getValueChoices()) {
+                combo.add(converter.convert(choice));
+            }
             combo.setText(value == null ? "" : value);
         }
 
@@ -53,8 +52,7 @@ public class ComboEnumControlBuilder extends ControlBuilder {
                 int selectionIndex = combo.getSelectionIndex();
                 if (selectionIndex != -1) {
                     String item = combo.getItem(selectionIndex);
-                    Class valueType = input.getValueType();
-                    Inputs.setValueFor(input, Enum.valueOf(valueType, item));
+                    Inputs.setValueFor(input, item);
                 }
             }
         });
@@ -62,8 +60,8 @@ public class ComboEnumControlBuilder extends ControlBuilder {
     }
 
     @Override
-    protected Class<Enum> getProducedType() {
-        return Enum.class;
+    protected Class<String> getProducedType() {
+        return String.class;
     }
 
     @Override
@@ -73,6 +71,6 @@ public class ComboEnumControlBuilder extends ControlBuilder {
 
     @Override
     protected Class<?>[] getSupportedInputComponentTypes() {
-        return new Class<?>[] { UISelectOne.class, UIInput.class };
+        return new Class<?>[] { UISelectOne.class };
     }
 }

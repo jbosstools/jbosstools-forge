@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.jboss.forge.ui.context.UIContext;
 import org.jboss.forge.ui.context.UIValidationContext;
-import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.InputComponent;
 
 public class UIValidationContextImpl implements UIValidationContext {
     private List<String> errors = new ArrayList<String>();
@@ -23,7 +23,7 @@ public class UIValidationContextImpl implements UIValidationContext {
     }
 
     @Override
-    public void addValidationError(UIInputComponent<?, ?> input, String errorMessage) {
+    public void addValidationError(InputComponent<?, ?> input, String errorMessage) {
         errors.add(errorMessage);
     }
 

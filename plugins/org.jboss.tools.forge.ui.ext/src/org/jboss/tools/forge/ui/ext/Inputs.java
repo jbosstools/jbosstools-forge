@@ -8,23 +8,34 @@
 package org.jboss.tools.forge.ui.ext;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.jboss.forge.convert.CompositeConverter;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.facets.HintsFacet;
 import org.jboss.forge.ui.hints.InputType;
-import org.jboss.forge.ui.input.UIInput;
-import org.jboss.forge.ui.input.UIInputComponent;
-import org.jboss.forge.ui.input.UISelectMany;
-import org.jboss.forge.ui.input.UISelectOne;
+import org.jboss.forge.ui.input.InputComponent;
+import org.jboss.forge.ui.input.ManyValued;
+import org.jboss.forge.ui.input.SelectComponent;
+import org.jboss.forge.ui.input.SingleValued;
 import org.jboss.tools.forge.ext.core.ForgeService;
 
+/**
+ * Utilities for {@link InputComponent} objects
+ *
+ * TODO: May be moved to ui-api in the future
+ *
+ * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ *
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class Inputs {
 
-    public static InputType getInputType(UIInputComponent<?, ?> input) {
+    /**
+     * @return the {@link InputType} object associated to this {@link InputComponent}
+     */
+    public static InputType getInputType(InputComponent<?, ?> input) {
         InputType result = null;
         if (input.hasFacet(HintsFacet.class)) {
             HintsFacet facet = input.getFacet(HintsFacet.class);
@@ -33,101 +44,90 @@ public abstract class Inputs {
         return result;
     }
 
-    public static Object getValueFor(UIInputComponent<?, ?> component) {
-        if (component instanceof UIInput) {
-            return ((UIInput<Object>) component).getValue();
-        } else if (component instanceof UISelectOne) {
-            return ((UISelectOne<Object>) component).getValue();
-        } else if (component instanceof UISelectMany) {
-            return ((UISelectMany<Object>) component).getValue();
+    /**
+     * @return the value stored in this {@link InputComponent}
+     */
+    public static Object getValueFor(InputComponent<?, ?> component) {
+        if (component instanceof SingleValued) {
+            return ((SingleValued<?, Object>) component).getValue();
+        } else if (component instanceof ManyValued) {
+            return ((ManyValued<?, Object>) component).getValue();
         } else {
             return null;
         }
     }
 
-    public static void setValueFor(UIInputComponent<?, ?> component, Object value) {
-        if (component instanceof UIInput) {
-            setInputValue((UIInput<Object>) component, value);
-        } else if (component instanceof UISelectOne) {
-            setInputValue((UISelectOne) component, value);
-        } else if (component instanceof UISelectMany) {
-            setInputValue((UISelectMany) component, value);
+    /**
+     * Sets the value in the provided {@link InputComponent}, making any necessary conversions
+     *
+     * @param component
+     * @param value
+     */
+    public static void setValueFor(InputComponent<?, Object> component, Object value) {
+        if (component instanceof SingleValued) {
+            setSingleInputValue(component, value);
+        } else if (component instanceof ManyValued) {
+            setManyInputValue(component, value);
         }
     }
 
-    private static void setInputValue(final UIInput<Object> input, Object value) {
-        Object convertedType = value;
+    private static void setSingleInputValue(final InputComponent<?, Object> input, final Object value) {
+        final Object convertedType;
         if (value != null) {
-            // TODO: Cache Converter ?
-            ConverterFactory converterFactory = getConverterFactory();
-            Class<? extends Object> source = value.getClass();
-            Class<Object> target = input.getValueType();
-            if (converterFactory != null) {
-                Converter converter = converterFactory.getConverter(source, target);
-                convertedType = converter.convert(value);
-            } else {
-                System.err.println("Converter Factory was not deployed !! Cannot convert from " + source + " to "
-                    + target);
-            }
+            convertedType = convertToUIInputValue(input, value);
+        } else {
+            convertedType = null;
         }
-        input.setValue(convertedType);
+        ((SingleValued) input).setValue(convertedType);
     }
 
-    private static void setInputValue(final UISelectOne<Object> input, Object value) {
-        Object convertedType = value;
+    private static void setManyInputValue(final InputComponent<?, Object> input, Object value) {
+        final List<Object> convertedValues;
         if (value != null) {
-            // TODO: Cache Converter ?
-            ConverterFactory converterFactory = getConverterFactory();
-            Class<? extends Object> source = value.getClass();
-            Class<Object> target = input.getValueType();
-            if (converterFactory != null) {
-                Converter converter = converterFactory.getConverter(source, target);
-                convertedType = converter.convert(value);
-            } else {
-                System.err.println("Converter Factory was not deployed !! Cannot convert from " + source + " to "
-                    + target);
-            }
-        }
-        input.setValue(convertedType);
-    }
-
-    private static void setInputValue(final UISelectMany<Object> input, Object value) {
-        if (value != null) {
-            // TODO: Cache Converter ?
-
+            convertedValues = new ArrayList<Object>();
             if (value instanceof Iterable) {
                 Iterable<Object> values = (Iterable) value;
-
-                List<Object> convertedValues = new ArrayList<Object>();
-                for (Object object : values) {
-                    convertedValues.add(convertValue(input.getValueType(), object));
+                for (Object obj : values) {
+                    convertedValues.add(convertToUIInputValue(input, obj));
                 }
-                input.setValue(values);
             } else {
-                input.setValue(Arrays.asList(convertValue(input.getValueType(), value)));
+                convertedValues.add(convertToUIInputValue(input, value));
             }
-
+        } else {
+            convertedValues = null;
         }
+        ((ManyValued) input).setValue(convertedValues);
     }
 
-    public static <T> T convertValue(Class<T> targetType, Object value) {
+    /**
+     * Returns the converted value that matches the input
+     *
+     * @param input
+     * @param value
+     * @return
+     */
+    private static Object convertToUIInputValue(final InputComponent<?, Object> input, final Object value) {
+        final Object convertedType;
         ConverterFactory converterFactory = getConverterFactory();
-        Class<? extends Object> source = value.getClass();
-        if (converterFactory != null) {
-            Converter converter = converterFactory.getConverter(source, targetType);
-            return (T) converter.convert(value);
+        Class<Object> sourceType = (Class<Object>) value.getClass();
+        Class<Object> targetType = input.getValueType();
+        Converter<String, Object> valueConverter = input.getValueConverter();
+        if (valueConverter != null) {
+            Converter<Object, String> stringConverter = converterFactory.getConverter(sourceType, String.class);
+            CompositeConverter compositeConverter = new CompositeConverter(stringConverter, valueConverter);
+            convertedType = compositeConverter.convert(value);
         } else {
-            System.err.println("Converter Factory was not deployed !! Cannot convert from " + source + " to "
-                + targetType);
-            return (T) value;
+            Converter<Object, Object> converter = converterFactory.getConverter(sourceType, targetType);
+            convertedType = converter.convert(value);
         }
+        return convertedType;
     }
 
     public static ConverterFactory getConverterFactory() {
         return ForgeService.INSTANCE.lookup(ConverterFactory.class);
     }
 
-    public static boolean hasValue(UIInputComponent<?, ?> input) {
+    public static boolean hasValue(InputComponent<?, ?> input) {
         boolean ret;
         Object value = Inputs.getValueFor(input);
         if (value == null) {
@@ -140,7 +140,13 @@ public abstract class Inputs {
         return ret;
     }
 
-    public static String validateRequired(final UIInputComponent<?, ?> input) {
+    /**
+     * Validate if the input has a value. If not, return the error message
+     *
+     * @param input
+     * @return
+     */
+    public static String validateRequired(final InputComponent<?, ?> input) {
         String requiredMessage = null;
         if (input.isRequired() && !Inputs.hasValue(input)) {
             requiredMessage = input.getRequiredMessage();
@@ -152,4 +158,14 @@ public abstract class Inputs {
         return requiredMessage;
     }
 
+    public static Converter<?, String> getItemLabelConverter(final SelectComponent<?, ?> input) {
+        Converter<?, String> converter = input.getItemLabelConverter();
+        if (converter == null) {
+            ConverterFactory converterFactory = getConverterFactory();
+            if (converterFactory != null) {
+                converter = converterFactory.getConverter(input.getValueType(), String.class);
+            }
+        }
+        return converter;
+    }
 }

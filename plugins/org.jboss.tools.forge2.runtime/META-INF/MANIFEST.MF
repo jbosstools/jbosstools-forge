@@ -30,5 +30,7 @@ Export-Package: bootpath,
  org.jboss.forge.ui.facets,
  org.jboss.forge.ui.hints,
  org.jboss.forge.ui.input,
+ org.jboss.forge.ui.metadata,
  org.jboss.forge.ui.result,
+ org.jboss.forge.ui.util,
  org.jboss.forge.ui.wizard

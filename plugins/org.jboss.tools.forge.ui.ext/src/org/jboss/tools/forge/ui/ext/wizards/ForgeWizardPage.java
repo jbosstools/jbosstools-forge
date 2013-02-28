@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.jboss.forge.ui.UICommand;
-import org.jboss.forge.ui.UICommandMetadata;
-import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.InputComponent;
+import org.jboss.forge.ui.metadata.UICommandMetadata;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.Inputs;
 import org.jboss.tools.forge.ui.ext.context.UIBuilderImpl;
@@ -64,21 +64,21 @@ public class ForgeWizardPage extends WizardPage {
             e.printStackTrace();
         }
 
-        List<UIInputComponent<?, ?>> inputs = uiBuilder.getInputs();
+        List<InputComponent<?, ?>> inputs = uiBuilder.getInputs();
         createControls(parent, inputs);
     }
 
     @SuppressWarnings("unchecked")
-    protected void createControls(Composite parent, List<UIInputComponent<?, ?>> inputs) {
+    protected void createControls(Composite parent, List<InputComponent<?, ?>> inputs) {
         Composite container = new Composite(parent, SWT.NULL);
         GridLayout layout = new GridLayout();
         container.setLayout(layout);
         layout.numColumns = 2;
         layout.verticalSpacing = 9;
 
-        for (final UIInputComponent<?, ?> input : inputs) {
+        for (final InputComponent<?, ?> input : inputs) {
             ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE.getBuilderFor(input);
-            Control control = controlBuilder.build(this, (UIInputComponent<?, Object>) input, container);
+            Control control = controlBuilder.build(this, (InputComponent<?, Object>) input, container);
 
             // Update page status
             Listener pageCompleteListener = new Listener() {
@@ -109,7 +109,7 @@ public class ForgeWizardPage extends WizardPage {
 
         // Validate required
         if (uiBuilder != null) {
-            for (UIInputComponent<?, ?> input : uiBuilder.getInputs()) {
+            for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
                 String requiredMsg = Inputs.validateRequired(input);
                 if (requiredMsg != null) {
                     setErrorMessage(requiredMsg);

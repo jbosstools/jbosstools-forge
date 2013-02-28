@@ -7,13 +7,13 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
-import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.InputComponent;
 
 /**
  * A factory for {@link ControlBuilder} instances.
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public enum ControlBuilderRegistry {
     INSTANCE;
@@ -22,7 +22,7 @@ public enum ControlBuilderRegistry {
         new FileChooserControlBuilder(), new CheckboxTableControlBuilder(), new TextBoxControlBuilder(),
         new FallbackTextBoxControlBuilder() };
 
-    public ControlBuilder getBuilderFor(UIInputComponent<?, ?> input) {
+    public ControlBuilder getBuilderFor(InputComponent<?, ?> input) {
         for (ControlBuilder builder : controlBuilders) {
             if (builder.handles(input)) {
                 return builder;
