@@ -71,7 +71,8 @@ public class ForgeCorePlugin extends Plugin {
 		});
 	}
 
-	private URL copy(File directory, String name, InputStream input)
+	@SuppressWarnings("resource")
+   private URL copy(File directory, String name, InputStream input)
 			throws IOException {
 		File outputFile = new File(directory, name);
 

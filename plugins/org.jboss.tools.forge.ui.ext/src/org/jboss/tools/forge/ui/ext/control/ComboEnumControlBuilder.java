@@ -25,7 +25,7 @@ import org.jboss.tools.forge.ui.ext.Inputs;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 @SuppressWarnings("rawtypes")
-public class EnumComboControlBuilder extends ControlBuilder {
+public class ComboEnumControlBuilder extends ControlBuilder {
 
     @Override
     @SuppressWarnings({ "unchecked" })
