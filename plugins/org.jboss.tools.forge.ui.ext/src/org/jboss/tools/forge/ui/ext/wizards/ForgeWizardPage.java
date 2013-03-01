@@ -34,7 +34,7 @@ import org.jboss.tools.forge.ui.ext.control.ControlBuilderRegistry;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  *
  */
-public class ForgeWizardPage extends WizardPage {
+public class ForgeWizardPage extends WizardPage implements Listener {
     private UICommand uiCommand;
     private UIContextImpl uiContext;
     private UIBuilderImpl uiBuilder;
@@ -42,6 +42,7 @@ public class ForgeWizardPage extends WizardPage {
     public ForgeWizardPage(Wizard wizard, UICommand command, UIContextImpl contextImpl) {
         super("Page Name");
         setWizard(wizard);
+        setPageComplete(false);
         UICommandMetadata id = command.getMetadata();
         setTitle(id.getName());
         setDescription(id.getDescription());
@@ -81,29 +82,35 @@ public class ForgeWizardPage extends WizardPage {
             Control control = controlBuilder.build(this, (InputComponent<?, Object>) input, container);
 
             // Update page status
-            Listener pageCompleteListener = new Listener() {
-                @Override
-                public void handleEvent(Event event) {
-                    if (isCurrentPage()) {
-                        isPageComplete();
-                        // Refresh the buttons
-                        getContainer().updateButtons();
-                    }
-                    event.doit = true;
-                }
-            };
-            control.addListener(SWT.Modify, pageCompleteListener);
-            control.addListener(SWT.DefaultSelection, pageCompleteListener);
-            control.addListener(SWT.Selection, pageCompleteListener);
+            control.addListener(SWT.Modify, this);
+            control.addListener(SWT.DefaultSelection, this);
+            control.addListener(SWT.Selection, this);
         }
+        setPageComplete(validatePage());
+        // Show description on opening
+        setErrorMessage(null);
+        setMessage(null);
         setControl(container);
     }
 
     /**
-     * Validates the method
+     * Calls validate page when needed
      */
     @Override
-    public boolean isPageComplete() {
+    public void handleEvent(Event event) {
+        if (isCurrentPage()) {
+            setPageComplete(validatePage());
+            // Refresh the buttons
+            getContainer().updateButtons();
+        }
+    }
+
+    /**
+     * Called
+     *
+     * @return
+     */
+    public boolean validatePage() {
         // clear error message
         setErrorMessage(null);
 
