@@ -18,10 +18,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.jboss.forge.ui.UICommand;
-import org.jboss.forge.ui.UICommandMetadata;
-import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.InputComponent;
+import org.jboss.forge.ui.metadata.UICommandMetadata;
+import org.jboss.forge.ui.util.InputComponents;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.ext.Inputs;
 import org.jboss.tools.forge.ui.ext.context.UIBuilderImpl;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UIValidationContextImpl;
@@ -34,7 +34,7 @@ import org.jboss.tools.forge.ui.ext.control.ControlBuilderRegistry;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  *
  */
-public class ForgeWizardPage extends WizardPage {
+public class ForgeWizardPage extends WizardPage implements Listener {
     private UICommand uiCommand;
     private UIContextImpl uiContext;
     private UIBuilderImpl uiBuilder;
@@ -42,6 +42,7 @@ public class ForgeWizardPage extends WizardPage {
     public ForgeWizardPage(Wizard wizard, UICommand command, UIContextImpl contextImpl) {
         super("Page Name");
         setWizard(wizard);
+        setPageComplete(false);
         UICommandMetadata id = command.getMetadata();
         setTitle(id.getName());
         setDescription(id.getDescription());
@@ -64,53 +65,62 @@ public class ForgeWizardPage extends WizardPage {
             e.printStackTrace();
         }
 
-        List<UIInputComponent<?, ?>> inputs = uiBuilder.getInputs();
+        List<InputComponent<?, ?>> inputs = uiBuilder.getInputs();
         createControls(parent, inputs);
     }
 
     @SuppressWarnings("unchecked")
-    protected void createControls(Composite parent, List<UIInputComponent<?, ?>> inputs) {
+    protected void createControls(Composite parent, List<InputComponent<?, ?>> inputs) {
         Composite container = new Composite(parent, SWT.NULL);
         GridLayout layout = new GridLayout();
         container.setLayout(layout);
         layout.numColumns = 2;
         layout.verticalSpacing = 9;
 
-        for (final UIInputComponent<?, ?> input : inputs) {
+        for (final InputComponent<?, ?> input : inputs) {
             ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE.getBuilderFor(input);
-            Control control = controlBuilder.build(this, (UIInputComponent<?, Object>) input, container);
+            Control control = controlBuilder.build(this, (InputComponent<?, Object>) input, container);
 
             // Update page status
-            Listener pageCompleteListener = new Listener() {
-                @Override
-                public void handleEvent(Event event) {
-                    if (isCurrentPage()) {
-                        isPageComplete();
-                        // Refresh the buttons
-                        getContainer().updateButtons();
-                    }
-                    event.doit = true;
-                }
-            };
-            control.addListener(SWT.Modify, pageCompleteListener);
-            control.addListener(SWT.DefaultSelection, pageCompleteListener);
-            control.addListener(SWT.Selection, pageCompleteListener);
+            control.addListener(SWT.Modify, this);
+            control.addListener(SWT.DefaultSelection, this);
+            control.addListener(SWT.Selection, this);
         }
+        setPageComplete(validatePage());
+        // Show description on opening
+        setErrorMessage(null);
+        setMessage(null);
         setControl(container);
     }
 
     /**
-     * Validates the method
+     * The <code>ForgeWizardPage</code> implementation of this <code>Listener</code> method handles all events and
+     * enablements for controls on this page.
      */
     @Override
-    public boolean isPageComplete() {
+    public void handleEvent(Event event) {
+        if (isCurrentPage()) {
+            setPageComplete(validatePage());
+            // Refresh the buttons
+            getContainer().updateButtons();
+        }
+        event.doit = true;
+    }
+
+    /**
+     * Returns whether this page's controls currently all contain valid values. It also calls
+     * {@link ForgeWizardPage#setErrorMessage(String)} if an error is found
+     *
+     * @return <code>true</code> if all controls are valid, and <code>false</code> if at least one is invalid
+     */
+    public boolean validatePage() {
         // clear error message
         setErrorMessage(null);
 
         // Validate required
         if (uiBuilder != null) {
-            for (UIInputComponent<?, ?> input : uiBuilder.getInputs()) {
-                String requiredMsg = Inputs.validateRequired(input);
+            for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
+                String requiredMsg = InputComponents.validateRequired(input);
                 if (requiredMsg != null) {
                     setErrorMessage(requiredMsg);
                     return false;

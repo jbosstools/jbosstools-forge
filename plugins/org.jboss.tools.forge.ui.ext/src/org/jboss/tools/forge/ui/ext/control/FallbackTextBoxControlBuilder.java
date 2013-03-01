@@ -7,18 +7,18 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
-import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.InputComponent;
 
 /**
  * This component only renders any undefined input as a textbox.
- * 
- * 
+ *
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public class FallbackTextBoxControlBuilder extends TextBoxControlBuilder {
     @Override
-    public boolean handles(UIInputComponent<?, ?> input) {
+    public boolean handles(InputComponent<?, ?> input) {
         return true;
     }
 }

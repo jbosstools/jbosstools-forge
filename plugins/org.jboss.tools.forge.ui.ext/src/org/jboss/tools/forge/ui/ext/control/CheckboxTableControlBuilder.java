@@ -8,7 +8,6 @@
 package org.jboss.tools.forge.ui.ext.control;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -20,18 +19,20 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
-import org.jboss.forge.ui.input.UIInputComponent;
+import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UISelectMany;
-import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.forge.ui.util.InputComponents;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class CheckboxTableControlBuilder extends ControlBuilder {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public Control build(ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite container) {
+    public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
         // Create the label
         Label label = new Label(container, SWT.NULL);
         label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
@@ -40,13 +41,15 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
         table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         UISelectMany<Object> selectMany = (UISelectMany) input;
         final List<Object> data = new ArrayList<Object>();
-        Inputs.setValueFor(input, data);
-        Iterator<Object> iterator = selectMany.getValueChoices().iterator();
-        while (iterator.hasNext()) {
-            Object next = iterator.next();
-            TableItem item = new TableItem(table, SWT.NONE);
-            item.setData(next);
-            item.setText(next.toString());
+        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
+        InputComponents.setValueFor(converterFactory, input, data);
+        Iterable<Object> valueChoices = selectMany.getValueChoices();
+        if (valueChoices != null) {
+            for (Object next : valueChoices) {
+                TableItem item = new TableItem(table, SWT.NONE);
+                item.setData(next);
+                item.setText(next.toString());
+            }
         }
         table.addSelectionListener(new SelectionAdapter() {
             @Override

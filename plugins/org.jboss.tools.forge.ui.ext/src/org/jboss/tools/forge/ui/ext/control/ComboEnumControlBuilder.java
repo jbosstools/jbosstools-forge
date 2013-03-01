@@ -18,18 +18,19 @@ import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
+import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UIInput;
-import org.jboss.forge.ui.input.UIInputComponent;
 import org.jboss.forge.ui.input.UISelectOne;
-import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.forge.ui.util.InputComponents;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 @SuppressWarnings("rawtypes")
-public class EnumComboControlBuilder extends ControlBuilder {
+public class ComboEnumControlBuilder extends ControlBuilder {
 
     @Override
     @SuppressWarnings({ "unchecked" })
-    public Control build(ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite container) {
+    public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
         // Create the label
         Label label = new Label(container, SWT.NULL);
         label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
@@ -40,10 +41,10 @@ public class EnumComboControlBuilder extends ControlBuilder {
             combo.add(enum1.name());
         }
         // Set Default Value
-        ConverterFactory converterFactory = Inputs.getConverterFactory();
+        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(Inputs.getValueFor(input));
+            String value = converter.convert(InputComponents.getValueFor(input));
             combo.setText(value == null ? "" : value);
         }
 
@@ -54,7 +55,7 @@ public class EnumComboControlBuilder extends ControlBuilder {
                 if (selectionIndex != -1) {
                     String item = combo.getItem(selectionIndex);
                     Class valueType = input.getValueType();
-                    Inputs.setValueFor(input, Enum.valueOf(valueType, item));
+                    InputComponents.setValueFor(converterFactory, input, Enum.valueOf(valueType, item));
                 }
             }
         });

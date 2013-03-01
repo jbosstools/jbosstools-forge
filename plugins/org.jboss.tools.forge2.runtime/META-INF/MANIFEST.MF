@@ -6,6 +6,7 @@ Bundle-Version: 1.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
+Eclipse-BundleShape: dir
 Bundle-ClassPath: lib/javassist-3.15.0-GA.jar,
  lib/forge-proxy-2.0.0-SNAPSHOT.jar,
  lib/forge-addon-container-api-2.0.0-SNAPSHOT.jar,
@@ -30,5 +31,7 @@ Export-Package: bootpath,
  org.jboss.forge.ui.facets,
  org.jboss.forge.ui.hints,
  org.jboss.forge.ui.input,
+ org.jboss.forge.ui.metadata,
  org.jboss.forge.ui.result,
+ org.jboss.forge.ui.util,
  org.jboss.forge.ui.wizard

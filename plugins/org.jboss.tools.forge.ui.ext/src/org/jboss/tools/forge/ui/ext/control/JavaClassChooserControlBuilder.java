@@ -23,15 +23,16 @@ import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
+import org.jboss.forge.ui.input.InputComponent;
 import org.jboss.forge.ui.input.UIInput;
-import org.jboss.forge.ui.input.UIInputComponent;
-import org.jboss.tools.forge.ui.ext.Inputs;
+import org.jboss.forge.ui.util.InputComponents;
+import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class JavaClassChooserControlBuilder extends ControlBuilder {
 
     @Override
-    public Control build(final ForgeWizardPage page, final UIInputComponent<?, Object> input, final Composite parent) {
+    public Control build(final ForgeWizardPage page, final InputComponent<?, Object> input, final Composite parent) {
         // Create the label
         Label label = new Label(parent, SWT.NULL);
         label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
@@ -51,10 +52,10 @@ public class JavaClassChooserControlBuilder extends ControlBuilder {
         containerText.setLayoutData(gd);
 
         // Set Default Value
-        ConverterFactory converterFactory = Inputs.getConverterFactory();
+        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
         if (converterFactory != null) {
             Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(Inputs.getValueFor(input));
+            String value = converter.convert(InputComponents.getValueFor(input));
             containerText.setText(value == null ? "" : value);
         }
 
@@ -63,7 +64,7 @@ public class JavaClassChooserControlBuilder extends ControlBuilder {
             public void modifyText(ModifyEvent e) {
                 String text = containerText.getText();
                 if (text != null) {
-                    Inputs.setValueFor(input, text);
+                    InputComponents.setValueFor(converterFactory, input, text);
                 }
             }
         });
