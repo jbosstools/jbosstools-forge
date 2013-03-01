@@ -104,6 +104,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
             // Refresh the buttons
             getContainer().updateButtons();
         }
+        event.doit = true;
     }
 
     /**

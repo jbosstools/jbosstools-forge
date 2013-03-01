@@ -44,12 +44,13 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
         final List<Object> data = new ArrayList<Object>();
         final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
         InputComponents.setValueFor(converterFactory, input, data);
-        Iterator<Object> iterator = selectMany.getValueChoices().iterator();
-        while (iterator.hasNext()) {
-            Object next = iterator.next();
-            TableItem item = new TableItem(table, SWT.NONE);
-            item.setData(next);
-            item.setText(next.toString());
+        Iterable<Object> valueChoices = selectMany.getValueChoices();
+        if (valueChoices != null) {
+            for (Object next : valueChoices) {
+                TableItem item = new TableItem(table, SWT.NONE);
+                item.setData(next);
+                item.setText(next.toString());
+            }
         }
         table.addSelectionListener(new SelectionAdapter() {
             @Override

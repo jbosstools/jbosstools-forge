@@ -41,8 +41,11 @@ public class ComboControlBuilder extends ControlBuilder {
             Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
             String value = converter.convert(InputComponents.getValueFor(input));
             UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-            for (Object choice : selectOne.getValueChoices()) {
-                combo.add(converter.convert(choice));
+            Iterable<Object> valueChoices = selectOne.getValueChoices();
+            if (valueChoices != null) {
+                for (Object choice : valueChoices) {
+                    combo.add(converter.convert(choice));
+                }
             }
             combo.setText(value == null ? "" : value);
         }
@@ -61,8 +64,8 @@ public class ComboControlBuilder extends ControlBuilder {
     }
 
     @Override
-    protected Class<String> getProducedType() {
-        return String.class;
+    protected Class<Object> getProducedType() {
+        return Object.class;
     }
 
     @Override
