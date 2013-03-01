@@ -38,7 +38,7 @@ public class ComboControlBuilder extends ControlBuilder {
         Label label = new Label(container, SWT.NULL);
         label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
 
-        final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
+        final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 
         final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
         UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
@@ -63,7 +63,8 @@ public class ComboControlBuilder extends ControlBuilder {
                 int selectionIndex = combo.getSelectionIndex();
                 if (selectionIndex != -1) {
                     String item = combo.getItem(selectionIndex);
-                    InputComponents.setValueFor(converterFactory, input, items.get(item));
+                    Object selectedObj = items.get(item);
+                    InputComponents.setValueFor(converterFactory, input, selectedObj);
                 }
             }
         });
