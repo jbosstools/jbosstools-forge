@@ -94,7 +94,8 @@ public class ForgeWizardPage extends WizardPage implements Listener {
     }
 
     /**
-     * Calls validate page when needed
+     * The <code>ForgeWizardPage</code> implementation of this <code>Listener</code> method handles all events and
+     * enablements for controls on this page.
      */
     @Override
     public void handleEvent(Event event) {
@@ -106,9 +107,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
     }
 
     /**
-     * Called
+     * Returns whether this page's controls currently all contain valid values. It also calls
+     * {@link ForgeWizardPage#setErrorMessage(String)} if an error is found
      *
-     * @return
+     * @return <code>true</code> if all controls are valid, and <code>false</code> if at least one is invalid
      */
     public boolean validatePage() {
         // clear error message
