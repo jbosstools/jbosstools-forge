@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
@@ -63,6 +65,13 @@ public class ComboControlBuilder extends ControlBuilder {
                     String item = combo.getItem(selectionIndex);
                     InputComponents.setValueFor(converterFactory, input, items.get(item));
                 }
+            }
+        });
+        // Cleaning the map when the input is disposed
+        combo.addDisposeListener(new DisposeListener() {
+            @Override
+            public void widgetDisposed(DisposeEvent e) {
+                items.clear();
             }
         });
         return combo;
