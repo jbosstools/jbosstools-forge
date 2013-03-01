@@ -7,6 +7,9 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,20 +38,22 @@ public class ComboControlBuilder extends ControlBuilder {
 
         final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
 
-        // Set Default Value
         final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
-        if (converterFactory != null) {
-            Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(InputComponents.getValueFor(input));
-            UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-            Iterable<Object> valueChoices = selectOne.getValueChoices();
-            if (valueChoices != null) {
-                for (Object choice : valueChoices) {
-                    combo.add(converter.convert(choice));
-                }
+        UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+        Converter<Object, String> converter = (Converter<Object, String>) InputComponents.getItemLabelConverter(
+            converterFactory, selectOne);
+        String value = converter.convert(InputComponents.getValueFor(input));
+        final Map<String, Object> items = new HashMap<String, Object>();
+        Iterable<Object> valueChoices = selectOne.getValueChoices();
+        if (valueChoices != null) {
+            for (Object choice : valueChoices) {
+                String itemLabel = converter.convert(choice);
+                items.put(itemLabel, choice);
+                combo.add(itemLabel);
             }
-            combo.setText(value == null ? "" : value);
         }
+        // Set Default Value
+        combo.setText(value == null ? "" : value);
 
         combo.addSelectionListener(new SelectionAdapter() {
             @Override
@@ -56,7 +61,7 @@ public class ComboControlBuilder extends ControlBuilder {
                 int selectionIndex = combo.getSelectionIndex();
                 if (selectionIndex != -1) {
                     String item = combo.getItem(selectionIndex);
-                    InputComponents.setValueFor(converterFactory, input, item);
+                    InputComponents.setValueFor(converterFactory, input, items.get(item));
                 }
             }
         });

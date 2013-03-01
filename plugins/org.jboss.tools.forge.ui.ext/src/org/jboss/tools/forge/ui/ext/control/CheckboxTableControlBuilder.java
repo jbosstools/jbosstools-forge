@@ -8,7 +8,6 @@
 package org.jboss.tools.forge.ui.ext.control;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
