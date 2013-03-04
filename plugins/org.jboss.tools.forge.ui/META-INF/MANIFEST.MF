@@ -30,4 +30,5 @@ Bundle-Activator: org.jboss.tools.forge.ui.ForgeUIPlugin
 Bundle-ClassPath: .
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
-Export-Package: org.jboss.tools.forge.ui.util
+Export-Package: org.jboss.tools.forge.importer,
+ org.jboss.tools.forge.ui.util
