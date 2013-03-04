@@ -26,6 +26,7 @@ public enum ControlBuilderRegistry {
         new FileChooserControlBuilder(),
         new CheckboxTableControlBuilder(),
         new TextBoxControlBuilder(),
+        new PasswordTextBoxControlBuilder(),
         new FallbackTextBoxControlBuilder() };
 
     public ControlBuilder getBuilderFor(InputComponent<?, ?> input) {
