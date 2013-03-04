@@ -30,10 +30,9 @@ public class CheckboxControlBuilder extends ControlBuilder {
     @Override
     public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
         // Create the label
-        Label label = new Label(container, SWT.NULL);
-        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
-
+        new Label(container, SWT.NULL);
         Button cmb = new Button(container, SWT.CHECK);
+        cmb.setText(input.getLabel() == null ? input.getName() : input.getLabel());
         cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         // Set Default Value
         final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
