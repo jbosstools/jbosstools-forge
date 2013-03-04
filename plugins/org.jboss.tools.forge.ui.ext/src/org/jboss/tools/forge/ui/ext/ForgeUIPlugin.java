@@ -8,7 +8,7 @@ import org.osgi.framework.BundleContext;
 
 public class ForgeUIPlugin extends AbstractUIPlugin {
 
-    public static final String PLUGIN_ID = "org.jboss.tools.forge.ui";
+    public static final String PLUGIN_ID = "org.jboss.tools.forge.ui.ext";
 
     private static ForgeUIPlugin plugin;
 
