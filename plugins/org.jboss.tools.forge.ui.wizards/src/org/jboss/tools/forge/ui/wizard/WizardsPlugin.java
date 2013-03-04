@@ -1,15 +1,15 @@
-package org.jboss.tools.forge.ui.scaffold;
+package org.jboss.tools.forge.ui.wizard;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class ScaffoldPlugin extends AbstractUIPlugin {
+public class WizardsPlugin extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "org.jboss.tools.forge.ui.scaffold"; 
 
-	private static ScaffoldPlugin plugin;
+	private static WizardsPlugin plugin;
 	
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -21,7 +21,7 @@ public class ScaffoldPlugin extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	public static ScaffoldPlugin getDefault() {
+	public static WizardsPlugin getDefault() {
 		return plugin;
 	}
 

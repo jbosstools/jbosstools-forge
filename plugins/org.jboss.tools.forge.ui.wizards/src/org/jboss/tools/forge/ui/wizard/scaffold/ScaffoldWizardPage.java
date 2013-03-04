@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.scaffold.wizard;
+package org.jboss.tools.forge.ui.wizard.scaffold;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.wizard.WizardPage;
@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.tools.forge.ui.scaffold.dialog.JPAProjectSelectionDialog;
+import org.jboss.tools.forge.ui.wizard.dialog.JPAProjectSelectionDialog;
 
 public class ScaffoldWizardPage extends WizardPage {
 	

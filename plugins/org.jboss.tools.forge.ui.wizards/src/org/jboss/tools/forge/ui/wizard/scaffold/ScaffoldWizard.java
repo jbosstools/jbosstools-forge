@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.scaffold.wizard;
+package org.jboss.tools.forge.ui.wizard.scaffold;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -21,8 +21,8 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWizard;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
-import org.jboss.tools.forge.ui.scaffold.ScaffoldPlugin;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
+import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 
 public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
 
@@ -99,7 +99,7 @@ public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
 		try {
 			startForge();
 		} catch (Exception e) {
-			ScaffoldPlugin.log(e);
+			WizardsPlugin.log(e);
 		}
 	}
 
