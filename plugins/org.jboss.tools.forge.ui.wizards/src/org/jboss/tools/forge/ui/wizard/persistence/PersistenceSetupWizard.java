@@ -2,6 +2,8 @@ package org.jboss.tools.forge.ui.wizard.persistence;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -120,11 +122,20 @@ public class PersistenceSetupWizard extends Wizard implements IWorkbenchWizard {
 	}
 
 	private void updateProject(String projectName) {
-		ProjectConfigurationUpdater.updateProject(
-				ResourcesPlugin
+		IProject project = ResourcesPlugin
 				.getWorkspace()
 				.getRoot()
-				.getProject(projectName));
+				.getProject(projectName);
+		try {
+			project.refreshLocal(IResource.DEPTH_INFINITE, null);
+			ProjectConfigurationUpdater.updateProject(
+					ResourcesPlugin
+					.getWorkspace()
+					.getRoot()
+					.getProject(projectName));
+		} catch (CoreException e) {
+			WizardsPlugin.log(e);
+		}
 	}
 	
 }

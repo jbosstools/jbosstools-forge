@@ -98,6 +98,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private Object infoMutex = new Object();
 	
 	public String sendCommand(String str) {
+//		System.out.println("sendCommand(" + str + ")");
 		String result = null;
 		if (process != null && !process.isTerminated()) {
 			IStreamsProxy streamsProxy = getStreamsProxy();
@@ -222,7 +223,8 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	private class CommandResultListener extends ForgeHiddenOutputFilter implements IStreamListener {
 		@Override
-		public void streamAppended(String text, IStreamMonitor monitor) {		
+		public void streamAppended(String text, IStreamMonitor monitor) {	
+//			System.out.println("CommandResultListener.streamAppended(" + text + ")");
 			outputAvailable(text);
 		}
 		@Override
