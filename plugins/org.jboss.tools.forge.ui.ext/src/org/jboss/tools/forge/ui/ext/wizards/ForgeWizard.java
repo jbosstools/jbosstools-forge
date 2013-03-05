@@ -158,11 +158,13 @@ public class ForgeWizard extends MutableWizard {
             for (IWizardPage wizardPage : getPages()) {
                 UICommand cmd = ((ForgeWizardPage) wizardPage).getUICommand();
                 Result result = cmd.execute(uiContext);
-                String message = result.getMessage();
-                if (message == null) {
-                    message = "Command " + initialCommand.getMetadata().getName() + " is executed.";
+                if (result != null) {
+                    String message = result.getMessage();
+                    if (message == null) {
+                        message = "Command " + initialCommand.getMetadata().getName() + " is executed.";
+                    }
+                    writeToStatusBar(message);
                 }
-                writeToStatusBar(message);
             }
             return true;
         } catch (Exception e) {
