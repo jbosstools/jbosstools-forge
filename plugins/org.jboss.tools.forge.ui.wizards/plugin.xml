@@ -13,6 +13,15 @@
           </description>
        </wizard>
        <wizard
+             name="Set Up Persistence"
+             category="org.jboss.ide.eclipse.ui.wizards"
+             class="org.jboss.tools.forge.ui.wizard.persistence.PersistenceSetupWizard"
+             id="org.jboss.tools.forge.ui.wizard.persistence">
+          <description>
+                Set up persistence
+          </description>
+       </wizard>
+       <wizard
              name="Scaffold Entities"
              category="org.jboss.ide.eclipse.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.scaffold.ScaffoldWizard"
