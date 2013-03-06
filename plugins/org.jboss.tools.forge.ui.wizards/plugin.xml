@@ -9,7 +9,7 @@
              class="org.jboss.tools.forge.ui.wizard.newproject.NewProjectWizard"
              id="org.jboss.tools.forge.ui.wizard.newproject">
           <description>
-                Creates a new project
+                Create a new project
           </description>
        </wizard>
        <wizard
@@ -22,12 +22,21 @@
           </description>
        </wizard>
        <wizard
+             name="Scaffold Setup"
+             category="org.jboss.ide.eclipse.ui.wizards"
+             class="org.jboss.tools.forge.ui.wizard.scaffold.ScaffoldSetupWizard"
+             id="org.jboss.tools.forge.ui.wizard.scaffold.setup">
+          <description>
+                Set up scaffolding
+          </description>
+       </wizard>
+       <wizard
              name="Scaffold Entities"
              category="org.jboss.ide.eclipse.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.scaffold.ScaffoldWizard"
              id="org.jboss.tools.forge.ui.wizard.scaffold.jsf">
           <description>
-                Scaffolds entities
+                Scaffold entities
           </description>
        </wizard>
     </extension> 
