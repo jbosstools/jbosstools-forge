@@ -22,6 +22,15 @@
           </description>
        </wizard>
        <wizard
+             name="Create New Entity"
+             category="org.jboss.ide.eclipse.ui.wizards"
+             class="org.jboss.tools.forge.ui.wizard.entity.NewEntityWizard"
+             id="org.jboss.tools.forge.ui.wizard.entity">
+          <description>
+                Create new entity
+          </description>
+       </wizard>
+       <wizard
              name="Scaffold Setup"
              category="org.jboss.ide.eclipse.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.scaffold.ScaffoldSetupWizard"
