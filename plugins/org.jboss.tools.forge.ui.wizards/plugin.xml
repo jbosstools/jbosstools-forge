@@ -13,7 +13,7 @@
           </description>
        </wizard>
        <wizard
-             name="Set Up Persistence"
+             name="Persistence Setup"
              category="org.jboss.ide.eclipse.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.persistence.PersistenceSetupWizard"
              id="org.jboss.tools.forge.ui.wizard.persistence">
@@ -22,12 +22,21 @@
           </description>
        </wizard>
        <wizard
-             name="Create New Entity"
+             name="New Entity"
              category="org.jboss.ide.eclipse.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.entity.NewEntityWizard"
              id="org.jboss.tools.forge.ui.wizard.entity">
           <description>
                 Create new entity
+          </description>
+       </wizard>
+       <wizard
+             name="New Field"
+             category="org.jboss.ide.eclipse.ui.wizards"
+             class="org.jboss.tools.forge.ui.wizard.field.NewFieldWizard"
+             id="org.jboss.tools.forge.ui.wizard.field">
+          <description>
+                Create new field
           </description>
        </wizard>
        <wizard
