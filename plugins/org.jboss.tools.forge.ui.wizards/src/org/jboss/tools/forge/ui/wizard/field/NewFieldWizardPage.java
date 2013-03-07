@@ -1,8 +1,10 @@
 package org.jboss.tools.forge.ui.wizard.field;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jpt.jpa.core.JpaProject;
 import org.eclipse.swt.SWT;
@@ -18,11 +20,30 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.jboss.tools.forge.ui.wizard.IForgeWizard;
+import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 import org.jboss.tools.forge.ui.wizard.dialog.JPAProjectSelectionDialog;
 
 public class NewFieldWizardPage extends WizardPage {
 	
-	private NewFieldDescriptor newFieldDescriptor = new NewFieldDescriptor();
+	final static String PROJECT_NAME = "NewFieldWizardPage.projectName";
+	final static String ENTITY_NAME = "NewFieldWizardPage.entityName";
+	final static String FIELD_NAME = "NewFieldWizardPage.fieldName";
+	final static String FIELD_TYPE = "NewFieldWizardPage.fieldType";
+	
+	private static final String[]  FIELD_TYPES = {
+		"string",
+		"int",
+		"long",
+		"number",
+		"boolean",
+		"temporal",
+		"oneToOne",
+		"oneToMany",
+		"manyToOne",
+		"manyToMany",
+		"custom"
+	};
 	
 	private Combo entityCombo;
 
@@ -56,7 +77,7 @@ public class NewFieldWizardPage extends WizardPage {
 				if (dialog.open() != SWT.CANCEL) {
 					IProject project = (IProject)dialog.getResult()[0];
 					projectNameText.setText(project.getName());
-					newFieldDescriptor.project = project.getName();
+					getWizardDescriptor().put(PROJECT_NAME, project.getName());
 					updateEntityCombo(project);
 				}
 			}			
@@ -86,7 +107,7 @@ public class NewFieldWizardPage extends WizardPage {
 		entityCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				newFieldDescriptor.entity = entityCombo.getText();
+				getWizardDescriptor().put(ENTITY_NAME, entityCombo.getText());
 			}
 		});
 	}
@@ -102,7 +123,7 @@ public class NewFieldWizardPage extends WizardPage {
 		nameText.addModifyListener(new ModifyListener() {		
 			@Override
 			public void modifyText(ModifyEvent e) {
-				newFieldDescriptor.name = nameText.getText();
+				getWizardDescriptor().put(FIELD_NAME, nameText.getText());
 			}
 		});
 	}
@@ -114,19 +135,30 @@ public class NewFieldWizardPage extends WizardPage {
 		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gridData.horizontalSpan = 2;
 		typeCombo.setLayoutData(gridData);
-		for (String type : NewFieldDescriptor.TYPES) {
+		for (String type : FIELD_TYPES) {
 			typeCombo.add(type);
 		}
 		typeCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				newFieldDescriptor.type = typeCombo.getText();
+				getWizardDescriptor().put(FIELD_TYPE, typeCombo.getText());
 			}
 		});
 	}
 	
-	public NewFieldDescriptor getNewFieldDescriptor() {
-		return newFieldDescriptor;
+	@Override
+	public IForgeWizard getWizard() {
+		IWizard result = super.getWizard();
+		if (!(result instanceof IForgeWizard)) {
+			RuntimeException e = new RuntimeException("Forge wizard pages need to be hosted by a Forge wizard");
+			WizardsPlugin.log(e);
+			throw e;
+		}
+		return (IForgeWizard)result;
+	}
+	
+	private Map<Object, Object> getWizardDescriptor() {
+		return getWizard().getWizardDescriptor();
 	}
 	
 }

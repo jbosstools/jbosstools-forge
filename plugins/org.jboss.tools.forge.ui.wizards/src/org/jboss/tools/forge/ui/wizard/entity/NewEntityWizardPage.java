@@ -22,8 +22,8 @@ import org.jboss.tools.forge.ui.wizard.dialog.ProjectSelectionDialog;
 
 public class NewEntityWizardPage extends WizardPage {
 	
-	public final static String PROJECT_NAME = "NewEntityWizardPage.projectName";
-	public final static String ENTITY_NAME = "NewEntityWizardPage.entityName";
+	final static String PROJECT_NAME = "NewEntityWizardPage.projectName";
+	final static String ENTITY_NAME = "NewEntityWizardPage.entityName";
 	
 	protected NewEntityWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.entity.new", "Create New Entity", null);

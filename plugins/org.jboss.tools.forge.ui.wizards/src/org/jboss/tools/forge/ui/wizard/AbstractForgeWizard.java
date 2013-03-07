@@ -117,20 +117,16 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 				.getProject(projectName);
 	}
 
-	protected void refreshProject(String projectName) {
-		IProject project = getProject(projectName);
-		if (project != null) {
-			refreshProject(project);
-		}
-	}
-	
-	protected void refreshProject(IProject project) {
+	protected void refreshResource(IResource project) {
 		try {
 			project.refreshLocal(IResource.DEPTH_INFINITE, null);
-			ProjectConfigurationUpdater.updateProject(project);
 		} catch (CoreException e) {
 			WizardsPlugin.log(e);
 		}
+	}
+	
+	protected void updateProjectConfiguration(IProject project) {
+		ProjectConfigurationUpdater.updateProject(project);
 	}
 	
 	public Map<Object, Object> getWizardDescriptor() {

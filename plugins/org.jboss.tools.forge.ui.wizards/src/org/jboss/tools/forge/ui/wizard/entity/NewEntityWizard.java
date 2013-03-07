@@ -27,7 +27,7 @@ public class NewEntityWizard extends AbstractForgeWizard {
 	
 	@Override
 	public void doRefresh() {
-		refreshProject(getProjectName());
+		refreshResource(getProject(getProjectName()));
 	}
 	
 	private String getProjectName() {
