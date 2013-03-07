@@ -1,6 +1,9 @@
 package org.jboss.tools.forge.ui.wizard.entity;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -13,12 +16,15 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.jboss.tools.forge.ui.wizard.IForgeWizard;
+import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 import org.jboss.tools.forge.ui.wizard.dialog.ProjectSelectionDialog;
 
 public class NewEntityWizardPage extends WizardPage {
 	
-	private NewEntityDescriptor newEntityDescriptor = new NewEntityDescriptor();
-
+	public final static String PROJECT_NAME = "NewEntityWizardPage.projectName";
+	public final static String ENTITY_NAME = "NewEntityWizardPage.entityName";
+	
 	protected NewEntityWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.entity.new", "Create New Entity", null);
 	}
@@ -47,7 +53,7 @@ public class NewEntityWizardPage extends WizardPage {
 				if (dialog.open() != SWT.CANCEL) {
 					IProject project = (IProject)dialog.getResult()[0];
 					projectNameText.setText(project.getName());
-					newEntityDescriptor.project = project.getName();
+					getWizardDescriptor().put(PROJECT_NAME, project.getName());
 				}
 			}			
 			@Override
@@ -68,13 +74,24 @@ public class NewEntityWizardPage extends WizardPage {
 		nameText.addModifyListener(new ModifyListener() {		
 			@Override
 			public void modifyText(ModifyEvent e) {
-				newEntityDescriptor.name = nameText.getText();
+				getWizardDescriptor().put(ENTITY_NAME, nameText.getText());
 			}
 		});
 	}
 	
-	public NewEntityDescriptor getNewEntityDescriptor() {
-		return newEntityDescriptor;
+	@Override
+	public IForgeWizard getWizard() {
+		IWizard result = super.getWizard();
+		if (!(result instanceof IForgeWizard)) {
+			RuntimeException e = new RuntimeException("Forge wizard pages need to be hosted by a Forge wizard");
+			WizardsPlugin.log(e);
+			throw e;
+		}
+		return (IForgeWizard)result;
+	}
+	
+	private Map<Object, Object> getWizardDescriptor() {
+		return getWizard().getWizardDescriptor();
 	}
 	
 }
