@@ -36,6 +36,11 @@ public class NewFieldWizard extends AbstractForgeWizard {
 		refreshResource(getTargetEntity().getResource());
 	}
 	
+	@Override
+	public String getStatusMessage() {
+		return "Creating new field '" + getFieldName() + "'.";
+	}
+	
 	private IJavaElement getTargetEntity() {
 		IJavaElement result = null;
 		try {

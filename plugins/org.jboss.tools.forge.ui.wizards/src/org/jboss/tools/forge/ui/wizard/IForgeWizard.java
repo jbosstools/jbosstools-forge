@@ -9,4 +9,5 @@ public interface IForgeWizard extends IWorkbenchWizard {
 	void doExecute();
 	void doRefresh();
 	Map<Object, Object> getWizardDescriptor();
+	String getStatusMessage();
 }

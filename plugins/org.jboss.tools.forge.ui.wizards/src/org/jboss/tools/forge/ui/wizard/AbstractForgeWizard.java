@@ -69,7 +69,7 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 	
 	@Override
 	public boolean performFinish() {
-		Job job = new WorkspaceJob("Create new entity") {
+		Job job = new WorkspaceJob(getStatusMessage()) {
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor)
 					throws CoreException {

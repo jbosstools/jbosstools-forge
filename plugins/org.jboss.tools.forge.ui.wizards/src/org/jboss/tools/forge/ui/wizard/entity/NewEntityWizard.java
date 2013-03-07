@@ -30,6 +30,11 @@ public class NewEntityWizard extends AbstractForgeWizard {
 		refreshResource(getProject(getProjectName()));
 	}
 	
+	@Override
+	public String getStatusMessage() {
+		return "Creating new entity '" + getEntityName() + "'.";
+	}
+	
 	private String getProjectName() {
 		return (String)getWizardDescriptor().get(NewEntityWizardPage.PROJECT_NAME);		
 	}

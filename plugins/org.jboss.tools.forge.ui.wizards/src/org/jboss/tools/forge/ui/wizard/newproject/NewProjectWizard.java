@@ -19,18 +19,24 @@ public class NewProjectWizard extends AbstractForgeWizard {
 		addPage(newProjectWizardPage);
 	}
 
+	@Override
 	public void doExecute() {
 		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
 		runtime.sendCommand("cd " + getProjectLocation());
 		runtime.sendCommand("new-project --named " + getProjectName());
 	}
 
-
+	@Override
 	public void doRefresh() {
 		new ProjectImporter(
 				getProjectLocation(), 
 				getProjectName())
 		.importProject();
+	}
+	
+	@Override
+	public String getStatusMessage() {
+		return "Creating new project '" + getProjectName() + "'.";
 	}
 	
 	private String getProjectLocation() {
