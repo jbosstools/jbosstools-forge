@@ -1,10 +1,6 @@
 package org.jboss.tools.forge.ui.wizard.persistence;
 
-import java.util.Map;
-
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -16,11 +12,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.jboss.tools.forge.ui.wizard.IForgeWizard;
-import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
+import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
 import org.jboss.tools.forge.ui.wizard.dialog.ProjectSelectionDialog;
 
-public class PersistenceSetupWizardPage extends WizardPage {
+public class PersistenceSetupWizardPage extends AbstractForgeWizardPage {
 	
 	final static String PROJECT_NAME = "PersistenceSetupWizardPage.projectName";
 	final static String PROVIDER_NAME = "PersistenceSetupWizardPage.providerName";
@@ -101,21 +96,6 @@ public class PersistenceSetupWizardPage extends WizardPage {
 			}
 		});
 		containerText.setText(defaultContainer);
-	}
-	
-	@Override
-	public IForgeWizard getWizard() {
-		IWizard result = super.getWizard();
-		if (!(result instanceof IForgeWizard)) {
-			RuntimeException e = new RuntimeException("Forge wizard pages need to be hosted by a Forge wizard");
-			WizardsPlugin.log(e);
-			throw e;
-		}
-		return (IForgeWizard)result;
-	}
-	
-	private Map<Object, Object> getWizardDescriptor() {
-		return getWizard().getWizardDescriptor();
 	}
 	
 }
