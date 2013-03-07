@@ -1,5 +1,8 @@
 package org.jboss.tools.forge.ui.wizard.newproject;
 
+import java.util.Map;
+
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -9,11 +12,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.jboss.tools.forge.ui.wizard.IForgeWizard;
+import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 
 public class NewProjectWizardPage extends WizardPage {
 	
-	private NewProjectDescriptor newProjectDescriptor = new NewProjectDescriptor();
-
+	final static String PROJECT_NAME = "NewProjectWizardPage.projectName";
+	final static String PROJECT_LOCATION = "NewProjectWizardPage.projectLocation";
+	
 	protected NewProjectWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.newproject", "Create New Project", null);
 	}
@@ -37,13 +43,24 @@ public class NewProjectWizardPage extends WizardPage {
 		projectNameText.addModifyListener(new ModifyListener() {		
 			@Override
 			public void modifyText(ModifyEvent e) {
-				newProjectDescriptor.name = projectNameText.getText();
+				getWizardDescriptor().put(PROJECT_NAME, projectNameText.getText());
 			}
 		});
 	}
 	
-	public NewProjectDescriptor getNewProjectDescriptor() {
-		return newProjectDescriptor;
+	@Override
+	public IForgeWizard getWizard() {
+		IWizard result = super.getWizard();
+		if (!(result instanceof IForgeWizard)) {
+			RuntimeException e = new RuntimeException("Forge wizard pages need to be hosted by a Forge wizard");
+			WizardsPlugin.log(e);
+			throw e;
+		}
+		return (IForgeWizard)result;
+	}
+	
+	private Map<Object, Object> getWizardDescriptor() {
+		return getWizard().getWizardDescriptor();
 	}
 	
 }
