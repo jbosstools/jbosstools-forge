@@ -1,6 +1,9 @@
 package org.jboss.tools.forge.ui.wizard.persistence;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -13,12 +16,20 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.jboss.tools.forge.ui.wizard.IForgeWizard;
+import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 import org.jboss.tools.forge.ui.wizard.dialog.ProjectSelectionDialog;
 
 public class PersistenceSetupWizardPage extends WizardPage {
 	
-	private PersistenceDescriptor persistenceDescriptor = new PersistenceDescriptor();
+	final static String PROJECT_NAME = "PersistenceSetupWizardPage.projectName";
+	final static String PROVIDER_NAME = "PersistenceSetupWizardPage.providerName";
+	final static String CONTAINER_NAME = "PersistenceSetupWizardPage.containerName";
+	
+	private final static String defaultProvider = "HIBERNATE";
+	private final static String defaultContainer = "JBOSS_AS7"; 
 
+	
 	protected PersistenceSetupWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.persistence", "Set Up Persistence", null);
 	}
@@ -48,7 +59,7 @@ public class PersistenceSetupWizardPage extends WizardPage {
 				if (dialog.open() != SWT.CANCEL) {
 					IProject project = (IProject)dialog.getResult()[0];
 					projectNameText.setText(project.getName());
-					persistenceDescriptor.project = project.getName();
+					getWizardDescriptor().put(PROJECT_NAME, projectNameText.getText());
 				}
 			}			
 			@Override
@@ -66,11 +77,11 @@ public class PersistenceSetupWizardPage extends WizardPage {
 		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gridData.horizontalSpan = 2;
 		providerText.setLayoutData(gridData);
-		providerText.setText(persistenceDescriptor.provider);
+		providerText.setText(defaultProvider);
 		providerText.addModifyListener(new ModifyListener() {		
 			@Override
 			public void modifyText(ModifyEvent e) {
-				persistenceDescriptor.provider = providerText.getText();
+				getWizardDescriptor().put(PROVIDER_NAME, providerText.getText());
 			}
 		});
 	}
@@ -83,17 +94,28 @@ public class PersistenceSetupWizardPage extends WizardPage {
 		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gridData.horizontalSpan = 2;
 		containerText.setLayoutData(gridData);
-		containerText.setText(persistenceDescriptor.container);
+		containerText.setText(defaultContainer);
 		containerText.addModifyListener(new ModifyListener() {		
 			@Override
 			public void modifyText(ModifyEvent e) {
-				persistenceDescriptor.container = containerText.getText();
+				getWizardDescriptor().put(CONTAINER_NAME, containerText.getText());
 			}
 		});
 	}
 	
-	public PersistenceDescriptor getPersistenceDescriptor() {
-		return persistenceDescriptor;
+	@Override
+	public IForgeWizard getWizard() {
+		IWizard result = super.getWizard();
+		if (!(result instanceof IForgeWizard)) {
+			RuntimeException e = new RuntimeException("Forge wizard pages need to be hosted by a Forge wizard");
+			WizardsPlugin.log(e);
+			throw e;
+		}
+		return (IForgeWizard)result;
+	}
+	
+	private Map<Object, Object> getWizardDescriptor() {
+		return getWizard().getWizardDescriptor();
 	}
 	
 }
