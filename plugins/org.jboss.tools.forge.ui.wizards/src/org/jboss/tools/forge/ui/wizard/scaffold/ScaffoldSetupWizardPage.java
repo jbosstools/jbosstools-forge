@@ -1,6 +1,9 @@
 package org.jboss.tools.forge.ui.wizard.scaffold;
 
+import java.util.Map;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,11 +14,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.jboss.tools.forge.ui.wizard.IForgeWizard;
+import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 import org.jboss.tools.forge.ui.wizard.dialog.JPAProjectSelectionDialog;
 
 public class ScaffoldSetupWizardPage extends WizardPage {
 	
-	private ScaffoldSetupDescriptor scaffoldSetupDescriptor = new ScaffoldSetupDescriptor();
+	final static String PROJECT_NAME = "ScaffoldSetupWizardPage.projectName";
 
 	protected ScaffoldSetupWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.scaffold.setup", "Set Up Scaffolding", null);
@@ -44,7 +49,7 @@ public class ScaffoldSetupWizardPage extends WizardPage {
 				if (dialog.open() != SWT.CANCEL) {
 					IProject project = (IProject)dialog.getResult()[0];
 					projectNameText.setText(project.getName());
-					scaffoldSetupDescriptor.project = project.getName();
+					getWizardDescriptor().put(PROJECT_NAME, projectNameText.getText());
 				}
 			}			
 			@Override
@@ -54,8 +59,19 @@ public class ScaffoldSetupWizardPage extends WizardPage {
 		});
 	}
 		
-	public ScaffoldSetupDescriptor getScaffoldSetupDescriptor() {
-		return scaffoldSetupDescriptor;
+	@Override
+	public IForgeWizard getWizard() {
+		IWizard result = super.getWizard();
+		if (!(result instanceof IForgeWizard)) {
+			RuntimeException e = new RuntimeException("Forge wizard pages need to be hosted by a Forge wizard");
+			WizardsPlugin.log(e);
+			throw e;
+		}
+		return (IForgeWizard)result;
+	}
+	
+	private Map<Object, Object> getWizardDescriptor() {
+		return getWizard().getWizardDescriptor();
 	}
 	
 }

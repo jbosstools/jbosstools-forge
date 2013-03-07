@@ -77,13 +77,13 @@ public class PersistenceSetupWizardPage extends WizardPage {
 		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gridData.horizontalSpan = 2;
 		providerText.setLayoutData(gridData);
-		providerText.setText(defaultProvider);
 		providerText.addModifyListener(new ModifyListener() {		
 			@Override
 			public void modifyText(ModifyEvent e) {
 				getWizardDescriptor().put(PROVIDER_NAME, providerText.getText());
 			}
 		});
+		providerText.setText(defaultProvider);
 	}
 	
 	private void createContainerEditor(Composite parent) {
@@ -94,13 +94,13 @@ public class PersistenceSetupWizardPage extends WizardPage {
 		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gridData.horizontalSpan = 2;
 		containerText.setLayoutData(gridData);
-		containerText.setText(defaultContainer);
 		containerText.addModifyListener(new ModifyListener() {		
 			@Override
 			public void modifyText(ModifyEvent e) {
 				getWizardDescriptor().put(CONTAINER_NAME, containerText.getText());
 			}
 		});
+		containerText.setText(defaultContainer);
 	}
 	
 	@Override
