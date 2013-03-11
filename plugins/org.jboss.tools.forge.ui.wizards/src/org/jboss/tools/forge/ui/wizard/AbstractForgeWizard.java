@@ -57,7 +57,6 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 					}
 
 				});
-
 				while (!ForgeHelper.isForgeRunning()) {
 					taskName += ".";
 					monitor.setTaskName(taskName);

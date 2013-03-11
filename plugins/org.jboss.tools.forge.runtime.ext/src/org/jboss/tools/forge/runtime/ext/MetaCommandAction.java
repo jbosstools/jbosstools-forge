@@ -48,6 +48,7 @@ public class MetaCommandAction implements TriggeredAction {
 	}
 	
 	private void handleHiddenCommand(String text) {	
+		shell.print(ESCAPE + "handleHiddenCommand(" + text + ")"); 
 		try {
 			if ("plugin-candidates-query".equals(text)) {
 				shell.print(ESCAPE + "RESULT: plugin-candidates-answer: " + getPluginCandidates() + ESCAPE);
