@@ -25,7 +25,7 @@ import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard {
 
-	private HashMap<Object, Object> wizardDescriptor = new HashMap<Object, Object>();
+	private HashMap<Object, Object> wizardDescriptor = null;
 	
 	private String startDir = null;
 	private boolean acceptDefaults = false;
@@ -130,6 +130,9 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 	}
 	
 	public Map<Object, Object> getWizardDescriptor() {
+		if (wizardDescriptor == null) {
+			wizardDescriptor = new HashMap<Object, Object>();
+		}
 		return wizardDescriptor;
 	}
 	

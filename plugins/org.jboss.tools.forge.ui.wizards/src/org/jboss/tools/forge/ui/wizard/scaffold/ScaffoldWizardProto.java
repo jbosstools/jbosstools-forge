@@ -24,11 +24,11 @@ import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 
-public class ScaffoldWizard extends Wizard implements IWorkbenchWizard {
+public class ScaffoldWizardProto extends Wizard implements IWorkbenchWizard {
 
-	private ScaffoldWizardPage scaffoldWizardPage = new ScaffoldWizardPage();
+	private ScaffoldWizardPageProto scaffoldWizardPage = new ScaffoldWizardPageProto();
 
-	public ScaffoldWizard() {
+	public ScaffoldWizardProto() {
 		setWindowTitle("Scaffold JPA Entities");
 		// setDefaultPageImageDescriptor(ImageDescriptor.createFromFile(
 		// ScaffoldWizard.class, "ScaffoldEntitiesWizBan.png"));

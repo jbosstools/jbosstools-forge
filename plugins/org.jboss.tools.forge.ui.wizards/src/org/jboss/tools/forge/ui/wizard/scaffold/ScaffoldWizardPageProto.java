@@ -13,11 +13,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.forge.ui.wizard.dialog.JPAProjectSelectionDialog;
 
-public class ScaffoldWizardPage extends WizardPage {
+public class ScaffoldWizardPageProto extends WizardPage {
 	
 	private IProject targetProject;
 
-	protected ScaffoldWizardPage() {
+	protected ScaffoldWizardPageProto() {
 		super("org.jboss.tools.forge.ui.wizard.scaffold", "Scaffold JPA Entities", null);
 	}
 

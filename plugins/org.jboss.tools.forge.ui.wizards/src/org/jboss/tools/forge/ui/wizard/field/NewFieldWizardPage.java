@@ -74,7 +74,7 @@ public class NewFieldWizardPage extends AbstractForgeWizardPage {
 					IProject project = (IProject)dialog.getResult()[0];
 					projectNameText.setText(project.getName());
 					getWizardDescriptor().put(PROJECT_NAME, project.getName());
-					updateEntityCombo(project);
+					refreshEntityEditor(project);
 				}
 			}			
 			@Override
@@ -84,7 +84,7 @@ public class NewFieldWizardPage extends AbstractForgeWizardPage {
 		});
 	}
 	
-	private void updateEntityCombo(IProject project) {
+	private void refreshEntityEditor(IProject project) {
 		entityCombo.removeAll();
 		JpaProject jpaProject = (JpaProject)project.getAdapter(JpaProject.class);
 		Iterator<String> iterator = jpaProject.getAnnotatedJavaSourceClassNames().iterator();
