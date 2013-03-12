@@ -1,19 +1,21 @@
 package org.jboss.tools.forge.ui.wizard.persistence;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
-import org.jboss.tools.forge.ui.wizard.dialog.ProjectSelectionDialog;
+import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
 public class PersistenceSetupWizardPage extends AbstractForgeWizardPage {
 	
@@ -42,26 +44,26 @@ public class PersistenceSetupWizardPage extends AbstractForgeWizardPage {
 	private void createProjectEditor(Composite parent) {
 		Label projectNameLabel = new Label(parent, SWT.NONE);
 		projectNameLabel.setText("Project: ");
-		final Text projectNameText = new Text(parent, SWT.BORDER);
-		projectNameText.setText("");
-		projectNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		Button projectSearchButton = new Button(parent, SWT.NONE);
-		projectSearchButton.setText("Search...");
-		projectSearchButton.addSelectionListener(new SelectionListener() {			
+		final Combo projectNameCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+		IProject[] allProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		for (IProject project : allProjects) {
+			if (!WizardsHelper.isJPAProject(project)) {
+				projectNameCombo.add(project.getName());
+			}
+		}
+		String projectName = (String)getWizardDescriptor().get(PROJECT_NAME); 
+		if (projectName != null) {
+			projectNameCombo.setText(projectName);
+		}
+		projectNameCombo.addSelectionListener(new SelectionAdapter() {		
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				ProjectSelectionDialog dialog = new ProjectSelectionDialog(getShell());
-				if (dialog.open() != SWT.CANCEL) {
-					IProject project = (IProject)dialog.getResult()[0];
-					projectNameText.setText(project.getName());
-					getWizardDescriptor().put(PROJECT_NAME, projectNameText.getText());
-				}
-			}			
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-				widgetSelected(e);
+			public void widgetSelected(SelectionEvent e) {
+				getWizardDescriptor().put(PROJECT_NAME, projectNameCombo.getText());
 			}
 		});
+		projectNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		final Button newProjectButton = new Button(parent, SWT.NONE);
+		newProjectButton.setText("New...");
 	}
 		
 	private void createProviderEditor(Composite parent) {

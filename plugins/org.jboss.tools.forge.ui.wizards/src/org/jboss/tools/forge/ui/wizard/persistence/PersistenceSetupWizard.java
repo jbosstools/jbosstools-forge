@@ -1,9 +1,14 @@
 package org.jboss.tools.forge.ui.wizard.persistence;
 
+import java.util.Iterator;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbench;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
+import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
 public class PersistenceSetupWizard extends AbstractForgeWizard {
 
@@ -11,6 +16,29 @@ public class PersistenceSetupWizard extends AbstractForgeWizard {
 
 	public PersistenceSetupWizard() {
 		setWindowTitle("Set Up Persistence");
+	}
+	
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection sel) {
+		super.init(workbench, sel);
+		initializeProject(sel);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void initializeProject(IStructuredSelection sel) {
+		Iterator iterator = sel.iterator();
+		while (iterator.hasNext()) {
+			Object object = iterator.next();
+			if (object instanceof IProject) {
+				IProject project = (IProject)object;
+				if (!WizardsHelper.isJPAProject(project)) {
+					getWizardDescriptor().put(
+							PersistenceSetupWizardPage.PROJECT_NAME, 
+							project.getName());
+					return;
+				}
+			}
+		}
 	}
 
 	@Override
