@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.wizard.newproject;
+package org.jboss.tools.forge.ui.wizard.project;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.tools.forge.core.process.ForgeRuntime;

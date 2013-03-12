@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.wizard.newproject;
+package org.jboss.tools.forge.ui.wizard.project;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;

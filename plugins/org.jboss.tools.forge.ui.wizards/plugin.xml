@@ -6,7 +6,7 @@
        <wizard
              name="New Project"
              category="org.jboss.ide.eclipse.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.newproject.NewProjectWizard"
+             class="org.jboss.tools.forge.ui.wizard.project.NewProjectWizard"
              id="org.jboss.tools.forge.ui.wizard.newproject">
           <description>
                 Create a new project
