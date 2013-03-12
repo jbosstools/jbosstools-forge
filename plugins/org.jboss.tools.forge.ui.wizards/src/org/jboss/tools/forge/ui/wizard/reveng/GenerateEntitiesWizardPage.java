@@ -25,6 +25,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	private HashMap<String, ConnectionProfileDescriptor> connectionProfiles = 
 			new HashMap<String, ConnectionProfileDescriptor>();
 	private Combo connectionProfileCombo;
+	private ConnectionProfileHelper connectionProfileHelper = new ConnectionProfileHelper(this);
 	
 	protected GenerateEntitiesWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.generate.entities", "Generate Entities", null);
@@ -69,6 +70,12 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		connectionProfileLabel.setText("Connection Profile: ");
 		connectionProfileCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 		connectionProfileCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		connectionProfileCombo.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getWizardDescriptor().put(CONNECTION_PROFILE, connectionProfileCombo.getText());
+			}
+		});
 		Button connectionProfileButton = new Button(parent, SWT.NONE);
 		connectionProfileButton.setText("Manage...");
 		connectionProfileButton.addSelectionListener(new SelectionAdapter() {			
@@ -79,10 +86,10 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				refreshConnectionProfiles(dialog.getConnectionProfiles());
 			}			
 		});
-		refreshConnectionProfiles(ConnectionProfileHelper.getConnectionProfiles());
+		connectionProfileHelper.retrieveConnectionProfiles();
 	}
 	
-	private void refreshConnectionProfiles(ConnectionProfileDescriptor[] connectionProfiles) {
+	void refreshConnectionProfiles(ConnectionProfileDescriptor[] connectionProfiles) {
 		this.connectionProfiles.clear();
 		connectionProfileCombo.removeAll();
 		for (ConnectionProfileDescriptor connectionProfile : connectionProfiles) {
