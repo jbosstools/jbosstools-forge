@@ -1,15 +1,21 @@
 package org.jboss.tools.forge.ui.wizard.field;
 
+import java.util.Iterator;
+
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbench;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
 import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
+import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
 public class NewFieldWizard extends AbstractForgeWizard {
 
@@ -17,6 +23,29 @@ public class NewFieldWizard extends AbstractForgeWizard {
 
 	public NewFieldWizard() {
 		setWindowTitle("Create New Field");
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection sel) {
+		super.init(workbench, sel);
+		initializeProject(sel);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void initializeProject(IStructuredSelection sel) {
+		Iterator iterator = sel.iterator();
+		while (iterator.hasNext()) {
+			Object object = iterator.next();
+			if (object instanceof IResource) {
+				IProject project = ((IResource)object).getProject();
+				if (WizardsHelper.isJPAProject(project)) {
+					getWizardDescriptor().put(
+							NewFieldWizardPage.PROJECT_NAME, 
+							project.getName());
+					return;
+				}
+			}
+		}
 	}
 
 	@Override

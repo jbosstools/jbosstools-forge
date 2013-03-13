@@ -3,6 +3,7 @@ package org.jboss.tools.forge.ui.wizard.persistence;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
@@ -29,8 +30,8 @@ public class PersistenceSetupWizard extends AbstractForgeWizard {
 		Iterator iterator = sel.iterator();
 		while (iterator.hasNext()) {
 			Object object = iterator.next();
-			if (object instanceof IProject) {
-				IProject project = (IProject)object;
+			if (object instanceof IResource) {
+				IProject project = ((IResource)object).getProject();
 				if (!WizardsHelper.isJPAProject(project)) {
 					getWizardDescriptor().put(
 							PersistenceSetupWizardPage.PROJECT_NAME, 

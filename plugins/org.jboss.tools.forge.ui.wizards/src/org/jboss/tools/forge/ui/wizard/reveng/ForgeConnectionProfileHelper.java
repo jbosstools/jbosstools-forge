@@ -11,7 +11,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
-public class ConnectionProfileHelper {
+public class ForgeConnectionProfileHelper {
 	
 	private static final String CONNECTION_PROFILE = "Connection profile \"";
 	private static final String DIALECT = "dialect:";
@@ -22,7 +22,7 @@ public class ConnectionProfileHelper {
 	
 	private GenerateEntitiesWizardPage wizardPage;
 	
-	ConnectionProfileHelper(GenerateEntitiesWizardPage wizardPage) {
+	ForgeConnectionProfileHelper(GenerateEntitiesWizardPage wizardPage) {
 		this.wizardPage = wizardPage;
 	}
 	
