@@ -5,10 +5,12 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ForgePreferencesInitializerTest {
 	
+	@Ignore
 	@Test
 	public void testInitializeDefaultPreferences() {
 		IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
