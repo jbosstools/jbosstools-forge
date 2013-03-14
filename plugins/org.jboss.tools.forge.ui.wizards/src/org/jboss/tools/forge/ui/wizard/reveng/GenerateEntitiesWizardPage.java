@@ -24,7 +24,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	private HashMap<String, ConnectionProfileDescriptor> connectionProfiles = 
 			new HashMap<String, ConnectionProfileDescriptor>();
 	private Combo connectionProfileCombo;
-	private ForgeConnectionProfileHelper connectionProfileHelper = new ForgeConnectionProfileHelper(this);
+	private DataToolsConnectionProfileHelper connectionProfileHelper = new DataToolsConnectionProfileHelper(this);
 	
 	protected GenerateEntitiesWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.generate.entities", "Generate Entities", null);
