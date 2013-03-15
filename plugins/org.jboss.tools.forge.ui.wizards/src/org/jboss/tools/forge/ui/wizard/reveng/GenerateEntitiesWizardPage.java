@@ -12,7 +12,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
@@ -23,8 +25,12 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	
 	private HashMap<String, ConnectionProfileDescriptor> connectionProfiles = 
 			new HashMap<String, ConnectionProfileDescriptor>();
+	private DataToolsConnectionProfileHelper connectionProfileHelper = 
+			new DataToolsConnectionProfileHelper(this);
+	
 	private Combo connectionProfileCombo;
-	private DataToolsConnectionProfileHelper connectionProfileHelper = new DataToolsConnectionProfileHelper(this);
+	private Text urlText;
+	
 	
 	protected GenerateEntitiesWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.generate.entities", "Generate Entities", null);
@@ -36,6 +42,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
 		createConnectionProfileEditor(control);
+		createConnectionProfileDetailsEditor(control);
 		setControl(control);
 	}
 	
@@ -72,7 +79,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		connectionProfileCombo.addSelectionListener(new SelectionAdapter() {			
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				getWizardDescriptor().put(CONNECTION_PROFILE, connectionProfileCombo.getText());
+				updateConnectionProfileDetails();
 			}
 		});
 		Button connectionProfileButton = new Button(parent, SWT.NONE);
@@ -95,6 +102,44 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 			connectionProfileCombo.add(connectionProfile.name);
 			this.connectionProfiles.put(connectionProfile.name, connectionProfile);
 		}
+	}
+	
+	private void createConnectionProfileDetailsEditor(Composite parent) {
+//		Composite comp = new Composite(parent, SWT.BORDER);
+//		GridData gridData = new GridData(SWT.DEFAULT, 3);
+//		gridData.grabExcessHorizontalSpace = true;
+//		gridData.horizontalAlignment = SWT.FILL;
+//		comp.setLayoutData(gridData);
+//		comp.setLayout(new GridLayout(2, false));
+		Group group = new Group(parent, SWT.SHADOW_IN);
+		group.setText("Connection Profile Details");
+		GridData gridData = new GridData(3, SWT.DEFAULT);
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalAlignment = SWT.FILL;
+		gridData.horizontalSpan = 3;
+		group.setLayoutData(gridData);
+		group.setLayout(new GridLayout(2, false));
+		createUrlEditor(group);
+//		createUserNameEditor(group);
+//		createPasswordEditor(group);
+//		createHibernateDialectEditor(group);
+//		createDriverNameEditor(group);
+//		createDriverLocationEditor(group);
+//		createUpdateConnectionProfileEditor(group);
+	}
+	
+	private void createUrlEditor(Composite parent) {
+		Label urlLabel = new Label(parent, SWT.NONE);
+		urlLabel.setText("URL: ");
+		urlText = new Text(parent, SWT.NONE);
+	}
+	
+	private void updateConnectionProfileDetails() {
+		ConnectionProfileDescriptor selectedConnectionProfile = 
+				connectionProfiles.get(connectionProfileCombo.getText());
+		String url = selectedConnectionProfile.url;
+		url = url == null ? "" : url;
+		urlText.setText(selectedConnectionProfile.url);
 	}
 	
 }
