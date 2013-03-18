@@ -28,8 +28,8 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	private DataToolsConnectionProfileHelper connectionProfileHelper = 
 			new DataToolsConnectionProfileHelper(this);
 	
-	private Combo connectionProfileCombo;
-	private Text urlText;
+	private Combo connectionProfileCombo, hibernateDialectCombo;
+	private Text urlText, userNameText, userPasswordText, driverNameText, driverLocationText;
 	
 	
 	protected GenerateEntitiesWizardPage() {
@@ -69,11 +69,12 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		});
 		final Button newProjectButton = new Button(parent, SWT.NONE);
 		newProjectButton.setText("New...");
+		newProjectButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 	}
 		
 	private void createConnectionProfileEditor(Composite parent) {
 		Label connectionProfileLabel = new Label(parent, SWT.NONE);
-		connectionProfileLabel.setText("Connection Profile: ");
+		connectionProfileLabel.setText("Connection Profile Name: ");
 		connectionProfileCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 		connectionProfileCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		connectionProfileCombo.addSelectionListener(new SelectionAdapter() {			
@@ -92,6 +93,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				refreshConnectionProfiles(dialog.getConnectionProfiles());
 			}			
 		});
+		connectionProfileButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		connectionProfileHelper.retrieveConnectionProfiles();
 	}
 	
@@ -105,33 +107,63 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	}
 	
 	private void createConnectionProfileDetailsEditor(Composite parent) {
-//		Composite comp = new Composite(parent, SWT.BORDER);
-//		GridData gridData = new GridData(SWT.DEFAULT, 3);
-//		gridData.grabExcessHorizontalSpace = true;
-//		gridData.horizontalAlignment = SWT.FILL;
-//		comp.setLayoutData(gridData);
-//		comp.setLayout(new GridLayout(2, false));
-		Group group = new Group(parent, SWT.SHADOW_IN);
-		group.setText("Connection Profile Details");
-		GridData gridData = new GridData(3, SWT.DEFAULT);
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalAlignment = SWT.FILL;
-		gridData.horizontalSpan = 3;
-		group.setLayoutData(gridData);
+		Label connectionProfileDetailsLabel = new Label(parent, SWT.NONE);
+		connectionProfileDetailsLabel.setText("Connection Profile Details: ");
+		connectionProfileDetailsLabel.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false, 2, SWT.DEFAULT));
+		Combo dummyCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+		dummyCombo.setVisible(false);
+		Group group = new Group(parent, SWT.DEFAULT);
+		group.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, SWT.DEFAULT));
 		group.setLayout(new GridLayout(2, false));
 		createUrlEditor(group);
-//		createUserNameEditor(group);
-//		createPasswordEditor(group);
-//		createHibernateDialectEditor(group);
-//		createDriverNameEditor(group);
-//		createDriverLocationEditor(group);
+		createUserNameEditor(group);
+		createPasswordEditor(group);
+		createHibernateDialectEditor(group);
+		createDriverNameEditor(group);
+		createDriverLocationEditor(group);
 //		createUpdateConnectionProfileEditor(group);
 	}
 	
 	private void createUrlEditor(Composite parent) {
 		Label urlLabel = new Label(parent, SWT.NONE);
 		urlLabel.setText("URL: ");
-		urlText = new Text(parent, SWT.NONE);
+		urlText = new Text(parent, SWT.BORDER);
+		urlText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+	}
+	
+	private void createUserNameEditor(Composite parent) {
+		Label userNameLabel = new Label(parent, SWT.NONE);
+		userNameLabel.setText("User Name: ");
+		userNameText = new Text(parent, SWT.BORDER);
+		userNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+	}
+	
+	private void createPasswordEditor(Composite parent) {
+		Label userPasswordLabel = new Label(parent, SWT.NONE);
+		userPasswordLabel.setText("User Password: ");
+		userPasswordText = new Text(parent, SWT.BORDER);
+		userPasswordText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+	}
+	
+	private void createHibernateDialectEditor(Composite parent) {
+		Label hibernateDialectLabel = new Label(parent, SWT.NONE);
+		hibernateDialectLabel.setText("Hibernate Dialect: ");
+		hibernateDialectCombo = new Combo(parent, SWT.DROP_DOWN);
+		hibernateDialectCombo.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+	}
+	
+	private void createDriverNameEditor(Composite parent) {
+		Label driverNameLabel = new Label(parent, SWT.NONE);
+		driverNameLabel.setText("Driver Name: ");
+		driverNameText = new Text(parent, SWT.BORDER);
+		driverNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+	}
+	
+	private void createDriverLocationEditor(Composite parent) {
+		Label driverLocationLabel = new Label(parent, SWT.NONE);
+		driverLocationLabel.setText("Driver Location: ");
+		driverLocationText = new Text(parent, SWT.BORDER);
+		driverLocationText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 	}
 	
 	private void updateConnectionProfileDetails() {
