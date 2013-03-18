@@ -15,9 +15,9 @@ public class DataToolsConnectionProfileHelper {
 	private static final String USER_NAME = "org.eclipse.datatools.connectivity.db.username";
 	private static final String URL = "org.eclipse.datatools.connectivity.db.URL";
 	
-	private GenerateEntitiesWizardPage wizardPage;
+	private ConnectionProfileWizardPage wizardPage;
 	
-	DataToolsConnectionProfileHelper(GenerateEntitiesWizardPage wizardPage) {
+	DataToolsConnectionProfileHelper(ConnectionProfileWizardPage wizardPage) {
 		this.wizardPage = wizardPage;
 	}
 		
@@ -44,11 +44,6 @@ public class DataToolsConnectionProfileHelper {
 			descriptor.driverLocation = props.getProperty(DRIVER_LOCATION);
 			descriptor.url = props.getProperty(URL);
 			descriptor.user = props.getProperty(USER_NAME);
-//			System.out.println("connection profile: " + connectionProfile.getName());
-//			for (Entry<Object, Object> entry : props.entrySet()) {
-//				System.out.println("  key: " + entry.getKey());
-//				System.out.println("  value: " + entry.getValue());
-//			}
 			result.add(descriptor);
 		}
 		return result;

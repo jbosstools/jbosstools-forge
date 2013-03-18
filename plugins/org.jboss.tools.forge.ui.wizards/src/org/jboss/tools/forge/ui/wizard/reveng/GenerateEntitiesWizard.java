@@ -13,7 +13,7 @@ import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
 public class GenerateEntitiesWizard extends AbstractForgeWizard {
 
-	private GenerateEntitiesWizardPage generateEntitiesWizardPage = new GenerateEntitiesWizardPage();
+	private ConnectionProfileWizardPage generateEntitiesWizardPage = new ConnectionProfileWizardPage();
 
 	public GenerateEntitiesWizard() {
 		setWindowTitle("Generate Entities");
@@ -34,7 +34,7 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 				IProject project = ((IResource)object).getProject();
 				if (WizardsHelper.isJPAProject(project)) {
 					getWizardDescriptor().put(
-							GenerateEntitiesWizardPage.PROJECT_NAME, 
+							ConnectionProfileWizardPage.PROJECT_NAME, 
 							project.getName());
 					return;
 				}
@@ -67,11 +67,11 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 	}
 	
 	private String getProjectName() {
-		return (String)getWizardDescriptor().get(GenerateEntitiesWizardPage.PROJECT_NAME);
+		return (String)getWizardDescriptor().get(ConnectionProfileWizardPage.PROJECT_NAME);
 	}
 	
 	private String getConnectionProfile() {
-		return (String)getWizardDescriptor().get(GenerateEntitiesWizardPage.CONNECTION_PROFILE);
+		return (String)getWizardDescriptor().get(ConnectionProfileWizardPage.CONNECTION_PROFILE);
 	}
 	
 	private String getProjectLocation() {

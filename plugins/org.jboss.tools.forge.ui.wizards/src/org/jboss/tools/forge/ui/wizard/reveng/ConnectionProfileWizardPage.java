@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
-public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
+public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 	
 	final static String PROJECT_NAME = "GenerateEntitiesWizardPage.projectName";
 	final static String CONNECTION_PROFILE = "GenerateEntitiesWizardPage.connectionProfile";
@@ -33,7 +33,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	private Text urlText, userNameText, userPasswordText, driverNameText, driverLocationText;
 	
 	
-	protected GenerateEntitiesWizardPage() {
+	protected ConnectionProfileWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.generate.entities", "Generate Entities", null);
 	}
 	

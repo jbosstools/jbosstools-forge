@@ -20,9 +20,9 @@ public class ForgeConnectionProfileHelper {
 	private static final String URL = "url:";
 	private static final String USER = "user:";
 	
-	private GenerateEntitiesWizardPage wizardPage;
+	private ConnectionProfileWizardPage wizardPage;
 	
-	ForgeConnectionProfileHelper(GenerateEntitiesWizardPage wizardPage) {
+	ForgeConnectionProfileHelper(ConnectionProfileWizardPage wizardPage) {
 		this.wizardPage = wizardPage;
 	}
 	
