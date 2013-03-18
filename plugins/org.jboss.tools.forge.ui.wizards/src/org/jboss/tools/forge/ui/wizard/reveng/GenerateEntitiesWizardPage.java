@@ -9,6 +9,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -113,7 +114,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		Combo dummyCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 		dummyCombo.setVisible(false);
 		Group group = new Group(parent, SWT.DEFAULT);
-		group.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2, SWT.DEFAULT));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 3, SWT.DEFAULT));
 		group.setLayout(new GridLayout(2, false));
 		createUrlEditor(group);
 		createUserNameEditor(group);
@@ -121,7 +122,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		createHibernateDialectEditor(group);
 		createDriverNameEditor(group);
 		createDriverLocationEditor(group);
-//		createUpdateConnectionProfileEditor(group);
+		createUpdateRestoreComposite(group);
 	}
 	
 	private void createUrlEditor(Composite parent) {
@@ -164,6 +165,22 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		driverLocationLabel.setText("Driver Location: ");
 		driverLocationText = new Text(parent, SWT.BORDER);
 		driverLocationText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+	}
+	
+	private void createUpdateRestoreComposite(Composite parent) {
+		Composite updateRestoreComposite = new Composite(parent, SWT.NONE);
+		RowLayout layout = new RowLayout();
+		layout.marginBottom = 0;
+		layout.marginTop = 0;
+		layout.marginLeft = 0;
+		layout.marginRight = 0;
+		layout.spacing = 0;
+		updateRestoreComposite.setLayout(layout);
+		Button updateButton = new Button(updateRestoreComposite, SWT.NONE);
+		updateButton.setText("Update");
+		Button restoreButton = new Button(updateRestoreComposite, SWT.NONE);
+		restoreButton.setText("Restore");
+		updateRestoreComposite.setLayoutData(new GridData(SWT.END, SWT.DEFAULT, true, false, 3, SWT.DEFAULT));
 	}
 	
 	private void updateConnectionProfileDetails() {
