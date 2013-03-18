@@ -49,7 +49,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 	
 	private void createProjectEditor(Composite parent) {
 		Label projectNameLabel = new Label(parent, SWT.NONE);
-		projectNameLabel.setText("Project: ");
+		projectNameLabel.setText("JPA Project: ");
 		final Combo projectNameCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 		projectNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		IProject[] allProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
@@ -142,7 +142,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 	private void createPasswordEditor(Composite parent) {
 		Label userPasswordLabel = new Label(parent, SWT.NONE);
 		userPasswordLabel.setText("User Password: ");
-		userPasswordText = new Text(parent, SWT.BORDER);
+		userPasswordText = new Text(parent, SWT.BORDER | SWT.PASSWORD);
 		userPasswordText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 	}
 	
@@ -151,11 +151,18 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		hibernateDialectLabel.setText("Hibernate Dialect: ");
 		hibernateDialectCombo = new Combo(parent, SWT.DROP_DOWN);
 		hibernateDialectCombo.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		fillHibernateDialectCombo();
+	}
+	
+	private void fillHibernateDialectCombo() {
+		for (HibernateDialect hibernateDialect : HibernateDialect.values()) {
+			hibernateDialectCombo.add(hibernateDialect.getClassName());
+		}
 	}
 	
 	private void createDriverNameEditor(Composite parent) {
 		Label driverNameLabel = new Label(parent, SWT.NONE);
-		driverNameLabel.setText("Driver Name: ");
+		driverNameLabel.setText("Driver Class: ");
 		driverNameText = new Text(parent, SWT.BORDER);
 		driverNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 	}
@@ -189,6 +196,20 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		String url = selectedConnectionProfile.url;
 		url = url == null ? "" : url;
 		urlText.setText(selectedConnectionProfile.url);
+		String user = selectedConnectionProfile.user;
+		user = user == null ? "" : user;
+		userNameText.setText(user);
+		String password = selectedConnectionProfile.password;
+		password = password == null ? "" : password;
+		String driverClassName = selectedConnectionProfile.driverClass;
+		userPasswordText.setText(password);
+		driverClassName = driverClassName == null ? "" : driverClassName;
+		driverNameText.setText(driverClassName);
+		String driverLocation = selectedConnectionProfile.driverLocation;
+		driverLocation = driverLocation == null ? "" : driverLocation;
+		driverLocationText.setText(driverLocation);
 	}
+	
+	
 	
 }
