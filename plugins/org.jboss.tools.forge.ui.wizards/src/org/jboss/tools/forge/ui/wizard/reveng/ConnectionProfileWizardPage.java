@@ -33,7 +33,9 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 	
 	private Combo connectionProfileCombo, hibernateDialectCombo;
 	private Text urlText, userNameText, userPasswordText, driverNameText, driverLocationText;
+	private Button saveButton, revertButton;
 	
+	private boolean updatingConnectionProfileDetails = false;
 	
 	protected ConnectionProfileWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.generate.entities", "Generate Entities", null);
@@ -136,7 +138,9 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		urlText.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (updatingConnectionProfileDetails) return;
 				getSelectedConnectionProfile().url = urlText.getText();
+				enableButtons(true);
 			}
 		});
 	}
@@ -149,7 +153,9 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		userNameText.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (updatingConnectionProfileDetails) return;
 				getSelectedConnectionProfile().user = userNameText.getText();
+				enableButtons(true);
 			}
 		});
 	}
@@ -162,7 +168,9 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		userPasswordText.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (updatingConnectionProfileDetails) return;
 				getSelectedConnectionProfile().password = userPasswordText.getText();
+				enableButtons(true);
 			}
 		});
 	}
@@ -176,7 +184,9 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		hibernateDialectCombo.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (updatingConnectionProfileDetails) return;
 				getSelectedConnectionProfile().dialect = hibernateDialectCombo.getText();
+				enableButtons(true);
 			}
 		});
 	}
@@ -195,7 +205,9 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		driverNameText.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (updatingConnectionProfileDetails) return;
 				getSelectedConnectionProfile().driverClass = driverNameText.getText();
+				enableButtons(true);
 			}
 		});
 	}
@@ -208,7 +220,9 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		driverLocationText.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
+				if (updatingConnectionProfileDetails) return;
 				getSelectedConnectionProfile().driverLocation = driverLocationText.getText();
+				enableButtons(true);
 			}
 		});
 	}
@@ -222,16 +236,34 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		layout.marginRight = 0;
 		layout.spacing = 0;
 		updateRestoreComposite.setLayout(layout);
-		Button updateButton = new Button(updateRestoreComposite, SWT.NONE);
-		updateButton.setText("Save");
-		updateButton.setEnabled(false);
-		Button restoreButton = new Button(updateRestoreComposite, SWT.NONE);
-		restoreButton.setText("Revert");
-		restoreButton.setEnabled(false);
+		saveButton = new Button(updateRestoreComposite, SWT.NONE);
+		saveButton.setText("Save");
+		saveButton.setEnabled(false);
+		saveButton.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				connectionProfileHelper.saveConnectionProfile(getSelectedConnectionProfile());
+				enableButtons(false);
+			}
+		});
+		revertButton = new Button(updateRestoreComposite, SWT.NONE);
+		revertButton.setText("Revert");
+		revertButton.setEnabled(false);
+		revertButton.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String name = connectionProfileCombo.getText();
+				if (name != null && !"".equals(name)) {			
+					connectionProfileHelper.revertConnectionProfile(getSelectedConnectionProfile());
+					enableButtons(false);
+				}
+			}
+		});
 		updateRestoreComposite.setLayoutData(new GridData(SWT.END, SWT.DEFAULT, true, false, 3, SWT.DEFAULT));
 	}
 	
-	private void updateConnectionProfileDetails() {
+	void updateConnectionProfileDetails() {
+		updatingConnectionProfileDetails = true;
 		ConnectionProfileDescriptor selectedConnectionProfile = getSelectedConnectionProfile();
 		String url = selectedConnectionProfile.url;
 		url = url == null ? "" : url;
@@ -248,6 +280,12 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		String driverLocation = selectedConnectionProfile.driverLocation;
 		driverLocation = driverLocation == null ? "" : driverLocation;
 		driverLocationText.setText(driverLocation);
+		updatingConnectionProfileDetails = false;
+	}
+	
+	private void enableButtons(boolean enabled) {
+		saveButton.setEnabled(enabled);
+		revertButton.setEnabled(enabled);
 	}
 	
 	private ConnectionProfileDescriptor getSelectedConnectionProfile() {
