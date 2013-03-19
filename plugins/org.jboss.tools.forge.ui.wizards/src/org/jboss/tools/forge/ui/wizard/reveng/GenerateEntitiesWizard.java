@@ -51,7 +51,13 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 	public void doExecute() {
 		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
 		runtime.sendCommand("cd " + getProjectLocation());
-		runtime.sendCommand("generate-entities --connection-profile " + getConnectionProfile());
+		runtime.sendCommand(
+				"generate-entities" +
+				" --url " + getConnectionProfile().url +
+				" --user " + getConnectionProfile().user +
+				" --dialect " + getConnectionProfile().dialect +
+				" --driver " + getConnectionProfile().driverClass +
+				" --pathToDriver " + getConnectionProfile().driverLocation);
 	}
 	
 	@Override
@@ -70,8 +76,8 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 		return (String)getWizardDescriptor().get(ConnectionProfileWizardPage.PROJECT_NAME);
 	}
 	
-	private String getConnectionProfile() {
-		return (String)getWizardDescriptor().get(ConnectionProfileWizardPage.CONNECTION_PROFILE);
+	private ConnectionProfileDescriptor getConnectionProfile() {
+		return (ConnectionProfileDescriptor)getWizardDescriptor().get(ConnectionProfileWizardPage.CONNECTION_PROFILE);
 	}
 	
 	private String getProjectLocation() {

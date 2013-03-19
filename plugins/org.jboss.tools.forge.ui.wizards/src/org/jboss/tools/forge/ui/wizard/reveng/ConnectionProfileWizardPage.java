@@ -84,6 +84,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				updateConnectionProfileDetails();
+				getWizardDescriptor().put(CONNECTION_PROFILE, getSelectedConnectionProfile());
 			}
 		});
 		Button connectionProfileButton = new Button(parent, SWT.NONE);
@@ -252,7 +253,5 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 	private ConnectionProfileDescriptor getSelectedConnectionProfile() {
 		return connectionProfiles.get(connectionProfileCombo.getText());
 	}
-	
-	
 	
 }
