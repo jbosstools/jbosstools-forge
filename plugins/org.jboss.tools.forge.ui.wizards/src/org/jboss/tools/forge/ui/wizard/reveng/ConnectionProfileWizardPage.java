@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -130,6 +132,12 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		urlLabel.setText("URL: ");
 		urlText = new Text(parent, SWT.BORDER);
 		urlText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		urlText.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				getSelectedConnectionProfile().url = urlText.getText();
+			}
+		});
 	}
 	
 	private void createUserNameEditor(Composite parent) {
@@ -137,6 +145,12 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		userNameLabel.setText("User Name: ");
 		userNameText = new Text(parent, SWT.BORDER);
 		userNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		userNameText.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				getSelectedConnectionProfile().user = userNameText.getText();
+			}
+		});
 	}
 	
 	private void createPasswordEditor(Composite parent) {
@@ -144,6 +158,12 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		userPasswordLabel.setText("User Password: ");
 		userPasswordText = new Text(parent, SWT.BORDER | SWT.PASSWORD);
 		userPasswordText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		userPasswordText.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				getSelectedConnectionProfile().password = userPasswordText.getText();
+			}
+		});
 	}
 	
 	private void createHibernateDialectEditor(Composite parent) {
@@ -152,6 +172,12 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		hibernateDialectCombo = new Combo(parent, SWT.DROP_DOWN);
 		hibernateDialectCombo.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		fillHibernateDialectCombo();
+		hibernateDialectCombo.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				getSelectedConnectionProfile().dialect = hibernateDialectCombo.getText();
+			}
+		});
 	}
 	
 	private void fillHibernateDialectCombo() {
@@ -165,6 +191,12 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		driverNameLabel.setText("Driver Class: ");
 		driverNameText = new Text(parent, SWT.BORDER);
 		driverNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		driverNameText.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				getSelectedConnectionProfile().driverClass = driverNameText.getText();
+			}
+		});
 	}
 	
 	private void createDriverLocationEditor(Composite parent) {
@@ -172,6 +204,12 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		driverLocationLabel.setText("Driver Location: ");
 		driverLocationText = new Text(parent, SWT.BORDER);
 		driverLocationText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		driverLocationText.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				getSelectedConnectionProfile().driverLocation = driverLocationText.getText();
+			}
+		});
 	}
 	
 	private void createUpdateRestoreComposite(Composite parent) {
@@ -184,15 +222,16 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		layout.spacing = 0;
 		updateRestoreComposite.setLayout(layout);
 		Button updateButton = new Button(updateRestoreComposite, SWT.NONE);
-		updateButton.setText("Update");
+		updateButton.setText("Save");
+		updateButton.setEnabled(false);
 		Button restoreButton = new Button(updateRestoreComposite, SWT.NONE);
-		restoreButton.setText("Restore");
+		restoreButton.setText("Revert");
+		restoreButton.setEnabled(false);
 		updateRestoreComposite.setLayoutData(new GridData(SWT.END, SWT.DEFAULT, true, false, 3, SWT.DEFAULT));
 	}
 	
 	private void updateConnectionProfileDetails() {
-		ConnectionProfileDescriptor selectedConnectionProfile = 
-				connectionProfiles.get(connectionProfileCombo.getText());
+		ConnectionProfileDescriptor selectedConnectionProfile = getSelectedConnectionProfile();
 		String url = selectedConnectionProfile.url;
 		url = url == null ? "" : url;
 		urlText.setText(selectedConnectionProfile.url);
@@ -208,6 +247,10 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		String driverLocation = selectedConnectionProfile.driverLocation;
 		driverLocation = driverLocation == null ? "" : driverLocation;
 		driverLocationText.setText(driverLocation);
+	}
+	
+	private ConnectionProfileDescriptor getSelectedConnectionProfile() {
+		return connectionProfiles.get(connectionProfileCombo.getText());
 	}
 	
 	
