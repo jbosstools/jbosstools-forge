@@ -18,6 +18,8 @@ Bundle-ClassPath: lib/javassist-3.15.0-GA.jar,
  lib/resources-api-2.0.0-SNAPSHOT.jar
 Export-Package: bootpath,
  org.jboss.forge.container,
+ org.jboss.forge.container.addons,
+ org.jboss.forge.container.repositories,
  org.jboss.forge.container.services,
  org.jboss.forge.container.util,
  org.jboss.forge.convert,

@@ -7,8 +7,8 @@
 
 package org.jboss.tools.forge.ext.core;
 
-import org.jboss.forge.container.AddonRegistry;
 import org.jboss.forge.container.Forge;
+import org.jboss.forge.container.addons.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
 import org.jboss.forge.convert.ConverterFactory;
 
