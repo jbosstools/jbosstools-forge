@@ -22,7 +22,19 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection sel) {
 		super.init(workbench, sel);
+		if (!isHibernateToolsPluginAvailable()) {
+			installHibernateToolsPlugin();
+		}
 		initializeProject(sel);
+	}
+	
+	private boolean isHibernateToolsPluginAvailable() {
+//		String str = ForgeHelper.getDefaultRuntime().sendCommand("forge list-plugins");
+//		System.out.println(str);
+		return true;
+	}
+	
+	public void installHibernateToolsPlugin() {		
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -51,13 +63,18 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 	public void doExecute() {
 		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
 		runtime.sendCommand("cd " + getProjectLocation());
-		runtime.sendCommand(
+		String generateCommand = 
 				"generate-entities" +
 				" --url " + getConnectionProfile().url +
 				" --user " + getConnectionProfile().user +
 				" --dialect " + getConnectionProfile().dialect +
 				" --driver " + getConnectionProfile().driverClass +
-				" --pathToDriver " + getConnectionProfile().driverLocation);
+				" --pathToDriver " + getConnectionProfile().driverLocation;
+		if (getConnectionProfile().password != null 
+				&& !"".equals(getConnectionProfile().password)) {
+			generateCommand += " --password " + getConnectionProfile().password;
+		}
+		runtime.sendCommand(generateCommand);
 	}
 	
 	@Override

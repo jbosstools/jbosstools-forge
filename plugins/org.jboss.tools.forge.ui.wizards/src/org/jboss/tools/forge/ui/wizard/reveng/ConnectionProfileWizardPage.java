@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
@@ -165,14 +166,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		userPasswordLabel.setText("User Password: ");
 		userPasswordText = new Text(parent, SWT.BORDER | SWT.PASSWORD);
 		userPasswordText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-		userPasswordText.addModifyListener(new ModifyListener() {			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (updatingConnectionProfileDetails) return;
-				getSelectedConnectionProfile().password = userPasswordText.getText();
-				enableButtons(true);
-			}
-		});
+		userPasswordText.addModifyListener(modifyListener);
 	}
 	
 	private void createHibernateDialectEditor(Composite parent) {
@@ -181,14 +175,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		hibernateDialectCombo = new Combo(parent, SWT.DROP_DOWN);
 		hibernateDialectCombo.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		fillHibernateDialectCombo();
-		hibernateDialectCombo.addModifyListener(new ModifyListener() {			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (updatingConnectionProfileDetails) return;
-				getSelectedConnectionProfile().dialect = hibernateDialectCombo.getText();
-				enableButtons(true);
-			}
-		});
+		hibernateDialectCombo.addModifyListener(modifyListener);
 	}
 	
 	private void fillHibernateDialectCombo() {
@@ -202,14 +189,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		driverNameLabel.setText("Driver Class: ");
 		driverNameText = new Text(parent, SWT.BORDER);
 		driverNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-		driverNameText.addModifyListener(new ModifyListener() {			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (updatingConnectionProfileDetails) return;
-				getSelectedConnectionProfile().driverClass = driverNameText.getText();
-				enableButtons(true);
-			}
-		});
+		driverNameText.addModifyListener(modifyListener);
 	}
 	
 	private void createDriverLocationEditor(Composite parent) {
@@ -217,14 +197,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		driverLocationLabel.setText("Driver Location: ");
 		driverLocationText = new Text(parent, SWT.BORDER);
 		driverLocationText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
-		driverLocationText.addModifyListener(new ModifyListener() {			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				if (updatingConnectionProfileDetails) return;
-				getSelectedConnectionProfile().driverLocation = driverLocationText.getText();
-				enableButtons(true);
-			}
-		});
+		driverLocationText.addModifyListener(modifyListener);
 	}
 	
 	private void createUpdateRestoreComposite(Composite parent) {
@@ -281,6 +254,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		driverLocation = driverLocation == null ? "" : driverLocation;
 		driverLocationText.setText(driverLocation);
 		updatingConnectionProfileDetails = false;
+//		connectionProfileHelper.testConnectionProfile(selectedConnectionProfile);
 	}
 	
 	private void enableButtons(boolean enabled) {
@@ -291,5 +265,28 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 	private ConnectionProfileDescriptor getSelectedConnectionProfile() {
 		return connectionProfiles.get(connectionProfileCombo.getText());
 	}
+	
+	private ModifyListener modifyListener = new ModifyListener() {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			if (updatingConnectionProfileDetails) return;
+			Widget widget = e.widget;
+			if (widget == urlText) {
+				getSelectedConnectionProfile().url = urlText.getText();
+			} else if (widget == userNameText) {
+				getSelectedConnectionProfile().user = userNameText.getText();
+			} else if (widget == userPasswordText) {
+				getSelectedConnectionProfile().password = userPasswordText.getText();
+			} else if (widget == driverNameText) {
+				getSelectedConnectionProfile().driverClass = driverNameText.getText();
+			} else if (widget == driverLocationText) {
+				getSelectedConnectionProfile().driverLocation = driverLocationText.getText();
+			} else if (widget == hibernateDialectCombo) {
+				getSelectedConnectionProfile().dialect = hibernateDialectCombo.getText();
+			}
+			enableButtons(true);
+//			connectionProfileHelper.testConnectionProfile(getSelectedConnectionProfile());
+		}
+	};
 	
 }

@@ -75,5 +75,21 @@ public class DataToolsConnectionProfileHelper {
 		descriptor.url = props.getProperty(URL);
 		descriptor.user = props.getProperty(USER_NAME);		
 	}
+	
+//	boolean testConnectionProfile(ConnectionProfileDescriptor descriptor) {
+//		boolean result = false;
+//		IConnectionProfile connectionProfile = ProfileManager
+//				.getInstance()
+//				.getProfileByName(descriptor.name);
+//		try {
+//			IStatus status = connectionProfile.connectWithoutJob();
+//			if (status.getCode() == IStatus.OK) {
+//				result = true;
+//			}
+//		} finally {
+//			connectionProfile.disconnect();
+//		}
+//		return result;
+//	}
 
 }
