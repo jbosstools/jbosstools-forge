@@ -35,6 +35,7 @@ import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UISelectionImpl;
+import org.jboss.tools.forge.ui.ext.importer.ProjectImporter;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ForgeWizard extends MutableWizard {
@@ -166,6 +167,7 @@ public class ForgeWizard extends MutableWizard {
                     writeToStatusBar(message);
                 }
             }
+            new ProjectImporter("/tmp/teste", "Teste").importProject();
             return true;
         } catch (Exception e) {
             ForgeUIPlugin.log(e);

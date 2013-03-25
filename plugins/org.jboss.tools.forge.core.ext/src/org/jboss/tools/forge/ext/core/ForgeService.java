@@ -7,6 +7,7 @@
 
 package org.jboss.tools.forge.ext.core;
 
+import org.jboss.forge.container.ContainerStatus;
 import org.jboss.forge.container.Forge;
 import org.jboss.forge.container.addons.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
@@ -19,50 +20,48 @@ import org.jboss.forge.convert.ConverterFactory;
  *
  */
 
-public enum ForgeService
-{
-   INSTANCE;
+public enum ForgeService {
+    INSTANCE;
 
-   private transient Forge forge;
-   private ConverterFactory converterFactory;
+    private transient Forge forge;
+    private ConverterFactory converterFactory;
 
-   private ForgeService()
-   {
-   }
+    private ForgeService() {
+    }
 
-   public void setForge(Forge forge)
-   {
-      this.forge = forge;
-   }
+    public void setForge(Forge forge) {
+	this.forge = forge;
+    }
 
-   public void start(ClassLoader loader)
-   {
-      forge.startAsync(loader);
-   }
+    public void start(ClassLoader loader) {
+	forge.startAsync(loader);
+    }
 
-   public AddonRegistry getAddonRegistry()
-   {
-      return forge.getAddonRegistry();
-   }
+    public AddonRegistry getAddonRegistry() {
+	return forge.getAddonRegistry();
+    }
 
-   public void stop()
-   {
-      forge.stop();
-   }
+    public void stop() {
+	forge.stop();
+    }
 
-   public ConverterFactory getConverterFactory()
-   {
-      if (converterFactory == null)
-      {
-         converterFactory = lookup(ConverterFactory.class);
-      }
-      return converterFactory;
-   }
+    public ContainerStatus getContainerStatus() {
+	return (forge == null) ? ContainerStatus.STOPPED : forge.getStatus();
+    }
 
-   public <S> S lookup(Class<S> service)
-   {
-      ExportedInstance<S> exportedInstance = forge.getAddonRegistry()
-               .getExportedInstance(service);
-      return (exportedInstance == null) ? null : exportedInstance.get();
-   }
+    public ConverterFactory getConverterFactory() {
+	if (converterFactory == null) {
+	    converterFactory = lookup(ConverterFactory.class);
+	}
+	return converterFactory;
+    }
+
+    public <S> S lookup(Class<S> service) {
+	ExportedInstance<S> exportedInstance = null;
+	if (forge != null) {
+	    exportedInstance = forge.getAddonRegistry().getExportedInstance(
+		    service);
+	}
+	return (exportedInstance == null) ? null : exportedInstance.get();
+    }
 }
