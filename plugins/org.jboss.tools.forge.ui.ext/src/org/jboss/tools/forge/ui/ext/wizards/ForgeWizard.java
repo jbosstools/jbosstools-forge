@@ -94,7 +94,7 @@ public class ForgeWizard extends MutableWizard {
     private <T> Class<T> locateNativeClass(Class<T> type) {
         Class<T> result = type;
         AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
-        for (Addon addon : registry.getRegisteredAddons()) {
+        for (Addon addon : registry.getAddons()) {
             try {
                 ClassLoader classLoader = addon.getClassLoader();
                 result = (Class<T>) classLoader.loadClass(type.getName());
