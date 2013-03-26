@@ -27,7 +27,7 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
             @Override
             public void run() {
                 ForgeService forgeService = ForgeService.INSTANCE;
-                while (forgeService.getContainerStatus().isStarting()) {
+                while (!forgeService.getContainerStatus().isStarted()) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
