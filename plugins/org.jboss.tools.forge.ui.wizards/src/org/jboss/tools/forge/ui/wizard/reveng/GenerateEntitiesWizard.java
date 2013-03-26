@@ -18,23 +18,29 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 	public GenerateEntitiesWizard() {
 		setWindowTitle("Generate Entities");
 	}
-
+	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection sel) {
 		super.init(workbench, sel);
-		if (!isHibernateToolsPluginAvailable()) {
-			installHibernateToolsPlugin();
-		}
-		initializeProject(sel);
+		doInit(workbench, sel);
+	}
+	
+	private void doInit(IWorkbench workbench, final IStructuredSelection sel) {
+		Runnable runner = new Runnable() {
+			@Override
+			public void run() {
+				if (!isHibernateToolsPluginAvailable()) {
+					new HibernateToolsInstaller().install(getShell());
+				}
+				initializeProject(sel);
+			}			
+		};
+		new Thread(runner).start();
 	}
 	
 	private boolean isHibernateToolsPluginAvailable() {
-//		String str = ForgeHelper.getDefaultRuntime().sendCommand("forge list-plugins");
-//		System.out.println(str);
-		return true;
-	}
-	
-	public void installHibernateToolsPlugin() {		
+		String str = ForgeHelper.getDefaultRuntime().sendCommand("forge list-plugins");
+		return str != null && str.contains("org.jboss.hibernate.forge.hibernate-tools-plugin");
 	}
 	
 	@SuppressWarnings("rawtypes")

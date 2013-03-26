@@ -25,7 +25,7 @@ public abstract class ForgeHiddenOutputFilter implements ForgeOutputFilter {
 	
 	@Override
 	public void outputAvailable(String output) {
-//		System.out.println("outputAvailable(" + output + ")");
+//		System.out.println("ForgeHiddenOutputFilter.outputAvailable(" + output + ")");
 		for (int i = 0; i < output.length(); i++) {
 			char c = output.charAt(i);
 			if (c == 27) {

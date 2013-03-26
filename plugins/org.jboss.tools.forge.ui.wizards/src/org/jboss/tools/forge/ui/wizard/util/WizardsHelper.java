@@ -13,9 +13,28 @@ public class WizardsHelper {
 	}
 
 	public static boolean isHibernateToolsPluginAvailable() {
-		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
-		String str = runtime.sendCommand("forge list-plugins");
-		return str != null && str.contains("org.jboss.hibernate.forge.hibernate-tools-plugin");
+		final StringBuffer buff = new StringBuffer();
+		Runnable command = new Runnable() {
+			@Override
+			public void run() {
+				ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+				String str = runtime.sendCommand("forge list-plugins");
+				synchronized(buff) {
+					buff.append(str).append(" done");
+				}
+			}			
+		};
+		new Thread(command).start();
+		while (buff.length() == 0) {
+			try {
+				Thread.currentThread().wait(100);
+			} catch (InterruptedException e) {}
+		}
+		return buff.toString().contains("org.jboss.hibernate.forge.hibernate-tools-plugin");
+	}
+	
+	public static void installHibernateToolsPlugin() {
+		
 	}
 	
 }

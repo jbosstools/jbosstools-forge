@@ -95,7 +95,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	private boolean commandResultAvailable = false;
 	private String commandResult = null;
-	private Object infoMutex = new Object();
+	private Object mutex = new Object();
 	
 	public String sendCommand(String str) {
 //		System.out.println("sendCommand(" + str + ")");
@@ -107,7 +107,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				errorStreamMonitor.removeListener(masterStreamListener);
 				IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
 				if (streamMonitor != null) {
-					synchronized(infoMutex) {
+					synchronized(mutex) {
 						try {
 							streamsProxy.write(new Character((char)31).toString() + str + '\n');
 						} catch (IOException e) {
@@ -115,7 +115,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 						}
 						while (!commandResultAvailable) {
 							try {
-								infoMutex.wait();
+								mutex.wait();
 							} catch (InterruptedException e) {}
 						}
 					}
@@ -233,8 +233,8 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			if (str.startsWith("RESULT: ")) {
 				commandResult = str.substring(8);
 				commandResultAvailable = true;
-				synchronized (infoMutex) {
-					infoMutex.notifyAll();
+				synchronized (mutex) {
+					mutex.notifyAll();
 				}
 			}
 		}
