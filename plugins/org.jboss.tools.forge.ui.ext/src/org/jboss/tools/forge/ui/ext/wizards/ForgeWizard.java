@@ -49,7 +49,6 @@ public class ForgeWizard extends MutableWizard {
         setNeedsProgressMonitor(true);
         boolean isWizard = uiCommand instanceof UIWizard;
         setForcePreviousAndNextButtons(isWizard);
-        setWindowTitle(uiCommand.getMetadata().getName());
     }
 
     private UIContextImpl createContext(List<Object> selectedElements) {
