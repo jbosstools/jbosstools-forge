@@ -7,6 +7,7 @@
 package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -38,6 +39,8 @@ public class ForgeWizardPage extends WizardPage implements Listener {
     private UICommand uiCommand;
     private UIContextImpl uiContext;
     private UIBuilderImpl uiBuilder;
+
+    private ComponentControlEntry[] componentControlEntries;
 
     public ForgeWizardPage(Wizard wizard, UICommand command, UIContextImpl contextImpl) {
         super("Page Name");
@@ -77,7 +80,12 @@ public class ForgeWizardPage extends WizardPage implements Listener {
         layout.numColumns = 2;
         layout.verticalSpacing = 9;
 
-        for (final InputComponent<?, ?> input : inputs) {
+        // Init component control array
+        int size = inputs.size();
+        componentControlEntries = new ComponentControlEntry[size];
+
+        for (int i = 0; i < size; i++) {
+            final InputComponent<?, ?> input = inputs.get(i);
             ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE.getBuilderFor(input);
             Control control = controlBuilder.build(this, (InputComponent<?, Object>) input, container);
 
@@ -85,9 +93,12 @@ public class ForgeWizardPage extends WizardPage implements Listener {
             control.addListener(SWT.Modify, this);
             control.addListener(SWT.DefaultSelection, this);
             control.addListener(SWT.Selection, this);
+
+            componentControlEntries[i] = new ComponentControlEntry(input, control);
         }
         setPageComplete(validatePage());
-        // Show description on opening
+
+        // Clear error messages when opening
         setErrorMessage(null);
         setMessage(null);
         setControl(container);
@@ -116,6 +127,15 @@ public class ForgeWizardPage extends WizardPage implements Listener {
     public boolean validatePage() {
         // clear error message
         setErrorMessage(null);
+
+        // Change enabled state
+        if (componentControlEntries != null) {
+            for (ComponentControlEntry entry : componentControlEntries) {
+                InputComponent<?, ?> key = entry.getComponent();
+                Control value = entry.getControl();
+                value.setEnabled(key.isEnabled());
+            }
+        }
 
         // Validate required
         if (uiBuilder != null) {
@@ -149,4 +169,35 @@ public class ForgeWizardPage extends WizardPage implements Listener {
             // PlatformUI.getWorkbench().getHelpSystem().displayHelp(docLocation.toExternalForm());
         }
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        if (componentControlEntries != null) {
+            Arrays.fill(componentControlEntries, null);
+            componentControlEntries = null;
+        }
+    }
+
+    /**
+     * Stores a component/control relationship
+     */
+    private class ComponentControlEntry {
+        private InputComponent<?, ?> component;
+        private Control control;
+
+        public ComponentControlEntry(InputComponent<?, ?> component, Control control) {
+            this.component = component;
+            this.control = control;
+        }
+
+        public InputComponent<?, ?> getComponent() {
+            return component;
+        }
+
+        public Control getControl() {
+            return control;
+        }
+    }
+
 }
