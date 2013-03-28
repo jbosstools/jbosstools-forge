@@ -41,18 +41,6 @@
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
-                           <artifactId>forge-addon-container</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>forge-addon-container-${version.forge}.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
-                           <artifactId>forge-parser-xml</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>forge-parser-xml-${version.forge}.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
                            <artifactId>forge-proxy</artifactId>
                            <version>${version.forge}</version>
                            <destFileName>forge-proxy-${version.forge}.jar</destFileName>
