@@ -1,0 +1,13 @@
+
+org/apache/maven/artifact/repository
+META-INF/maven
+org/apache/maven/artifact/repository/metadata
+org/apache/maven/artifact/repository/metadata/io
+org
+META-INF
+org/apache/maven/artifact/repository/metadata/io/xpp3
+org/apache
+META-INF/maven/org.apache.maven
+META-INF/maven/org.apache.maven/maven-repository-metadata
+org/apache/maven
+org/apache/maven/artifact

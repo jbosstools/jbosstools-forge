@@ -1,0 +1,15 @@
+
+org/sonatype/plexus
+org/sonatype/plexus/components/sec/dispatcher/model
+org/sonatype/plexus/components/sec/dispatcher
+META-INF/maven
+org/sonatype/plexus/components
+org/sonatype/plexus/components/sec/dispatcher/model/io/xpp3
+org/sonatype/plexus/components/sec/dispatcher/model/io
+org
+META-INF
+META-INF/plexus
+META-INF/maven/org.sonatype.plexus
+META-INF/maven/org.sonatype.plexus/plexus-sec-dispatcher
+org/sonatype
+org/sonatype/plexus/components/sec

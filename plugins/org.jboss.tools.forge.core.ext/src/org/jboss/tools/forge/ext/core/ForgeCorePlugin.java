@@ -7,12 +7,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.jboss.forge.container.Forge;
+import org.jboss.forge.container.impl.AddonRepositoryImpl;
+import org.jboss.forge.container.repositories.AddonRepository;
 import org.jboss.forge.container.util.ClassLoaders;
 import org.jboss.forge.proxy.ClassLoaderAdapterCallback;
 import org.osgi.framework.BundleContext;
@@ -37,8 +43,8 @@ public class ForgeCorePlugin extends Plugin {
 	plugin = this;
     }
 
-    private Forge getForge(final BundleContext context) {
-	return ClassLoaders.executeIn(loader, new Callable<Forge>() {
+    private Forge getForge(final BundleContext context) throws Exception {
+	Forge forge = ClassLoaders.executeIn(loader, new Callable<Forge>() {
 	    @Override
 	    public Forge call() throws Exception {
 		BundleWiring wiring = context.getBundle().adapt(
@@ -69,6 +75,22 @@ public class ForgeCorePlugin extends Plugin {
 		return forge;
 	    }
 	});
+	setupInternalRepository(forge);
+	return forge;
+    }
+
+    private void setupInternalRepository(final Forge forge) throws IOException {
+	final File addonRepository = new File(
+		FileLocator.getBundleFile(Platform
+			.getBundle("org.jboss.tools.forge2.runtime")),
+		"addon-repository");
+	AddonRepository internalRepo = new ImmutableAddonRepository(
+		AddonRepositoryImpl.forDirectory(forge, addonRepository));
+	List<AddonRepository> repos = new ArrayList<AddonRepository>();
+	// XXX: UNCOMMENTING THE LINE BELOW THROWS A CLASSCASTEXCEPTION
+	// repos.add(internalRepo);
+	repos.addAll(forge.getRepositories());
+	forge.setRepositories(repos);
     }
 
     @SuppressWarnings("resource")

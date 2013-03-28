@@ -1,0 +1,14 @@
+
+org/codehaus/plexus/interpolation/util
+META-INF/maven
+org/codehaus/plexus/interpolation
+org/codehaus
+org
+META-INF
+META-INF/maven/org.codehaus.plexus
+org/codehaus/plexus
+org/codehaus/plexus/interpolation/os
+META-INF/maven/org.codehaus.plexus/plexus-interpolation
+org/codehaus/plexus/interpolation/multi
+org/codehaus/plexus/interpolation/object
+org/codehaus/plexus/interpolation/reflection

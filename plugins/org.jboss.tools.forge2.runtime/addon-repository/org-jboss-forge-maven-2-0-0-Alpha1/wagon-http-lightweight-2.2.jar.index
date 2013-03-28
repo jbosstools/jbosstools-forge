@@ -1,0 +1,12 @@
+
+META-INF/maven/org.apache.maven.wagon
+org/apache
+META-INF/maven
+org/apache/maven/wagon
+org/apache/maven/wagon/providers
+org
+org/apache/maven/wagon/providers/http
+META-INF
+META-INF/maven/org.apache.maven.wagon/wagon-http-lightweight
+org/apache/maven
+META-INF/plexus

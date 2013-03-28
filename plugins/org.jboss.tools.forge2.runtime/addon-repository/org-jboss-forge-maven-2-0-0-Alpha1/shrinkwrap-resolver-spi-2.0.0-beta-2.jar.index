@@ -1,0 +1,12 @@
+
+org/jboss/shrinkwrap/resolver/spi/loader
+org/jboss/shrinkwrap
+META-INF/maven/org.jboss.shrinkwrap.resolver/shrinkwrap-resolver-spi
+META-INF/maven
+org/jboss
+org/jboss/shrinkwrap/resolver/spi/format
+org/jboss/shrinkwrap/resolver/spi
+org
+META-INF/maven/org.jboss.shrinkwrap.resolver
+org/jboss/shrinkwrap/resolver
+META-INF

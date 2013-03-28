@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<installed>
+  <addon api-version="" name="org.jboss.forge:addon-manager" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:convert" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:dependencies" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:facets" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:environment" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:maven" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:projects" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:resources" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:ui-hints" version="2.0.0.Alpha1"/>
+  <addon api-version="" name="org.jboss.forge:ui" version="2.0.0.Alpha1"/>
+</installed>
+

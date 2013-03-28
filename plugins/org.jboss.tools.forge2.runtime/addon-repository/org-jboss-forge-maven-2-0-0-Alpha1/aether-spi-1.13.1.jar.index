@@ -1,0 +1,14 @@
+META-INF/maven/org.sonatype.aether/aether-spi
+
+org/sonatype/aether/spi/io
+org/sonatype/aether
+org/sonatype/aether/spi/log
+org/sonatype/aether/spi
+META-INF/maven
+org/sonatype/aether/spi/locator
+org
+org/sonatype/aether/spi/localrepo
+META-INF
+org/sonatype/aether/spi/connector
+META-INF/maven/org.sonatype.aether
+org/sonatype

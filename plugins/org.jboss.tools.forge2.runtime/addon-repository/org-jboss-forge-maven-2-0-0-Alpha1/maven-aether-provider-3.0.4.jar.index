@@ -1,0 +1,11 @@
+
+org/apache/maven/repository/internal
+org/apache/maven/repository
+org/apache
+META-INF/maven
+META-INF/maven/org.apache.maven/maven-aether-provider
+META-INF/maven/org.apache.maven
+org
+META-INF
+org/apache/maven
+META-INF/plexus

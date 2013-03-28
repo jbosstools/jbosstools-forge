@@ -1,0 +1,13 @@
+
+META-INF/maven/org.jboss.forge
+org/jboss/forge/addon
+META-INF/maven
+org/jboss
+META-INF/maven/org.jboss.forge/addon-manager-impl
+org/jboss/forge/addon/manager/impl/filters
+org/jboss/forge/addon/manager/impl
+org
+META-INF
+org/jboss/forge/addon/manager/impl/commands
+org/jboss/forge/addon/manager
+org/jboss/forge
