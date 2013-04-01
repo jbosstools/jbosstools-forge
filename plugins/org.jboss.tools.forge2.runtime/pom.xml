@@ -17,6 +17,29 @@
    <build>
       <plugins>
          <plugin>
+            <groupId>org.jboss.forge</groupId>
+            <artifactId>forge-maven-plugin</artifactId>
+            <version>1.0.0.Alpha1</version>
+            <executions>
+               <execution>
+                  <id>deploy-addons</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>addon-install</goal>
+                  </goals>
+                  <inherited>false</inherited>
+                  <configuration>
+                     <addonRepository>${basedir}/addon-repository</addonRepository>
+                     <addonIds>
+                        <addonId>org.jboss.forge:addon-manager,${version.forge}</addonId>
+                        <addonId>org.jboss.forge:maven,${version.forge}</addonId>
+                        <addonId>org.jboss.forge:projects,${version.forge}</addonId>
+                     </addonIds>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
@@ -103,6 +126,15 @@
                <filesets>
                   <fileset>
                      <directory>${basedir}/lib</directory>
+                     <includes>
+                        <include>*</include>
+                     </includes>
+                     <excludes>
+                     </excludes>
+                     <followSymlinks>false</followSymlinks>
+                  </fileset>
+                  <fileset>
+                     <directory>${basedir}/addon-repository</directory>
                      <includes>
                         <include>*</include>
                      </includes>

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<addon>
-  <dependencies>
-    <dependency export="true" name="org.jboss.forge:environment" optional="false" version="2.0.0.Alpha1"/>
-    <dependency export="true" name="org.jboss.forge:facets" optional="false" version="2.0.0.Alpha1"/>
-  </dependencies>
-</addon>
