@@ -12,7 +12,7 @@
 
    <packaging>eclipse-plugin</packaging>
    <properties>
-      <version.forge>2.0.0.Alpha1</version.forge>
+      <version.forge>2.0.0-SNAPSHOT</version.forge>
    </properties>
    <build>
       <plugins>
@@ -31,9 +31,14 @@
                   <configuration>
                      <addonRepository>${basedir}/addon-repository</addonRepository>
                      <addonIds>
+                        <addonId>org.jboss.forge:facets,${version.forge}</addonId>
+                        <addonId>org.jboss.forge:environment,${version.forge}</addonId>
+                        <addonId>org.jboss.forge:resources,${version.forge}</addonId>
+                        <addonId>org.jboss.forge:dependencies,${version.forge}</addonId>
                         <addonId>org.jboss.forge:addon-manager,${version.forge}</addonId>
                         <addonId>org.jboss.forge:maven,${version.forge}</addonId>
                         <addonId>org.jboss.forge:projects,${version.forge}</addonId>
+                        <addonId>org.jboss.forge:ui,${version.forge}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
@@ -148,7 +153,7 @@
       </plugins>
       <pluginManagement>
          <plugins>
-            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven
+            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven 
                build itself. -->
             <plugin>
                <groupId>org.eclipse.m2e</groupId>
