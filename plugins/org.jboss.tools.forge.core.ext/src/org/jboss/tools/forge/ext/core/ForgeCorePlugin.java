@@ -18,6 +18,7 @@ import org.jboss.forge.container.Forge;
 import org.jboss.forge.container.repositories.AddonRepository;
 import org.jboss.forge.container.repositories.AddonRepositoryMode;
 import org.jboss.forge.container.util.ClassLoaders;
+import org.jboss.forge.container.util.OperatingSystemUtils;
 import org.jboss.forge.proxy.ClassLoaderAdapterCallback;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -74,7 +75,7 @@ public class ForgeCorePlugin extends Plugin {
 		Forge forge = (Forge) ClassLoaderAdapterCallback.enhance(
 			Forge.class.getClassLoader(), loader, nativeForge,
 			Forge.class);
-		setupInternalRepository(forge);
+		setupRepositories(forge);
 		return forge;
 	    }
 	});
@@ -85,11 +86,12 @@ public class ForgeCorePlugin extends Plugin {
      * Adds the addon-repository folder inside the runtime plugin as an
      * {@link AddonRepository}
      */
-    private void setupInternalRepository(final Forge forge) throws IOException {
+    private void setupRepositories(final Forge forge) throws IOException {
 	Bundle runtimeBundle = Platform.getBundle(RUNTIME_PLUGIN_ID);
 	File bundleFile = FileLocator.getBundleFile(runtimeBundle);
 	File addonRepository = new File(bundleFile, "addon-repository");
 	forge.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepository);
+   forge.addRepository(AddonRepositoryMode.IMMUTABLE, new File(OperatingSystemUtils.getUserForgeDir(), "addons"));
     }
 
     @SuppressWarnings("resource")
