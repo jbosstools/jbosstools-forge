@@ -47,6 +47,42 @@
             </executions>
          </plugin>
          <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>2.5</version>
+            <executions>
+               <execution>
+                  <id>clean-build-libs</id>
+                  <phase>generate-resources</phase>
+                  <goals>
+                     <goal>clean</goal>
+                  </goals>
+                  <inherited>false</inherited>
+                  <configuration>
+                     <filesets>
+                        <fileset>
+                           <directory>${basedir}/lib</directory>
+                           <includes>
+                              <include>*</include>
+                           </includes>
+                           <excludes>
+                           </excludes>
+                           <followSymlinks>false</followSymlinks>
+                        </fileset>
+                        <fileset>
+                           <directory>${basedir}/addon-repository</directory>
+                           <includes>
+                              <include>*</include>
+                           </includes>
+                           <excludes>
+                           </excludes>
+                           <followSymlinks>false</followSymlinks>
+                        </fileset>
+                     </filesets>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
@@ -126,36 +162,10 @@
                </execution>
             </executions>
          </plugin>
-         <plugin>
-            <artifactId>maven-clean-plugin</artifactId>
-            <version>2.5</version>
-            <configuration>
-               <filesets>
-                  <fileset>
-                     <directory>${basedir}/lib</directory>
-                     <includes>
-                        <include>*</include>
-                     </includes>
-                     <excludes>
-                     </excludes>
-                     <followSymlinks>false</followSymlinks>
-                  </fileset>
-                  <fileset>
-                     <directory>${basedir}/addon-repository</directory>
-                     <includes>
-                        <include>*</include>
-                     </includes>
-                     <excludes>
-                     </excludes>
-                     <followSymlinks>false</followSymlinks>
-                  </fileset>
-               </filesets>
-            </configuration>
-         </plugin>
       </plugins>
       <pluginManagement>
          <plugins>
-            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven 
+            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven
                build itself. -->
             <plugin>
                <groupId>org.eclipse.m2e</groupId>
@@ -178,6 +188,19 @@
                               <goals>
                                  <goal>unpack</goal>
                                  <goal>copy</goal>
+                              </goals>
+                           </pluginExecutionFilter>
+                           <action>
+                              <ignore></ignore>
+                           </action>
+                        </pluginExecution>
+                        <pluginExecution>
+                           <pluginExecutionFilter>
+                              <groupId>org.apache.maven.plugins</groupId>
+                              <artifactId>maven-clean-plugin</artifactId>
+                              <versionRange>[2.5,)</versionRange>
+                              <goals>
+                                 <goal>clean</goal>
                               </goals>
                            </pluginExecutionFilter>
                            <action>
