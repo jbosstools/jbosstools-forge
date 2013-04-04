@@ -89,9 +89,10 @@ public class ForgeCorePlugin extends Plugin {
     private void setupRepositories(final Forge forge) throws IOException {
 	Bundle runtimeBundle = Platform.getBundle(RUNTIME_PLUGIN_ID);
 	File bundleFile = FileLocator.getBundleFile(runtimeBundle);
-	File addonRepository = new File(bundleFile, "addon-repository");
-	forge.addRepository(AddonRepositoryMode.IMMUTABLE, addonRepository);
-   forge.addRepository(AddonRepositoryMode.IMMUTABLE, new File(OperatingSystemUtils.getUserForgeDir(), "addons"));
+	forge.addRepository(AddonRepositoryMode.IMMUTABLE, new File(bundleFile,
+		"addon-repository"));
+	forge.addRepository(AddonRepositoryMode.MUTABLE, new File(
+		OperatingSystemUtils.getUserForgeDir(), "addons"));
     }
 
     @SuppressWarnings("resource")
