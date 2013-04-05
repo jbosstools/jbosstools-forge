@@ -24,7 +24,7 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  *
  */
-public class ProjectImporter {
+class ProjectImporter {
 
     private String baseDirPath;
     private String projectName;
