@@ -36,5 +36,13 @@
              class="org.jboss.tools.forge.ui.ext.startup.ForgeStarter">
        </startup>
     </extension>
+    <extension
+          point="org.eclipse.ui.preferencePages">
+       <page
+             class="org.jboss.tools.forge.ui.ext.preferences.ForgeExtPreferencesPage"
+             id="org.jboss.tools.forge.ui.ext"
+             name="Forge 2">
+       </page>
+    </extension>
 
 </plugin>
