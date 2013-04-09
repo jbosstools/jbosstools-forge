@@ -1,22 +1,39 @@
 package org.jboss.tools.forge.core.preferences;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
-import org.junit.Ignore;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ForgePreferencesInitializerTest {
 	
-	@Ignore
+	IEclipsePreferences preferences;
+	String preferredRuntime;
+	
+	@Before
+	public void setUp() {
+		preferences = InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
+		preferredRuntime = preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null);
+		preferences.remove(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES);
+	}
+	
+	@After
+	public void tearDown() {
+		if (preferredRuntime != null) {
+			preferences.put(
+					ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, 
+					preferredRuntime);
+		}
+	}
+	
 	@Test
 	public void testInitializeDefaultPreferences() {
-		IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
-//		String str = preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null);
-//		System.out.println(str);
-//		assertNull(preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null));
+		assertNull(preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null));
 		new ForgePreferencesInitializer().initializeDefaultPreferences();
 		assertEquals(
 				ForgePreferencesInitializer.INITIAL_RUNTIMES_PREFERENCE, 
