@@ -36,6 +36,12 @@ import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UISelectionImpl;
 
+/**
+ * A wizard implementation to handle {@link UICommand} objects
+ *
+ * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+ *
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ForgeWizard extends MutableWizard {
 

@@ -54,9 +54,6 @@ public class ComboControlBuilder extends ControlBuilder {
                 combo.add(itemLabel);
             }
         }
-        // Set Default Value
-        combo.setText(value == null ? "" : value);
-
         combo.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -68,6 +65,16 @@ public class ComboControlBuilder extends ControlBuilder {
                 }
             }
         });
+
+        // Set Default Value
+        if (value == null) {
+            if (combo.getVisibleItemCount() > 0) {
+                combo.select(0);
+            }
+        } else {
+            combo.setText(value);
+        }
+
         // Cleaning the map when the input is disposed
         combo.addDisposeListener(new DisposeListener() {
             @Override

@@ -27,7 +27,7 @@
             commandId="org.jboss.tools.forge.ui.command.runForgeCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+6">
+            sequence="CTRL+5">
       </key>
    </extension>
     <extension
@@ -35,6 +35,14 @@
        <startup
              class="org.jboss.tools.forge.ui.ext.startup.ForgeStarter">
        </startup>
+    </extension>
+    <extension
+          point="org.eclipse.ui.preferencePages">
+       <page
+             class="org.jboss.tools.forge.ui.ext.preferences.ForgeExtPreferencesPage"
+             id="org.jboss.tools.forge.ui.ext"
+             name="Forge 2">
+       </page>
     </extension>
 
 </plugin>

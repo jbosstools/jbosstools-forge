@@ -11,16 +11,24 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.Callable;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.jboss.forge.container.Forge;
+import org.jboss.forge.container.repositories.AddonRepository;
+import org.jboss.forge.container.repositories.AddonRepositoryMode;
 import org.jboss.forge.container.util.ClassLoaders;
+import org.jboss.forge.container.util.OperatingSystemUtils;
 import org.jboss.forge.proxy.ClassLoaderAdapterCallback;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
 
 import bootpath.BootpathMarker;
 
 public class ForgeCorePlugin extends Plugin {
+
+    private static final String RUNTIME_PLUGIN_ID = "org.jboss.tools.forge2.runtime";
 
     public static final String PLUGIN_ID = "org.jboss.forge.ui.eclipse"; //$NON-NLS-1$
 
@@ -37,8 +45,8 @@ public class ForgeCorePlugin extends Plugin {
 	plugin = this;
     }
 
-    private Forge getForge(final BundleContext context) {
-	return ClassLoaders.executeIn(loader, new Callable<Forge>() {
+    private Forge getForge(final BundleContext context) throws Exception {
+	Forge forge = ClassLoaders.executeIn(loader, new Callable<Forge>() {
 	    @Override
 	    public Forge call() throws Exception {
 		BundleWiring wiring = context.getBundle().adapt(
@@ -63,12 +71,28 @@ public class ForgeCorePlugin extends Plugin {
 		Class<?> bootstrapType = loader
 			.loadClass("org.jboss.forge.container.ForgeImpl");
 
+		Object nativeForge = bootstrapType.newInstance();
 		Forge forge = (Forge) ClassLoaderAdapterCallback.enhance(
-			Forge.class.getClassLoader(), loader,
-			bootstrapType.newInstance(), Forge.class);
+			Forge.class.getClassLoader(), loader, nativeForge,
+			Forge.class);
+		setupRepositories(forge);
 		return forge;
 	    }
 	});
+	return forge;
+    }
+
+    /**
+     * Adds the addon-repository folder inside the runtime plugin as an
+     * {@link AddonRepository}
+     */
+    private void setupRepositories(final Forge forge) throws IOException {
+	Bundle runtimeBundle = Platform.getBundle(RUNTIME_PLUGIN_ID);
+	File bundleFile = FileLocator.getBundleFile(runtimeBundle);
+	forge.addRepository(AddonRepositoryMode.IMMUTABLE, new File(bundleFile,
+		"addon-repository"));
+	forge.addRepository(AddonRepositoryMode.MUTABLE, new File(
+		OperatingSystemUtils.getUserForgeDir(), "addons"));
     }
 
     @SuppressWarnings("resource")

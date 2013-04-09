@@ -1,5 +1,8 @@
 package org.jboss.tools.forge.ui.ext;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -22,24 +25,33 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
     @Override
     public void start(BundleContext context) throws Exception {
         super.start(context);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
         // Register the project listener
-        new Thread() {
+        executor.submit(new Runnable() {
             @Override
             public void run() {
                 ForgeService forgeService = ForgeService.INSTANCE;
-                while (forgeService.getContainerStatus().isStarting()) {
+                while (!forgeService.getContainerStatus().isStarted()) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         break;
                     }
                 }
-                ProjectFactory projectFactory = forgeService.lookup(ProjectFactory.class);
+                ProjectFactory projectFactory;
+                while ((projectFactory = forgeService.lookup(ProjectFactory.class)) == null) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
                 if (projectFactory != null) {
                     projectListenerRegistration = projectFactory.addProjectListener(new ImportEclipseProjectListener());
                 }
             }
-        }.start();
+        });
+        executor.shutdown();
         plugin = this;
     }
 
