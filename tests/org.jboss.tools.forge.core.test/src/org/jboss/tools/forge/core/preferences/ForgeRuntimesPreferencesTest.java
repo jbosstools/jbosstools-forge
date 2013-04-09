@@ -2,8 +2,8 @@ package org.jboss.tools.forge.core.preferences;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -11,6 +11,8 @@ import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.process.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.process.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ForgeRuntimesPreferencesTest {
@@ -22,6 +24,20 @@ public class ForgeRuntimesPreferencesTest {
 			"   <runtime name=\"foo\" location=\"foofoo\" type=\"external\"/>" +
 			"   <runtime name=\"bar\" location=\"barbar\" type=\"external\"/>" +
 			"</forgeRuntimes>";
+	
+	private ForgeRuntime[] savedRuntimes;
+	private ForgeRuntime savedDefaultRuntime;
+	
+	@Before
+	public void setUp() {
+		savedRuntimes = ForgeRuntimesPreferences.INSTANCE.getRuntimes();
+		savedDefaultRuntime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+	}
+	
+	@After
+	public void tearDown() {
+		ForgeRuntimesPreferences.INSTANCE.setRuntimes(savedRuntimes, savedDefaultRuntime);
+	}
 	
 	@Test
 	public void testGetDefaultInitialCase() {
@@ -169,19 +185,5 @@ public class ForgeRuntimesPreferencesTest {
 		assertEquals("barbar", runtimeToVerify.getLocation());
 		assertEquals("external", runtimeToVerify.getType());
 	}
-	
-//	@Test
-//	public void testGetInstallationsAlternativeCase() {
-//		ForgeInstallations.INSTANCE.installations = null;
-//		InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID).put(
-//				ForgeInstallations.PREF_FORGE_INSTALLATIONS, 
-//				ALTERNATIVE_FORGE_INSTALLATIONS);
-//		ForgeRuntime[] runtimes = ForgeInstallations.INSTANCE.getInstallations();
-//		assertNotNull(ForgeInstallations.INSTANCE.installations);
-//		assertEquals(3, runtimes.length);
-//	}
-	
-	
-	
-	
+		
 }
