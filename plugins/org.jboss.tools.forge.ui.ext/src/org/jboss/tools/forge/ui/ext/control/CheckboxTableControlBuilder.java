@@ -14,9 +14,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.jboss.forge.convert.ConverterFactory;
@@ -33,12 +34,17 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
-        // Create the label
-        Label label = new Label(container, SWT.NULL);
-        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
 
-        final Table table = new Table(container, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-        table.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        final Group group = new Group(container, SWT.SHADOW_NONE);
+        GridData layoutData = new GridData(GridData.FILL_BOTH);
+        layoutData.horizontalSpan = 2;
+        group.setLayout(new GridLayout());
+        group.setLayoutData(layoutData);
+        group.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+
+        final Table table = new Table(group, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+        table.setLayoutData(new GridData(GridData.FILL_BOTH));
+
         UISelectMany<Object> selectMany = (UISelectMany) input;
         final List<Object> data = new ArrayList<Object>();
         final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
@@ -64,7 +70,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
                 }
             }
         });
-        return table;
+        return group;
     }
 
     @Override
