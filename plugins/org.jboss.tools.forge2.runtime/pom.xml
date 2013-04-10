@@ -31,6 +31,7 @@
                   <configuration>
                      <addonRepository>${basedir}/addon-repository</addonRepository>
                      <addonIds>
+                        <addonId>org.jboss.forge:addons,${version.forge}</addonId>
                         <addonId>org.jboss.forge:convert,${version.forge}</addonId>
                         <addonId>org.jboss.forge:facets,${version.forge}</addonId>
                         <addonId>org.jboss.forge:environment,${version.forge}</addonId>
