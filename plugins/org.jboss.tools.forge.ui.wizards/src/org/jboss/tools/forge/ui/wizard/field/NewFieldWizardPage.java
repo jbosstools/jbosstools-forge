@@ -3,6 +3,7 @@ package org.jboss.tools.forge.ui.wizard.field;
 import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jpt.common.core.resource.java.JavaResourceAbstractType;
 import org.eclipse.jpt.jpa.core.JpaProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -87,9 +88,12 @@ public class NewFieldWizardPage extends AbstractForgeWizardPage {
 	private void refreshEntityEditor(IProject project) {
 		entityCombo.removeAll();
 		JpaProject jpaProject = (JpaProject)project.getAdapter(JpaProject.class);
-		Iterator<String> iterator = jpaProject.getAnnotatedJavaSourceClassNames().iterator();
+		Iterable<JavaResourceAbstractType> iterable = jpaProject.getAnnotatedJavaSourceTypes();
+		Iterator<JavaResourceAbstractType> iterator = iterable.iterator();
 		while (iterator.hasNext()) {
-			entityCombo.add(iterator.next());
+			JavaResourceAbstractType jrat = iterator.next();
+			String qualifiedName = jrat.getTypeBinding().getQualifiedName();
+			entityCombo.add(qualifiedName);
 		}
 	}
 	

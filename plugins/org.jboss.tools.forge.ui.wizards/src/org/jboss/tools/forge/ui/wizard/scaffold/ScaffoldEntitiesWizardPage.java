@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jpt.common.core.resource.java.JavaResourceAbstractType;
 import org.eclipse.jpt.jpa.core.JpaProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -100,10 +101,13 @@ public class ScaffoldEntitiesWizardPage extends AbstractForgeWizardPage {
 		selectEntitiesTable.removeAll();
 		IProject project = getProject(projectName);
 		JpaProject jpaProject = (JpaProject)project.getAdapter(JpaProject.class);
-		Iterator<String> iterator = jpaProject.getAnnotatedJavaSourceClassNames().iterator();
+		Iterable<JavaResourceAbstractType> iterable = jpaProject.getAnnotatedJavaSourceTypes();
+		Iterator<JavaResourceAbstractType> iterator = iterable.iterator();
 		while (iterator.hasNext()) {
 			TableItem tableItem = new TableItem(selectEntitiesTable, SWT.NONE);
-			tableItem.setText(iterator.next());
+			JavaResourceAbstractType jrat = iterator.next();
+			String qualifiedName = jrat.getTypeBinding().getQualifiedName();
+			tableItem.setText(qualifiedName);
 		}		
 	}
 		
