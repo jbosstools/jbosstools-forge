@@ -7,8 +7,7 @@
 
 package org.jboss.tools.forge.ui.ext.preferences;
 
-import java.io.File;
-
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,8 +22,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.jboss.forge.container.util.OperatingSystemUtils;
+import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
 import org.jboss.tools.forge.ext.core.ForgeExtPreferences;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 
 /**
  * Preferences Page for Forge 2
@@ -94,6 +95,20 @@ public class ForgeExtPreferencesPage extends PreferencePage implements IWorkbenc
     @Override
     public boolean performOk() {
         ForgeExtPreferences.INSTANCE.setAddonDir(addonDirText.getText());
+        try {
+            restartForge();
+        } catch (BundleException be) {
+            ForgeCorePlugin.log(be);
+        }
         return true;
+    }
+
+    /**
+     * Attempts to restart the forge service
+     */
+    private void restartForge() throws BundleException {
+        Bundle bundle = Platform.getBundle(ForgeCorePlugin.PLUGIN_ID);
+        bundle.stop();
+        bundle.start();
     }
 }
