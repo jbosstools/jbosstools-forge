@@ -12,13 +12,14 @@ import java.util.HashSet;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.jboss.forge.container.Forge;
 import org.jboss.forge.container.repositories.AddonRepository;
 import org.jboss.forge.container.repositories.AddonRepositoryMode;
 import org.jboss.forge.container.util.ClassLoaders;
-import org.jboss.forge.container.util.OperatingSystemUtils;
 import org.jboss.forge.proxy.ClassLoaderAdapterCallback;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -30,7 +31,7 @@ public class ForgeCorePlugin extends Plugin {
 
     private static final String RUNTIME_PLUGIN_ID = "org.jboss.tools.forge2.runtime";
 
-    public static final String PLUGIN_ID = "org.jboss.forge.ui.eclipse"; //$NON-NLS-1$
+    public static final String PLUGIN_ID = "org.jboss.tools.forge.core.ext";
 
     private static ForgeCorePlugin plugin;
 
@@ -92,7 +93,7 @@ public class ForgeCorePlugin extends Plugin {
 	forge.addRepository(AddonRepositoryMode.IMMUTABLE, new File(bundleFile,
 		"addon-repository"));
 	forge.addRepository(AddonRepositoryMode.MUTABLE, new File(
-		OperatingSystemUtils.getUserForgeDir(), "addons"));
+		ForgeExtPreferences.INSTANCE.getAddonDir()));
     }
 
     @SuppressWarnings("resource")
@@ -142,6 +143,16 @@ public class ForgeCorePlugin extends Plugin {
 
     public static ForgeCorePlugin getDefault() {
 	return plugin;
+    }
+
+    public static void log(Throwable t) {
+	getDefault().getLog().log(
+		newErrorStatus("Error logged from Forge Ext Core Plugin: ", t));
+    }
+
+    private static IStatus newErrorStatus(String message, Throwable exception) {
+	return new Status(IStatus.ERROR, PLUGIN_ID, IStatus.INFO, message,
+		exception);
     }
 
 }

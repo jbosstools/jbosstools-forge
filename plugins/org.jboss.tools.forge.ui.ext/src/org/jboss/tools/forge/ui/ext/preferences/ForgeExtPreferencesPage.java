@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.forge.container.util.OperatingSystemUtils;
+import org.jboss.tools.forge.ext.core.ForgeExtPreferences;
 
 /**
  * Preferences Page for Forge 2
@@ -55,8 +56,7 @@ public class ForgeExtPreferencesPage extends PreferencePage implements IWorkbenc
 
         addonDirText = new Text(container, SWT.BORDER);
         addonDirText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        // FIXME: Should set the value stored in preferences
-        addonDirText.setText(new File(OperatingSystemUtils.getUserForgeDir(), "addons").getAbsolutePath());
+        addonDirText.setText(ForgeExtPreferences.INSTANCE.getAddonDir());
         Button button = new Button(container, SWT.PUSH);
         button.setText("Browse...");
         button.addSelectionListener(new SelectionAdapter() {
@@ -93,7 +93,7 @@ public class ForgeExtPreferencesPage extends PreferencePage implements IWorkbenc
 
     @Override
     public boolean performOk() {
-        // TODO: Store the current value
+        ForgeExtPreferences.INSTANCE.setAddonDir(addonDirText.getText());
         return true;
     }
 }
