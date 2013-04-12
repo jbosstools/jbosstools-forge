@@ -64,6 +64,7 @@ public class ForgeConnectionProfileHelper {
 	
 	private ConnectionProfileDescriptor parseConnectionProfile(String raw) {
 		ConnectionProfileDescriptor result = new ConnectionProfileDescriptor();
+		String lineSeparator = System.getProperty("line.separator");
 		int start = 0;
 		int end = -1;
 		// get the connection profile name
@@ -72,23 +73,23 @@ public class ForgeConnectionProfileHelper {
 		result.name = raw.substring(start, end);
 		// get the dialect
 		start = raw.indexOf(DIALECT, end) + DIALECT.length();
-		end = raw.indexOf(System.lineSeparator(), start);
+		end = raw.indexOf(lineSeparator, start);
 		result.dialect = raw.substring(start, end).trim();
 		// get the driver class
 		start = raw.indexOf(DRIVER_CLASS, end) + DRIVER_CLASS.length();
-		end = raw.indexOf(System.lineSeparator(), start);
+		end = raw.indexOf(lineSeparator, start);
 		result.driverClass = raw.substring(start, end).trim();
 		// get the driver location
 		start = raw.indexOf(DRIVER_LOCATION, end) + DRIVER_LOCATION.length();
-		end = raw.indexOf(System.lineSeparator(), start);
+		end = raw.indexOf(lineSeparator, start);
 		result.driverLocation = raw.substring(start, end).trim();
 		// get the url
 		start = raw.indexOf(URL, end) + URL.length();
-		end = raw.indexOf(System.lineSeparator(), start);
+		end = raw.indexOf(lineSeparator, start);
 		result.url = raw.substring(start, end).trim();
 		// get the user
 		start = raw.indexOf(USER, end) + USER.length();
-		end = raw.indexOf(System.lineSeparator(), start);
+		end = raw.indexOf(lineSeparator, start);
 		end = end == -1 ? raw.length() : end;
 		result.user = raw.substring(start, end).trim();
 		return result;
