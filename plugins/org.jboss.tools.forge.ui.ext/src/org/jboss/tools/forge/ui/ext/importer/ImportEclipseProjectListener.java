@@ -12,7 +12,6 @@ import java.util.Set;
 
 import org.jboss.forge.projects.Project;
 import org.jboss.forge.projects.ProjectListener;
-import org.jboss.forge.projects.facets.MetadataFacet;
 import org.jboss.forge.resource.DirectoryResource;
 
 /**
@@ -36,7 +35,7 @@ public enum ImportEclipseProjectListener implements ProjectListener {
         for (Project project : projects) {
             DirectoryResource projectRoot = project.getProjectRoot();
             String baseDirPath = projectRoot.getParent().getFullyQualifiedName();
-            String projectName = project.getFacet(MetadataFacet.class).getProjectName();
+            String projectName = projectRoot.getName();
             ProjectImporter projectImporter = new ProjectImporter(baseDirPath, projectName);
             projectImporter.importProject();
         }
