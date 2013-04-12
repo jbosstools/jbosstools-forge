@@ -47,7 +47,7 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
                     }
                 }
                 if (projectFactory != null) {
-                    projectListenerRegistration = projectFactory.addProjectListener(new ImportEclipseProjectListener());
+                    projectListenerRegistration = projectFactory.addProjectListener(ImportEclipseProjectListener.INSTANCE);
                 }
             }
         });

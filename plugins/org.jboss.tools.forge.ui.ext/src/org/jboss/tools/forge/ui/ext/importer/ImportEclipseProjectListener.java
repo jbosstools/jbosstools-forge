@@ -7,6 +7,9 @@
 
 package org.jboss.tools.forge.ui.ext.importer;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jboss.forge.projects.Project;
 import org.jboss.forge.projects.ProjectListener;
 import org.jboss.forge.resource.DirectoryResource;
@@ -17,15 +20,29 @@ import org.jboss.forge.resource.DirectoryResource;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  *
  */
-public class ImportEclipseProjectListener implements ProjectListener {
+public enum ImportEclipseProjectListener implements ProjectListener {
+
+    INSTANCE;
+
+    private Set<Project> projects = new HashSet<Project>();
 
     @Override
     public void projectCreated(Project project) {
-        DirectoryResource projectRoot = project.getProjectRoot();
-        String baseDirPath = projectRoot.getParent().getFullyQualifiedName();
-        String projectName = projectRoot.getName();
-        ProjectImporter projectImporter = new ProjectImporter(baseDirPath, projectName);
-        projectImporter.importProject();
+        projects.add(project);
+    }
+
+    public void doImport() {
+        for (Project project : projects) {
+            DirectoryResource projectRoot = project.getProjectRoot();
+            String baseDirPath = projectRoot.getParent().getFullyQualifiedName();
+            String projectName = projectRoot.getName();
+            ProjectImporter projectImporter = new ProjectImporter(baseDirPath, projectName);
+            projectImporter.importProject();
+        }
+    }
+
+    public void clear() {
+        projects.clear();
     }
 
 }
