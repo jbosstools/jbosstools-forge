@@ -45,9 +45,9 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
         final Table table = new Table(group, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
         table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        UISelectMany<Object> selectMany = (UISelectMany) input;
-        final List<Object> data = new ArrayList<Object>();
+        final UISelectMany<Object> selectMany = (UISelectMany) input;
         final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
+        final List<Object> data = new ArrayList<Object>();
         InputComponents.setValueFor(converterFactory, input, data);
         Iterable<Object> valueChoices = selectMany.getValueChoices();
         if (valueChoices != null) {
@@ -67,6 +67,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
                     } else {
                         data.remove(source.getData());
                     }
+                    InputComponents.setValueFor(converterFactory, input, data);
                 }
             }
         });
