@@ -107,4 +107,23 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 		return getProject(getProjectName()).getLocation().toOSString();
 	}
 	
+	String prompt = null;
+	String promptNoProject = null;
+	
+	@Override
+	protected void doBefore() {
+		super.doBefore();
+		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
+		prompt = runtime.sendCommand("get-prompt");
+		promptNoProject = runtime.sendCommand("get-prompt-no-project");		
+	}
+	
+	@Override
+	protected void doAfter() {
+		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
+		runtime.sendCommand("set-prompt " + prompt);
+		runtime.sendCommand("set-prompt-no-project " + promptNoProject);
+		super.doAfter();
+	}
+	
 }

@@ -7,12 +7,15 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 
 public class HibernateToolsInstaller {
 	
 	private boolean done = false;
+	private String prompt = null;
+	private String promptNoProject = null;
 	
 	void install(Shell shell) {
 		final ProgressMonitorDialog pmd = new ProgressMonitorDialog(shell);
@@ -29,9 +32,12 @@ public class HibernateToolsInstaller {
 							Runnable installer = new Runnable() {
 								@Override
 								public void run() {
-									ForgeHelper.getDefaultRuntime().sendCommand("set VERBOSE true");
-									String str = ForgeHelper.getDefaultRuntime().sendCommand("forge install-plugin hibernate-tools");
-									System.out.println(str);
+									ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
+//									prompt = runtime.sendCommand("get-prompt");
+//									promptNoProject = runtime.sendCommand("get-prompt-no-project");		
+									runtime.sendCommand("forge install-plugin hibernate-tools");
+//									runtime.sendCommand("set-prompt " + prompt);
+//									runtime.sendCommand("set-prompt-no-project " + promptNoProject);
 									done = true;
 								}								
 							};

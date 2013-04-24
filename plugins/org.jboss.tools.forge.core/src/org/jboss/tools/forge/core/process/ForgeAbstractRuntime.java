@@ -98,7 +98,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private Object mutex = new Object();
 	
 	public String sendCommand(String str) {
-//		System.out.println("sendCommand(" + str + ")");
+		System.out.println("sendCommand(" + str + ")");
 		String result = null;
 		if (process != null && !process.isTerminated()) {
 			IStreamsProxy streamsProxy = getStreamsProxy();
@@ -123,8 +123,10 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 					commandResult = null;
 					commandResultAvailable = false;
 				}
+				errorStreamMonitor.addListener(masterStreamListener);
 			}
 		}
+		System.out.println("ForgeAbstractRuntime.sendCommand result: " + result);
 		return result;
 	}
 	
@@ -224,12 +226,12 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private class CommandResultListener extends ForgeHiddenOutputFilter implements IStreamListener {
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {	
-//			System.out.println("CommandResultListener.streamAppended(" + text + ")");
+			System.out.println("CommandResultListener.streamAppended(" + text + ")");
 			outputAvailable(text);
 		}
 		@Override
 		public void handleFilteredString(String str) {
-//			System.out.println("CommandResultListener.handleFilteredString(" + str + ")");
+			System.out.println("CommandResultListener.handleFilteredString(" + str + ")");
 			if (str.startsWith("RESULT: ")) {
 				commandResult = str.substring(8);
 				commandResultAvailable = true;

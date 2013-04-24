@@ -9,6 +9,7 @@ Bundle-Localization: plugin
 Eclipse-BundleShape: dir
 Export-Package: javax.enterprise.event,
  javax.inject,
+ org.jboss.forge,
  org.jboss.forge.project,
  org.jboss.forge.resources,
  org.jboss.forge.resources.events,
