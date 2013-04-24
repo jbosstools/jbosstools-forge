@@ -29,8 +29,8 @@ public abstract class ControlBuilder {
      * @param page
      *            TODO
      * @param input
-     * @param converterRegistry
-     *            the converter registry to convert the inputed value from the Control to the UIInput
+     * @param container
+     *            the container this control will be placed on
      *
      * @return
      */
