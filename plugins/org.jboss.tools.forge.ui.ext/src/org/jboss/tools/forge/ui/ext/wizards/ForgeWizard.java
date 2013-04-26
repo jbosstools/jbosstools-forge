@@ -134,6 +134,10 @@ public class ForgeWizard extends MutableWizard {
         }
         // No next page
         if (nextCommand == null) {
+            // Clear any subsequent pages that may exist (occurs when navigation changes)
+            List<ForgeWizardPage> pageList = getPageList();
+            int idx = pageList.indexOf(page);
+            pageList.subList(idx + 1, pageList.size()).clear();
             return null;
         } else {
             Class<? extends UICommand> successor = nextCommand.getNext();
