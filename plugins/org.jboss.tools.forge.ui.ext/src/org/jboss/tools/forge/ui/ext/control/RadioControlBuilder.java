@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
+import org.jboss.forge.proxy.Proxies;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.InputComponent;
@@ -56,7 +57,7 @@ public class RadioControlBuilder extends ControlBuilder {
                     @Override
                     public void widgetSelected(SelectionEvent e) {
                         if (button.getSelection()) {
-                            InputComponents.setValueFor(converterFactory, input, choice);
+                            InputComponents.setValueFor(converterFactory, input, Proxies.unwrap(choice));
                         }
                     }
                 });

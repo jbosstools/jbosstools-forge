@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
+import org.jboss.forge.proxy.Proxies;
 import org.jboss.forge.ui.hints.InputType;
 import org.jboss.forge.ui.hints.InputTypes;
 import org.jboss.forge.ui.input.InputComponent;
@@ -50,7 +51,7 @@ public class ComboControlBuilder extends ControlBuilder {
         if (valueChoices != null) {
             for (Object choice : valueChoices) {
                 String itemLabel = converter.convert(choice);
-                items.put(itemLabel, choice);
+                items.put(itemLabel, Proxies.unwrap(choice));
                 combo.add(itemLabel);
             }
         }
