@@ -88,7 +88,7 @@
                         <artifactItem>
                            <groupId>org.javassist</groupId>
                            <artifactId>javassist</artifactId>
-                           <version>3.15.0-GA</version>
+                           <version>3.17.1-GA</version>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>

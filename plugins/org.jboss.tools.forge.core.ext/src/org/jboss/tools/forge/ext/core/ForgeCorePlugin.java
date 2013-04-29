@@ -40,6 +40,7 @@ public class ForgeCorePlugin extends Plugin {
     @Override
     public void start(final BundleContext context) throws Exception {
 	super.start(context);
+	System.setProperty("modules.ignore.jdk.factory", "true");
 	Forge forge = getForge(context);
 	ForgeService.INSTANCE.setForge(forge);
 	ForgeService.INSTANCE.start(loader);
