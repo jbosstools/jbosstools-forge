@@ -187,12 +187,11 @@ public class ForgeWizard extends MutableWizard {
 								+ " is executed.";
 					}
 					writeToStatusBar(message);
-               if(result instanceof Failed)
-               {
-                  Throwable exception = ((Failed) result).getException();
-                  if(exception != null)
-                     ForgeUIPlugin.log(exception);
-               }
+					if (result instanceof Failed) {
+						Throwable exception = ((Failed) result).getException();
+						if (exception != null)
+							ForgeUIPlugin.log(exception);
+					}
 				}
 			}
 			// TODO: Decouple this
