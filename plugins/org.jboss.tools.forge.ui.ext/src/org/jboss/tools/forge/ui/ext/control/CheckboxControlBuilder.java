@@ -29,7 +29,7 @@ public class CheckboxControlBuilder extends ControlBuilder {
 	@Override
 	public Control build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
-		GridData layoutData = new GridData(GridData.FILL_BOTH);
+		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 2;
 		Button cmb = new Button(container, SWT.CHECK);
 		cmb.setLayoutData(layoutData);
