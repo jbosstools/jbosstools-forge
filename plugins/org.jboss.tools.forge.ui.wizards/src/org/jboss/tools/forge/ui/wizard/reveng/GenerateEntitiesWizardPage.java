@@ -1,12 +1,21 @@
 package org.jboss.tools.forge.ui.wizard.reveng;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.JavaElementLabelProvider;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -23,6 +32,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
 import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
@@ -40,7 +50,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	
 	private Combo projectNameCombo, connectionProfileCombo, hibernateDialectCombo;
 	private Text entityPackageText, urlText, userNameText, userPasswordText, driverNameText, driverLocationText;
-	private Button saveButton, revertButton;
+	private Button saveButton, revertButton, browsePackageButton;
 	
 	private boolean updatingConnectionProfileDetails = false;
 	
@@ -79,6 +89,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 				getWizardDescriptor().put(PROJECT_NAME, projectNameCombo.getText());
 				updateEntityPackageText();
+				browsePackageButton.setEnabled(isProjectSelected());
 			}
 		});
 		final Button newProjectButton = new Button(parent, SWT.NONE);
@@ -94,7 +105,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 			if (project == null) return;
 			File pomFile = project.getFile("pom.xml").getLocation().toFile();
 			Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
-			entityPackageText.setText(model.getGroupId());
+			entityPackageText.setText(model.getGroupId() + ".model");
 		} catch (CoreException e) {
 			WizardsPlugin.log(e);
 		}
@@ -111,9 +122,65 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				getWizardDescriptor().put(ENTITY_PACKAGE, entityPackageText.getText());
 			}
 		});
-		final Button browseButton = new Button(parent, SWT.NONE);
-		browseButton.setText("Browse...");
-		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		browsePackageButton = new Button(parent, SWT.NONE);
+		browsePackageButton.setText("Browse...");
+		browsePackageButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		browsePackageButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				selectEntityPackage();
+			}
+		});
+		browsePackageButton.setEnabled(isProjectSelected());
+	}
+	
+	private boolean isProjectSelected() {
+		String projectName = projectNameCombo.getText();
+		return projectName != null && !"".equals(projectName);
+	}
+	
+	private List<IPackageFragment> getPackageFragments() {
+		ArrayList<IPackageFragment> result = new ArrayList<IPackageFragment>();
+		try {
+			String projectName = projectNameCombo.getText();
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+			IJavaProject javaProject = JavaCore.create(project);
+			for (IPackageFragmentRoot root : javaProject.getAllPackageFragmentRoots()) {
+				if (root.getKind() != IPackageFragmentRoot.K_SOURCE) continue;
+				for (IJavaElement javaElement : root.getChildren()) {
+					addPackageFragments(javaElement, result);
+				}
+			}
+		} catch (JavaModelException e) {
+			WizardsPlugin.log(e);
+		}
+		return result;
+	}
+	
+	private void addPackageFragments(IJavaElement javaElement, List<IPackageFragment> list) throws JavaModelException {
+		if (javaElement instanceof IPackageFragment) {
+			IPackageFragment packageFragment = (IPackageFragment)javaElement;
+			if (!packageFragment.isDefaultPackage()) {
+				list.add(packageFragment);
+			}
+			for (IJavaElement child : packageFragment.getChildren()) {
+				addPackageFragments(child, list);
+			}
+		}
+	}
+	
+	private void selectEntityPackage() {
+		ElementListSelectionDialog dialog = 
+				new ElementListSelectionDialog(getShell(), new JavaElementLabelProvider());
+		dialog.setTitle("Package Selection");
+		dialog.setMessage("Select a package.");
+		dialog.setElements(getPackageFragments().toArray());
+		dialog.open();
+		Object[] results = dialog.getResult();
+		if (results.length > 0 && results[0] instanceof IPackageFragment) {
+			IPackageFragment result = (IPackageFragment)results[0];
+			entityPackageText.setText(result.getElementName());
+		}
 	}
 		
 	private void createConnectionProfileEditor(Composite parent) {
