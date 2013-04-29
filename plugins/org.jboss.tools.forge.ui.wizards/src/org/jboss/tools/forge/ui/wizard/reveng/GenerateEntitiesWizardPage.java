@@ -1,9 +1,13 @@
 package org.jboss.tools.forge.ui.wizard.reveng;
 
+import java.io.File;
 import java.util.HashMap;
 
+import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -20,6 +24,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
+import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
 public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
@@ -33,7 +38,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	private DataToolsConnectionProfileHelper connectionProfileHelper = 
 			new DataToolsConnectionProfileHelper(this);
 	
-	private Combo connectionProfileCombo, hibernateDialectCombo;
+	private Combo projectNameCombo, connectionProfileCombo, hibernateDialectCombo;
 	private Text entityPackageText, urlText, userNameText, userPasswordText, driverNameText, driverLocationText;
 	private Button saveButton, revertButton;
 	
@@ -57,7 +62,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	private void createProjectEditor(Composite parent) {
 		Label projectNameLabel = new Label(parent, SWT.NONE);
 		projectNameLabel.setText("JPA Project: ");
-		final Combo projectNameCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+		projectNameCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 		projectNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		IProject[] allProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (IProject project : allProjects) {
@@ -73,11 +78,26 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				getWizardDescriptor().put(PROJECT_NAME, projectNameCombo.getText());
+				updateEntityPackageText();
 			}
 		});
 		final Button newProjectButton = new Button(parent, SWT.NONE);
 		newProjectButton.setText("New...");
 		newProjectButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+	}
+	
+	private void updateEntityPackageText() {
+		try {
+			String projectName = projectNameCombo.getText();
+			if (projectName == null || "".equals(projectName)) return;
+			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+			if (project == null) return;
+			File pomFile = project.getFile("pom.xml").getLocation().toFile();
+			Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
+			entityPackageText.setText(model.getGroupId());
+		} catch (CoreException e) {
+			WizardsPlugin.log(e);
+		}
 	}
 	
 	private void createEntityPackageEditor(Composite parent) {
