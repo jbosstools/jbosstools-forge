@@ -28,6 +28,7 @@ import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.proxy.Proxies;
 import org.jboss.forge.resource.Resource;
 import org.jboss.forge.ui.UICommand;
+import org.jboss.forge.ui.result.Failed;
 import org.jboss.forge.ui.result.NavigationResult;
 import org.jboss.forge.ui.result.Result;
 import org.jboss.forge.ui.wizard.UIWizard;
@@ -186,6 +187,12 @@ public class ForgeWizard extends MutableWizard {
 								+ " is executed.";
 					}
 					writeToStatusBar(message);
+               if(result instanceof Failed)
+               {
+                  Throwable exception = ((Failed) result).getException();
+                  if(exception != null)
+                     ForgeUIPlugin.log(exception);
+               }
 				}
 			}
 			// TODO: Decouple this
