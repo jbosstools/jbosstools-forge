@@ -14,7 +14,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.convert.Converter;
 import org.jboss.forge.convert.ConverterFactory;
 import org.jboss.forge.ui.hints.InputType;
@@ -30,12 +29,12 @@ public class CheckboxControlBuilder extends ControlBuilder {
 	@Override
 	public Control build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
-		// Create the label
-		new Label(container, SWT.NULL);
+		GridData layoutData = new GridData(GridData.FILL_BOTH);
+		layoutData.horizontalSpan = 2;
 		Button cmb = new Button(container, SWT.CHECK);
+		cmb.setLayoutData(layoutData);
 		cmb.setText(input.getLabel() == null ? input.getName() : input
 				.getLabel());
-		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		// Set Default Value
 		final ConverterFactory converterFactory = ForgeService.INSTANCE
 				.getConverterFactory();
