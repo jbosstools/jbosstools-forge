@@ -15,9 +15,9 @@ public class DataToolsConnectionProfileHelper {
 	private static final String USER_NAME = "org.eclipse.datatools.connectivity.db.username";
 	private static final String URL = "org.eclipse.datatools.connectivity.db.URL";
 	
-	private ConnectionProfileWizardPage wizardPage;
+	private GenerateEntitiesWizardPage wizardPage;
 	
-	DataToolsConnectionProfileHelper(ConnectionProfileWizardPage wizardPage) {
+	DataToolsConnectionProfileHelper(GenerateEntitiesWizardPage wizardPage) {
 		this.wizardPage = wizardPage;
 	}
 		

@@ -13,7 +13,7 @@ import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
 public class GenerateEntitiesWizard extends AbstractForgeWizard {
 
-	private ConnectionProfileWizardPage generateEntitiesWizardPage = new ConnectionProfileWizardPage();
+	private GenerateEntitiesWizardPage generateEntitiesWizardPage = new GenerateEntitiesWizardPage();
 
 	public GenerateEntitiesWizard() {
 		setWindowTitle("Generate Entities");
@@ -52,7 +52,7 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 				IProject project = ((IResource)object).getProject();
 				if (WizardsHelper.isJPAProject(project)) {
 					getWizardDescriptor().put(
-							ConnectionProfileWizardPage.PROJECT_NAME, 
+							GenerateEntitiesWizardPage.PROJECT_NAME, 
 							project.getName());
 					return;
 				}
@@ -80,6 +80,12 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 				&& !"".equals(getConnectionProfile().password)) {
 			generateCommand += " --password " + getConnectionProfile().password;
 		}
+		String entityPackage = 
+				(String)getWizardDescriptor().get(
+						GenerateEntitiesWizardPage.ENTITY_PACKAGE);
+		if (entityPackage != null && !"".equals(entityPackage)) {
+			generateCommand += " --entityPackage " + entityPackage;
+		}
 		runtime.sendCommand(generateCommand);
 	}
 	
@@ -96,11 +102,11 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 	}
 	
 	private String getProjectName() {
-		return (String)getWizardDescriptor().get(ConnectionProfileWizardPage.PROJECT_NAME);
+		return (String)getWizardDescriptor().get(GenerateEntitiesWizardPage.PROJECT_NAME);
 	}
 	
 	private ConnectionProfileDescriptor getConnectionProfile() {
-		return (ConnectionProfileDescriptor)getWizardDescriptor().get(ConnectionProfileWizardPage.CONNECTION_PROFILE);
+		return (ConnectionProfileDescriptor)getWizardDescriptor().get(GenerateEntitiesWizardPage.CONNECTION_PROFILE);
 	}
 	
 	private String getProjectLocation() {

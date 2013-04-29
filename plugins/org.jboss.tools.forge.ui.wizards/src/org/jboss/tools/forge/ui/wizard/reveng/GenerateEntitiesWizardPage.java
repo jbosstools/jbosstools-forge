@@ -22,9 +22,10 @@ import org.eclipse.swt.widgets.Widget;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
-public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
+public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	
 	final static String PROJECT_NAME = "GenerateEntitiesWizardPage.projectName";
+	final static String ENTITY_PACKAGE = "GenerateEntitiesWizardPage.entityPackage";
 	final static String CONNECTION_PROFILE = "GenerateEntitiesWizardPage.connectionProfile";
 	
 	private HashMap<String, ConnectionProfileDescriptor> connectionProfiles = 
@@ -33,12 +34,12 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 			new DataToolsConnectionProfileHelper(this);
 	
 	private Combo connectionProfileCombo, hibernateDialectCombo;
-	private Text urlText, userNameText, userPasswordText, driverNameText, driverLocationText;
+	private Text entityPackageText, urlText, userNameText, userPasswordText, driverNameText, driverLocationText;
 	private Button saveButton, revertButton;
 	
 	private boolean updatingConnectionProfileDetails = false;
 	
-	protected ConnectionProfileWizardPage() {
+	protected GenerateEntitiesWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.generate.entities", "Generate Entities", null);
 	}
 	
@@ -47,6 +48,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		Composite control = new Composite(parent, SWT.NULL);
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
+		createEntityPackageEditor(control);
 		createConnectionProfileEditor(control);
 		createConnectionProfileDetailsEditor(control);
 		setControl(control);
@@ -77,6 +79,22 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 		newProjectButton.setText("New...");
 		newProjectButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 	}
+	
+	private void createEntityPackageEditor(Composite parent) {
+		Label entityPackageLabel = new Label(parent, SWT.NONE);
+		entityPackageLabel.setText("Entity Package: ");
+		entityPackageText = new Text(parent, SWT.BORDER);
+		entityPackageText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		entityPackageText.addModifyListener(new ModifyListener() {			
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				getWizardDescriptor().put(ENTITY_PACKAGE, entityPackageText.getText());
+			}
+		});
+		final Button browseButton = new Button(parent, SWT.NONE);
+		browseButton.setText("Browse...");
+		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+	}
 		
 	private void createConnectionProfileEditor(Composite parent) {
 		Label connectionProfileLabel = new Label(parent, SWT.NONE);
@@ -91,7 +109,7 @@ public class ConnectionProfileWizardPage extends AbstractForgeWizardPage {
 			}
 		});
 		Button connectionProfileButton = new Button(parent, SWT.NONE);
-		connectionProfileButton.setText("Manage...");
+		connectionProfileButton.setText("New...");
 		connectionProfileButton.addSelectionListener(new SelectionAdapter() {			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
