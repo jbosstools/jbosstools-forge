@@ -12,18 +12,19 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
 /**
  * Imports a maven-ized project into the workspace
- * 
+ *
  * FOR INTERNAL USE ONLY. This class was copied from the
  * org.jboss.tools.forge.ui plugin in order to avoid dependency on it and should
  * be removed in future versions.
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 class ProjectImporter {
 
@@ -36,21 +37,14 @@ class ProjectImporter {
 	}
 
 	public void importProject() {
-		Job job = new WorkspaceJob("Importing Forge project") {
-			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor) {
-				try {
-					MavenPlugin.getProjectConfigurationManager()
-							.importProjects(getProjectToImport(),
-									new ProjectImportConfiguration(), monitor);
-				} catch (CoreException ex) {
-					return ex.getStatus();
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(MavenPlugin.getProjectConfigurationManager().getRule());
+		Job job = new MavenImportWorkspaceJob("Importing Forge project");
 		job.schedule();
+	}
+
+	private Collection<MavenProjectInfo> getProjectToImport() {
+		ArrayList<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>(1);
+		result.add(createMavenProjectInfo());
+		return result;
 	}
 
 	private MavenProjectInfo createMavenProjectInfo() {
@@ -63,15 +57,31 @@ class ProjectImporter {
 			String pomName = projectName + "/" + "pom.xml";
 			result = new MavenProjectInfo(pomName, pomFile, model, null);
 		} catch (CoreException e) {
-
+			e.printStackTrace();
 		}
 		return result;
 	}
 
-	private Collection<MavenProjectInfo> getProjectToImport() {
-		ArrayList<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>(1);
-		result.add(createMavenProjectInfo());
-		return result;
+	private class MavenImportWorkspaceJob extends WorkspaceJob {
+
+		public MavenImportWorkspaceJob(String name) {
+			super(name);
+			setRule(MavenPlugin.getProjectConfigurationManager().getRule());
+		}
+
+		@Override
+		public IStatus runInWorkspace(IProgressMonitor monitor) {
+			try {
+				ProjectImportConfiguration config = new ProjectImportConfiguration();
+				IProjectConfigurationManager configManager = MavenPlugin
+						.getProjectConfigurationManager();
+				Collection<MavenProjectInfo> projectToImport = getProjectToImport();
+				configManager.importProjects(projectToImport, config, monitor);
+			} catch (CoreException ex) {
+				return ex.getStatus();
+			}
+			return Status.OK_STATUS;
+		}
 	}
 
 }
