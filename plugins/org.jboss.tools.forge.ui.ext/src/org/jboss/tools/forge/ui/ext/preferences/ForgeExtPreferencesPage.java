@@ -29,86 +29,88 @@ import org.osgi.framework.BundleException;
 
 /**
  * Preferences Page for Forge 2
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
-public class ForgeExtPreferencesPage extends PreferencePage implements IWorkbenchPreferencePage {
+public class ForgeExtPreferencesPage extends PreferencePage implements
+		IWorkbenchPreferencePage {
 
-    private Text addonDirText;
+	private Text addonDirText;
 
-    @Override
-    public void init(IWorkbench workbench) {
-    }
+	@Override
+	public void init(IWorkbench workbench) {
+	}
 
-    private void createAddonDirText(Composite parent) {
-        Label addonDirLabel = new Label(parent, SWT.NONE);
-        addonDirLabel.setText("Forge Addon Repository Location: ");
+	private void createAddonDirText(Composite parent) {
+		Label addonDirLabel = new Label(parent, SWT.NONE);
+		addonDirLabel.setText("Forge Addon Repository Location: ");
 
-        Composite container = new Composite(parent, SWT.NULL);
-        container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		Composite container = new Composite(parent, SWT.NULL);
+		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-        GridLayout layout = new GridLayout();
-        container.setLayout(layout);
-        layout.numColumns = 2;
-        layout.verticalSpacing = 9;
-        layout.marginWidth = 0;
-        layout.marginHeight = 0;
+		GridLayout layout = new GridLayout();
+		container.setLayout(layout);
+		layout.numColumns = 2;
+		layout.verticalSpacing = 9;
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
 
-        addonDirText = new Text(container, SWT.BORDER);
-        addonDirText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        addonDirText.setText(ForgeExtPreferences.INSTANCE.getAddonDir());
-        Button button = new Button(container, SWT.PUSH);
-        button.setText("Browse...");
-        button.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                DirectoryDialog dialog = new DirectoryDialog(getShell(), SWT.OPEN);
-                dialog.setText("Select a directory");
-                dialog.setFilterPath(addonDirText.getText());
-                String selectedPath = dialog.open();
-                if (selectedPath != null) {
-                    addonDirText.setText(selectedPath);
-                }
-            }
-        });
-    }
+		addonDirText = new Text(container, SWT.BORDER);
+		addonDirText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		addonDirText.setText(ForgeExtPreferences.INSTANCE.getAddonDir());
+		Button button = new Button(container, SWT.PUSH);
+		button.setText("Browse...");
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				DirectoryDialog dialog = new DirectoryDialog(getShell(),
+						SWT.OPEN);
+				dialog.setText("Select a directory");
+				dialog.setFilterPath(addonDirText.getText());
+				String selectedPath = dialog.open();
+				if (selectedPath != null) {
+					addonDirText.setText(selectedPath);
+				}
+			}
+		});
+	}
 
-    @Override
-    protected Control createContents(Composite parent) {
-        noDefaultAndApplyButton();
-        Composite clientArea = createClientArea(parent);
-        createAddonDirText(clientArea);
-        return null;
-    }
+	@Override
+	protected Control createContents(Composite parent) {
+		noDefaultAndApplyButton();
+		Composite clientArea = createClientArea(parent);
+		createAddonDirText(clientArea);
+		return null;
+	}
 
-    private Composite createClientArea(Composite parent) {
-        Composite clientArea = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 2;
-        clientArea.setLayout(layout);
-        GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-        clientArea.setLayoutData(gridData);
-        return clientArea;
-    }
+	private Composite createClientArea(Composite parent) {
+		Composite clientArea = new Composite(parent, SWT.NONE);
+		GridLayout layout = new GridLayout();
+		layout.numColumns = 2;
+		clientArea.setLayout(layout);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		clientArea.setLayoutData(gridData);
+		return clientArea;
+	}
 
-    @Override
-    public boolean performOk() {
-        ForgeExtPreferences.INSTANCE.setAddonDir(addonDirText.getText());
-        try {
-            restartForge();
-        } catch (BundleException be) {
-            ForgeCorePlugin.log(be);
-        }
-        return true;
-    }
+	@Override
+	public boolean performOk() {
+		ForgeExtPreferences.INSTANCE.setAddonDir(addonDirText.getText());
+		try {
+			restartForge();
+		} catch (BundleException be) {
+			ForgeCorePlugin.log(be);
+		}
+		return true;
+	}
 
-    /**
-     * Attempts to restart the forge service
-     */
-    private void restartForge() throws BundleException {
-        Bundle bundle = Platform.getBundle(ForgeCorePlugin.PLUGIN_ID);
-        bundle.stop();
-        bundle.start();
-    }
+	/**
+	 * Attempts to restart the forge service
+	 */
+	private void restartForge() throws BundleException {
+		Bundle bundle = Platform.getBundle(ForgeCorePlugin.PLUGIN_ID);
+		bundle.stop();
+		bundle.start();
+	}
 }

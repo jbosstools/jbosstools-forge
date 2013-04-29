@@ -32,72 +32,77 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class ComboControlBuilder extends ControlBuilder {
 
-    @Override
-    @SuppressWarnings({ "unchecked" })
-    public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
-        // Create the label
-        Label label = new Label(container, SWT.NULL);
-        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+	@Override
+	@SuppressWarnings({ "unchecked" })
+	public Control build(ForgeWizardPage page,
+			final InputComponent<?, Object> input, final Composite container) {
+		// Create the label
+		Label label = new Label(container, SWT.NULL);
+		label.setText(input.getLabel() == null ? input.getName() : input
+				.getLabel());
 
-        final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
+		final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN
+				| SWT.READ_ONLY);
 
-        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
-        UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-        Converter<Object, String> converter = (Converter<Object, String>) InputComponents.getItemLabelConverter(
-            converterFactory, selectOne);
-        String value = converter.convert(InputComponents.getValueFor(input));
-        final Map<String, Object> items = new HashMap<String, Object>();
-        Iterable<Object> valueChoices = selectOne.getValueChoices();
-        if (valueChoices != null) {
-            for (Object choice : valueChoices) {
-                String itemLabel = converter.convert(choice);
-                items.put(itemLabel, Proxies.unwrap(choice));
-                combo.add(itemLabel);
-            }
-        }
-        combo.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                int selectionIndex = combo.getSelectionIndex();
-                if (selectionIndex != -1) {
-                    String item = combo.getItem(selectionIndex);
-                    Object selectedObj = items.get(item);
-                    InputComponents.setValueFor(converterFactory, input, selectedObj);
-                }
-            }
-        });
+		final ConverterFactory converterFactory = ForgeService.INSTANCE
+				.getConverterFactory();
+		UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+		Converter<Object, String> converter = (Converter<Object, String>) InputComponents
+				.getItemLabelConverter(converterFactory, selectOne);
+		String value = converter.convert(InputComponents.getValueFor(input));
+		final Map<String, Object> items = new HashMap<String, Object>();
+		Iterable<Object> valueChoices = selectOne.getValueChoices();
+		if (valueChoices != null) {
+			for (Object choice : valueChoices) {
+				String itemLabel = converter.convert(choice);
+				items.put(itemLabel, Proxies.unwrap(choice));
+				combo.add(itemLabel);
+			}
+		}
+		combo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int selectionIndex = combo.getSelectionIndex();
+				if (selectionIndex != -1) {
+					String item = combo.getItem(selectionIndex);
+					Object selectedObj = items.get(item);
+					InputComponents.setValueFor(converterFactory, input,
+							selectedObj);
+				}
+			}
+		});
 
-        // Set Default Value
-        if (value == null) {
-            if (combo.getVisibleItemCount() > 0) {
-                combo.select(0);
-            }
-        } else {
-            combo.setText(value);
-        }
+		// Set Default Value
+		if (value == null) {
+			if (combo.getVisibleItemCount() > 0) {
+				combo.select(0);
+			}
+		} else {
+			combo.setText(value);
+		}
 
-        // Cleaning the map when the input is disposed
-        combo.addDisposeListener(new DisposeListener() {
-            @Override
-            public void widgetDisposed(DisposeEvent e) {
-                items.clear();
-            }
-        });
-        return combo;
-    }
+		// Cleaning the map when the input is disposed
+		combo.addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				items.clear();
+			}
+		});
+		return combo;
+	}
 
-    @Override
-    protected Class<Object> getProducedType() {
-        return Object.class;
-    }
+	@Override
+	protected Class<Object> getProducedType() {
+		return Object.class;
+	}
 
-    @Override
-    protected InputType getSupportedInputType() {
-        return InputTypes.SELECT_ONE_DROPDOWN;
-    }
+	@Override
+	protected InputType getSupportedInputType() {
+		return InputTypes.SELECT_ONE_DROPDOWN;
+	}
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes() {
-        return new Class<?>[] { UISelectOne.class };
-    }
+	@Override
+	protected Class<?>[] getSupportedInputComponentTypes() {
+		return new Class<?>[] { UISelectOne.class };
+	}
 }

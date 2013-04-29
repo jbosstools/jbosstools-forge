@@ -9,10 +9,11 @@ import org.jboss.tools.forge.ui.ext.dialog.UICommandListDialog;
 
 public class ForgeCommandHandler extends AbstractHandler {
 
-    @Override
-    public Object execute(ExecutionEvent event) throws ExecutionException {
-        IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-        return new UICommandListDialog(window).open();
-    }
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		IWorkbenchWindow window = HandlerUtil
+				.getActiveWorkbenchWindowChecked(event);
+		return new UICommandListDialog(window).open();
+	}
 
 }

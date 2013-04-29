@@ -10,16 +10,16 @@ package org.jboss.tools.forge.ui.ext.context;
 import org.jboss.forge.ui.context.AbstractUIContext;
 
 public class UIContextImpl extends AbstractUIContext {
-    private UISelectionImpl<?> currentSelection;
+	private UISelectionImpl<?> currentSelection;
 
-    public UIContextImpl(UISelectionImpl<?> selection) {
-        this.currentSelection = selection;
-    }
+	public UIContextImpl(UISelectionImpl<?> selection) {
+		this.currentSelection = selection;
+	}
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public UISelectionImpl<?> getInitialSelection() {
-        return currentSelection;
-    }
+	@SuppressWarnings("unchecked")
+	@Override
+	public UISelectionImpl<?> getInitialSelection() {
+		return currentSelection;
+	}
 
 }

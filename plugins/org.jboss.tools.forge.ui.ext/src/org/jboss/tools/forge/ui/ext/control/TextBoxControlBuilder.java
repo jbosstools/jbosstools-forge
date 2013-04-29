@@ -27,44 +27,50 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class TextBoxControlBuilder extends ControlBuilder {
 
-    @Override
-    public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
-        // Create the label
-        Label label = new Label(container, SWT.NULL);
-        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+	@Override
+	public Control build(ForgeWizardPage page,
+			final InputComponent<?, Object> input, final Composite container) {
+		// Create the label
+		Label label = new Label(container, SWT.NULL);
+		label.setText(input.getLabel() == null ? input.getName() : input
+				.getLabel());
 
-        final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
-        txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
+		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-        // Set Default Value
-        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
-        if (converterFactory != null) {
-            Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(InputComponents.getValueFor(input));
-            txt.setText(value == null ? "" : value);
-        }
+		// Set Default Value
+		final ConverterFactory converterFactory = ForgeService.INSTANCE
+				.getConverterFactory();
+		if (converterFactory != null) {
+			Converter<Object, String> converter = converterFactory
+					.getConverter(input.getValueType(), String.class);
+			String value = converter
+					.convert(InputComponents.getValueFor(input));
+			txt.setText(value == null ? "" : value);
+		}
 
-        txt.addModifyListener(new ModifyListener() {
-            @Override
-            public void modifyText(ModifyEvent e) {
-                InputComponents.setValueFor(converterFactory, input, txt.getText());
-            }
-        });
-        return txt;
-    }
+		txt.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				InputComponents.setValueFor(converterFactory, input,
+						txt.getText());
+			}
+		});
+		return txt;
+	}
 
-    @Override
-    protected Class<String> getProducedType() {
-        return String.class;
-    }
+	@Override
+	protected Class<String> getProducedType() {
+		return String.class;
+	}
 
-    @Override
-    protected InputType getSupportedInputType() {
-        return InputTypes.TEXTBOX;
-    }
+	@Override
+	protected InputType getSupportedInputType() {
+		return InputTypes.TEXTBOX;
+	}
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes() {
-        return new Class<?>[] { UIInput.class };
-    }
+	@Override
+	protected Class<?>[] getSupportedInputComponentTypes() {
+		return new Class<?>[] { UIInput.class };
+	}
 }

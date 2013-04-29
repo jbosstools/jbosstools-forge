@@ -31,173 +31,183 @@ import org.jboss.tools.forge.ui.ext.control.ControlBuilderRegistry;
 
 /**
  * A Forge Wizard Page
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 public class ForgeWizardPage extends WizardPage implements Listener {
-    private UICommand uiCommand;
-    private UIContextImpl uiContext;
-    private UIBuilderImpl uiBuilder;
+	private UICommand uiCommand;
+	private UIContextImpl uiContext;
+	private UIBuilderImpl uiBuilder;
 
-    private ComponentControlEntry[] componentControlEntries;
+	private ComponentControlEntry[] componentControlEntries;
 
-    public ForgeWizardPage(Wizard wizard, UICommand command, UIContextImpl contextImpl) {
-        super("Page Name");
-        setWizard(wizard);
-        setPageComplete(false);
-        UICommandMetadata id = command.getMetadata();
-        setTitle(id.getName());
-        setDescription(id.getDescription());
-        setImageDescriptor(ForgeUIPlugin.getForgeLogo());
-        this.uiCommand = command;
-        this.uiContext = contextImpl;
-    }
+	public ForgeWizardPage(Wizard wizard, UICommand command,
+			UIContextImpl contextImpl) {
+		super("Page Name");
+		setWizard(wizard);
+		setPageComplete(false);
+		UICommandMetadata id = command.getMetadata();
+		setTitle(id.getName());
+		setDescription(id.getDescription());
+		setImageDescriptor(ForgeUIPlugin.getForgeLogo());
+		this.uiCommand = command;
+		this.uiContext = contextImpl;
+	}
 
-    public UICommand getUICommand() {
-        return uiCommand;
-    }
+	public UICommand getUICommand() {
+		return uiCommand;
+	}
 
-    @Override
-    public void createControl(Composite parent) {
-        uiBuilder = new UIBuilderImpl(uiContext);
-        try {
-            uiCommand.initializeUI(uiBuilder);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+	@Override
+	public void createControl(Composite parent) {
+		uiBuilder = new UIBuilderImpl(uiContext);
+		try {
+			uiCommand.initializeUI(uiBuilder);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        List<InputComponent<?, ?>> inputs = uiBuilder.getInputs();
-        createControls(parent, inputs);
-    }
+		List<InputComponent<?, ?>> inputs = uiBuilder.getInputs();
+		createControls(parent, inputs);
+	}
 
-    @SuppressWarnings("unchecked")
-    protected void createControls(Composite parent, List<InputComponent<?, ?>> inputs) {
-        Composite container = new Composite(parent, SWT.NULL);
-        GridLayout layout = new GridLayout();
-        container.setLayout(layout);
-        layout.numColumns = 2;
-        layout.verticalSpacing = 9;
+	@SuppressWarnings("unchecked")
+	protected void createControls(Composite parent,
+			List<InputComponent<?, ?>> inputs) {
+		Composite container = new Composite(parent, SWT.NULL);
+		GridLayout layout = new GridLayout();
+		container.setLayout(layout);
+		layout.numColumns = 2;
+		layout.verticalSpacing = 9;
 
-        // Init component control array
-        int size = inputs.size();
-        componentControlEntries = new ComponentControlEntry[size];
+		// Init component control array
+		int size = inputs.size();
+		componentControlEntries = new ComponentControlEntry[size];
 
-        for (int i = 0; i < size; i++) {
-            final InputComponent<?, ?> input = inputs.get(i);
-            ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE.getBuilderFor(input);
-            Control control = controlBuilder.build(this, (InputComponent<?, Object>) input, container);
+		for (int i = 0; i < size; i++) {
+			final InputComponent<?, ?> input = inputs.get(i);
+			ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE
+					.getBuilderFor(input);
+			Control control = controlBuilder.build(this,
+					(InputComponent<?, Object>) input, container);
 
-            // Update page status
-            control.addListener(SWT.Modify, this);
-            control.addListener(SWT.DefaultSelection, this);
-            control.addListener(SWT.Selection, this);
+			// Update page status
+			control.addListener(SWT.Modify, this);
+			control.addListener(SWT.DefaultSelection, this);
+			control.addListener(SWT.Selection, this);
 
-            componentControlEntries[i] = new ComponentControlEntry(input, control);
-        }
-        setPageComplete(validatePage());
+			componentControlEntries[i] = new ComponentControlEntry(input,
+					control);
+		}
+		setPageComplete(validatePage());
 
-        // Clear error messages when opening
-        setErrorMessage(null);
-        setMessage(null);
-        setControl(container);
-    }
+		// Clear error messages when opening
+		setErrorMessage(null);
+		setMessage(null);
+		setControl(container);
+	}
 
-    /**
-     * The <code>ForgeWizardPage</code> implementation of this <code>Listener</code> method handles all events and
-     * enablements for controls on this page.
-     */
-    @Override
-    public void handleEvent(Event event) {
-        if (isCurrentPage()) {
-            setPageComplete(validatePage());
-            // Refresh the buttons
-            getContainer().updateButtons();
-        }
-        event.doit = true;
-    }
+	/**
+	 * The <code>ForgeWizardPage</code> implementation of this
+	 * <code>Listener</code> method handles all events and enablements for
+	 * controls on this page.
+	 */
+	@Override
+	public void handleEvent(Event event) {
+		if (isCurrentPage()) {
+			setPageComplete(validatePage());
+			// Refresh the buttons
+			getContainer().updateButtons();
+		}
+		event.doit = true;
+	}
 
-    /**
-     * Returns whether this page's controls currently all contain valid values. It also calls
-     * {@link ForgeWizardPage#setErrorMessage(String)} if an error is found
-     *
-     * @return <code>true</code> if all controls are valid, and <code>false</code> if at least one is invalid
-     */
-    public boolean validatePage() {
-        // clear error message
-        setErrorMessage(null);
+	/**
+	 * Returns whether this page's controls currently all contain valid values.
+	 * It also calls {@link ForgeWizardPage#setErrorMessage(String)} if an error
+	 * is found
+	 * 
+	 * @return <code>true</code> if all controls are valid, and
+	 *         <code>false</code> if at least one is invalid
+	 */
+	public boolean validatePage() {
+		// clear error message
+		setErrorMessage(null);
 
-        // Change enabled state
-        if (componentControlEntries != null) {
-            for (ComponentControlEntry entry : componentControlEntries) {
-                InputComponent<?, ?> key = entry.getComponent();
-                Control value = entry.getControl();
-                value.setEnabled(key.isEnabled());
-            }
-        }
+		// Change enabled state
+		if (componentControlEntries != null) {
+			for (ComponentControlEntry entry : componentControlEntries) {
+				InputComponent<?, ?> key = entry.getComponent();
+				Control value = entry.getControl();
+				value.setEnabled(key.isEnabled());
+			}
+		}
 
-        // Validate required
-        if (uiBuilder != null) {
-            for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
-                String requiredMsg = InputComponents.validateRequired(input);
-                if (requiredMsg != null) {
-                    setErrorMessage(requiredMsg);
-                    return false;
-                }
-            }
-        }
+		// Validate required
+		if (uiBuilder != null) {
+			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
+				String requiredMsg = InputComponents.validateRequired(input);
+				if (requiredMsg != null) {
+					setErrorMessage(requiredMsg);
+					return false;
+				}
+			}
+		}
 
-        // Invoke custom validation
-        UIValidationContextImpl validationContext = new UIValidationContextImpl(uiContext);
-        // invokes the validation in the current UICommand
-        uiCommand.validate(validationContext);
-        List<String> errors = validationContext.getErrors();
-        boolean noErrors = errors.isEmpty();
-        if (!noErrors) {
-            setErrorMessage(errors.get(0));
-        }
-        // if no errors were found, the page is ready to go to the next step
-        return noErrors;
-    }
+		// Invoke custom validation
+		UIValidationContextImpl validationContext = new UIValidationContextImpl(
+				uiContext);
+		// invokes the validation in the current UICommand
+		uiCommand.validate(validationContext);
+		List<String> errors = validationContext.getErrors();
+		boolean noErrors = errors.isEmpty();
+		if (!noErrors) {
+			setErrorMessage(errors.get(0));
+		}
+		// if no errors were found, the page is ready to go to the next step
+		return noErrors;
+	}
 
-    @Override
-    public void performHelp() {
-        UICommandMetadata metadata = uiCommand.getMetadata();
-        URL docLocation = metadata.getDocLocation();
-        if (docLocation != null) {
-            // PlatformUI.getWorkbench().getHelpSystem().displayHelp(docLocation.toExternalForm());
-        }
-    }
+	@Override
+	public void performHelp() {
+		UICommandMetadata metadata = uiCommand.getMetadata();
+		URL docLocation = metadata.getDocLocation();
+		if (docLocation != null) {
+			// PlatformUI.getWorkbench().getHelpSystem().displayHelp(docLocation.toExternalForm());
+		}
+	}
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        if (componentControlEntries != null) {
-            Arrays.fill(componentControlEntries, null);
-            componentControlEntries = null;
-        }
-    }
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (componentControlEntries != null) {
+			Arrays.fill(componentControlEntries, null);
+			componentControlEntries = null;
+		}
+	}
 
-    /**
-     * Stores a component/control relationship
-     */
-    private class ComponentControlEntry {
-        private InputComponent<?, ?> component;
-        private Control control;
+	/**
+	 * Stores a component/control relationship
+	 */
+	private class ComponentControlEntry {
+		private InputComponent<?, ?> component;
+		private Control control;
 
-        public ComponentControlEntry(InputComponent<?, ?> component, Control control) {
-            this.component = component;
-            this.control = control;
-        }
+		public ComponentControlEntry(InputComponent<?, ?> component,
+				Control control) {
+			this.component = component;
+			this.control = control;
+		}
 
-        public InputComponent<?, ?> getComponent() {
-            return component;
-        }
+		public InputComponent<?, ?> getComponent() {
+			return component;
+		}
 
-        public Control getControl() {
-            return control;
-        }
-    }
+		public Control getControl() {
+			return control;
+		}
+	}
 
 }

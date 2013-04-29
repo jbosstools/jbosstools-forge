@@ -28,52 +28,60 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 @SuppressWarnings("rawtypes")
 public class ComboEnumControlBuilder extends ControlBuilder {
 
-    @Override
-    @SuppressWarnings({ "unchecked" })
-    public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
-        // Create the label
-        Label label = new Label(container, SWT.NULL);
-        label.setText(input.getLabel() == null ? input.getName() : input.getLabel());
+	@Override
+	@SuppressWarnings({ "unchecked" })
+	public Control build(ForgeWizardPage page,
+			final InputComponent<?, Object> input, final Composite container) {
+		// Create the label
+		Label label = new Label(container, SWT.NULL);
+		label.setText(input.getLabel() == null ? input.getName() : input
+				.getLabel());
 
-        final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE | SWT.READ_ONLY);
-        Enum[] enumConstants = input.getValueType().asSubclass(Enum.class).getEnumConstants();
-        for (Enum enum1 : enumConstants) {
-            combo.add(enum1.name());
-        }
-        // Set Default Value
-        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
-        if (converterFactory != null) {
-            Converter<Object, String> converter = converterFactory.getConverter(input.getValueType(), String.class);
-            String value = converter.convert(InputComponents.getValueFor(input));
-            combo.setText(value == null ? "" : value);
-        }
+		final Combo combo = new Combo(container, SWT.BORDER | SWT.SINGLE
+				| SWT.READ_ONLY);
+		Enum[] enumConstants = input.getValueType().asSubclass(Enum.class)
+				.getEnumConstants();
+		for (Enum enum1 : enumConstants) {
+			combo.add(enum1.name());
+		}
+		// Set Default Value
+		final ConverterFactory converterFactory = ForgeService.INSTANCE
+				.getConverterFactory();
+		if (converterFactory != null) {
+			Converter<Object, String> converter = converterFactory
+					.getConverter(input.getValueType(), String.class);
+			String value = converter
+					.convert(InputComponents.getValueFor(input));
+			combo.setText(value == null ? "" : value);
+		}
 
-        combo.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                int selectionIndex = combo.getSelectionIndex();
-                if (selectionIndex != -1) {
-                    String item = combo.getItem(selectionIndex);
-                    Class valueType = input.getValueType();
-                    InputComponents.setValueFor(converterFactory, input, Enum.valueOf(valueType, item));
-                }
-            }
-        });
-        return combo;
-    }
+		combo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				int selectionIndex = combo.getSelectionIndex();
+				if (selectionIndex != -1) {
+					String item = combo.getItem(selectionIndex);
+					Class valueType = input.getValueType();
+					InputComponents.setValueFor(converterFactory, input,
+							Enum.valueOf(valueType, item));
+				}
+			}
+		});
+		return combo;
+	}
 
-    @Override
-    protected Class<Enum> getProducedType() {
-        return Enum.class;
-    }
+	@Override
+	protected Class<Enum> getProducedType() {
+		return Enum.class;
+	}
 
-    @Override
-    protected InputType getSupportedInputType() {
-        return InputTypes.SELECT_ONE_DROPDOWN;
-    }
+	@Override
+	protected InputType getSupportedInputType() {
+		return InputTypes.SELECT_ONE_DROPDOWN;
+	}
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes() {
-        return new Class<?>[] { UISelectOne.class, UIInput.class };
-    }
+	@Override
+	protected Class<?>[] getSupportedInputComponentTypes() {
+		return new Class<?>[] { UISelectOne.class, UIInput.class };
+	}
 }

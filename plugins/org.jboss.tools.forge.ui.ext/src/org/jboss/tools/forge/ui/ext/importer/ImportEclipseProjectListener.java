@@ -16,33 +16,35 @@ import org.jboss.forge.resource.DirectoryResource;
 
 /**
  * A project listener that imports created projects into the Eclipse Workspace
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 public enum ImportEclipseProjectListener implements ProjectListener {
 
-    INSTANCE;
+	INSTANCE;
 
-    private Set<Project> projects = new HashSet<Project>();
+	private Set<Project> projects = new HashSet<Project>();
 
-    @Override
-    public void projectCreated(Project project) {
-        projects.add(project);
-    }
+	@Override
+	public void projectCreated(Project project) {
+		projects.add(project);
+	}
 
-    public void doImport() {
-        for (Project project : projects) {
-            DirectoryResource projectRoot = project.getProjectRoot();
-            String baseDirPath = projectRoot.getParent().getFullyQualifiedName();
-            String projectName = projectRoot.getName();
-            ProjectImporter projectImporter = new ProjectImporter(baseDirPath, projectName);
-            projectImporter.importProject();
-        }
-    }
+	public void doImport() {
+		for (Project project : projects) {
+			DirectoryResource projectRoot = project.getProjectRoot();
+			String baseDirPath = projectRoot.getParent()
+					.getFullyQualifiedName();
+			String projectName = projectRoot.getName();
+			ProjectImporter projectImporter = new ProjectImporter(baseDirPath,
+					projectName);
+			projectImporter.importProject();
+		}
+	}
 
-    public void clear() {
-        projects.clear();
-    }
+	public void clear() {
+		projects.clear();
+	}
 
 }

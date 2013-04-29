@@ -27,44 +27,49 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class CheckboxControlBuilder extends ControlBuilder {
 
-    @Override
-    public Control build(ForgeWizardPage page, final InputComponent<?, Object> input, final Composite container) {
-        // Create the label
-        new Label(container, SWT.NULL);
-        Button cmb = new Button(container, SWT.CHECK);
-        cmb.setText(input.getLabel() == null ? input.getName() : input.getLabel());
-        cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        // Set Default Value
-        final ConverterFactory converterFactory = ForgeService.INSTANCE.getConverterFactory();
-        if (converterFactory != null) {
-            Converter<Object, Boolean> converter = converterFactory.getConverter(input.getValueType(), Boolean.class);
-            Boolean value = converter.convert(InputComponents.getValueFor(input));
-            cmb.setSelection(value == null ? false : value);
-        }
+	@Override
+	public Control build(ForgeWizardPage page,
+			final InputComponent<?, Object> input, final Composite container) {
+		// Create the label
+		new Label(container, SWT.NULL);
+		Button cmb = new Button(container, SWT.CHECK);
+		cmb.setText(input.getLabel() == null ? input.getName() : input
+				.getLabel());
+		cmb.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		// Set Default Value
+		final ConverterFactory converterFactory = ForgeService.INSTANCE
+				.getConverterFactory();
+		if (converterFactory != null) {
+			Converter<Object, Boolean> converter = converterFactory
+					.getConverter(input.getValueType(), Boolean.class);
+			Boolean value = converter.convert(InputComponents
+					.getValueFor(input));
+			cmb.setSelection(value == null ? false : value);
+		}
 
-        // cmd.setSelection(value == null ? false : value);
-        cmb.addSelectionListener(new SelectionAdapter() {
-            @Override
-            public void widgetSelected(SelectionEvent e) {
-                boolean selection = ((Button) e.widget).getSelection();
-                InputComponents.setValueFor(converterFactory, input, selection);
-            }
-        });
-        return cmb;
-    }
+		// cmd.setSelection(value == null ? false : value);
+		cmb.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				boolean selection = ((Button) e.widget).getSelection();
+				InputComponents.setValueFor(converterFactory, input, selection);
+			}
+		});
+		return cmb;
+	}
 
-    @Override
-    protected Class<Boolean> getProducedType() {
-        return Boolean.class;
-    }
+	@Override
+	protected Class<Boolean> getProducedType() {
+		return Boolean.class;
+	}
 
-    @Override
-    protected InputType getSupportedInputType() {
-        return InputTypes.CHECKBOX;
-    }
+	@Override
+	protected InputType getSupportedInputType() {
+		return InputTypes.CHECKBOX;
+	}
 
-    @Override
-    protected Class<?>[] getSupportedInputComponentTypes() {
-        return new Class<?>[] { UIInput.class };
-    }
+	@Override
+	protected Class<?>[] getSupportedInputComponentTypes() {
+		return new Class<?>[] { UIInput.class };
+	}
 }

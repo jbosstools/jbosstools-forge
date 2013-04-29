@@ -17,58 +17,61 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
 /**
  * Imports a maven-ized project into the workspace
- *
- * FOR INTERNAL USE ONLY. This class was copied from the org.jboss.tools.forge.ui plugin in order to avoid dependency on
- * it and should be removed in future versions.
- *
+ * 
+ * FOR INTERNAL USE ONLY. This class was copied from the
+ * org.jboss.tools.forge.ui plugin in order to avoid dependency on it and should
+ * be removed in future versions.
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 class ProjectImporter {
 
-    private String baseDirPath;
-    private String projectName;
+	private String baseDirPath;
+	private String projectName;
 
-    public ProjectImporter(String baseDirPath, String projectName) {
-        this.baseDirPath = baseDirPath;
-        this.projectName = projectName;
-    }
+	public ProjectImporter(String baseDirPath, String projectName) {
+		this.baseDirPath = baseDirPath;
+		this.projectName = projectName;
+	}
 
-    public void importProject() {
-        Job job = new WorkspaceJob("Importing Forge project") {
-            @Override
-            public IStatus runInWorkspace(IProgressMonitor monitor) {
-                try {
-                    MavenPlugin.getProjectConfigurationManager().importProjects(getProjectToImport(),
-                        new ProjectImportConfiguration(), monitor);
-                } catch (CoreException ex) {
-                    return ex.getStatus();
-                }
-                return Status.OK_STATUS;
-            }
-        };
-        job.setRule(MavenPlugin.getProjectConfigurationManager().getRule());
-        job.schedule();
-    }
+	public void importProject() {
+		Job job = new WorkspaceJob("Importing Forge project") {
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
+				try {
+					MavenPlugin.getProjectConfigurationManager()
+							.importProjects(getProjectToImport(),
+									new ProjectImportConfiguration(), monitor);
+				} catch (CoreException ex) {
+					return ex.getStatus();
+				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setRule(MavenPlugin.getProjectConfigurationManager().getRule());
+		job.schedule();
+	}
 
-    private MavenProjectInfo createMavenProjectInfo() {
-        MavenProjectInfo result = null;
-        try {
-            File projectDir = new File(baseDirPath, projectName);
-            File pomFile = new File(projectDir, "pom.xml");
-            Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
-            String pomName = projectName + "/" + "pom.xml";
-            result = new MavenProjectInfo(pomName, pomFile, model, null);
-        } catch (CoreException e) {
+	private MavenProjectInfo createMavenProjectInfo() {
+		MavenProjectInfo result = null;
+		try {
+			File projectDir = new File(baseDirPath, projectName);
+			File pomFile = new File(projectDir, "pom.xml");
+			Model model = MavenPlugin.getMavenModelManager().readMavenModel(
+					pomFile);
+			String pomName = projectName + "/" + "pom.xml";
+			result = new MavenProjectInfo(pomName, pomFile, model, null);
+		} catch (CoreException e) {
 
-        }
-        return result;
-    }
+		}
+		return result;
+	}
 
-    private Collection<MavenProjectInfo> getProjectToImport() {
-        ArrayList<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>(1);
-        result.add(createMavenProjectInfo());
-        return result;
-    }
+	private Collection<MavenProjectInfo> getProjectToImport() {
+		ArrayList<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>(1);
+		result.add(createMavenProjectInfo());
+		return result;
+	}
 
 }
