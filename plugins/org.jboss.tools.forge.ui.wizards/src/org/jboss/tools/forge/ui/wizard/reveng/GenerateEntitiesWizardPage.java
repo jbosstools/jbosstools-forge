@@ -9,6 +9,7 @@ import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.datatools.connectivity.db.generic.ui.wizard.NewJDBCFilteredCPWizard;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragment;
@@ -16,6 +17,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -200,9 +202,11 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		connectionProfileButton.addSelectionListener(new SelectionAdapter() {			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				ManageConnectionProfileDialog dialog = new ManageConnectionProfileDialog(getShell());
-				dialog.open();
-				refreshConnectionProfiles(dialog.getConnectionProfiles());
+				NewJDBCFilteredCPWizard wizard = new NewJDBCFilteredCPWizard();
+				WizardDialog wizardDialog = new WizardDialog(getShell(), wizard);
+				wizardDialog.setHelpAvailable(false);
+				wizardDialog.open();
+				connectionProfileHelper.retrieveConnectionProfiles();
 			}			
 		});
 		connectionProfileButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
