@@ -31,7 +31,7 @@ public class ForgeStartupPreferencePage extends PreferencePage implements
 	
 	private void createStartupButton(Composite parent) {
 		startupButton = new Button(parent, SWT.CHECK);
-		startupButton.setText("Start Forge when Eclipse starts." );
+		startupButton.setText("Start Forge when workbench starts." );
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		startupButton.setLayoutData(gridData);
