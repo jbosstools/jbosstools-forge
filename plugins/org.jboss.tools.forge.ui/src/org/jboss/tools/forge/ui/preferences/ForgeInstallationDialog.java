@@ -84,7 +84,7 @@ public class ForgeInstallationDialog extends Dialog {
 	
 	private void createLocationButton(Composite area) {
 		locationButton = new Button(area, SWT.PUSH);
-		locationButton.setText("Search...");
+		locationButton.setText("Browse...");
 		locationButton.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				searchLocation();				
