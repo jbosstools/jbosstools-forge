@@ -5,6 +5,7 @@ import java.util.Map;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
+import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public abstract class AbstractForgeWizardPage extends WizardPage {
 

@@ -36,8 +36,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
-import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
+import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	

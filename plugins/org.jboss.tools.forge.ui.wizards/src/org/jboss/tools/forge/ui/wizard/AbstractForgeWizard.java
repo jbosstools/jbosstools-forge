@@ -22,6 +22,7 @@ import org.eclipse.ui.IWorkbench;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
+import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard {
 

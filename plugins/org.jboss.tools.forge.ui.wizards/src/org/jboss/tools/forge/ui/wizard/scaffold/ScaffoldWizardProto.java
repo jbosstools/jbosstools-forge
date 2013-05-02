@@ -22,7 +22,7 @@ import org.eclipse.ui.IWorkbenchWizard;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
-import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
+import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public class ScaffoldWizardProto extends Wizard implements IWorkbenchWizard {
 

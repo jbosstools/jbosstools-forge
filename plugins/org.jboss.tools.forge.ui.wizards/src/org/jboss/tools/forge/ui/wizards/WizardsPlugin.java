@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.wizard;
+package org.jboss.tools.forge.ui.wizards;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

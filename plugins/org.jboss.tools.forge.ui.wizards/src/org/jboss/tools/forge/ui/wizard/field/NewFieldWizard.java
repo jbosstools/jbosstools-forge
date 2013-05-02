@@ -14,8 +14,8 @@ import org.eclipse.ui.IWorkbench;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
-import org.jboss.tools.forge.ui.wizard.WizardsPlugin;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
+import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public class NewFieldWizard extends AbstractForgeWizard {
 
