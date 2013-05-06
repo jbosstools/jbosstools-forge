@@ -36,13 +36,13 @@ import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UISelectionImpl;
-import org.jboss.tools.forge.ui.ext.importer.ImportEclipseProjectListener;
+import org.jboss.tools.forge.ui.ext.listeners.EventBus;
 
 /**
  * A wizard implementation to handle {@link UICommand} objects
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ForgeWizard extends MutableWizard {
@@ -194,20 +194,17 @@ public class ForgeWizard extends MutableWizard {
 					}
 				}
 			}
-			// TODO: Decouple this
-			ImportEclipseProjectListener.INSTANCE.doImport();
+			EventBus.INSTANCE.fireWizardFinished(uiContext);
 			return true;
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
 			return false;
-		} finally {
-			ImportEclipseProjectListener.INSTANCE.clear();
 		}
 	}
 
 	@Override
 	public boolean performCancel() {
-		ImportEclipseProjectListener.INSTANCE.clear();
+		EventBus.INSTANCE.fireWizardClosed(uiContext);
 		return true;
 	}
 

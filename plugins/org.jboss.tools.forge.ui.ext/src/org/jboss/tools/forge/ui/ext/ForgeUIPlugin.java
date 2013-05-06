@@ -12,6 +12,8 @@ import org.jboss.forge.projects.ProjectFactory;
 import org.jboss.forge.projects.ProjectListener;
 import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.importer.ImportEclipseProjectListener;
+import org.jboss.tools.forge.ui.ext.listeners.EventBus;
+import org.jboss.tools.forge.ui.ext.listeners.PickUpListener;
 import org.osgi.framework.BundleContext;
 
 public class ForgeUIPlugin extends AbstractUIPlugin {
@@ -50,7 +52,10 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 				if (projectFactory != null) {
 					projectListenerRegistration = projectFactory
 							.addProjectListener(ImportEclipseProjectListener.INSTANCE);
+					EventBus.INSTANCE
+							.register(ImportEclipseProjectListener.INSTANCE);
 				}
+				EventBus.INSTANCE.register(PickUpListener.INSTANCE);
 			}
 		});
 		executor.shutdown();

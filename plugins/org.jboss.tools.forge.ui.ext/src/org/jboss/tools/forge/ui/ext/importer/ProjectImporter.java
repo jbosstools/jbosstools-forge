@@ -39,6 +39,11 @@ class ProjectImporter {
 	public void importProject() {
 		Job job = new MavenImportWorkspaceJob("Importing Forge project");
 		job.schedule();
+		try {
+			job.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private Collection<MavenProjectInfo> getProjectToImport() {

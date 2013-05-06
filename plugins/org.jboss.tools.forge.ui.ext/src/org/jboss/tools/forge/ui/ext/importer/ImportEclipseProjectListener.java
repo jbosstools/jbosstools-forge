@@ -13,14 +13,17 @@ import java.util.Set;
 import org.jboss.forge.projects.Project;
 import org.jboss.forge.projects.ProjectListener;
 import org.jboss.forge.resource.DirectoryResource;
+import org.jboss.forge.ui.context.UIContext;
+import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
 
 /**
  * A project listener that imports created projects into the Eclipse Workspace
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
-public enum ImportEclipseProjectListener implements ProjectListener {
+public enum ImportEclipseProjectListener implements ProjectListener,
+		WizardListener {
 
 	INSTANCE;
 
@@ -43,7 +46,13 @@ public enum ImportEclipseProjectListener implements ProjectListener {
 		}
 	}
 
-	public void clear() {
+	@Override
+	public void onFinish(UIContext context) {
+		doImport();
+	}
+
+	@Override
+	public void dispose() {
 		projects.clear();
 	}
 
