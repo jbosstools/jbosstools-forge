@@ -1,6 +1,8 @@
 package org.jboss.tools.forge.ui.ext.listeners;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -39,10 +41,34 @@ public enum PickUpListener implements WizardListener {
 	public void dispose() {
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void onFinish(UIContext context) {
-		if (context.getSelection() != null) {
-			open(context.getSelection().toString());
+		Object selection = context.getSelection();
+		if (selection != null) {
+			if (selection instanceof Iterable<?>) {
+				for (Object item : (Iterable<Object>) selection) {
+					if (item != null)
+						open(item.toString());
+				}
+			} else if (selection instanceof Iterator<?>) {
+				Iterator<Object> it = (Iterator<Object>) selection;
+				while (it.hasNext()) {
+					Object item = it.next();
+					if (item != null)
+						open(item.toString());
+				}
+			} else if (selection.getClass().isArray()) {
+				int length = Array.getLength(selection);
+				for (int i = 0; i < length; i++) {
+					Object item = Array.get(selection, i);
+					if (item != null) {
+						open(item.toString());
+					}
+				}
+			} else {
+				open(selection.toString());
+			}
 		}
 	}
 
