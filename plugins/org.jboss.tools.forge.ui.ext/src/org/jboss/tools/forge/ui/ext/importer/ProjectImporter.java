@@ -18,13 +18,13 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
 /**
  * Imports a maven-ized project into the workspace
- *
+ * 
  * FOR INTERNAL USE ONLY. This class was copied from the
  * org.jboss.tools.forge.ui plugin in order to avoid dependency on it and should
  * be removed in future versions.
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 class ProjectImporter {
 
@@ -39,11 +39,6 @@ class ProjectImporter {
 	public void importProject() {
 		Job job = new MavenImportWorkspaceJob("Importing Forge project");
 		job.schedule();
-		try {
-			job.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private Collection<MavenProjectInfo> getProjectToImport() {
