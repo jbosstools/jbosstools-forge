@@ -7,7 +7,7 @@ import org.osgi.framework.BundleContext;
 
 public class WizardsPlugin extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "org.jboss.tools.forge.ui.scaffold"; 
+	public static final String PLUGIN_ID = "org.jboss.tools.forge.ui.wizards"; 
 
 	private static WizardsPlugin plugin;
 	
@@ -26,7 +26,7 @@ public class WizardsPlugin extends AbstractUIPlugin {
 	}
 
 	public static void log(Throwable t) {
-		getDefault().getLog().log(newErrorStatus("Error logged from Forge scaffold plugin: ", t)); 
+		getDefault().getLog().log(newErrorStatus("Error logged from Forge wizards plugin: ", t)); 
 	}
 	
 	private static IStatus newErrorStatus(String message, Throwable exception) {

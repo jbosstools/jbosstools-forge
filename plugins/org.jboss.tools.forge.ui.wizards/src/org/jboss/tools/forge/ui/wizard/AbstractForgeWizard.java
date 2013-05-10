@@ -13,22 +13,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
+import org.jboss.tools.forge.ui.notifier.NotificationType;
+import org.jboss.tools.forge.ui.notifier.NotifierDialog;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
@@ -144,32 +138,13 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 		return wizardDescriptor;
 	}
 	
-	protected void writeToStatusBar(final String message) {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				IWorkbench workbench = PlatformUI.getWorkbench();
-				if (workbench == null)
-					return;
-				IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-				if (window == null)
-					return;
-				IWorkbenchPage page = window.getActivePage();
-				IViewPart view = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
-				if (view == null)
-					return;
-				IViewSite site = view.getViewSite();
-				IActionBars actionBars = site.getActionBars();
-				if (actionBars == null)
-					return;
-				IStatusLineManager statusLineManager = actionBars
-						.getStatusLineManager();
-				if (statusLineManager == null)
-					return;
-				statusLineManager.setMessage(message);
-			}
-			
-		});
-	}
+//	protected void displayNotification(final String title, final String message) {
+//		Display.getDefault().asyncExec(new Runnable() {
+//			@Override
+//			public void run() {
+//				NotifierDialog.notify(title, message, NotificationType.INFO);
+//			}			
+//		});
+//	}
 
 }
