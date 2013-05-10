@@ -21,8 +21,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
-import org.jboss.tools.forge.ui.notifier.NotificationType;
-import org.jboss.tools.forge.ui.notifier.NotifierDialog;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
