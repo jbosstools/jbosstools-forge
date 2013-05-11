@@ -43,6 +43,7 @@ public enum ForgeService {
 					@Override
 					public Void call() throws Exception {
 						forge.startAsync(loader);
+						started = true;
 						return null;
 					}
 				});
