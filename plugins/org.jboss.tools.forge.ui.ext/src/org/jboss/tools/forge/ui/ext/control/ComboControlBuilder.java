@@ -7,7 +7,7 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
@@ -50,7 +50,7 @@ public class ComboControlBuilder extends ControlBuilder {
 		Converter<Object, String> converter = (Converter<Object, String>) InputComponents
 				.getItemLabelConverter(converterFactory, selectOne);
 		String value = converter.convert(InputComponents.getValueFor(input));
-		final Map<String, Object> items = new HashMap<String, Object>();
+		final Map<String, Object> items = new LinkedHashMap<String, Object>();
 		Iterable<Object> valueChoices = selectOne.getValueChoices();
 		if (valueChoices != null) {
 			for (Object choice : valueChoices) {
