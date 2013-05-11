@@ -12,15 +12,16 @@ import java.util.Set;
 
 import org.jboss.forge.projects.Project;
 import org.jboss.forge.projects.ProjectListener;
+import org.jboss.forge.projects.facets.MetadataFacet;
 import org.jboss.forge.resource.DirectoryResource;
 import org.jboss.forge.ui.context.UIContext;
 import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
 
 /**
  * A project listener that imports created projects into the Eclipse Workspace
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 public enum ImportEclipseProjectListener implements ProjectListener,
 		WizardListener {
@@ -39,9 +40,11 @@ public enum ImportEclipseProjectListener implements ProjectListener,
 			DirectoryResource projectRoot = project.getProjectRoot();
 			String baseDirPath = projectRoot.getParent()
 					.getFullyQualifiedName();
-			String projectName = projectRoot.getName();
+			String moduleLocation = projectRoot.getName();
+			String projectName = project.getFacet(MetadataFacet.class)
+					.getProjectName();
 			ProjectImporter projectImporter = new ProjectImporter(baseDirPath,
-					projectName);
+					moduleLocation, projectName);
 			projectImporter.importProject();
 		}
 	}

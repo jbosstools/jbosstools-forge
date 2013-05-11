@@ -135,6 +135,12 @@
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
+                           <artifactId>dependencies-api</artifactId>
+                           <version>${version.forge}</version>
+                           <destFileName>dependencies-api-${version.forge}.jar</destFileName>
+                        </artifactItem>                        
+                        <artifactItem>
+                           <groupId>org.jboss.forge</groupId>
                            <artifactId>projects-api</artifactId>
                            <version>${version.forge}</version>
                            <destFileName>projects-api-${version.forge}.jar</destFileName>
