@@ -7,12 +7,9 @@
 
 package org.jboss.tools.forge.ext.core;
 
-import java.util.concurrent.Callable;
-
 import org.jboss.forge.container.ContainerStatus;
 import org.jboss.forge.container.Forge;
 import org.jboss.forge.container.addons.AddonRegistry;
-import org.jboss.forge.container.lock.LockMode;
 import org.jboss.forge.container.services.ExportedInstance;
 import org.jboss.forge.convert.ConverterFactory;
 
@@ -28,7 +25,6 @@ public enum ForgeService {
 
 	private transient Forge forge;
 	private ConverterFactory converterFactory;
-	boolean started = false;
 
 	private ForgeService() {
 	}
@@ -38,15 +34,7 @@ public enum ForgeService {
 	}
 
 	public void start(final ClassLoader loader) {
-		forge.getLockManager().performLocked(LockMode.WRITE,
-				new Callable<Void>() {
-					@Override
-					public Void call() throws Exception {
-						forge.startAsync(loader);
-						started = true;
-						return null;
-					}
-				});
+		forge.startAsync(loader);
 	}
 
 	public AddonRegistry getAddonRegistry() {
@@ -55,12 +43,10 @@ public enum ForgeService {
 
 	public void stop() {
 		forge.stop();
-		started = false;
 	}
 
 	public ContainerStatus getContainerStatus() {
-		return (forge == null || !started) ? ContainerStatus.STOPPED : forge
-				.getStatus();
+		return (forge == null) ? ContainerStatus.STOPPED : forge.getStatus();
 	}
 
 	public ConverterFactory getConverterFactory() {

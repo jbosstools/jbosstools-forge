@@ -29,131 +29,131 @@ import bootpath.BootpathMarker;
 
 public class ForgeCorePlugin extends Plugin {
 
-    private static final String RUNTIME_PLUGIN_ID = "org.jboss.tools.forge2.runtime";
+	private static final String RUNTIME_PLUGIN_ID = "org.jboss.tools.forge2.runtime";
 
-    public static final String PLUGIN_ID = "org.jboss.tools.forge.core.ext";
+	public static final String PLUGIN_ID = "org.jboss.tools.forge.core.ext";
 
-    private static ForgeCorePlugin plugin;
+	private static ForgeCorePlugin plugin;
 
-    private URLClassLoader loader;
+	private URLClassLoader loader;
 
-    @Override
-    public void start(final BundleContext context) throws Exception {
-	super.start(context);
-	System.setProperty("modules.ignore.jdk.factory", "true");
-	Forge forge = getForge(context);
-	ForgeService.INSTANCE.setForge(forge);
-	ForgeService.INSTANCE.start(loader);
-	plugin = this;
-    }
+	@Override
+	public void start(final BundleContext context) throws Exception {
+		super.start(context);
+		System.setProperty("modules.ignore.jdk.factory", "true");
+		Forge forge = getForge(context);
+		ForgeService.INSTANCE.setForge(forge);
+		ForgeService.INSTANCE.start(loader);
+		plugin = this;
+	}
 
-    private Forge getForge(final BundleContext context) throws Exception {
-	Forge forge = ClassLoaders.executeIn(loader, new Callable<Forge>() {
-	    @Override
-	    public Forge call() throws Exception {
-		BundleWiring wiring = context.getBundle().adapt(
-			BundleWiring.class);
-		Collection<String> entries = wiring.listResources("bootpath",
-			"*.jar", BundleWiring.LISTRESOURCES_RECURSE);
-		Collection<URL> resources = new HashSet<URL>();
-		File jarDir = File.createTempFile("forge", "jars");
-		if (entries != null)
-		    for (String resource : entries) {
-			URL jar = BootpathMarker.class.getResource("/"
-				+ resource);
-			if (jar != null) {
-			    resources.add(copy(jarDir, resource,
-				    jar.openStream()));
+	private Forge getForge(final BundleContext context) throws Exception {
+		Forge forge = ClassLoaders.executeIn(loader, new Callable<Forge>() {
+			@Override
+			public Forge call() throws Exception {
+				BundleWiring wiring = context.getBundle().adapt(
+						BundleWiring.class);
+				Collection<String> entries = wiring.listResources("bootpath",
+						"*.jar", BundleWiring.LISTRESOURCES_RECURSE);
+				Collection<URL> resources = new HashSet<URL>();
+				File jarDir = File.createTempFile("forge", "jars");
+				if (entries != null)
+					for (String resource : entries) {
+						URL jar = BootpathMarker.class.getResource("/"
+								+ resource);
+						if (jar != null) {
+							resources.add(copy(jarDir, resource,
+									jar.openStream()));
+						}
+					}
+
+				loader = new URLClassLoader(resources.toArray(new URL[resources
+						.size()]), null);
+
+				Class<?> bootstrapType = loader
+						.loadClass("org.jboss.forge.container.ForgeImpl");
+
+				Object nativeForge = bootstrapType.newInstance();
+				Forge forge = (Forge) ClassLoaderAdapterCallback.enhance(
+						Forge.class.getClassLoader(), loader, nativeForge,
+						Forge.class);
+				setupRepositories(forge);
+				return forge;
 			}
-		    }
-
-		loader = new URLClassLoader(resources.toArray(new URL[resources
-			.size()]), null);
-
-		Class<?> bootstrapType = loader
-			.loadClass("org.jboss.forge.container.ForgeImpl");
-
-		Object nativeForge = bootstrapType.newInstance();
-		Forge forge = (Forge) ClassLoaderAdapterCallback.enhance(
-			Forge.class.getClassLoader(), loader, nativeForge,
-			Forge.class);
-		setupRepositories(forge);
+		});
 		return forge;
-	    }
-	});
-	return forge;
-    }
-
-    /**
-     * Adds the addon-repository folder inside the runtime plugin as an
-     * {@link AddonRepository}
-     */
-    private void setupRepositories(final Forge forge) throws IOException {
-	Bundle runtimeBundle = Platform.getBundle(RUNTIME_PLUGIN_ID);
-	File bundleFile = FileLocator.getBundleFile(runtimeBundle);
-	forge.addRepository(AddonRepositoryMode.IMMUTABLE, new File(bundleFile,
-		"addon-repository"));
-	forge.addRepository(AddonRepositoryMode.MUTABLE, new File(
-		ForgeExtPreferences.INSTANCE.getAddonDir()));
-    }
-
-    @SuppressWarnings("resource")
-    private URL copy(File directory, String name, InputStream input)
-	    throws IOException {
-	File outputFile = new File(directory, name);
-
-	FileOutputStream output = null;
-	try {
-	    directory.delete();
-	    outputFile.getParentFile().mkdirs();
-	    outputFile.createNewFile();
-
-	    output = new FileOutputStream(outputFile);
-	    final byte[] buffer = new byte[4096];
-	    int read = 0;
-	    while ((read = input.read(buffer)) != -1) {
-		output.write(buffer, 0, read);
-	    }
-	    output.flush();
-	} catch (Exception e) {
-	    throw new RuntimeException("Could not write out jar file " + name,
-		    e);
-	} finally {
-	    close(input);
-	    close(output);
 	}
-	return outputFile.toURI().toURL();
-    }
 
-    private void close(Closeable closeable) {
-	try {
-	    if (closeable != null) {
-		closeable.close();
-	    }
-	} catch (Exception e) {
-	    throw new RuntimeException("Could not close stream", e);
+	/**
+	 * Adds the addon-repository folder inside the runtime plugin as an
+	 * {@link AddonRepository}
+	 */
+	private void setupRepositories(final Forge forge) throws IOException {
+		Bundle runtimeBundle = Platform.getBundle(RUNTIME_PLUGIN_ID);
+		File bundleFile = FileLocator.getBundleFile(runtimeBundle);
+		forge.addRepository(AddonRepositoryMode.IMMUTABLE, new File(bundleFile,
+				"addon-repository"));
+		forge.addRepository(AddonRepositoryMode.MUTABLE, new File(
+				ForgeExtPreferences.INSTANCE.getAddonDir()));
 	}
-    }
 
-    @Override
-    public void stop(BundleContext context) throws Exception {
-	plugin = null;
-	super.stop(context);
-	ForgeService.INSTANCE.stop();
-    }
+	@SuppressWarnings("resource")
+	private URL copy(File directory, String name, InputStream input)
+			throws IOException {
+		File outputFile = new File(directory, name);
 
-    public static ForgeCorePlugin getDefault() {
-	return plugin;
-    }
+		FileOutputStream output = null;
+		try {
+			directory.delete();
+			outputFile.getParentFile().mkdirs();
+			outputFile.createNewFile();
 
-    public static void log(Throwable t) {
-	getDefault().getLog().log(
-		newErrorStatus("Error logged from Forge Ext Core Plugin: ", t));
-    }
+			output = new FileOutputStream(outputFile);
+			final byte[] buffer = new byte[4096];
+			int read = 0;
+			while ((read = input.read(buffer)) != -1) {
+				output.write(buffer, 0, read);
+			}
+			output.flush();
+		} catch (Exception e) {
+			throw new RuntimeException("Could not write out jar file " + name,
+					e);
+		} finally {
+			close(input);
+			close(output);
+		}
+		return outputFile.toURI().toURL();
+	}
 
-    private static IStatus newErrorStatus(String message, Throwable exception) {
-	return new Status(IStatus.ERROR, PLUGIN_ID, IStatus.INFO, message,
-		exception);
-    }
+	private void close(Closeable closeable) {
+		try {
+			if (closeable != null) {
+				closeable.close();
+			}
+		} catch (Exception e) {
+			throw new RuntimeException("Could not close stream", e);
+		}
+	}
+
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		plugin = null;
+		super.stop(context);
+		ForgeService.INSTANCE.stop();
+	}
+
+	public static ForgeCorePlugin getDefault() {
+		return plugin;
+	}
+
+	public static void log(Throwable t) {
+		getDefault().getLog().log(
+				newErrorStatus("Error logged from Forge Ext Core Plugin: ", t));
+	}
+
+	private static IStatus newErrorStatus(String message, Throwable exception) {
+		return new Status(IStatus.ERROR, PLUGIN_ID, IStatus.INFO, message,
+				exception);
+	}
 
 }
