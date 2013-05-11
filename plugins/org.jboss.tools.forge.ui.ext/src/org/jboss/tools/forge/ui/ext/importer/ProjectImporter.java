@@ -29,15 +29,19 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 class ProjectImporter {
 
 	private String baseDirPath;
+	private String moduleLocation;
 	private String projectName;
 
-	public ProjectImporter(String baseDirPath, String projectName) {
+	public ProjectImporter(String baseDirPath, String moduleLocation,
+			String projectName) {
 		this.baseDirPath = baseDirPath;
+		this.moduleLocation = moduleLocation;
 		this.projectName = projectName;
 	}
 
 	public void importProject() {
-		Job job = new MavenImportWorkspaceJob("Importing Forge project");
+		Job job = new MavenImportWorkspaceJob("Importing project "
+				+ projectName);
 		job.schedule();
 	}
 
@@ -50,11 +54,11 @@ class ProjectImporter {
 	private MavenProjectInfo createMavenProjectInfo() {
 		MavenProjectInfo result = null;
 		try {
-			File projectDir = new File(baseDirPath, projectName);
+			File projectDir = new File(baseDirPath, moduleLocation);
 			File pomFile = new File(projectDir, "pom.xml");
 			Model model = MavenPlugin.getMavenModelManager().readMavenModel(
 					pomFile);
-			String pomName = projectName + "/" + "pom.xml";
+			String pomName = moduleLocation + "/" + "pom.xml";
 			result = new MavenProjectInfo(pomName, pomFile, model, null);
 		} catch (CoreException e) {
 			e.printStackTrace();
