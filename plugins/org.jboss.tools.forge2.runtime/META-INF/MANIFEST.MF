@@ -7,8 +7,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Eclipse-BundleShape: dir
-Bundle-ClassPath: lib/javassist-3.17.1-GA.jar,
- lib/forge-proxy-2.0.0-SNAPSHOT.jar,
+Bundle-ClassPath: lib/forge-proxy-2.0.0-SNAPSHOT.jar,
+ lib/forge-javassist-1.jar,
  lib/forge-addon-container-api-2.0.0-SNAPSHOT.jar,
  lib/forge-se-2.0.0-SNAPSHOT.jar,
  lib/ui-api-2.0.0-SNAPSHOT.jar,

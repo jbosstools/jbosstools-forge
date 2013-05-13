@@ -86,9 +86,9 @@
                   <configuration>
                      <artifactItems>
                         <artifactItem>
-                           <groupId>org.javassist</groupId>
-                           <artifactId>javassist</artifactId>
-                           <version>3.17.1-GA</version>
+                           <groupId>org.jboss.forge</groupId>
+                           <artifactId>forge-javassist</artifactId>
+                           <version>1</version>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge</groupId>
