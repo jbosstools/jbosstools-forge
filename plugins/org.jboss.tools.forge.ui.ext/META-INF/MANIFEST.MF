@@ -22,5 +22,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.rse.ui;bundle-version="3.2.1",
  org.eclipse.rse.core;bundle-version="3.2.1",
  org.eclipse.rse.subsystems.files.core;bundle-version="3.2.101",
- org.eclipse.rse.subsystems.files.local;bundle-version="2.1.200"
+ org.eclipse.rse.subsystems.files.local;bundle-version="2.1.200",
+ org.jboss.tools.forge.ui.notifications;bundle-version="1.0.0"
 Export-Package: org.jboss.tools.forge.ui.ext

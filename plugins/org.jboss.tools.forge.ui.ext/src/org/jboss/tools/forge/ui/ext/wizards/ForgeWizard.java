@@ -10,17 +10,9 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IViewPart;
-import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Display;
 import org.jboss.forge.container.addons.Addon;
 import org.jboss.forge.container.addons.AddonRegistry;
 import org.jboss.forge.convert.Converter;
@@ -31,12 +23,16 @@ import org.jboss.forge.ui.UICommand;
 import org.jboss.forge.ui.result.Failed;
 import org.jboss.forge.ui.result.NavigationResult;
 import org.jboss.forge.ui.result.Result;
+import org.jboss.forge.ui.result.ResultSuccess;
+import org.jboss.forge.ui.result.ResultsFail;
 import org.jboss.forge.ui.wizard.UIWizard;
 import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UISelectionImpl;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
+import org.jboss.tools.forge.ui.notifications.NotificationDialog;
+import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
  * A wizard implementation to handle {@link UICommand} objects
@@ -181,12 +177,14 @@ public class ForgeWizard extends MutableWizard {
 				Result result = cmd.execute(uiContext);
 				if (result != null) {
 					String message = result.getMessage();
+					String title = "Forge Command";
+					NotificationType type = NotificationType.INFO;
 					if (message == null) {
 						message = "Command "
 								+ initialCommand.getMetadata().getName()
 								+ " is executed.";
 					}
-					writeToStatusBar(message);
+					displayMessage(title, message, type);
 					if (result instanceof Failed) {
 						Throwable exception = ((Failed) result).getException();
 						if (exception != null)
@@ -201,33 +199,23 @@ public class ForgeWizard extends MutableWizard {
 			return false;
 		}
 	}
+	
+	protected void displayMessage(
+			final String title, 
+			final String message, 
+			final NotificationType type) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				NotificationDialog.notify(title, message, type);
+			}		
+		});
+	}
 
 	@Override
 	public boolean performCancel() {
 		EventBus.INSTANCE.fireWizardClosed(uiContext);
 		return true;
-	}
-
-	protected void writeToStatusBar(String message) {
-		IWorkbench workbench = PlatformUI.getWorkbench();
-		if (workbench == null)
-			return;
-		IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-		if (window == null)
-			return;
-		IWorkbenchPage page = window.getActivePage();
-		IViewPart view = page.findView(IPageLayout.ID_PROJECT_EXPLORER);
-		if (view == null)
-			return;
-		IViewSite site = view.getViewSite();
-		IActionBars actionBars = site.getActionBars();
-		if (actionBars == null)
-			return;
-		IStatusLineManager statusLineManager = actionBars
-				.getStatusLineManager();
-		if (statusLineManager == null)
-			return;
-		statusLineManager.setMessage(message);
 	}
 
 	protected UIContextImpl getUiContext() {
