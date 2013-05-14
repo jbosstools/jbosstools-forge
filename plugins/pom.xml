@@ -20,6 +20,7 @@
 		<module>org.jboss.tools.forge2.runtime</module>
 		<module>org.jboss.tools.forge.ui</module>
 		<module>org.jboss.tools.forge.ui.ext</module>
+		<module>org.jboss.tools.forge.ui.notifications</module>
 		<module>org.jboss.tools.forge.ui.wizards</module>
 	</modules>
 </project>
