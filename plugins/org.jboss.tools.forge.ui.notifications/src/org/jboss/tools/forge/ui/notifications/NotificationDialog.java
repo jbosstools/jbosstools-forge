@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,6 +40,10 @@ public class NotificationDialog {
 		@Override
 		public void widgetDisposed(DisposeEvent event) {
 			ACTIVE_DIALOGS.remove(shell);
+			Region region = shell.getRegion();
+			if (region != null) {
+				region.dispose();
+			}
 		}
 	};
 
@@ -61,8 +66,8 @@ public class NotificationDialog {
 		shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		shell.setSize(calculateInitialSize());
 		shell.setLocation(calculateInitialLocation());
-		;
 		shell.setAlpha(0);
+		addRegion(shell);
 	}
 
 	private Point calculateInitialSize() {
@@ -149,8 +154,10 @@ public class NotificationDialog {
 		gc.setLineWidth(2);
 		gc.setForeground(NotificationColors
 				.getColor(NotificationConstants.BORDER_COLOR_NAME));
-		gc.drawRectangle(rect.x + 1, rect.y + 1, rect.width - 2,
-				rect.height - 2);
+//		gc.drawRectangle(rect.x + 1, rect.y + 1, rect.width - 2,
+//				rect.height - 2);
+		gc.drawRoundRectangle(rect.x + 1, rect.y + 1, rect.width - 2,
+				rect.height - 2, 50, 50);
 	}
 
 	private void setBackground(Image image) {
@@ -179,6 +186,84 @@ public class NotificationDialog {
 		shell.setVisible(true);
 		ACTIVE_DIALOGS.add(shell);
 		NotificationHelper.fadeIn(shell);
+	}
+
+	private void addRegion(Shell shell) {
+		Region region = new Region();
+		Point s = shell.getSize();
+		
+		/* Add entire Shell */
+		region.add(0, 0, s.x, s.y);
+
+		/* Subtract Top-Left Corner */
+		region.subtract(0, 0, 20, 1);
+		region.subtract(0, 1, 17, 1);
+		region.subtract(0, 2, 15, 1);
+		region.subtract(0, 3, 13, 1);
+		region.subtract(0, 4, 11, 1);
+		region.subtract(0, 5, 9, 1);
+		region.subtract(0, 6, 8, 1);
+		region.subtract(0, 7, 7, 1);
+		region.subtract(0, 8, 6, 1);
+		region.subtract(0, 9, 5, 2);
+		region.subtract(0, 11, 4, 2);
+		region.subtract(0, 13, 3, 2);
+		region.subtract(0, 15, 2, 2);
+		region.subtract(0, 17, 1, 3);
+
+		/* Subtract Top-Right Corner */
+		region.subtract(s.x - 20, 0, 20, 1);
+		region.subtract(s.x - 17, 1, 17, 1);
+		region.subtract(s.x - 15, 2, 15, 1);
+		region.subtract(s.x - 13, 3, 13, 1);
+		region.subtract(s.x - 11, 4, 11, 1);
+		region.subtract(s.x - 9, 5, 9, 1);
+		region.subtract(s.x - 8, 6, 8, 1);
+		region.subtract(s.x - 7, 7, 7, 1);
+		region.subtract(s.x - 6, 8, 6, 1);
+		region.subtract(s.x - 5, 9, 5, 2);
+		region.subtract(s.x - 4, 11, 4, 2);
+		region.subtract(s.x - 3, 13, 3, 2);
+		region.subtract(s.x - 2, 15, 2, 2);
+		region.subtract(s.x - 1, 17, 1, 3);
+		
+		/* Subtract Bottom-Left Corner */
+		region.subtract(0, s.y - 0, 20, 1);
+		region.subtract(0, s.y - 1, 17, 1);
+		region.subtract(0, s.y - 2, 15, 1);
+		region.subtract(0, s.y - 3, 13, 1);
+		region.subtract(0, s.y - 4, 11, 1);
+		region.subtract(0, s.y - 5, 9, 1);
+		region.subtract(0, s.y - 6, 8, 1);
+		region.subtract(0, s.y - 7, 7, 1);
+		region.subtract(0, s.y - 8, 6, 1);
+		region.subtract(0, s.y - 9, 5, 2);
+		region.subtract(0, s.y - 11, 4, 2);		
+		region.subtract(0, s.y - 13, 3, 2);
+		region.subtract(0, s.y - 15, 2, 2);
+		region.subtract(0, s.y - 17, 1, 3);
+
+		/* Subtract Bottom-Right Corner */
+		region.subtract(s.x - 20, s.y - 0, 20, 1);
+		region.subtract(s.x - 17, s.y - 1, 17, 1);
+		region.subtract(s.x - 15, s.y - 2, 15, 1);
+		region.subtract(s.x - 13, s.y - 3, 13, 1);
+		region.subtract(s.x - 11, s.y - 4, 11, 1);
+		region.subtract(s.x - 9, s.y - 5, 9, 1);
+		region.subtract(s.x - 8, s.y - 6, 8, 1);
+		region.subtract(s.x - 7, s.y - 7, 7, 1);
+		region.subtract(s.x - 6, s.y - 8, 6, 1);
+		region.subtract(s.x - 5, s.y - 9, 5, 2);
+		region.subtract(s.x - 4, s.y - 11, 4, 2);
+		region.subtract(s.x - 3, s.y - 13, 3, 2);
+		region.subtract(s.x - 2, s.y - 15, 2, 2);
+		region.subtract(s.x - 1, s.y - 17, 1, 3);
+
+		if (shell.getRegion() != null) {
+			shell.getRegion().dispose();
+		}
+		shell.setRegion(region);
+
 	}
 
 }
