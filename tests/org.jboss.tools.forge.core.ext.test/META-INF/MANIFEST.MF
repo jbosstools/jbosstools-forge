@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Forge Core Test Plugin
+Bundle-Name: Forge Core Extensions Test Plugin
 Bundle-SymbolicName: org.jboss.tools.forge.core.ext.test
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
