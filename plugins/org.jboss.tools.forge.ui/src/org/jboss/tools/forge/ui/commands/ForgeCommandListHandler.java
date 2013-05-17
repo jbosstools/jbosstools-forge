@@ -2,6 +2,13 @@ package org.jboss.tools.forge.ui.commands;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -16,21 +23,47 @@ import org.jboss.tools.forge.ui.part.ForgeView;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ForgeCommandListHandler extends AbstractHandler {
+	
+	private String commandsString;
+	private IWorkbenchWindow window;
+	private ForgeRuntime runtime;
+	
+	private Job getCommandsJob = new Job("Get Commands") {	
+		@Override
+		protected IStatus run(IProgressMonitor progressMonitor) {
+			commandsString = runtime.sendCommand("plugin-candidates-query");
+			return Status.OK_STATUS;
+		}
+	};
+	
+	private IJobChangeListener getCommandsJobListener = new JobChangeAdapter() {
+		@Override
+		public void done(IJobChangeEvent event) {
+			getCommandsJob.removeJobChangeListener(this);
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					new ForgeCommandListDialog(window, runtime, commandsString).open();
+				}				
+			});
+		}
+	};
 
 	public Object execute(ExecutionEvent executionEvent) {
-		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindow(executionEvent);
+		window = HandlerUtil.getActiveWorkbenchWindow(executionEvent);
 		if (window == null) {
 			return null;
 		}				
 		showForgeView(window);
-		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 		if (ForgeHelper.isForgeStarting()) {
 			showWaitUntilStartedMessage();
 		} else if (!ForgeHelper.isForgeRunning()) {
 			askUserToStartRuntime(); 
 		}
 		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
-			new ForgeCommandListDialog(window, runtime).open();
+			getCommandsJob.addJobChangeListener(getCommandsJobListener);
+			getCommandsJob.schedule();
 		}
 		return null;
 	}

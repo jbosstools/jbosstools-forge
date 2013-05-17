@@ -44,7 +44,7 @@ public class ForgeCommandListDialog extends PopupDialog {
 	private String selectedPlugin = "";
 	private String selectedCommand = "";
 
-	public ForgeCommandListDialog(IWorkbenchWindow window, ForgeRuntime runtime) {
+	public ForgeCommandListDialog(IWorkbenchWindow window, ForgeRuntime runtime, String commandsString) {
 		super(window.getShell(), 
 				SWT.RESIZE, 
 				true, 
@@ -55,14 +55,13 @@ public class ForgeCommandListDialog extends PopupDialog {
 				"Select the command you want Forge to execute",
 				"Start typing to filter the list");
 		this.runtime = runtime;
-		this.allCandidates = getAllCandidates();
+		this.allCandidates = getAllCandidates(commandsString);
 	}
 	
-	private SortedMap<String, SortedSet<String>> getAllCandidates() {
+	private SortedMap<String, SortedSet<String>> getAllCandidates(String commandsString) {
 		SortedMap<String, SortedSet<String>> result = new TreeMap<String, SortedSet<String>>();
-		String pluginCandidates = runtime.sendCommand("plugin-candidates-query");
 		SortedSet<String> currentCommands = null;
-		StringTokenizer tokenizer = new StringTokenizer(pluginCandidates);
+		StringTokenizer tokenizer = new StringTokenizer(commandsString);
 		if (tokenizer.hasMoreTokens()) {
 			String first = tokenizer.nextToken();
 			if ("plugin-candidates-answer:".equals(first)) {
