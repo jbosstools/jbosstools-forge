@@ -181,6 +181,7 @@ public class ForgeLaunchHelper {
 
 		@Override
 		public void launchRemoved(ILaunch launch) {
+			if (launch == null || launch.getLaunchConfiguration() == null) return;
 			if (launch.getLaunchConfiguration().getName().startsWith(launchConfigurationName)) {
 				ForgeLaunchHelper.removeLaunchConfiguration(launchConfigurationName);
 				LAUNCH_MANAGER.removeLaunchListener(this);
