@@ -2,22 +2,22 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge2.runtime;singleton:=true
-Bundle-Version: 1.2.0.qualifier
+Bundle-Version: 2.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Eclipse-BundleShape: dir
-Bundle-ClassPath: lib/forge-proxy-2.0.0-SNAPSHOT.jar,
+Bundle-ClassPath: lib/forge-proxy-2.0.0.Alpha4.jar,
  lib/forge-javassist-1.jar,
- lib/forge-addon-container-api-2.0.0-SNAPSHOT.jar,
- lib/forge-se-2.0.0-SNAPSHOT.jar,
- lib/ui-api-2.0.0-SNAPSHOT.jar,
- lib/convert-api-2.0.0-SNAPSHOT.jar,
- lib/ui-hints-2.0.0-SNAPSHOT.jar,
- lib/facets-api-2.0.0-SNAPSHOT.jar,
- lib/resources-api-2.0.0-SNAPSHOT.jar,
- lib/projects-api-2.0.0-SNAPSHOT.jar,
- lib/dependencies-api-2.0.0-SNAPSHOT.jar,
+ lib/forge-addon-container-api-2.0.0.Alpha4.jar,
+ lib/forge-se-2.0.0.Alpha4.jar,
+ lib/ui-api-2.0.0.Alpha4.jar,
+ lib/convert-api-2.0.0.Alpha4.jar,
+ lib/ui-hints-2.0.0.Alpha4.jar,
+ lib/facets-api-2.0.0.Alpha4.jar,
+ lib/resources-api-2.0.0.Alpha4.jar,
+ lib/projects-api-2.0.0.Alpha4.jar,
+ lib/dependencies-api-2.0.0.Alpha4.jar,
  .
 Export-Package: bootpath,
  org.jboss.forge.container,
