@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Forge Notifications
+Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.ui.notifications;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -9,4 +9,6 @@ Require-Bundle: org.eclipse.ui,
 Export-Package: org.jboss.tools.forge.ui.notifications
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.jboss.tools.forge.ui.notifications.internal.NotificationsPlugin
+Bundle-Vendor: %BundleProvider
+Bundle-Localization: plugin
 

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Forge Scaffolding
+Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.ui.wizards;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
@@ -20,3 +20,5 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.8.1",
  org.eclipse.datatools.connectivity.db.generic.ui;bundle-version="1.0.2",
  org.eclipse.datatools.connectivity.ui;bundle-version="1.2.4"
 Export-Package: org.jboss.tools.forge.ui.wizard
+Bundle-Vendor: %BundleProvider
+Bundle-Localization: plugin
