@@ -97,7 +97,6 @@ public class ForgeCorePlugin extends Plugin {
 				ForgeExtPreferences.INSTANCE.getAddonDir()));
 	}
 
-	@SuppressWarnings("resource")
 	private URL copy(File directory, String name, InputStream input)
 			throws IOException {
 		File outputFile = new File(directory, name);

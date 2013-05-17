@@ -14,8 +14,8 @@ import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 public class HibernateToolsInstaller {
 	
 	private boolean done = false;
-	private String prompt = null;
-	private String promptNoProject = null;
+//	private String prompt = null;
+//	private String promptNoProject = null;
 	
 	void install(Shell shell) {
 		final ProgressMonitorDialog pmd = new ProgressMonitorDialog(shell);
