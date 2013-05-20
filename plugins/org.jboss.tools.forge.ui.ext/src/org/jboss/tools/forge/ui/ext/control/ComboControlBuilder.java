@@ -27,7 +27,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.proxy.Proxies;
-import org.jboss.tools.forge.ext.core.ForgeService;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class ComboControlBuilder extends ControlBuilder {
@@ -44,7 +44,7 @@ public class ComboControlBuilder extends ControlBuilder {
 		final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN
 				| SWT.READ_ONLY);
 
-		final ConverterFactory converterFactory = ForgeService.INSTANCE
+		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
 		Converter<Object, String> converter = (Converter<Object, String>) InputComponents

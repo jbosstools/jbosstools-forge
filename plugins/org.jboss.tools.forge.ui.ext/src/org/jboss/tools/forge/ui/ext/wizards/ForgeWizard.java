@@ -21,10 +21,10 @@ import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.NavigationResult;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.addon.ui.wizard.UIWizard;
-import org.jboss.forge.container.addons.Addon;
-import org.jboss.forge.container.addons.AddonRegistry;
+import org.jboss.forge.furnace.addons.Addon;
+import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.proxy.Proxies;
-import org.jboss.tools.forge.ext.core.ForgeService;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UISelectionImpl;
@@ -56,7 +56,7 @@ public class ForgeWizard extends MutableWizard {
 
 	private UIContextImpl createContext(List<Object> selectedElements) {
 		List<Object> result = new LinkedList<Object>();
-		ConverterFactory converterFactory = ForgeService.INSTANCE
+		ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.lookup(ConverterFactory.class);
 		if (converterFactory != null) {
 			Converter<File, Resource> converter = converterFactory
@@ -100,7 +100,7 @@ public class ForgeWizard extends MutableWizard {
 
 	private <T> Class<T> locateNativeClass(Class<T> type) {
 		Class<T> result = type;
-		AddonRegistry registry = ForgeService.INSTANCE.getAddonRegistry();
+		AddonRegistry registry = FurnaceService.INSTANCE.getAddonRegistry();
 		for (Addon addon : registry.getAddons()) {
 			try {
 				ClassLoader classLoader = addon.getClassLoader();
@@ -154,7 +154,7 @@ public class ForgeWizard extends MutableWizard {
 					// Clean the old pages
 					pageList.subList(idx, pageList.size()).clear();
 				}
-				UICommand nextStep = ForgeService.INSTANCE.lookup(successor);
+				UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
 				nextPage = new ForgeWizardPage(this, nextStep, getUiContext());
 				addPage(nextPage);
 			}

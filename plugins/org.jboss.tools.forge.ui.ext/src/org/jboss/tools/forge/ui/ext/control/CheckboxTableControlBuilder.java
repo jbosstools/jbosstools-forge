@@ -27,7 +27,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.proxy.Proxies;
-import org.jboss.tools.forge.ext.core.ForgeService;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class CheckboxTableControlBuilder extends ControlBuilder {
@@ -50,7 +50,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		final UISelectMany<Object> selectMany = (UISelectMany) input;
-		final ConverterFactory converterFactory = ForgeService.INSTANCE
+		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		final List<Object> data = new ArrayList<Object>();
 		InputComponents.setValueFor(converterFactory, input, data);

@@ -11,7 +11,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.jboss.forge.container.util.OperatingSystemUtils;
+import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**

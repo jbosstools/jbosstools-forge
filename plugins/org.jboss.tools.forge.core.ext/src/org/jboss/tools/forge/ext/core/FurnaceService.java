@@ -8,10 +8,10 @@
 package org.jboss.tools.forge.ext.core;
 
 import org.jboss.forge.addon.convert.ConverterFactory;
-import org.jboss.forge.container.ContainerStatus;
-import org.jboss.forge.container.Forge;
-import org.jboss.forge.container.addons.AddonRegistry;
-import org.jboss.forge.container.services.ExportedInstance;
+import org.jboss.forge.furnace.ContainerStatus;
+import org.jboss.forge.furnace.Furnace;
+import org.jboss.forge.furnace.addons.AddonRegistry;
+import org.jboss.forge.furnace.services.ExportedInstance;
 
 /**
  * This is a singleton for the {@link Forge} class.
@@ -20,16 +20,16 @@ import org.jboss.forge.container.services.ExportedInstance;
  * 
  */
 
-public enum ForgeService {
+public enum FurnaceService {
 	INSTANCE;
 
-	private transient Forge forge;
+	private transient Furnace forge;
 	private ConverterFactory converterFactory;
 
-	private ForgeService() {
+	private FurnaceService() {
 	}
 
-	public void setForge(Forge forge) {
+	public void setFurnace(Furnace forge) {
 		this.forge = forge;
 	}
 

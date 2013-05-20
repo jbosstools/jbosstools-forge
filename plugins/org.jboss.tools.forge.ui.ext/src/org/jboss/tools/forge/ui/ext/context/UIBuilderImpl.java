@@ -13,7 +13,7 @@ import java.util.List;
 import org.jboss.forge.addon.ui.context.UIBuilder;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.input.InputComponent;
-import org.jboss.forge.container.util.Assert;
+import org.jboss.forge.furnace.util.Assert;
 
 public class UIBuilderImpl implements UIBuilder {
 	private List<InputComponent<?, ?>> inputs = new ArrayList<InputComponent<?, ?>>();

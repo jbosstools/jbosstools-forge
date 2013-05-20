@@ -19,9 +19,9 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
-import org.jboss.forge.container.addons.AddonRegistry;
-import org.jboss.forge.container.services.ExportedInstance;
-import org.jboss.tools.forge.ext.core.ForgeService;
+import org.jboss.forge.furnace.addons.AddonRegistry;
+import org.jboss.forge.furnace.services.ExportedInstance;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 
 public class UICommandListDialog extends PopupDialog {
@@ -44,7 +44,7 @@ public class UICommandListDialog extends PopupDialog {
 
 	private SortedMap<String, UICommand> getAllCandidates() {
 		SortedMap<String, UICommand> result = new TreeMap<String, UICommand>();
-		AddonRegistry addonRegistry = ForgeService.INSTANCE.getAddonRegistry();
+		AddonRegistry addonRegistry = FurnaceService.INSTANCE.getAddonRegistry();
 		Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry
 				.getExportedInstances(UICommand.class);
 		for (ExportedInstance<UICommand> instance : exportedInstances) {

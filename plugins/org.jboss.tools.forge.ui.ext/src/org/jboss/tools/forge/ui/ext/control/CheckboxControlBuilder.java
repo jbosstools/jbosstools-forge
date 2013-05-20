@@ -21,7 +21,7 @@ import org.jboss.forge.addon.ui.hints.InputTypes;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.tools.forge.ext.core.ForgeService;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class CheckboxControlBuilder extends ControlBuilder {
@@ -36,7 +36,7 @@ public class CheckboxControlBuilder extends ControlBuilder {
 		cmb.setText(input.getLabel() == null ? input.getName() : input
 				.getLabel());
 		// Set Default Value
-		final ConverterFactory converterFactory = ForgeService.INSTANCE
+		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		if (converterFactory != null) {
 			Converter<Object, Boolean> converter = converterFactory

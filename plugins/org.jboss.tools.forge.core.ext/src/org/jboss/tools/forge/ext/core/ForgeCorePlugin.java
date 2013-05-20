@@ -16,10 +16,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.jboss.forge.container.Forge;
-import org.jboss.forge.container.repositories.AddonRepository;
-import org.jboss.forge.container.repositories.AddonRepositoryMode;
-import org.jboss.forge.container.util.ClassLoaders;
+import org.jboss.forge.furnace.Furnace;
+import org.jboss.forge.furnace.repositories.AddonRepository;
+import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
+import org.jboss.forge.furnace.util.ClassLoaders;
 import org.jboss.forge.proxy.ClassLoaderAdapterCallback;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -41,16 +41,16 @@ public class ForgeCorePlugin extends Plugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		System.setProperty("modules.ignore.jdk.factory", "true");
-		Forge forge = getForge(context);
-		ForgeService.INSTANCE.setForge(forge);
-		ForgeService.INSTANCE.start(loader);
+		Furnace furnace = getFurnace(context);
+		FurnaceService.INSTANCE.setFurnace(furnace);
+		FurnaceService.INSTANCE.start(loader);
 		plugin = this;
 	}
 
-	private Forge getForge(final BundleContext context) throws Exception {
-		Forge forge = ClassLoaders.executeIn(loader, new Callable<Forge>() {
+	private Furnace getFurnace(final BundleContext context) throws Exception {
+		Furnace forge = ClassLoaders.executeIn(loader, new Callable<Furnace>() {
 			@Override
-			public Forge call() throws Exception {
+			public Furnace call() throws Exception {
 				BundleWiring wiring = context.getBundle().adapt(
 						BundleWiring.class);
 				Collection<String> entries = wiring.listResources("bootpath",
@@ -71,14 +71,14 @@ public class ForgeCorePlugin extends Plugin {
 						.size()]), null);
 
 				Class<?> bootstrapType = loader
-						.loadClass("org.jboss.forge.container.ForgeImpl");
+						.loadClass("org.jboss.forge.furnace.FurnaceImpl");
 
 				Object nativeForge = bootstrapType.newInstance();
-				Forge forge = (Forge) ClassLoaderAdapterCallback.enhance(
-						Forge.class.getClassLoader(), loader, nativeForge,
-						Forge.class);
-				setupRepositories(forge);
-				return forge;
+				Furnace furnace = (Furnace) ClassLoaderAdapterCallback.enhance(
+						Furnace.class.getClassLoader(), loader, nativeForge,
+						Furnace.class);
+				setupRepositories(furnace);
+				return furnace;
 			}
 		});
 		return forge;
@@ -88,15 +88,16 @@ public class ForgeCorePlugin extends Plugin {
 	 * Adds the addon-repository folder inside the runtime plugin as an
 	 * {@link AddonRepository}
 	 */
-	private void setupRepositories(final Forge forge) throws IOException {
+	private void setupRepositories(final Furnace furnace) throws IOException {
 		Bundle runtimeBundle = Platform.getBundle(RUNTIME_PLUGIN_ID);
 		File bundleFile = FileLocator.getBundleFile(runtimeBundle);
-		forge.addRepository(AddonRepositoryMode.IMMUTABLE, new File(bundleFile,
-				"addon-repository"));
-		forge.addRepository(AddonRepositoryMode.MUTABLE, new File(
+		furnace.addRepository(AddonRepositoryMode.IMMUTABLE, new File(
+				bundleFile, "addon-repository"));
+		furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
 				ForgeExtPreferences.INSTANCE.getAddonDir()));
 	}
 
+	@SuppressWarnings("resource")
 	private URL copy(File directory, String name, InputStream input)
 			throws IOException {
 		File outputFile = new File(directory, name);
@@ -138,7 +139,7 @@ public class ForgeCorePlugin extends Plugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-		ForgeService.INSTANCE.stop();
+		FurnaceService.INSTANCE.stop();
 	}
 
 	public static ForgeCorePlugin getDefault() {

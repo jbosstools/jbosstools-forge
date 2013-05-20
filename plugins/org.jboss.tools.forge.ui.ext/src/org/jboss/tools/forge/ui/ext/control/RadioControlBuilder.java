@@ -24,7 +24,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.proxy.Proxies;
-import org.jboss.tools.forge.ext.core.ForgeService;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class RadioControlBuilder extends ControlBuilder {
@@ -42,7 +42,7 @@ public class RadioControlBuilder extends ControlBuilder {
 		container.setLayout(new RowLayout());
 		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		final ConverterFactory converterFactory = ForgeService.INSTANCE
+		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
 		Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents

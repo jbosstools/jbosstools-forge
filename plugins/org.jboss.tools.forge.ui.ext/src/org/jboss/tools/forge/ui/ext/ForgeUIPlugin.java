@@ -9,8 +9,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.ProjectListener;
-import org.jboss.forge.container.spi.ListenerRegistration;
-import org.jboss.tools.forge.ext.core.ForgeService;
+import org.jboss.forge.furnace.spi.ListenerRegistration;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.importer.ImportEclipseProjectListener;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
 import org.jboss.tools.forge.ui.ext.listeners.PickUpListener;
@@ -32,7 +32,7 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 		executor.submit(new Runnable() {
 			@Override
 			public void run() {
-				ForgeService forgeService = ForgeService.INSTANCE;
+				FurnaceService forgeService = FurnaceService.INSTANCE;
 				while (!forgeService.getContainerStatus().isStarted()) {
 					try {
 						Thread.sleep(1000);
