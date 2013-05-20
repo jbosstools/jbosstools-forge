@@ -9,10 +9,10 @@ package org.jboss.tools.forge.ui.ext.control;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.proxy.Proxies;
-import org.jboss.forge.ui.hints.InputType;
-import org.jboss.forge.ui.input.InputComponent;
-import org.jboss.forge.ui.util.InputComponents;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**

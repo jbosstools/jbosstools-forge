@@ -10,11 +10,11 @@ package org.jboss.tools.forge.ui.ext.importer;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jboss.forge.projects.Project;
-import org.jboss.forge.projects.ProjectListener;
-import org.jboss.forge.projects.facets.MetadataFacet;
-import org.jboss.forge.resource.DirectoryResource;
-import org.jboss.forge.ui.context.UIContext;
+import org.jboss.forge.addon.projects.Project;
+import org.jboss.forge.addon.projects.ProjectListener;
+import org.jboss.forge.addon.projects.facets.MetadataFacet;
+import org.jboss.forge.addon.resource.DirectoryResource;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
 
 /**

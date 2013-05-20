@@ -10,7 +10,7 @@ package org.jboss.tools.forge.ui.ext.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.forge.ui.context.UIContext;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
 

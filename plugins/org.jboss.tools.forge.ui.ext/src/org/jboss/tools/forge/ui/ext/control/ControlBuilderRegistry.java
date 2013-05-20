@@ -7,7 +7,7 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
-import org.jboss.forge.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.input.InputComponent;
 
 /**
  * A factory for {@link ControlBuilder} instances.

@@ -16,11 +16,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
+import org.jboss.forge.addon.ui.wizard.UIWizardStep;
 import org.jboss.forge.container.addons.AddonRegistry;
 import org.jboss.forge.container.services.ExportedInstance;
-import org.jboss.forge.ui.UICommand;
-import org.jboss.forge.ui.metadata.UICommandMetadata;
-import org.jboss.forge.ui.wizard.UIWizardStep;
 import org.jboss.tools.forge.ext.core.ForgeService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 

@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.container.util.Assert;
-import org.jboss.forge.ui.context.UISelection;
 
 public class UISelectionImpl<T> implements UISelection<T> {
 

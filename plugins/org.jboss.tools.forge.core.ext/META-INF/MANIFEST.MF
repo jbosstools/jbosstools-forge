@@ -10,4 +10,4 @@ Bundle-Activator: org.jboss.tools.forge.ext.core.ForgeCorePlugin
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",
- org.jboss.tools.forge2.runtime;bundle-version="1.0.0"
+ org.jboss.tools.forge2.runtime

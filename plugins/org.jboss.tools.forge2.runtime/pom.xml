@@ -9,10 +9,10 @@
    </parent>
    <groupId>org.jboss.tools.forge.plugins</groupId>
    <artifactId>org.jboss.tools.forge2.runtime</artifactId>
-
+   <version>2.0.0-SNAPSHOT</version>
    <packaging>eclipse-plugin</packaging>
    <properties>
-      <version.forge>2.0.0.Alpha4</version.forge>
+      <version.forge>2.0.0-SNAPSHOT</version.forge>
    </properties>
    <build>
       <plugins>
@@ -31,17 +31,17 @@
                   <configuration>
                      <addonRepository>${basedir}/addon-repository</addonRepository>
                      <addonIds>
-                        <addonId>org.jboss.forge:addons,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:convert,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:facets,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:environment,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:resources,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:dependencies,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:addon-manager,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:maven,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:projects,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:ui,${version.forge}</addonId>
-                        <addonId>org.jboss.forge:ui-hints,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:addons,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:convert,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:facets,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:environment,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:resources,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:dependencies,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:addon-manager,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:maven,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:projects,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:ui,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:ui-hints,${version.forge}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
@@ -91,62 +91,62 @@
                            <version>1</version>
                         </artifactItem>
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
-                           <artifactId>forge-addon-container-api</artifactId>
+                           <groupId>org.jboss.forge.furnace</groupId>
+                           <artifactId>furnace-api</artifactId>
                            <version>${version.forge}</version>
-                           <destFileName>forge-addon-container-api-${version.forge}.jar</destFileName>
+                           <destFileName>furnace-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
-                           <artifactId>forge-proxy</artifactId>
+                           <groupId>org.jboss.forge.furnace</groupId>
+                           <artifactId>furnace-proxy</artifactId>
                            <version>${version.forge}</version>
-                           <destFileName>forge-proxy-${version.forge}.jar</destFileName>
+                           <destFileName>furnace-proxy-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
-                           <artifactId>forge-se</artifactId>
+                           <groupId>org.jboss.forge.furnace</groupId>
+                           <artifactId>furnace-se</artifactId>
                            <version>${version.forge}</version>
-                           <destFileName>forge-se-${version.forge}.jar</destFileName>
+                           <destFileName>furnace-se-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <!-- Addons API needed -->
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
+                           <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>ui-api</artifactId>
                            <version>${version.forge}</version>
                            <destFileName>ui-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
+                           <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>convert-api</artifactId>
                            <version>${version.forge}</version>
                            <destFileName>convert-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
+                           <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>facets-api</artifactId>
                            <version>${version.forge}</version>
                            <destFileName>facets-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
+                           <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>resources-api</artifactId>
                            <version>${version.forge}</version>
                            <destFileName>resources-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
+                           <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>dependencies-api</artifactId>
                            <version>${version.forge}</version>
                            <destFileName>dependencies-api-${version.forge}.jar</destFileName>
                         </artifactItem>                        
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
+                           <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>projects-api</artifactId>
                            <version>${version.forge}</version>
                            <destFileName>projects-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
-                           <groupId>org.jboss.forge</groupId>
+                           <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>ui-hints</artifactId>
                            <version>${version.forge}</version>
                            <classifier>forge-addon</classifier>
@@ -211,6 +211,4 @@
          </plugins>
       </pluginManagement>
    </build>
-
-   <version>2.0.0-SNAPSHOT</version>
 </project>
