@@ -76,7 +76,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 				}
 			}
 		});
-		return group;
+		return table;
 	}
 
 	@Override
