@@ -187,12 +187,9 @@ public class ForgeWizard extends MutableWizard {
 					String message = result.getMessage();
 					String title = "Forge Command";
 					NotificationType type = NotificationType.INFO;
-					if (message == null) {
-						message = "Command "
-								+ initialCommand.getMetadata().getName()
-								+ " is executed.";
+					if (message != null) {
+						displayMessage(title, message, type);
 					}
-					displayMessage(title, message, type);
 					if (result instanceof Failed) {
 						Throwable exception = ((Failed) result).getException();
 						if (exception != null)
