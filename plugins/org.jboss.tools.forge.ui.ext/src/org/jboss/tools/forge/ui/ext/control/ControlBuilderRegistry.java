@@ -19,10 +19,9 @@ public enum ControlBuilderRegistry {
 	INSTANCE;
 
 	private ControlBuilder[] controlBuilders = { new CheckboxControlBuilder(),
-			new ComboEnumControlBuilder(), new ComboControlBuilder(),
-			new RadioControlBuilder(), new FileChooserControlBuilder(),
-			new CheckboxTableControlBuilder(), new TextBoxControlBuilder(),
-			new PasswordTextBoxControlBuilder(),
+			new ComboControlBuilder(), new RadioControlBuilder(),
+			new FileChooserControlBuilder(), new CheckboxTableControlBuilder(),
+			new TextBoxControlBuilder(), new PasswordTextBoxControlBuilder(),
 			new FallbackTextBoxControlBuilder() };
 
 	public ControlBuilder getBuilderFor(InputComponent<?, ?> input) {
