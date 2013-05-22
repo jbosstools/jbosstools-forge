@@ -5,7 +5,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
+import org.eclipse.jface.dialogs.PageChangingEvent;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -25,6 +27,7 @@ import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.services.ExportedInstance;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
+import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class UICommandListDialog extends PopupDialog {
 
@@ -94,6 +97,18 @@ public class UICommandListDialog extends PopupDialog {
 		// TODO: Show help button when it's possible to display the docs for
 		// each UICommand
 		wizardDialog.setHelpAvailable(false);
+		wizardDialog.addPageChangingListener(new IPageChangingListener() {
+
+			@Override
+			public void handlePageChanging(PageChangingEvent event) {
+				// Mark as unchanged
+				ForgeWizardPage currentPage = (ForgeWizardPage) event
+						.getCurrentPage();
+				if (currentPage != null) {
+					currentPage.setChanged(false);
+				}
+			}
+		});
 		wizardDialog.addPageChangedListener(new IPageChangedListener() {
 			@Override
 			public void pageChanged(PageChangedEvent event) {

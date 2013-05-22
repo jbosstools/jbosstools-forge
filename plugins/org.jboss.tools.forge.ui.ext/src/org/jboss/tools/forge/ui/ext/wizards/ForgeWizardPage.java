@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -195,20 +194,6 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		}
 	}
 
-	@Override
-	public IWizardPage getNextPage() {
-		IWizardPage nextPage = super.getNextPage();
-		this.changed = false;
-		return nextPage;
-	}
-
-	@Override
-	public IWizardPage getPreviousPage() {
-		IWizardPage previousPage = super.getPreviousPage();
-		this.changed = false;
-		return previousPage;
-	}
-
 	/**
 	 * Stores a component/control relationship
 	 */
@@ -235,9 +220,13 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		@Override
 		public void handleEvent(Event evt) {
 			if (isCurrentPage()) {
-				ForgeWizardPage.this.changed = true;
+				setChanged(true);
 			}
 		}
+	}
+
+	public void setChanged(boolean changed) {
+		this.changed = changed;
 	}
 
 	public boolean isChanged() {
