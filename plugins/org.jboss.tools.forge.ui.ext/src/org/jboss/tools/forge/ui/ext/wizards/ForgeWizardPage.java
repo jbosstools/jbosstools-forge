@@ -96,17 +96,15 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 					(InputComponent<?, Object>) input, container);
 
 			// Update page status
-			if (control.isListening(SWT.Modify)) {
-				control.addListener(SWT.Modify, this);
-			} else {
-				control.addListener(SWT.DefaultSelection, this);
-				control.addListener(SWT.Selection, this);
-			}
+			control.addListener(SWT.Modify, this);
+			control.addListener(SWT.DefaultSelection, this);
+			control.addListener(SWT.Selection, this);
 
 			// if a page is changed, subsequent pages should be invalidated
 			ChangeListener cl = new ChangeListener();
 			control.addListener(SWT.Modify, cl);
 			control.addListener(SWT.Selection, cl);
+
 			componentControlEntries[i] = new ComponentControlEntry(input,
 					control);
 		}
