@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -192,6 +193,20 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			Arrays.fill(componentControlEntries, null);
 			componentControlEntries = null;
 		}
+	}
+
+	@Override
+	public IWizardPage getNextPage() {
+		IWizardPage nextPage = super.getNextPage();
+		this.changed = false;
+		return nextPage;
+	}
+
+	@Override
+	public IWizardPage getPreviousPage() {
+		IWizardPage previousPage = super.getPreviousPage();
+		this.changed = false;
+		return previousPage;
 	}
 
 	/**

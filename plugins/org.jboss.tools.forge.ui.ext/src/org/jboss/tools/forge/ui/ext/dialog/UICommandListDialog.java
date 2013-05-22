@@ -4,6 +4,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.eclipse.jface.dialogs.IPageChangedListener;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -44,7 +46,8 @@ public class UICommandListDialog extends PopupDialog {
 
 	private SortedMap<String, UICommand> getAllCandidates() {
 		SortedMap<String, UICommand> result = new TreeMap<String, UICommand>();
-		AddonRegistry addonRegistry = FurnaceService.INSTANCE.getAddonRegistry();
+		AddonRegistry addonRegistry = FurnaceService.INSTANCE
+				.getAddonRegistry();
 		Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry
 				.getExportedInstances(UICommand.class);
 		for (ExportedInstance<UICommand> instance : exportedInstances) {
@@ -86,11 +89,25 @@ public class UICommandListDialog extends PopupDialog {
 		UICommand selectedCommand = allCandidates.get(selectedCommandName);
 		ForgeWizard wizard = new ForgeWizard(selectedCommand, currentSelection);
 		wizard.setWindowTitle(selectedCommandName);
-		WizardDialog wizardDialog = new WizardDialog(getParentShell(), wizard);
+		final WizardDialog wizardDialog = new WizardDialog(getParentShell(),
+				wizard);
 		// TODO: Show help button when it's possible to display the docs for
 		// each UICommand
 		wizardDialog.setHelpAvailable(false);
+		wizardDialog.addPageChangedListener(new IPageChangedListener() {
+			@Override
+			public void pageChanged(PageChangedEvent event) {
+				// BEHAVIOR: Finish button is enabled by default and then
+				// disabled when any field is selected/changed in the first page
+
+				// WHY: Wizard.canFinish() is called before getNextPage is
+				// called, therefore not checking if the second page is complete
+
+				// SOLUTION: Calling updateButtons will call canFinish() once
+				// again and set the button to the correct state
+				wizardDialog.updateButtons();
+			}
+		});
 		wizardDialog.open();
 	}
-
 }
