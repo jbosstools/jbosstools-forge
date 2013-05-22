@@ -12,11 +12,15 @@ import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
-public class ScaffoldEntitiesWizard extends AbstractForgeWizard {
+public class ScaffoldWizard extends AbstractForgeWizard {
 
+	private ScaffoldProjectWizardPage scaffoldProjectWizardPage = new ScaffoldProjectWizardPage();
 	private ScaffoldEntitiesWizardPage scaffoldEntitiesWizardPage = new ScaffoldEntitiesWizardPage();
 
-	public ScaffoldEntitiesWizard() {
+	boolean setupNeeded = false;
+	private boolean busy = false;
+
+	public ScaffoldWizard() {
 		setWindowTitle("Scaffold Entities");
 	}
 
@@ -35,7 +39,7 @@ public class ScaffoldEntitiesWizard extends AbstractForgeWizard {
 				IProject project = ((IResource)object).getProject();
 				if (WizardsHelper.isJPAProject(project)) {
 					getWizardDescriptor().put(
-							ScaffoldEntitiesWizardPage.PROJECT_NAME, 
+							ScaffoldProjectWizardPage.PROJECT_NAME, 
 							project.getName());
 					return;
 				}
@@ -45,6 +49,7 @@ public class ScaffoldEntitiesWizard extends AbstractForgeWizard {
 
 	@Override
 	public void addPages() {
+		addPage(scaffoldProjectWizardPage);
 		addPage(scaffoldEntitiesWizardPage);
 	}
 
@@ -52,7 +57,12 @@ public class ScaffoldEntitiesWizard extends AbstractForgeWizard {
 	public void doExecute() {
 		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
 		runtime.sendCommand("cd " + getProjectLocation());
+		if (setupNeeded) {
+			System.out.println("scaffold setup");
+			runtime.sendCommand("scaffold setup");
+		}
 		for (String entityName : getEntityNames()) {
+			System.out.println("scaffold from-entity " + entityName + ".java");
 			runtime.sendCommand("scaffold from-entity " + entityName + ".java");
 		}
 	}
@@ -70,7 +80,7 @@ public class ScaffoldEntitiesWizard extends AbstractForgeWizard {
 	}
 	
 	private String getProjectName() {
-		return (String)getWizardDescriptor().get(ScaffoldEntitiesWizardPage.PROJECT_NAME);
+		return (String)getWizardDescriptor().get(ScaffoldProjectWizardPage.PROJECT_NAME);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -78,8 +88,31 @@ public class ScaffoldEntitiesWizard extends AbstractForgeWizard {
 		return (List<String>)getWizardDescriptor().get(ScaffoldEntitiesWizardPage.ENTITY_NAMES);
 	}
 	
-	private String getProjectLocation() {
+	String getProjectLocation() {
 		return getProject(getProjectName()).getLocation().toOSString();
+	}
+	
+	void handleProjectChange() {
+		busy = true;
+		checkIfSetupNeeded();
+		scaffoldEntitiesWizardPage.handleProjectChange();
+	}
+	
+	private void checkIfSetupNeeded() {
+		new ScaffoldWizardHelper(this).checkIfSetupNeeded();
+	}
+	
+	void setBusy(boolean b) {
+		busy = b;
+		scaffoldProjectWizardPage.updatePageComplete();
+	}
+	
+	void setSetupNeeded(boolean b) {
+		setupNeeded = b;
+	}
+	
+	boolean isBusy() {
+		return busy;
 	}
 	
 }

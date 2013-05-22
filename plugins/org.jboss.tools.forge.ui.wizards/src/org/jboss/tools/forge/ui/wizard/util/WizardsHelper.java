@@ -4,12 +4,20 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.jpt.jpa.core.JpaProject;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public class WizardsHelper {
 
 	public static boolean isJPAProject(IProject project) {
-		Object object = project.getAdapter(JpaProject.class);
-		return object != null && object instanceof JpaProject;
+		boolean result = false;
+		JpaProject.Reference reference = 
+				(JpaProject.Reference)project.getAdapter(JpaProject.Reference.class);
+		try {
+			result = reference.getValue() != null;
+		} catch (InterruptedException e) {
+			WizardsPlugin.log(e);
+		}
+		return result;
 	}
 
 	public static boolean isHibernateToolsPluginAvailable() {
