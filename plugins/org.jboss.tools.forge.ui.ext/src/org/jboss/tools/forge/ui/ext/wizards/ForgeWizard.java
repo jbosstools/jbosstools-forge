@@ -34,9 +34,9 @@ import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
  * A wizard implementation to handle {@link UICommand} objects
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ForgeWizard extends MutableWizard {
@@ -118,8 +118,9 @@ public class ForgeWizard extends MutableWizard {
 	}
 
 	@Override
-	public IWizardPage getNextPage(IWizardPage page) {
-		UICommand uiCommand = ((ForgeWizardPage) page).getUICommand();
+	public IWizardPage getNextPage(final IWizardPage page) {
+		final ForgeWizardPage currentWizardPage = (ForgeWizardPage) page;
+		UICommand uiCommand = currentWizardPage.getUICommand();
 		// If it's not a wizard, we don't care
 		if (!(uiCommand instanceof UIWizard)) {
 			return null;
@@ -129,30 +130,31 @@ public class ForgeWizard extends MutableWizard {
 		try {
 			nextCommand = wiz.next(getUiContext());
 		} catch (Exception e) {
-			// TODO: Use Eclipse logging mechanism
-			e.printStackTrace();
+			ForgeUIPlugin.log(e);
 		}
 		// No next page
 		if (nextCommand == null) {
 			// Clear any subsequent pages that may exist (occurs when navigation
 			// changes)
 			List<ForgeWizardPage> pageList = getPageList();
-			int idx = pageList.indexOf(page);
-			pageList.subList(idx + 1, pageList.size()).clear();
+			int idx = pageList.indexOf(page) + 1;
+			clearNextPagesFrom(idx);
 			return null;
 		} else {
 			Class<? extends UICommand> successor = nextCommand.getNext();
 			// Do we have any pages already displayed ? (Did we went back
-			// already ?)
+			// already ?) or did we change anything in the current wizard ?
+			// If yes, clear subsequent pages
 			ForgeWizardPage nextPage = (ForgeWizardPage) super
 					.getNextPage(page);
 			if (nextPage == null
-					|| !isNextPageAssignableFrom(nextPage, successor)) {
+					|| (!isNextPageAssignableFrom(nextPage, successor) || currentWizardPage
+							.isChanged())) {
 				if (nextPage != null) {
 					List<ForgeWizardPage> pageList = getPageList();
 					int idx = pageList.indexOf(nextPage);
-					// Clean the old pages
-					pageList.subList(idx, pageList.size()).clear();
+					// Clear the old pages
+					clearNextPagesFrom(idx);
 				}
 				UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
 				nextPage = new ForgeWizardPage(this, nextStep, getUiContext());
@@ -160,6 +162,14 @@ public class ForgeWizard extends MutableWizard {
 			}
 			return nextPage;
 		}
+	}
+
+	/**
+	 * Clears the next pages from a specific index to the end of the list
+	 */
+	private void clearNextPagesFrom(int indexFrom) {
+		List<ForgeWizardPage> pageList = getPageList();
+		pageList.subList(indexFrom, pageList.size()).clear();
 	}
 
 	private boolean isNextPageAssignableFrom(ForgeWizardPage nextPage,
@@ -197,16 +207,14 @@ public class ForgeWizard extends MutableWizard {
 			return false;
 		}
 	}
-	
-	protected void displayMessage(
-			final String title, 
-			final String message, 
+
+	protected void displayMessage(final String title, final String message,
 			final NotificationType type) {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				NotificationDialog.notify(title, message, type);
-			}		
+			}
 		});
 	}
 

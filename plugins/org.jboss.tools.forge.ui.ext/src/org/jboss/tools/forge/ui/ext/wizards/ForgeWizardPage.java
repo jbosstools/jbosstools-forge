@@ -39,12 +39,13 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	private UICommand uiCommand;
 	private UIContextImpl uiContext;
 	private UIBuilderImpl uiBuilder;
+	private boolean changed;
 
 	private ComponentControlEntry[] componentControlEntries;
 
 	public ForgeWizardPage(Wizard wizard, UICommand command,
 			UIContextImpl contextImpl) {
-		super("Page Name");
+		super(command.getMetadata().getName());
 		setWizard(wizard);
 		setPageComplete(false);
 		UICommandMetadata id = command.getMetadata();
@@ -97,6 +98,11 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			control.addListener(SWT.Modify, this);
 			control.addListener(SWT.DefaultSelection, this);
 			control.addListener(SWT.Selection, this);
+
+			// if a page is changed, subsequent pages should be invalidated
+			ChangeListener cl = new ChangeListener();
+			control.addListener(SWT.Modify, cl);
+			control.addListener(SWT.Selection, cl);
 
 			componentControlEntries[i] = new ComponentControlEntry(input,
 					control);
@@ -210,4 +216,16 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		}
 	}
 
+	private class ChangeListener implements Listener {
+		@Override
+		public void handleEvent(Event evt) {
+			if (isCurrentPage()) {
+				ForgeWizardPage.this.changed = true;
+			}
+		}
+	}
+
+	public boolean isChanged() {
+		return changed;
+	}
 }
