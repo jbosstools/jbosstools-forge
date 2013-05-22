@@ -51,6 +51,7 @@ public class ForgeLaunchHelper {
 		IProcess result = null;
 		String launchConfigurationName = name + System.currentTimeMillis();
 		ILaunch launch = doLaunch(launchConfigurationName, location);
+//		ILaunch launch = doLaunch2(launchConfigurationName, location);
 		if (launch != null) {
 			IProcess[] processes = launch.getProcesses();
 			if (processes.length == 1) {
@@ -66,7 +67,7 @@ public class ForgeLaunchHelper {
 		if (workingCopy != null) {
 			try {
 				LAUNCH_MANAGER.addLaunchListener(new ForgeLaunchListener(launchConfigurationName));
-				launch = workingCopy.doSave().launch(getLaunchMode(), null, false, true);
+				launch = workingCopy.launch(getLaunchMode(), null, false, true);
 			} catch (CoreException e) {
 				ForgeCorePlugin.log(new RuntimeException("Problem while launching working copy.", e));
 			}
