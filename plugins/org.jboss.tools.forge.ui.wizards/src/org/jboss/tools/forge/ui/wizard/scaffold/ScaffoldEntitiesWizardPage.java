@@ -122,6 +122,7 @@ public class ScaffoldEntitiesWizardPage extends AbstractForgeWizardPage {
 	}
 	
 	private void refreshEntitiesLabel() {
+		if (selectEntitiesLabel == null) return;
 		String labelText = "Select entities";
 		String projectName = (String)getWizardDescriptor().get(ScaffoldProjectWizardPage.PROJECT_NAME);
 		if (projectName != null) {
