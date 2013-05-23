@@ -179,7 +179,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		dialog.setElements(getPackageFragments().toArray());
 		dialog.open();
 		Object[] results = dialog.getResult();
-		if (results.length > 0 && results[0] instanceof IPackageFragment) {
+		if (results != null && results.length > 0 && results[0] instanceof IPackageFragment) {
 			IPackageFragment result = (IPackageFragment)results[0];
 			entityPackageText.setText(result.getElementName());
 		}
