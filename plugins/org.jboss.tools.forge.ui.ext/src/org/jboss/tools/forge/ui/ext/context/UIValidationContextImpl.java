@@ -25,7 +25,12 @@ public class UIValidationContextImpl implements UIValidationContext {
 	@Override
 	public void addValidationError(InputComponent<?, ?> input,
 			String errorMessage) {
-		errors.add(errorMessage);
+		if (errorMessage == null || errorMessage.isEmpty()) {
+			errors.add("An internal error occurred and the original message should have been displayed in here. Check logs");
+			Thread.dumpStack();
+		} else {
+			errors.add(errorMessage);
+		}
 	}
 
 	public List<String> getErrors() {
