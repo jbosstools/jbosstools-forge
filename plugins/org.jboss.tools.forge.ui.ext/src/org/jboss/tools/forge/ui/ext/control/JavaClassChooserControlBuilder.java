@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
-import org.jboss.forge.addon.ui.hints.InputTypes;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
@@ -93,7 +92,7 @@ public class JavaClassChooserControlBuilder extends ControlBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputTypes.JAVA_CLASS_PICKER;
+		return InputType.JAVA_CLASS_PICKER;
 	}
 
 	@Override

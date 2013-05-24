@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
-import org.jboss.forge.addon.ui.hints.InputTypes;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
@@ -98,7 +97,7 @@ public class ComboControlBuilder extends ControlBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputTypes.SELECT_ONE_DROPDOWN;
+		return InputType.SELECT_ONE_DROPDOWN;
 	}
 
 	@Override

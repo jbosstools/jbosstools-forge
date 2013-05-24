@@ -35,7 +35,6 @@ import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
-import org.jboss.forge.addon.ui.hints.InputTypes;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
@@ -151,7 +150,7 @@ public class JavaPackageChooserControlBuilder extends ControlBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputTypes.JAVA_PACKAGE_PICKER;
+		return InputType.JAVA_PACKAGE_PICKER;
 	}
 
 	@Override
