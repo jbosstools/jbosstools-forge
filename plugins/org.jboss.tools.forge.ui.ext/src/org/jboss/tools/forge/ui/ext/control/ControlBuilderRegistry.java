@@ -19,8 +19,7 @@ public enum ControlBuilderRegistry {
 	INSTANCE;
 
 	private ControlBuilder[] controlBuilders = {
-			new JavaPackageChooserControlBuilder(),
-			new JavaClassChooserControlBuilder(), new CheckboxControlBuilder(),
+			new CheckboxControlBuilder(),
 			new ComboControlBuilder(), new RadioControlBuilder(),
 			new FileChooserControlBuilder(), new CheckboxTableControlBuilder(),
 			new TextBoxControlBuilder(), new PasswordTextBoxControlBuilder(),
