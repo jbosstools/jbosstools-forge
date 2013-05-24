@@ -18,7 +18,9 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 public enum ControlBuilderRegistry {
 	INSTANCE;
 
-	private ControlBuilder[] controlBuilders = { new CheckboxControlBuilder(),
+	private ControlBuilder[] controlBuilders = {
+			new JavaPackageChooserControlBuilder(),
+			new JavaClassChooserControlBuilder(), new CheckboxControlBuilder(),
 			new ComboControlBuilder(), new RadioControlBuilder(),
 			new FileChooserControlBuilder(), new CheckboxTableControlBuilder(),
 			new TextBoxControlBuilder(), new PasswordTextBoxControlBuilder(),

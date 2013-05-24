@@ -41,7 +41,7 @@
                         <addonId>org.jboss.forge.addon:maven,${version.forge}</addonId>
                         <addonId>org.jboss.forge.addon:projects,${version.forge}</addonId>
                         <addonId>org.jboss.forge.addon:ui,${version.forge}</addonId>
-                        <addonId>org.jboss.forge.addon:ui-hints,${version.forge}</addonId>
+                        <addonId>org.jboss.forge.addon:ui-spi,${version.forge}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
@@ -147,10 +147,10 @@
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
-                           <artifactId>ui-hints</artifactId>
+                           <artifactId>ui-spi</artifactId>
                            <version>${version.forge}</version>
                            <classifier>forge-addon</classifier>
-                           <destFileName>ui-hints-${version.forge}.jar</destFileName>
+                           <destFileName>ui-spi-${version.forge}.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>
