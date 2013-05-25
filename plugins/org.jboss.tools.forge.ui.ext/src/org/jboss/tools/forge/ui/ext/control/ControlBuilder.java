@@ -66,17 +66,16 @@ public abstract class ControlBuilder {
 	 */
 	public boolean handles(InputComponent<?, ?> input) {
 		boolean handles = false;
-		InputType inputTypeHint = InputComponents.getInputType(input);
-
 		for (Class<?> inputType : getSupportedInputComponentTypes()) {
-			if (inputType.isAssignableFrom(input.getClass())) {
+			if (inputType.isInstance(input)) {
 				handles = true;
 				break;
 			}
 		}
 
 		if (handles) {
-			if (inputTypeHint != null) {
+			InputType inputTypeHint = InputComponents.getInputType(input);
+			if (inputTypeHint != null && inputTypeHint != InputType.DEFAULT) {
 				handles = Proxies.areEquivalent(inputTypeHint,
 						getSupportedInputType());
 			} else {
