@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -43,7 +42,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 
 	private ComponentControlEntry[] componentControlEntries;
 
-	public ForgeWizardPage(Wizard wizard, UICommand command,
+	public ForgeWizardPage(ForgeWizard wizard, UICommand command,
 			UIContextImpl contextImpl) {
 		super(command.getMetadata().getName());
 		setWizard(wizard);
@@ -231,5 +230,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 
 	public boolean isChanged() {
 		return changed;
+	}
+
+	@Override
+	public ForgeWizard getWizard() {
+		return (ForgeWizard) super.getWizard();
 	}
 }

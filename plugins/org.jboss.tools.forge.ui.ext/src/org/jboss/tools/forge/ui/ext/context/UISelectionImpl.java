@@ -11,17 +11,22 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.furnace.util.Assert;
 
 public class UISelectionImpl<T> implements UISelection<T> {
 
 	private final List<T> selection;
+	private IResource resource;
 
-	public UISelectionImpl(List<T> selection) {
+	public UISelectionImpl(List<T> selection, IStructuredSelection ss) {
 		Assert.notNull(selection, "Selection must not be null.");
 		Assert.isTrue(!selection.isEmpty(), "Selection must not be empty.");
 		this.selection = Collections.unmodifiableList(selection);
+		this.resource = extractSelection(ss);
 	}
 
 	@Override
@@ -38,4 +43,22 @@ public class UISelectionImpl<T> implements UISelection<T> {
 	public int size() {
 		return selection.size();
 	}
+
+	public IResource getResource() {
+		return resource;
+	}
+
+	private IResource extractSelection(IStructuredSelection ss) {
+		if (ss == null)
+			return null;
+		Object element = ss.getFirstElement();
+		if (element instanceof IResource)
+			return (IResource) element;
+		if (!(element instanceof IAdaptable))
+			return null;
+		IAdaptable adaptable = (IAdaptable) element;
+		Object adapter = adaptable.getAdapter(IResource.class);
+		return (IResource) adapter;
+	}
+
 }

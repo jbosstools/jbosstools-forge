@@ -46,15 +46,15 @@ public class ForgeWizard extends MutableWizard {
 
 	public ForgeWizard(UICommand uiCommand, IStructuredSelection selection) {
 		this.initialCommand = uiCommand;
-		List<Object> selectedElements = selection == null ? Collections.EMPTY_LIST
-				: selection.toList();
-		this.uiContext = createContext(selectedElements);
+		this.uiContext = createContext(selection);
 		setNeedsProgressMonitor(true);
 		boolean isWizard = uiCommand instanceof UIWizard;
 		setForcePreviousAndNextButtons(isWizard);
 	}
 
-	private UIContextImpl createContext(List<Object> selectedElements) {
+	private UIContextImpl createContext(IStructuredSelection selection) {
+		List<Object> selectedElements = selection == null ? Collections.EMPTY_LIST
+				: selection.toList();
 		List<Object> result = new LinkedList<Object>();
 		ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.lookup(ConverterFactory.class);
@@ -91,11 +91,11 @@ public class ForgeWizard extends MutableWizard {
 				}
 			}
 		}
-		UISelectionImpl<?> selection = null;
+		UISelectionImpl<?> uiSelection = null;
 		if (!result.isEmpty()) {
-			selection = new UISelectionImpl(result);
+			uiSelection = new UISelectionImpl(result, selection);
 		}
-		return new UIContextImpl(selection);
+		return new UIContextImpl(uiSelection);
 	}
 
 	private <T> Class<T> locateNativeClass(Class<T> type) {
@@ -221,11 +221,7 @@ public class ForgeWizard extends MutableWizard {
 		return true;
 	}
 
-	protected UIContextImpl getUiContext() {
+	public UIContextImpl getUiContext() {
 		return uiContext;
-	}
-
-	protected UICommand getInitialCommand() {
-		return initialCommand;
 	}
 }
