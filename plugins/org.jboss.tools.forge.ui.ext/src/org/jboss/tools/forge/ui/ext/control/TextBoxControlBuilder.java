@@ -12,7 +12,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.convert.Converter;
@@ -27,7 +26,7 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 public class TextBoxControlBuilder extends ControlBuilder {
 
 	@Override
-	public Control build(ForgeWizardPage page,
+	public Text build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
