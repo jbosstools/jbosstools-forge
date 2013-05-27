@@ -59,6 +59,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		return uiCommand;
 	}
 
+	public UIContextImpl getUIContext() {
+		return uiContext;
+	}
+
 	@Override
 	public void createControl(Composite parent) {
 		uiBuilder = new UIBuilderImpl(uiContext);
@@ -230,10 +234,5 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 
 	public boolean isChanged() {
 		return changed;
-	}
-
-	@Override
-	public ForgeWizard getWizard() {
-		return (ForgeWizard) super.getWizard();
 	}
 }

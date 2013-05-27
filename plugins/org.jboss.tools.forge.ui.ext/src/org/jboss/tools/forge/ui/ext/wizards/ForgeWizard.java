@@ -128,7 +128,7 @@ public class ForgeWizard extends MutableWizard {
 		UIWizard wiz = (UIWizard) uiCommand;
 		NavigationResult nextCommand = null;
 		try {
-			nextCommand = wiz.next(getUiContext());
+			nextCommand = wiz.next(getUIContext());
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
 		}
@@ -157,7 +157,7 @@ public class ForgeWizard extends MutableWizard {
 					clearNextPagesFrom(idx);
 				}
 				UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
-				nextPage = new ForgeWizardPage(this, nextStep, getUiContext());
+				nextPage = new ForgeWizardPage(this, nextStep, getUIContext());
 				addPage(nextPage);
 			}
 			return nextPage;
@@ -221,7 +221,7 @@ public class ForgeWizard extends MutableWizard {
 		return true;
 	}
 
-	public UIContextImpl getUiContext() {
+	protected UIContextImpl getUIContext() {
 		return uiContext;
 	}
 }

@@ -98,8 +98,8 @@ public class JavaPackageChooserControlBuilder extends ControlBuilder {
 				dialog.setTitle("Package Selection");
 				dialog.setMessage("Select a package.");
 				IProject project;
-				UISelectionImpl<?> initialSelection = page.getWizard()
-						.getUiContext().getInitialSelection();
+				UISelectionImpl<?> initialSelection = page.getUIContext()
+						.getInitialSelection();
 				if (initialSelection != null) {
 					IResource resource = initialSelection.getResource();
 					project = (resource != null) ? resource.getProject() : null;
