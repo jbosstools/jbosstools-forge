@@ -29,8 +29,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ISetSelectionTarget;
-import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
 
 public enum PickUpListener implements WizardListener {
@@ -43,7 +43,7 @@ public enum PickUpListener implements WizardListener {
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public void onFinish(UIContext context) {
+	public void onFinish(UIContextImpl context) {
 		Object selection = context.getSelection();
 		if (selection != null) {
 			if (selection instanceof Iterable<?>) {

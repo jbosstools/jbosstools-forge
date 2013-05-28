@@ -10,15 +10,15 @@ package org.jboss.tools.forge.ui.ext.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
 
 /**
  * Fires events related to wizard manipulation. Used in {@link ForgeWizard}
- *
+ * 
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- *
+ * 
  */
 public enum EventBus {
 
@@ -30,14 +30,14 @@ public enum EventBus {
 		wizardListeners.add(wizardListener);
 	}
 
-	public void fireWizardFinished(final UIContext context) {
+	public void fireWizardFinished(final UIContextImpl context) {
 		for (WizardListener listener : wizardListeners) {
 			listener.onFinish(context);
 			listener.dispose();
 		}
 	}
 
-	public void fireWizardClosed(UIContext context) {
+	public void fireWizardClosed(UIContextImpl context) {
 		for (WizardListener listener : wizardListeners) {
 			listener.dispose();
 		}

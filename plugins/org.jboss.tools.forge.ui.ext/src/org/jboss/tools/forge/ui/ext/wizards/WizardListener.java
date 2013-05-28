@@ -7,11 +7,11 @@
 
 package org.jboss.tools.forge.ui.ext.wizards;
 
-import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 
 public interface WizardListener {
 
-	public void onFinish(UIContext context);
+	public void onFinish(UIContextImpl context);
 
 	public void dispose();
 }

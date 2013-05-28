@@ -14,7 +14,7 @@ import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectListener;
 import org.jboss.forge.addon.projects.facets.MetadataFacet;
 import org.jboss.forge.addon.resource.DirectoryResource;
-import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
 
 /**
@@ -50,7 +50,7 @@ public enum ImportEclipseProjectListener implements ProjectListener,
 	}
 
 	@Override
-	public void onFinish(UIContext context) {
+	public void onFinish(UIContextImpl context) {
 		doImport();
 	}
 

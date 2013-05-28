@@ -1,0 +1,40 @@
+/*
+ * Copyright 2013 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Eclipse Public License version 1.0, available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
+
+package org.jboss.tools.forge.ui.ext.listeners;
+
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
+import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
+import org.jboss.tools.forge.ui.ext.context.UISelectionImpl;
+import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
+
+public enum RefreshListener implements WizardListener {
+	INSTANCE;
+	@Override
+	public void onFinish(UIContextImpl context) {
+		UISelectionImpl<?> initialSelection = context.getInitialSelection();
+		if (initialSelection == null) {
+			return;
+		}
+		IResource resource = initialSelection.getResource();
+		try {
+			// resource.refreshLocal(IResource.DEPTH_ONE, null);
+			// Refresh Project
+			resource.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

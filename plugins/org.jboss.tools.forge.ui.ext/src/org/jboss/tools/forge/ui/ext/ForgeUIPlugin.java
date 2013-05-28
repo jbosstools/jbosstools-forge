@@ -14,6 +14,7 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.importer.ImportEclipseProjectListener;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
 import org.jboss.tools.forge.ui.ext.listeners.PickUpListener;
+import org.jboss.tools.forge.ui.ext.listeners.RefreshListener;
 import org.osgi.framework.BundleContext;
 
 public class ForgeUIPlugin extends AbstractUIPlugin {
@@ -55,6 +56,7 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 					EventBus.INSTANCE
 							.register(ImportEclipseProjectListener.INSTANCE);
 				}
+				EventBus.INSTANCE.register(RefreshListener.INSTANCE);
 				EventBus.INSTANCE.register(PickUpListener.INSTANCE);
 			}
 		});
