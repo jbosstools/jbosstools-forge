@@ -1,5 +1,6 @@
 package org.jboss.tools.forge.ui.ext.dialog;
 
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -26,6 +27,7 @@ import org.jboss.forge.addon.ui.wizard.UIWizardStep;
 import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.services.ExportedInstance;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
@@ -68,13 +70,17 @@ public class UICommandListDialog extends PopupDialog {
 		Composite result = (Composite) super.createDialogArea(parent);
 		result.setLayout(new FillLayout());
 		final List list = new List(result, SWT.SINGLE | SWT.V_SCROLL);
-		for (String candidate : allCandidates.keySet()) {
-			list.add(candidate);
+		final UIContextImpl uiContext = UIContextImpl
+				.createContext(currentSelection);
+		for (Entry<String, UICommand> candidate : allCandidates.entrySet()) {
+			if (candidate.getValue().isEnabled(uiContext)) {
+				list.add(candidate.getKey());
+			}
 		}
 		list.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				openWizard();
+				openWizard(uiContext);
 			}
 
 			@Override
@@ -88,9 +94,9 @@ public class UICommandListDialog extends PopupDialog {
 		return result;
 	}
 
-	private void openWizard() {
+	private void openWizard(UIContextImpl context) {
 		UICommand selectedCommand = allCandidates.get(selectedCommandName);
-		ForgeWizard wizard = new ForgeWizard(selectedCommand, currentSelection);
+		ForgeWizard wizard = new ForgeWizard(selectedCommand, context);
 		wizard.setWindowTitle(selectedCommandName);
 		final WizardDialog wizardDialog = new WizardDialog(getParentShell(),
 				wizard);
