@@ -108,7 +108,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			control.addListener(SWT.Selection, cl);
 
 			componentControlEntries[i] = new ComponentControlEntry(input,
-					control);
+					controlBuilder, control);
 		}
 		setPageComplete(validatePage());
 
@@ -148,9 +148,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		// Change enabled state
 		if (componentControlEntries != null) {
 			for (ComponentControlEntry entry : componentControlEntries) {
-				InputComponent<?, ?> key = entry.getComponent();
-				Control value = entry.getControl();
-				value.setEnabled(key.isEnabled());
+				InputComponent<?, ?> component = entry.getComponent();
+				Control control = entry.getControl();
+				ControlBuilder controlBuilder = entry.getControlBuilder();
+				controlBuilder.setEnabled(control, component.isEnabled());
 			}
 		}
 
@@ -202,12 +203,18 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 */
 	private class ComponentControlEntry {
 		private InputComponent<?, ?> component;
+		private ControlBuilder controlBuilder;
 		private Control control;
 
 		public ComponentControlEntry(InputComponent<?, ?> component,
-				Control control) {
+				ControlBuilder controlBuilder, Control control) {
 			this.component = component;
+			this.controlBuilder = controlBuilder;
 			this.control = control;
+		}
+
+		public ControlBuilder getControlBuilder() {
+			return controlBuilder;
 		}
 
 		public InputComponent<?, ?> getComponent() {

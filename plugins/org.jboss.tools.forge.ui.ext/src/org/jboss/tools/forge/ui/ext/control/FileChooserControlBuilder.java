@@ -105,7 +105,15 @@ public class FileChooserControlBuilder extends ControlBuilder {
 				}
 			}
 		});
-		return containerText;
+		return container;
+	}
+
+	@Override
+	public void setEnabled(Control control, boolean enabled) {
+		Composite container = (Composite) control;
+		for (Control childControl : container.getChildren()) {
+			childControl.setEnabled(enabled);
+		}
 	}
 
 	@Override

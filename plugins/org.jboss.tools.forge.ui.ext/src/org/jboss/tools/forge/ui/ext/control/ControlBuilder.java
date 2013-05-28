@@ -88,4 +88,8 @@ public abstract class ControlBuilder {
 		return handles;
 	}
 
+	public void setEnabled(Control control, boolean enabled) {
+		control.setEnabled(enabled);
+	}
+
 }
