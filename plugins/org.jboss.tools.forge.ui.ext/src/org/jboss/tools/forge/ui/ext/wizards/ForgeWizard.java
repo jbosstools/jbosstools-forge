@@ -103,21 +103,23 @@ public class ForgeWizard extends MutableWizard {
 
 	@Override
 	public boolean performFinish() {
+		String title = "Forge Command";
 		try {
 			for (IWizardPage wizardPage : getPages()) {
 				UICommand cmd = ((ForgeWizardPage) wizardPage).getUICommand();
 				Result result = cmd.execute(uiContext);
 				if (result != null) {
 					String message = result.getMessage();
-					String title = "Forge Command";
-					NotificationType type = NotificationType.INFO;
 					if (message != null) {
-						displayMessage(title, message, type);
+						displayMessage(title, message, NotificationType.INFO);
 					}
 					if (result instanceof Failed) {
 						Throwable exception = ((Failed) result).getException();
-						if (exception != null)
+						if (exception != null) {
 							ForgeUIPlugin.log(exception);
+							displayMessage(title, exception.getMessage(),
+									NotificationType.ERROR);
+						}
 					}
 				}
 			}
@@ -125,6 +127,7 @@ public class ForgeWizard extends MutableWizard {
 			return true;
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
+			displayMessage(title, e.getMessage(), NotificationType.ERROR);
 			return false;
 		}
 	}
