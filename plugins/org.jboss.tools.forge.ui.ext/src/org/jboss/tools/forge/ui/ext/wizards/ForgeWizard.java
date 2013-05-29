@@ -118,7 +118,7 @@ public class ForgeWizard extends MutableWizard {
 						if (exception != null) {
 							ForgeUIPlugin.log(exception);
 							displayMessage("Forge Command",
-									exception.getMessage(),
+									String.valueOf(exception.getMessage()),
 									NotificationType.ERROR);
 						}
 					}
@@ -128,7 +128,7 @@ public class ForgeWizard extends MutableWizard {
 			return true;
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
-			displayMessage("Forge Command", e.getMessage(),
+			displayMessage("Forge Command", String.valueOf(e.getMessage()),
 					NotificationType.ERROR);
 			return false;
 		}

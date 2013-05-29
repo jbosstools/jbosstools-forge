@@ -34,8 +34,7 @@ public class RadioControlBuilder extends ControlBuilder {
 			final InputComponent<?, Object> input, final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
-		label.setText(input.getLabel() == null ? input.getName() : input
-				.getLabel());
+		label.setText(InputComponents.getLabelFor(input, true));
 
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayout(new RowLayout());

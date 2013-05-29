@@ -37,8 +37,7 @@ public class ComboControlBuilder extends ControlBuilder {
 			final InputComponent<?, Object> input, final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
-		label.setText(input.getLabel() == null ? input.getName() : input
-				.getLabel());
+		label.setText(InputComponents.getLabelFor(input, true));
 
 		final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN
 				| SWT.READ_ONLY);

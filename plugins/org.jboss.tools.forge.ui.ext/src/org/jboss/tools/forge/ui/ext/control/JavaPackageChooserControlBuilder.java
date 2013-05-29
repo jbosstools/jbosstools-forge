@@ -50,8 +50,7 @@ public class JavaPackageChooserControlBuilder extends ControlBuilder {
 			final InputComponent<?, Object> input, final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
-		label.setText(input.getLabel() == null ? input.getName() : input
-				.getLabel());
+		label.setText(InputComponents.getLabelFor(input, true));
 
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

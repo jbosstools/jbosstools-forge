@@ -41,8 +41,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		layoutData.horizontalSpan = 2;
 		group.setLayout(new GridLayout());
 		group.setLayoutData(layoutData);
-		group.setText(input.getLabel() == null ? input.getName() : input
-				.getLabel());
+		group.setText(InputComponents.getLabelFor(input, false));
 
 		final Table table = new Table(group, SWT.CHECK | SWT.BORDER
 				| SWT.V_SCROLL | SWT.H_SCROLL);
