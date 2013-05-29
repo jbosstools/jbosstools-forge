@@ -7,6 +7,7 @@
 
 package org.jboss.tools.forge.ui.ext.listeners;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
@@ -22,13 +23,15 @@ public enum RefreshListener implements WizardListener {
 			return;
 		}
 		IResource resource = initialSelection.getResource();
-		try {
-			// resource.refreshLocal(IResource.DEPTH_ONE, null);
-			// Refresh Project
-			resource.getProject().refreshLocal(IResource.DEPTH_INFINITE, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
+		if (resource != null && resource.getProject() != null)
+			try {
+				// resource.refreshLocal(IResource.DEPTH_ONE, null);
+				// Refresh Project
+				IProject project = resource.getProject();
+				project.refreshLocal(IResource.DEPTH_INFINITE, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 	}
 
 	@Override
