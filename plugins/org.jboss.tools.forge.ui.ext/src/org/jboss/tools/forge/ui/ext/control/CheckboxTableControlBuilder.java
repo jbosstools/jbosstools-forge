@@ -8,7 +8,9 @@
 package org.jboss.tools.forge.ui.ext.control;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -53,11 +55,21 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		final List<Object> data = new ArrayList<Object>();
 		InputComponents.setValueFor(converterFactory, input, data);
 		Iterable<Object> valueChoices = selectMany.getValueChoices();
+		// Adding default values in a separate set
+		Set<Object> defaultValuesSet = new HashSet<Object>();
+		//TODO: FORGE-928
+//		Iterable<Object> defaultValues = selectMany.getValue();
+//		if (defaultValues != null) {
+//			for (Object object : defaultValues) {
+//				defaultValuesSet.add(object);
+//			}
+//		}
 		if (valueChoices != null) {
 			for (Object next : valueChoices) {
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setData(Proxies.unwrap(next));
 				item.setText(next.toString());
+				item.setChecked(defaultValuesSet.contains(next));
 			}
 		}
 		table.addSelectionListener(new SelectionAdapter() {
