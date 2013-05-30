@@ -53,17 +53,15 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		final List<Object> data = new ArrayList<Object>();
-		InputComponents.setValueFor(converterFactory, input, data);
 		Iterable<Object> valueChoices = selectMany.getValueChoices();
 		// Adding default values in a separate set
 		Set<Object> defaultValuesSet = new HashSet<Object>();
-		//TODO: FORGE-928
-//		Iterable<Object> defaultValues = selectMany.getValue();
-//		if (defaultValues != null) {
-//			for (Object object : defaultValues) {
-//				defaultValuesSet.add(object);
-//			}
-//		}
+		Iterable<Object> defaultValues = selectMany.getValue();
+		if (defaultValues != null) {
+			for (Object object : defaultValues) {
+				defaultValuesSet.add(object);
+			}
+		}
 		if (valueChoices != null) {
 			for (Object next : valueChoices) {
 				TableItem item = new TableItem(table, SWT.NONE);
