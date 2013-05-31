@@ -13,6 +13,7 @@ public abstract class AbstractForgeWizardPage extends WizardPage {
 			ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
 		setMessage("Powered by JBoss Forge");
+		setImageDescriptor(WizardsPlugin.imageDescriptorFromPlugin(WizardsPlugin.PLUGIN_ID, "icons/forge.png"));
 	}
 
 	@Override
