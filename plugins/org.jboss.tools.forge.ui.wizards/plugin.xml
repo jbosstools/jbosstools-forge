@@ -3,76 +3,35 @@
 <plugin>
     <extension
           point="org.eclipse.ui.newWizards">
+       <category
+             name="Forge"
+             id="org.jboss.tools.forge.ui.wizards"
+             parentCategory="org.jboss.ide.eclipse.ui.wizards" />
        <wizard
-             name="New Project"
-             category="org.jboss.ide.eclipse.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.project.NewProjectWizard"
-             id="org.jboss.tools.forge.ui.wizard.newproject">
-          <description>
-                Create a new project
-          </description>
-       </wizard>
-       <wizard
-             name="Persistence Setup"
-             category="org.jboss.ide.eclipse.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.persistence.PersistenceSetupWizard"
-             id="org.jboss.tools.forge.ui.wizard.persistence">
-          <description>
-                Set up persistence
-          </description>
-       </wizard>
-       <wizard
-             name="New Entity"
-             category="org.jboss.ide.eclipse.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.entity.NewEntityWizard"
-             id="org.jboss.tools.forge.ui.wizard.entity">
-          <description>
-                Create new entity
-          </description>
-       </wizard>
-       <wizard
-             name="New Field"
-             category="org.jboss.ide.eclipse.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.field.NewFieldWizard"
-             id="org.jboss.tools.forge.ui.wizard.field">
-          <description>
-                Create new field
-          </description>
-       </wizard>
-       <wizard
-             name="Scaffold Setup"
-             category="org.jboss.ide.eclipse.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.scaffold.ScaffoldSetupWizard"
-             id="org.jboss.tools.forge.ui.wizard.scaffold.setup">
-          <description>
-                Set up scaffolding
-          </description>
-       </wizard>
-       <wizard
-             name="Scaffold Entities"
-             category="org.jboss.ide.eclipse.ui.wizards"
+             name="Scaffold UI From Entities"
+             category="org.jboss.ide.eclipse.ui.wizards/org.jboss.tools.forge.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.scaffold.ScaffoldWizard"
              id="org.jboss.tools.forge.ui.wizard.scaffold.entities">
           <description>
-                Scaffold entities
+                Scaffold UI from entities
           </description>
        </wizard>
        <wizard
-             name="Generate REST Endpoints"
-             category="org.jboss.ide.eclipse.ui.wizards"
+             name="REST Endpoints From Entities"
+             category="org.jboss.ide.eclipse.ui.wizards/org.jboss.tools.forge.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.rest.RestWizard"
              id="org.jboss.tools.forge.ui.wizard.rest">
           <description>
-                Generate REST Endpoints
+                Generate REST endpoints from entities
           </description>
        </wizard>
        <wizard
-             name="Generate Entities"
-             category="org.jboss.ide.eclipse.ui.wizards"
+             name="Entities From Tables"
+             category="org.jboss.ide.eclipse.ui.wizards/org.jboss.tools.forge.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.reveng.GenerateEntitiesWizard"
              id="org.jboss.tools.forge.ui.wizard.reveng.entities">
           <description>
-                Generate entities
+                Generate entities from database tables
           </description>
        </wizard>
     </extension> 
