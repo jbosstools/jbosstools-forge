@@ -62,9 +62,9 @@ public class ScaffoldEntitiesWizardPage extends AbstractForgeWizardPage {
                 if (e.item instanceof TableItem) {
                     TableItem source = (TableItem) e.item;
                     if (source.getChecked()) {
-                        entityNames.add(source.getText());
+                        entityNames.add((String)source.getData());
                     } else {
-                        entityNames.remove(source.getText());
+                        entityNames.remove((String)source.getData());
                     }
                 }
             }
@@ -81,7 +81,7 @@ public class ScaffoldEntitiesWizardPage extends AbstractForgeWizardPage {
             	entityNames.clear();
             	for (TableItem tableItem : selectEntitiesTable.getItems()) {
             		tableItem.setChecked(true);
-            		entityNames.add(tableItem.getText());
+            		entityNames.add((String)tableItem.getData());
             	}
             }
 		});
@@ -117,6 +117,7 @@ public class ScaffoldEntitiesWizardPage extends AbstractForgeWizardPage {
 			TableItem tableItem = new TableItem(selectEntitiesTable, SWT.NONE);
 			JavaResourceAbstractType jrat = iterator.next();
 			String qualifiedName = jrat.getTypeBinding().getQualifiedName();
+			tableItem.setData(jrat.getFile().getLocation().toOSString());
 			tableItem.setText(qualifiedName);
 		}		
 	}

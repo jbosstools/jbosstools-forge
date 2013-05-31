@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.wizard.reveng;
+package org.jboss.tools.forge.ui.wizard.scaffold;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -11,11 +11,9 @@ import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
-public class HibernateToolsInstaller {
+public class AngularJsInstaller {
 	
 	private boolean done = false;
-//	private String prompt = null;
-//	private String promptNoProject = null;
 	
 	void install(Shell shell) {
 		final ProgressMonitorDialog pmd = new ProgressMonitorDialog(shell);
@@ -27,18 +25,14 @@ public class HibernateToolsInstaller {
 						@Override
 						public void run(IProgressMonitor monitor)
 								throws InvocationTargetException, InterruptedException {
-							String taskName = "Please wait while Hibernate Tools is being installed.";
+							String taskName = "Please wait while the AngularJS plugin is being installed.";
 							monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
 							Runnable installer = new Runnable() {
 								@Override
 								public void run() {
 									ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
-//									prompt = runtime.sendCommand("get-prompt");
-//									promptNoProject = runtime.sendCommand("get-prompt-no-project");		
-									runtime.sendCommand("forge install-plugin hibernate-tools");
+									runtime.sendCommand("forge install-plugin angularjs");
 									runtime.sendInput(" ");
-//									runtime.sendCommand("set-prompt " + prompt);
-//									runtime.sendCommand("set-prompt-no-project " + promptNoProject);
 									done = true;
 								}								
 							};

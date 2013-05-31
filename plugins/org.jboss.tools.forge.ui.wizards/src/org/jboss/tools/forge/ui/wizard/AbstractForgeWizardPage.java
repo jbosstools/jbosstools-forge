@@ -12,6 +12,7 @@ public abstract class AbstractForgeWizardPage extends WizardPage {
 	protected AbstractForgeWizardPage(String pageName, String title,
 			ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
+		setMessage("Powered by JBoss Forge");
 	}
 
 	@Override

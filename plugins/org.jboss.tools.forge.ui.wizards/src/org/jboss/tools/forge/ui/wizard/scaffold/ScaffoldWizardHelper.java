@@ -38,9 +38,7 @@ public class ScaffoldWizardHelper {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						wizard.setSetupNeeded(
-								!installedFacets.contains(
-										"+ faces	[org.jboss.forge.scaffold.faces.FacesScaffold]"));
+						wizard.setSetupNeeded(!installedFacets.contains(getSetupString()));
 						wizard.setBusy(false);
 					}				
 				});
@@ -48,5 +46,21 @@ public class ScaffoldWizardHelper {
 		});
 		job.schedule();
 	}
-
+	
+	private String getScaffoldType() {
+		return (String)wizard.getWizardDescriptor().get(ScaffoldProjectWizardPage.SCAFFOLD_TYPE);
+	}
+	
+	private String getSetupString() {
+		String scaffoldType = getScaffoldType();
+		if (ScaffoldProjectWizardPage.SCAFFOLD_TYPE_FACES.equals(scaffoldType)) {
+			return "+ faces	[org.jboss.forge.scaffold.faces.FacesScaffold]";
+		} else if (ScaffoldProjectWizardPage.SCAFFOLD_TYPE_ANGULARJS.equals(scaffoldType)) {
+			return "+ angularjs	[org.jboss.forge.scaffold.angularjs.AngularScaffold]";
+		} else {
+			return "INSTALLED"; // This string is always present;
+		}
+				
+	}
+	
 }

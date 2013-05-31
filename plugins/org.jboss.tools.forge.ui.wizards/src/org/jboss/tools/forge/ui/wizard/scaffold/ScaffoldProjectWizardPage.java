@@ -16,8 +16,13 @@ import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 public class ScaffoldProjectWizardPage extends AbstractForgeWizardPage {
 	
 	final static String PROJECT_NAME = "ScaffoldProjectWizardPage.projectName";
+	final static String SCAFFOLD_TYPE = "ScaffoldProjectWizardPage.scaffoldType";
+	
+	final static String SCAFFOLD_TYPE_FACES = "faces";
+	final static String SCAFFOLD_TYPE_ANGULARJS = "angularjs";
 	
 	private Combo projectNameCombo;
+	private Combo scaffoldTypeCombo;
 	
 	protected ScaffoldProjectWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.scaffold.project", "Select Project", null);
@@ -28,7 +33,32 @@ public class ScaffoldProjectWizardPage extends AbstractForgeWizardPage {
 		Composite control = new Composite(parent, SWT.NULL);
 		control.setLayout(new GridLayout(2, false));
 		createProjectEditor(control);
+		createScaffoldTypeEditor(control);
 		setControl(control);
+	}
+	
+	private void createScaffoldTypeEditor(Composite parent) {
+		Label scaffoldTypeLabel = new Label(parent, SWT.NONE);
+		scaffoldTypeLabel.setText("Scaffold Type: ");
+		scaffoldTypeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+		scaffoldTypeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		scaffoldTypeCombo.add(SCAFFOLD_TYPE_FACES);
+		scaffoldTypeCombo.add(SCAFFOLD_TYPE_ANGULARJS);
+		String scaffoldType = (String)getWizardDescriptor().get(SCAFFOLD_TYPE);
+		if (scaffoldType != null) {
+			scaffoldTypeCombo.setText(scaffoldType);
+			handleScaffoldTypeChange();
+		}
+		scaffoldTypeCombo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				String newScaffoldType = scaffoldTypeCombo.getText();
+				String oldScaffoldType = (String)getWizardDescriptor().get(SCAFFOLD_TYPE);
+				if ((oldScaffoldType == null && newScaffoldType != null) || !oldScaffoldType.equals(newScaffoldType)) {
+					handleScaffoldTypeChange();
+				}
+			}
+		});
 	}
 	
 	private void createProjectEditor(Composite parent) {
@@ -57,6 +87,11 @@ public class ScaffoldProjectWizardPage extends AbstractForgeWizardPage {
 				}
 			}			
 		});
+	}
+	
+	private void handleScaffoldTypeChange() {
+		getWizardDescriptor().put(SCAFFOLD_TYPE, scaffoldTypeCombo.getText());
+		((ScaffoldWizard)getWizard()).handleScaffoldTypeChange();
 	}
 	
 	private void handleProjectChange() {

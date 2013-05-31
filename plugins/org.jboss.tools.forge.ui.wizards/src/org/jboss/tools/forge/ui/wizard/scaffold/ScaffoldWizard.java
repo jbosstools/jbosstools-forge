@@ -27,7 +27,25 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection sel) {
 		super.init(workbench, sel);
-		initializeProject(sel);
+		doInit(workbench, sel);
+	}
+	
+	private void doInit(IWorkbench workbench, final IStructuredSelection sel) {
+		Runnable runner = new Runnable() {
+			@Override
+			public void run() {
+				if (!isAngularJsPluginAvailable()) {
+					new AngularJsInstaller().install(getShell());
+				}
+				initializeProject(sel);
+			}			
+		};
+		new Thread(runner).start();
+	}
+	
+	private boolean isAngularJsPluginAvailable() {
+		String str = ForgeHelper.getDefaultRuntime().sendCommand("forge list-plugins");
+		return str != null && str.contains("org.jboss.forge.angularjs-scaffoldx-plugin");
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -58,12 +76,11 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
 		runtime.sendCommand("cd " + getProjectLocation());
 		if (setupNeeded) {
-			System.out.println("scaffold setup");
-			runtime.sendCommand("scaffold setup");
+			String scaffoldType = (String)getWizardDescriptor().get(ScaffoldProjectWizardPage.SCAFFOLD_TYPE);
+			runtime.sendCommand("scaffold-x setup --scaffoldType " + scaffoldType);
 		}
 		for (String entityName : getEntityNames()) {
-			System.out.println("scaffold from-entity " + entityName + ".java");
-			runtime.sendCommand("scaffold from-entity " + entityName + ".java");
+			runtime.sendCommand("scaffold-x from " + entityName);
 		}
 	}
 	
@@ -93,9 +110,18 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 	}
 	
 	void handleProjectChange() {
-		busy = true;
-		checkIfSetupNeeded();
-		scaffoldEntitiesWizardPage.handleProjectChange();
+		if (getWizardDescriptor().get(ScaffoldProjectWizardPage.SCAFFOLD_TYPE) != null) {
+			setBusy(true);
+			checkIfSetupNeeded();
+			scaffoldEntitiesWizardPage.handleProjectChange();
+		}
+	}
+	
+	void handleScaffoldTypeChange() {
+		if (getProjectName() != null && getProject(getProjectName()) != null) {
+			setBusy(true);
+			checkIfSetupNeeded();
+		}
 	}
 	
 	private void checkIfSetupNeeded() {
