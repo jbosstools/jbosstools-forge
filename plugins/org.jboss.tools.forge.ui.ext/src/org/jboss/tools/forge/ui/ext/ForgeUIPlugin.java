@@ -92,4 +92,8 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 				"icons/forge.png");
 	}
 
+	public static ImageDescriptor getForgeIcon() {
+		return imageDescriptorFromPlugin(ForgeUIPlugin.PLUGIN_ID,
+				"icons/jbossforge_icon_16px.png");
+	}
 }

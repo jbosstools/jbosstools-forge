@@ -7,6 +7,8 @@
 
 package org.jboss.tools.forge.ui.ext.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -15,12 +17,9 @@ import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
-import org.eclipse.jface.dialogs.PopupDialog;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.swt.widgets.Shell;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
@@ -31,24 +30,44 @@ import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public abstract class AbstractUICommandDialog extends PopupDialog {
-	protected final UIContextImpl uiContext;
+/**
+ */
+public final class WizardDialogHelper {
 
-	public AbstractUICommandDialog(IWorkbenchWindow window) {
-		super(window.getShell(), SWT.RESIZE, true,
-				true, // persist size
-				false, // but not location
-				true, true, "Run a Forge command",
-				"Start typing to filter the list");
-		ISelection selection = window.getSelectionService().getSelection();
-		IStructuredSelection currentSelection = null;
-		if (selection instanceof IStructuredSelection) {
-			currentSelection = (IStructuredSelection) selection;
-		}
-		uiContext = UIContextImpl.createContext(currentSelection);
+	private UIContextImpl context;
+	private Shell parentShell;
+
+	public WizardDialogHelper(Shell parentShell, IStructuredSelection selection) {
+		this.parentShell = parentShell;
+		context = UIContextImpl.createContext(selection);
 	}
 
-	protected Map<String, UICommand> getAllCandidatesAsMap() {
+	public WizardDialogHelper(Shell parentShell, UIContextImpl context) {
+		this.parentShell = parentShell;
+		this.context = context;
+	}
+
+	public UIContextImpl getContext() {
+		return context;
+	}
+
+	public List<UICommand> getAllCandidatesAsList() {
+		List<UICommand> result = new ArrayList<UICommand>();
+		AddonRegistry addonRegistry = FurnaceService.INSTANCE
+				.getAddonRegistry();
+		Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry
+				.getExportedInstances(UICommand.class);
+		for (ExportedInstance<UICommand> instance : exportedInstances) {
+			UICommand uiCommand = instance.get();
+			if (!(uiCommand instanceof UIWizardStep)
+					&& uiCommand.isEnabled(context)) {
+				result.add(uiCommand);
+			}
+		}
+		return result;
+	}
+
+	public Map<String, UICommand> getAllCandidatesAsMap() {
 		Map<String, UICommand> result = new TreeMap<String, UICommand>();
 		AddonRegistry addonRegistry = FurnaceService.INSTANCE
 				.getAddonRegistry();
@@ -57,7 +76,7 @@ public abstract class AbstractUICommandDialog extends PopupDialog {
 		for (ExportedInstance<UICommand> instance : exportedInstances) {
 			UICommand uiCommand = instance.get();
 			if (!(uiCommand instanceof UIWizardStep)
-					&& uiCommand.isEnabled(uiContext)) {
+					&& uiCommand.isEnabled(context)) {
 				UICommandMetadata metadata = uiCommand.getMetadata();
 				result.put(metadata.getName(), uiCommand);
 			}
@@ -65,11 +84,10 @@ public abstract class AbstractUICommandDialog extends PopupDialog {
 		return result;
 	}
 
-	protected void openWizard(String windowTitle, UICommand selectedCommand) {
-		ForgeWizard wizard = new ForgeWizard(selectedCommand, uiContext);
+	public void openWizard(String windowTitle, UICommand selectedCommand) {
+		ForgeWizard wizard = new ForgeWizard(selectedCommand, context);
 		wizard.setWindowTitle(windowTitle);
-		final WizardDialog wizardDialog = new WizardDialog(getParentShell(),
-				wizard);
+		final WizardDialog wizardDialog = new WizardDialog(parentShell, wizard);
 		// TODO: Show help button when it's possible to display the docs for
 		// each UICommand
 		wizardDialog.setHelpAvailable(false);
