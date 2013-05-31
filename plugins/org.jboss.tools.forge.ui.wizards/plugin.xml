@@ -58,6 +58,15 @@
           </description>
        </wizard>
        <wizard
+             name="Generate REST Endpoints"
+             category="org.jboss.ide.eclipse.ui.wizards"
+             class="org.jboss.tools.forge.ui.wizard.rest.RestWizard"
+             id="org.jboss.tools.forge.ui.wizard.rest">
+          <description>
+                Generate REST Endpoints
+          </description>
+       </wizard>
+       <wizard
              name="Generate Entities"
              category="org.jboss.ide.eclipse.ui.wizards"
              class="org.jboss.tools.forge.ui.wizard.reveng.GenerateEntitiesWizard"
