@@ -482,9 +482,12 @@ public abstract class QuickAccessContents {
 						if (!o.equals(lastItem)) {
 							lastItem = (TableItem) o;
 							table.setSelection(new TableItem[] { lastItem });
+							table.setToolTipText(((QuickAccessEntry) lastItem
+									.getData()).element.getTooltip());
 						}
 					} else if (o == null) {
 						lastItem = null;
+						table.setToolTipText("");
 					}
 				}
 			}

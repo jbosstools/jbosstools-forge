@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.metadata.UICategory;
+import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessContents;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessElement;
 import org.jboss.tools.forge.ui.ext.quickaccess.impl.ForgeQuickAccessElement;
@@ -140,20 +141,11 @@ public class UICommandListDialog extends PopupDialog {
 	}
 
 	private String getCategoryName(UICommand command) {
-		StringBuilder sb = new StringBuilder();
 		UICategory category = command.getMetadata().getCategory();
 		if (category != null) {
-			collectCategoryName(category, sb);
-		}
-		return sb.toString();
-	}
-
-	private void collectCategoryName(UICategory category, StringBuilder sb) {
-		sb.append(category.getName());
-		UICategory subCategory = category.getSubCategory();
-		if (subCategory != null) {
-			sb.append("/");
-			collectCategoryName(subCategory, sb);
+			return category.toString();
+		} else {
+			return Categories.DEFAULT;
 		}
 	}
 }

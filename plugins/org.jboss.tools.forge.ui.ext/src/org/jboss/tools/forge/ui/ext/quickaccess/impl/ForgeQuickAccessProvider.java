@@ -90,6 +90,6 @@ public class ForgeQuickAccessProvider extends QuickAccessProvider implements
 
 	@Override
 	public int compareTo(ForgeQuickAccessProvider o) {
-		return getName().compareTo(o.getName());
+		return getName().compareToIgnoreCase(o.getName());
 	}
 }

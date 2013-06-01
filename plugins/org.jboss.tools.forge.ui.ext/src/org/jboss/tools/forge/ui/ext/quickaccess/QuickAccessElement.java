@@ -11,7 +11,6 @@
 
 package org.jboss.tools.forge.ui.ext.quickaccess;
 
-
 import org.eclipse.jface.resource.ImageDescriptor;
 
 /**
@@ -106,30 +105,39 @@ public abstract class QuickAccessElement {
 		String camelCase = CamelUtil.getCamelCase(sortLabel);
 		index = camelCase.indexOf(filter);
 		if (index != -1) {
-			int[][] indices = CamelUtil.getCamelCaseIndices(sortLabel, index, filter
-					.length());
+			int[][] indices = CamelUtil.getCamelCaseIndices(sortLabel, index,
+					filter.length());
 			return new QuickAccessEntry(this, providerForMatching, indices,
 					EMPTY_INDICES);
 		}
 		String combinedCamelCase = CamelUtil.getCamelCase(combinedLabel);
 		index = combinedCamelCase.indexOf(filter);
 		if (index != -1) {
-			String providerCamelCase = CamelUtil.getCamelCase(providerForMatching
-					.getName());
+			String providerCamelCase = CamelUtil
+					.getCamelCase(providerForMatching.getName());
 			int lengthOfElementMatch = index + filter.length()
 					- providerCamelCase.length();
 			if (lengthOfElementMatch > 0) {
-				return new QuickAccessEntry(
-						this,
-						providerForMatching,
-						CamelUtil.getCamelCaseIndices(sortLabel, 0, lengthOfElementMatch),
-						CamelUtil.getCamelCaseIndices(providerForMatching.getName(),
-								index, filter.length() - lengthOfElementMatch));
+				return new QuickAccessEntry(this, providerForMatching,
+						CamelUtil.getCamelCaseIndices(sortLabel, 0,
+								lengthOfElementMatch),
+						CamelUtil.getCamelCaseIndices(
+								providerForMatching.getName(), index,
+								filter.length() - lengthOfElementMatch));
 			}
 			return new QuickAccessEntry(this, providerForMatching,
-					EMPTY_INDICES, CamelUtil.getCamelCaseIndices(providerForMatching
-							.getName(), index, filter.length()));
+					EMPTY_INDICES, CamelUtil.getCamelCaseIndices(
+							providerForMatching.getName(), index,
+							filter.length()));
 		}
 		return null;
 	}
+
+	/**
+	 * Returns the tooltip for this element or null if none
+	 */
+	public String getTooltip() {
+		return null;
+	}
+
 }
