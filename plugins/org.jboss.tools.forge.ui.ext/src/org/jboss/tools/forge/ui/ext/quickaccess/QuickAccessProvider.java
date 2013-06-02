@@ -59,7 +59,7 @@ public abstract class QuickAccessProvider {
 			Collections.sort(sortedElements, new Comparator<QuickAccessElement>() {
 				@Override
 				public int compare(QuickAccessElement e1, QuickAccessElement e2) {
-					return e1.getLabel().compareTo(e2.getLabel());
+					return e1.getLabel().compareToIgnoreCase(e2.getLabel());
 				}
 			});
 		}
