@@ -34,7 +34,7 @@ public class TextBoxControlBuilder extends ControlBuilder {
 
 		final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
+		txt.setToolTipText(input.getDescription());
 		// Set Default Value
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();

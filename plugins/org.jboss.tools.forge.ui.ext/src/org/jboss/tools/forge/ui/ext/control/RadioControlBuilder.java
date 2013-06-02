@@ -52,6 +52,7 @@ public class RadioControlBuilder extends ControlBuilder {
 				final String itemLabel = itemLabelConverter.convert(choice);
 				final Button button = new Button(container, SWT.RADIO);
 				button.setText(itemLabel);
+				button.setToolTipText(input.getDescription());
 				boolean selected = choice.equals(originalValue);
 				button.setSelection(selected);
 				button.addSelectionListener(new SelectionAdapter() {

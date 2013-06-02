@@ -86,6 +86,7 @@ public class ComboControlBuilder extends ControlBuilder {
 				items.clear();
 			}
 		});
+		combo.setToolTipText(input.getDescription());
 		return combo;
 	}
 

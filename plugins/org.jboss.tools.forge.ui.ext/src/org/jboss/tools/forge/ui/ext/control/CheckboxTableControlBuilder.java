@@ -48,7 +48,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		final Table table = new Table(group, SWT.CHECK | SWT.BORDER
 				| SWT.V_SCROLL | SWT.H_SCROLL);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-
+		table.setToolTipText(input.getDescription());
 		final UISelectMany<Object> selectMany = (UISelectMany) input;
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();

@@ -65,7 +65,7 @@ public class FileChooserControlBuilder extends ControlBuilder {
 					.convert(InputComponents.getValueFor(input));
 			containerText.setText(value == null ? "" : value);
 		}
-
+		containerText.setToolTipText(input.getDescription());
 		containerText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
