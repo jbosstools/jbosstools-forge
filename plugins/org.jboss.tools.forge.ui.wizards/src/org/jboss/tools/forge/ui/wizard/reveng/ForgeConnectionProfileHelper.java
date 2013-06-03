@@ -59,6 +59,10 @@ public class ForgeConnectionProfileHelper {
 			end = end == -1 ? raw.length() : end;
 			result.add(parseConnectionProfile(raw.substring(start, end).trim()));
 		}
+		// add an unnamed connection profile
+		ConnectionProfileDescriptor unnamed = new ConnectionProfileDescriptor();
+		unnamed.name = "";
+		result.add(unnamed);
 		return result.toArray(new ConnectionProfileDescriptor[result.size()]);
 	}
 	

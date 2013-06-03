@@ -16,13 +16,16 @@ public class DataToolsConnectionProfileHelper {
 	private static final String URL = "org.eclipse.datatools.connectivity.db.URL";
 	
 	private GenerateEntitiesWizardPage wizardPage;
+	private ConnectionProfileDescriptor unnamed = new ConnectionProfileDescriptor();
 	
 	DataToolsConnectionProfileHelper(GenerateEntitiesWizardPage wizardPage) {
 		this.wizardPage = wizardPage;
+		this.unnamed.name = "";
 	}
 		
 	boolean retrieveConnectionProfiles() {
 		ArrayList<ConnectionProfileDescriptor> connectionProfileList = getConnectionProfiles();
+		connectionProfileList.add(unnamed);
 		wizardPage.refreshConnectionProfiles(
 				connectionProfileList.toArray(
 						new ConnectionProfileDescriptor[connectionProfileList.size()]));

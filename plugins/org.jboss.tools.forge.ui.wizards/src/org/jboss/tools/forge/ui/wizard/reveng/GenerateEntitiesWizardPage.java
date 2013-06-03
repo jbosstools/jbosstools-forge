@@ -211,6 +211,8 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		});
 		connectionProfileButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		connectionProfileHelper.retrieveConnectionProfiles();
+		connectionProfileCombo.setText("");
+		getWizardDescriptor().put(CONNECTION_PROFILE, getSelectedConnectionProfile());
 	}
 	
 	void refreshConnectionProfiles(ConnectionProfileDescriptor[] connectionProfiles) {
@@ -238,6 +240,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		createDriverNameEditor(group);
 		createDriverLocationEditor(group);
 		createUpdateRestoreComposite(group);
+		updateConnectionProfileDetails();
 	}
 	
 	private void createUrlEditor(Composite parent) {
@@ -349,7 +352,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		ConnectionProfileDescriptor selectedConnectionProfile = getSelectedConnectionProfile();
 		String url = selectedConnectionProfile.url;
 		url = url == null ? "" : url;
-		urlText.setText(selectedConnectionProfile.url);
+		urlText.setText(url);
 		String user = selectedConnectionProfile.user;
 		user = user == null ? "" : user;
 		userNameText.setText(user);
@@ -363,7 +366,6 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		driverLocation = driverLocation == null ? "" : driverLocation;
 		driverLocationText.setText(driverLocation);
 		updatingConnectionProfileDetails = false;
-//		connectionProfileHelper.testConnectionProfile(selectedConnectionProfile);
 	}
 	
 	private void enableButtons(boolean enabled) {
@@ -394,7 +396,6 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				getSelectedConnectionProfile().dialect = hibernateDialectCombo.getText();
 			}
 			enableButtons(true);
-//			connectionProfileHelper.testConnectionProfile(getSelectedConnectionProfile());
 		}
 	};
 	
