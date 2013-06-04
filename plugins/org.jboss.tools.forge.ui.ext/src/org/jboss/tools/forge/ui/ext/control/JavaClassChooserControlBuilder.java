@@ -77,10 +77,11 @@ public class JavaClassChooserControlBuilder extends ControlBuilder {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-
 				// TODO: Open Java Class chooser
+				
 			}
 		});
+		setupAutoCompleteForText(input, containerText);
 		return containerText;
 	}
 

@@ -66,6 +66,7 @@ public class FileChooserControlBuilder extends ControlBuilder {
 			containerText.setText(value == null ? "" : value);
 		}
 		containerText.setToolTipText(input.getDescription());
+		setupAutoCompleteForText(input, containerText);
 		containerText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {

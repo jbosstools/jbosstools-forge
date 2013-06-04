@@ -7,12 +7,18 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.ui.hints.InputType;
+import org.jboss.forge.addon.ui.input.HasCompleter;
 import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.addon.ui.input.UICompleter;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.proxy.Proxies;
+import org.jboss.tools.forge.ui.ext.autocomplete.InputComponentProposalProvider;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**
@@ -92,4 +98,20 @@ public abstract class ControlBuilder {
 		control.setEnabled(enabled);
 	}
 
+	@SuppressWarnings("unchecked")
+	protected ContentProposalAdapter setupAutoCompleteForText(
+			InputComponent<?, Object> input, Text control) {
+		ContentProposalAdapter result = null;
+		if (input instanceof HasCompleter) {
+			UICompleter<Object> completer = ((HasCompleter<?, Object>) input)
+					.getCompleter();
+			if (completer != null) {
+				result = new ContentProposalAdapter(control,
+						new TextContentAdapter(),
+						new InputComponentProposalProvider(input, completer),
+						null, null);
+			}
+		}
+		return result;
+	}
 }
