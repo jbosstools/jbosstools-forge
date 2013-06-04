@@ -23,7 +23,8 @@ public class InputComponentProposalProvider implements IContentProposalProvider 
 
 	public InputComponentProposalProvider(InputComponent<?, Object> component,
 			UICompleter<Object> completer) {
-		this.component = component;
+		// FIXME FORGE-939
+		this.component = null;// component;
 		this.completer = completer;
 	}
 
