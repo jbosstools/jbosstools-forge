@@ -10,6 +10,9 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
@@ -97,6 +100,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			Control control = controlBuilder.build(this,
 					(InputComponent<?, Object>) input, container);
 
+			if (input.isRequired()) {
+				decorateRequiredField(input, control);
+			}
+
 			// Update page status
 			control.addListener(SWT.Modify, this);
 			control.addListener(SWT.DefaultSelection, this);
@@ -116,6 +123,20 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		setErrorMessage(null);
 		setMessage(null);
 		setControl(container);
+	}
+
+	/**
+	 * Decorate required field
+	 */
+	private void decorateRequiredField(final InputComponent<?, ?> input,
+			Control control) {
+		FieldDecoration completerIndicator = FieldDecorationRegistry
+				.getDefault().getFieldDecoration(
+						FieldDecorationRegistry.DEC_REQUIRED);
+		ControlDecoration dec = new ControlDecoration(control, SWT.LEFT
+				| SWT.CENTER);
+		dec.setImage(completerIndicator.getImage());
+		dec.setDescriptionText(completerIndicator.getDescription());
 	}
 
 	/**
