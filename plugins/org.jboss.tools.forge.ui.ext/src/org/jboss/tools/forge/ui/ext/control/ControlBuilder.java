@@ -111,20 +111,23 @@ public abstract class ControlBuilder {
 			UICompleter<Object> completer = ((HasCompleter<?, Object>) input)
 					.getCompleter();
 			if (completer != null) {
-				KeyStroke keyStroke = KeyStroke.getInstance(SWT.CONTROL,
-						SWT.SPACE);
 				ControlDecoration dec = new ControlDecoration(text, SWT.TOP
 						| SWT.LEFT);
+				// Add lightbulb
 				FieldDecoration completerIndicator = FieldDecorationRegistry
 						.getDefault().getFieldDecoration(
 								FieldDecorationRegistry.DEC_CONTENT_PROPOSAL);
 				dec.setImage(completerIndicator.getImage());
 				dec.setDescriptionText(completerIndicator.getDescription());
 
+				// Register auto-complete
+				KeyStroke activationKeyStroke = KeyStroke.getInstance(
+						SWT.CONTROL, SWT.SPACE);
 				result = new ContentProposalAdapter(text,
 						new TextContentAdapter(),
 						new InputComponentProposalProvider(input, completer),
-						keyStroke, null);
+						activationKeyStroke, null);
+				result.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 			}
 		}
 		return result;
