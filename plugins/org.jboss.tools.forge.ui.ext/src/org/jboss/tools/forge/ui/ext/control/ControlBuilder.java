@@ -7,8 +7,10 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
+import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
@@ -106,10 +108,12 @@ public abstract class ControlBuilder {
 			UICompleter<Object> completer = ((HasCompleter<?, Object>) input)
 					.getCompleter();
 			if (completer != null) {
+				KeyStroke keyStroke = KeyStroke.getInstance(SWT.CONTROL,
+						SWT.SPACE);
 				result = new ContentProposalAdapter(control,
 						new TextContentAdapter(),
 						new InputComponentProposalProvider(input, completer),
-						null, null);
+						keyStroke, null);
 			}
 		}
 		return result;
