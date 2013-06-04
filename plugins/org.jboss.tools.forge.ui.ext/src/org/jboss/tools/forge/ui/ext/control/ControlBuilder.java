@@ -9,6 +9,9 @@ package org.jboss.tools.forge.ui.ext.control;
 
 import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -102,7 +105,7 @@ public abstract class ControlBuilder {
 
 	@SuppressWarnings("unchecked")
 	protected ContentProposalAdapter setupAutoCompleteForText(
-			InputComponent<?, Object> input, Text control) {
+			InputComponent<?, Object> input, Text text) {
 		ContentProposalAdapter result = null;
 		if (input instanceof HasCompleter) {
 			UICompleter<Object> completer = ((HasCompleter<?, Object>) input)
@@ -110,7 +113,15 @@ public abstract class ControlBuilder {
 			if (completer != null) {
 				KeyStroke keyStroke = KeyStroke.getInstance(SWT.CONTROL,
 						SWT.SPACE);
-				result = new ContentProposalAdapter(control,
+				ControlDecoration dec = new ControlDecoration(text, SWT.TOP
+						| SWT.LEFT);
+				FieldDecoration completerIndicator = FieldDecorationRegistry
+						.getDefault().getFieldDecoration(
+								FieldDecorationRegistry.DEC_CONTENT_PROPOSAL);
+				dec.setImage(completerIndicator.getImage());
+				dec.setDescriptionText(completerIndicator.getDescription());
+
+				result = new ContentProposalAdapter(text,
 						new TextContentAdapter(),
 						new InputComponentProposalProvider(input, completer),
 						keyStroke, null);
