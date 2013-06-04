@@ -15,100 +15,36 @@ import org.eclipse.jdt.ui.IJavaElementSearchConstants;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.SelectionDialog;
-import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
-import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.util.BusyIndicatorRunnableContext;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class JavaClassChooserControlBuilder extends ControlBuilder {
+public class JavaClassChooserControlBuilder extends
+		AbstractTextButtonControl {
 
 	@Override
-	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite parent) {
-		// Create the label
-		Label label = new Label(parent, SWT.NULL);
-		label.setText(InputComponents.getLabelFor(input, true));
-
-		Composite container = new Composite(parent, SWT.NULL);
-		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		layout.numColumns = 2;
-		layout.verticalSpacing = 9;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-
-		final Text containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
-		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
-		containerText.setLayoutData(gd);
-
-		// Set Default Value
-		final ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.getConverterFactory();
-		if (converterFactory != null) {
-			Converter<Object, String> converter = converterFactory
-					.getConverter(input.getValueType(), String.class);
-			String value = converter
-					.convert(InputComponents.getValueFor(input));
-			containerText.setText(value == null ? "" : value);
+	protected void browseButtonPressed(ForgeWizardPage page,
+			InputComponent<?, Object> input, Text containerText) {
+		IRunnableContext context = new BusyIndicatorRunnableContext();
+		IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
+		int style = IJavaElementSearchConstants.CONSIDER_ALL_TYPES;
+		try {
+			SelectionDialog dialog = JavaUI.createTypeDialog(page.getShell(),
+					context, scope, style, false, containerText.getText());
+			dialog.setTitle("Type Selection");
+			dialog.setMessage("Choose type name:");
+			if (dialog.open() == Window.OK) {
+				IType res = (IType) dialog.getResult()[0];
+				containerText.setText(res.getFullyQualifiedName('.'));
+			}
+		} catch (JavaModelException ex) {
+			ForgeUIPlugin.log(ex);
 		}
-		containerText.setToolTipText(input.getDescription());
-		containerText.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				String text = containerText.getText();
-				if (text != null) {
-					InputComponents.setValueFor(converterFactory, input, text);
-				}
-			}
-		});
-
-		Button button = new Button(container, SWT.PUSH);
-		button.setText("Browse...");
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				IRunnableContext context = new BusyIndicatorRunnableContext();
-				IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
-				int style = IJavaElementSearchConstants.CONSIDER_ALL_TYPES;
-				try {
-					SelectionDialog dialog = JavaUI.createTypeDialog(
-							page.getShell(), context, scope, style, false,
-							containerText.getText());
-					dialog.setTitle("Type Selection");
-					dialog.setMessage("Choose type name:");
-					if (dialog.open() == Window.OK) {
-						IType res = (IType) dialog.getResult()[0];
-						containerText.setText(res.getFullyQualifiedName('.'));
-					}
-				} catch (JavaModelException ex) {
-					ForgeUIPlugin.log(ex);
-				}
-
-			}
-		});
-		setupAutoCompleteForText(input, containerText);
-		return containerText;
 	}
 
 	@Override

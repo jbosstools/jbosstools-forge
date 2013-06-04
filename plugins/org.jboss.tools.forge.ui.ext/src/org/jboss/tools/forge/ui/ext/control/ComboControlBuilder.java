@@ -17,7 +17,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
@@ -33,7 +32,7 @@ public class ComboControlBuilder extends ControlBuilder {
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
-	public Control build(ForgeWizardPage page,
+	public Combo build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);

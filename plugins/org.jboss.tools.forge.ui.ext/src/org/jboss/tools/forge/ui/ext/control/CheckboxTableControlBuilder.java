@@ -18,7 +18,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -35,7 +34,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Control build(ForgeWizardPage page,
+	public Table build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
 
 		final Group group = new Group(container, SWT.SHADOW_NONE);

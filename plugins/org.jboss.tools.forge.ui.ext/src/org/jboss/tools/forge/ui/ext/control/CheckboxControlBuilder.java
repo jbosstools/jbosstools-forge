@@ -13,7 +13,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -26,7 +25,7 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 public class CheckboxControlBuilder extends ControlBuilder {
 
 	@Override
-	public Control build(ForgeWizardPage page,
+	public Button build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 2;
