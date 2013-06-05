@@ -41,8 +41,4 @@ public class WizardsHelper {
 		return buff.toString().contains("org.jboss.hibernate.forge.hibernate-tools-plugin");
 	}
 	
-	public static void installHibernateToolsPlugin() {
-		
-	}
-	
 }

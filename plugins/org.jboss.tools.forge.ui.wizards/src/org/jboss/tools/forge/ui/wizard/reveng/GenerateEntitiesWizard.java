@@ -59,7 +59,7 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 			}
 		}
 	}
-
+	
 	@Override
 	public void addPages() {
 		addPage(generateEntitiesWizardPage);

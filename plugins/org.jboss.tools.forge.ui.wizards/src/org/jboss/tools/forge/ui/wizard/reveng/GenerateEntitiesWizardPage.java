@@ -1,9 +1,15 @@
 package org.jboss.tools.forge.ui.wizard.reveng;
 
 import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.sql.Driver;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.apache.maven.model.Model;
 import org.eclipse.core.resources.IProject;
@@ -17,6 +23,9 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
+import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.SWT;
@@ -24,12 +33,13 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -53,7 +63,8 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 			hibernateDialectCombo;
 	private Text entityPackageText, urlText, userNameText, userPasswordText,
 			driverNameText, driverLocationText;
-	private Button saveButton, revertButton, browsePackageButton;
+	private Button saveButton, revertButton, browsePackageButton, 
+			browseDriverClassButton, browseDriverLocationButton;
 
 	private boolean updatingConnectionProfileDetails = false;
 
@@ -64,7 +75,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		getShell().setSize(getShell().computeSize(500, 560, true));
+		getShell().setSize(getShell().computeSize(500, 570, true));
 		Composite control = new Composite(parent, SWT.NULL);
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
@@ -258,24 +269,26 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		Combo dummyCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 		dummyCombo.setVisible(false);
 		Group group = new Group(parent, SWT.DEFAULT);
-		group.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false, 2,
+		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3,
 				SWT.DEFAULT));
-		group.setLayout(new GridLayout(2, false));
+		GridLayout groupLayout = new GridLayout(3, false);
+		groupLayout.verticalSpacing = -2;
+		group.setLayout(groupLayout);
 		createUrlEditor(group);
 		createUserNameEditor(group);
 		createPasswordEditor(group);
 		createHibernateDialectEditor(group);
-		createDriverNameEditor(group);
 		createDriverLocationEditor(group);
+		createDriverNameEditor(group);
 		createUpdateRestoreComposite(group);
 		updateConnectionProfileDetails();
 	}
-
+	
 	private void createUrlEditor(Composite parent) {
 		Label urlLabel = new Label(parent, SWT.NONE);
 		urlLabel.setText("URL: ");
 		urlText = new Text(parent, SWT.BORDER);
-		urlText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		urlText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		urlText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -285,14 +298,16 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				enableButtons(true);
 			}
 		});
+		Button dummyButton = new Button(parent, SWT.NONE);
+		dummyButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		dummyButton.setVisible(false);
 	}
 
 	private void createUserNameEditor(Composite parent) {
 		Label userNameLabel = new Label(parent, SWT.NONE);
 		userNameLabel.setText("User Name: ");
 		userNameText = new Text(parent, SWT.BORDER);
-		userNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true,
-				false));
+		userNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		userNameText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -302,25 +317,32 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				enableButtons(true);
 			}
 		});
+		Button dummyButton = new Button(parent, SWT.NONE);
+		dummyButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		dummyButton.setVisible(false);
 	}
 
 	private void createPasswordEditor(Composite parent) {
 		Label userPasswordLabel = new Label(parent, SWT.NONE);
 		userPasswordLabel.setText("User Password: ");
 		userPasswordText = new Text(parent, SWT.BORDER | SWT.PASSWORD);
-		userPasswordText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT,
-				true, false));
+		userPasswordText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		userPasswordText.addModifyListener(modifyListener);
+		Button dummyButton = new Button(parent, SWT.NONE);
+		dummyButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		dummyButton.setVisible(false);
 	}
 
 	private void createHibernateDialectEditor(Composite parent) {
 		Label hibernateDialectLabel = new Label(parent, SWT.NONE);
 		hibernateDialectLabel.setText("Hibernate Dialect: ");
 		hibernateDialectCombo = new Combo(parent, SWT.DROP_DOWN);
-		hibernateDialectCombo.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT,
-				true, false));
+		hibernateDialectCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fillHibernateDialectCombo();
 		hibernateDialectCombo.addModifyListener(modifyListener);
+		Button dummyButton = new Button(parent, SWT.NONE);
+		dummyButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		dummyButton.setVisible(false);
 	}
 
 	private void fillHibernateDialectCombo() {
@@ -333,28 +355,112 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		Label driverNameLabel = new Label(parent, SWT.NONE);
 		driverNameLabel.setText("Driver Class: ");
 		driverNameText = new Text(parent, SWT.BORDER);
-		driverNameText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true,
+		driverNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false));
 		driverNameText.addModifyListener(modifyListener);
+		browseDriverClassButton = new Button(parent, SWT.NONE);
+		browseDriverClassButton.setText("Browse...");
+		browseDriverClassButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		browseDriverClassButton.setEnabled(false);
+		browseDriverClassButton.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				browseForDriverClass();
+			}
+		});
+	}
+	
+	private void browseForDriverClass() {
+		LabelProvider labelProvider = new LabelProvider() {
+			public Image getImage(Object element) {
+				WizardsPlugin plugin = WizardsPlugin.getDefault();
+				ImageRegistry registry = plugin.getImageRegistry();
+				Image image = registry.get(WizardsPlugin.CLASS_ICON);
+				return image;
+			}
+			public String getText(Object element) {
+				return ((Class<?>)element).getName();
+			}
+		};
+		ElementListSelectionDialog dialog = new ElementListSelectionDialog(
+				getShell(), 
+				labelProvider);
+		dialog.setTitle("Driver Selection");
+		dialog.setMessage("Select a driver.");
+		dialog.setElements(getDriverClasses());
+		if (dialog.open() == Window.OK) {
+			Class<?> selectedDriver = (Class<?>)dialog.getFirstResult();
+			driverNameText.setText(selectedDriver.getName());
+		}
+	}
+
+	private Class<?>[] getDriverClasses() {
+		ArrayList<Class<?>> result = new ArrayList<Class<?>>();
+		try {
+			File file = new File(driverLocationText.getText());
+			URL[] urls = new URL[] { file.toURI().toURL() };
+			URLClassLoader classLoader = URLClassLoader.newInstance(urls);
+			Class<?> driverClass = classLoader.loadClass(Driver.class.getName());
+			JarFile jarFile = new JarFile(file);
+			Enumeration<JarEntry> iter = jarFile.entries();
+			while (iter.hasMoreElements()) {
+				JarEntry entry = iter.nextElement();
+				if (entry.getName().endsWith(".class")) { 
+					String name = entry.getName();
+					name = name.substring(0, name.length() - 6);
+					name = name.replace('/', '.');
+					try {
+						Class<?> clazz = classLoader.loadClass(name);
+						if (driverClass.isAssignableFrom(clazz)) {
+							result.add(clazz);
+						}
+					} catch (ClassNotFoundException cnfe) {
+						//ignore
+					} catch (NoClassDefFoundError err) {
+						//ignore
+					}
+				}
+			}
+		} catch (Exception e) {
+			// ignore and return an empty list
+		}
+		return result.toArray(new Class<?>[result.size()]);
 	}
 
 	private void createDriverLocationEditor(Composite parent) {
 		Label driverLocationLabel = new Label(parent, SWT.NONE);
 		driverLocationLabel.setText("Driver Location: ");
 		driverLocationText = new Text(parent, SWT.BORDER);
-		driverLocationText.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT,
+		driverLocationText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				true, false));
 		driverLocationText.addModifyListener(modifyListener);
+		browseDriverLocationButton = new Button(parent, SWT.NONE);
+		browseDriverLocationButton.setText("Browse...");
+		browseDriverLocationButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		browseDriverLocationButton.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				browseForDriverLocation();
+			}
+		});
+	}
+	
+	private void browseForDriverLocation() {
+		FileDialog dialog = new FileDialog(getShell());
+		dialog.setFilterExtensions(new String[] { "*.jar" });
+		dialog.open();
+		String fileName = dialog.getFileName();
+		String path = dialog.getFilterPath();
+		if (fileName != null && path != null) {
+			driverLocationText.setText(path + File.separator + fileName);
+		}
 	}
 
 	private void createUpdateRestoreComposite(Composite parent) {
 		Composite updateRestoreComposite = new Composite(parent, SWT.NONE);
-		RowLayout layout = new RowLayout();
-		layout.marginBottom = 0;
-		layout.marginTop = 0;
-		layout.marginLeft = 0;
-		layout.marginRight = 0;
-		layout.spacing = 0;
+		GridLayout layout = new GridLayout(2, true);
+		layout.marginHeight = 0;
+		layout.marginTop = 5;
 		updateRestoreComposite.setLayout(layout);
 		saveButton = new Button(updateRestoreComposite, SWT.NONE);
 		saveButton.setText("Save");
@@ -367,6 +473,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				enableButtons(false);
 			}
 		});
+		saveButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
 		revertButton = new Button(updateRestoreComposite, SWT.NONE);
 		revertButton.setText("Revert");
 		revertButton.setEnabled(false);
@@ -381,7 +488,8 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				}
 			}
 		});
-		updateRestoreComposite.setLayoutData(new GridData(SWT.END, SWT.DEFAULT,
+		revertButton.setLayoutData(new GridData(SWT.FILL, SWT.DEFAULT, true, false));
+		updateRestoreComposite.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER,
 				true, false, 3, SWT.DEFAULT));
 	}
 
@@ -432,8 +540,8 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				getSelectedConnectionProfile().driverClass = driverNameText
 						.getText();
 			} else if (widget == driverLocationText) {
-				getSelectedConnectionProfile().driverLocation = driverLocationText
-						.getText();
+				getSelectedConnectionProfile().driverLocation = driverLocationText.getText();
+				updateBrowseDriverClassButton();
 			} else if (widget == hibernateDialectCombo) {
 				getSelectedConnectionProfile().dialect = hibernateDialectCombo
 						.getText();
@@ -441,5 +549,17 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 			enableButtons(true);
 		}
 	};
+	
+	private void updateBrowseDriverClassButton() {
+		String driverLocation = driverLocationText.getText();
+		if (driverLocation != null) {
+			File file = new File(driverLocation);
+			if (file.exists()) {
+				browseDriverClassButton.setEnabled(true);
+				return;
+			}
+		}
+		browseDriverClassButton.setEnabled(false);
+	}
 
 }

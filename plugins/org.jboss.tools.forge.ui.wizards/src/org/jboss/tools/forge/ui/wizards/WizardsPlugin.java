@@ -2,13 +2,15 @@ package org.jboss.tools.forge.ui.wizards;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 public class WizardsPlugin extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = "org.jboss.tools.forge.ui.wizards"; 
-
+	public static final String CLASS_ICON = "WizardsPlugin.classIcon";
+	
 	private static WizardsPlugin plugin;
 	
 	public void start(BundleContext context) throws Exception {
@@ -19,6 +21,10 @@ public class WizardsPlugin extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+	}
+	
+	public void initializeImageRegistry(ImageRegistry reg) {
+		reg.put(CLASS_ICON, imageDescriptorFromPlugin(PLUGIN_ID, "icons/class.gif"));
 	}
 
 	public static WizardsPlugin getDefault() {
