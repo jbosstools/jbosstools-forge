@@ -2,7 +2,13 @@ package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.util.List;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.result.Failed;
@@ -103,35 +109,10 @@ public class ForgeWizard extends MutableWizard {
 
 	@Override
 	public boolean performFinish() {
-		try {
-			for (IWizardPage wizardPage : getPages()) {
-				UICommand cmd = ((ForgeWizardPage) wizardPage).getUICommand();
-				Result result = cmd.execute(uiContext);
-				if (result != null) {
-					String message = result.getMessage();
-					if (message != null) {
-						displayMessage("Forge Command", message,
-								NotificationType.INFO);
-					}
-					if (result instanceof Failed) {
-						Throwable exception = ((Failed) result).getException();
-						if (exception != null) {
-							ForgeUIPlugin.log(exception);
-							displayMessage("Forge Command",
-									String.valueOf(exception.getMessage()),
-									NotificationType.ERROR);
-						}
-					}
-				}
-			}
-			EventBus.INSTANCE.fireWizardFinished(uiContext);
-			return true;
-		} catch (Exception e) {
-			ForgeUIPlugin.log(e);
-			displayMessage("Forge Command", String.valueOf(e.getMessage()),
-					NotificationType.ERROR);
-			return false;
-		}
+		FinishJob finishJob = new FinishJob("Finishing '"
+				+ initialCommand.getMetadata().getName() + "'");
+		finishJob.schedule();
+		return true;
 	}
 
 	protected void displayMessage(final String title, final String message,
@@ -152,5 +133,59 @@ public class ForgeWizard extends MutableWizard {
 
 	protected UIContextImpl getUIContext() {
 		return uiContext;
+	}
+
+	/**
+	 * Called when Finish is called
+	 * 
+	 * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
+	 * 
+	 */
+	private class FinishJob extends WorkspaceJob {
+		public FinishJob(String name) {
+			super(name);
+			// TODO: Check if rule is correct
+			setRule(MavenPlugin.getProjectConfigurationManager().getRule());
+		}
+
+		@Override
+		public IStatus runInWorkspace(IProgressMonitor monitor)
+				throws CoreException {
+			try {
+				monitor.beginTask("Executing wizard pages", getPageCount());
+				for (IWizardPage wizardPage : getPages()) {
+					UICommand cmd = ((ForgeWizardPage) wizardPage)
+							.getUICommand();
+					Result result = cmd.execute(uiContext);
+					if (result != null) {
+						String message = result.getMessage();
+						if (message != null) {
+							displayMessage("Forge Command", message,
+									NotificationType.INFO);
+						}
+						if (result instanceof Failed) {
+							Throwable exception = ((Failed) result)
+									.getException();
+							if (exception != null) {
+								ForgeUIPlugin.log(exception);
+								displayMessage("Forge Command",
+										String.valueOf(exception.getMessage()),
+										NotificationType.ERROR);
+							}
+						}
+					}
+					monitor.worked(1);
+				}
+				EventBus.INSTANCE.fireWizardFinished(uiContext);
+				return Status.OK_STATUS;
+			} catch (Exception ex) {
+				ForgeUIPlugin.log(ex);
+				displayMessage("Forge Command",
+						String.valueOf(ex.getMessage()), NotificationType.ERROR);
+				return Status.CANCEL_STATUS;
+			} finally {
+				monitor.done();
+			}
+		}
 	}
 }
