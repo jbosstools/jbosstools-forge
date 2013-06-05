@@ -89,11 +89,11 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 
 	public static ImageDescriptor getForgeLogo() {
 		return imageDescriptorFromPlugin(ForgeUIPlugin.PLUGIN_ID,
-				"icons/forge.png");
+				"icons/page.gif");
 	}
 
 	public static ImageDescriptor getForgeIcon() {
 		return imageDescriptorFromPlugin(ForgeUIPlugin.PLUGIN_ID,
-				"icons/jbossforge_icon_16px.png");
+				"icons/icon.png");
 	}
 }
