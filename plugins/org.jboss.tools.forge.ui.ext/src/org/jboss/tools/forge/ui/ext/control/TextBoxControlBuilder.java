@@ -53,7 +53,7 @@ public class TextBoxControlBuilder extends ControlBuilder {
 						txt.getText());
 			}
 		});
-		setupAutoCompleteForText(input, txt);
+		setupAutoCompleteForText(page.getUIContext(), input, txt);
 		return txt;
 	}
 

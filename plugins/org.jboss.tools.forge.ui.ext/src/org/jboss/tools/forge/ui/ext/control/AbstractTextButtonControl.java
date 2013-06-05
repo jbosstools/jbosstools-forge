@@ -78,7 +78,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder {
 				browseButtonPressed(page, input, containerText);
 			}
 		});
-		setupAutoCompleteForText(input, containerText);
+		setupAutoCompleteForText(page.getUIContext(), input, containerText);
 		return container;
 	}
 

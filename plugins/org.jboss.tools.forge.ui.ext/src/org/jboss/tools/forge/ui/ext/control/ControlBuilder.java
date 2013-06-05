@@ -18,12 +18,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.ui.hints.InputType;
-import org.jboss.forge.addon.ui.input.HasCompleter;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UICompleter;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.proxy.Proxies;
 import org.jboss.tools.forge.ui.ext.autocomplete.InputComponentProposalProvider;
+import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**
@@ -103,32 +103,27 @@ public abstract class ControlBuilder {
 		control.setEnabled(enabled);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected ContentProposalAdapter setupAutoCompleteForText(
-			InputComponent<?, Object> input, Text text) {
+			UIContextImpl context, InputComponent<?, Object> input, Text text) {
 		ContentProposalAdapter result = null;
-		if (input instanceof HasCompleter) {
-			UICompleter<Object> completer = ((HasCompleter<?, Object>) input)
-					.getCompleter();
-			if (completer != null) {
-				ControlDecoration dec = new ControlDecoration(text, SWT.TOP
-						| SWT.LEFT);
-				// Add lightbulb
-				FieldDecoration completerIndicator = FieldDecorationRegistry
-						.getDefault().getFieldDecoration(
-								FieldDecorationRegistry.DEC_CONTENT_PROPOSAL);
-				dec.setImage(completerIndicator.getImage());
-				dec.setDescriptionText(completerIndicator.getDescription());
+		UICompleter<Object> completer = InputComponents.getCompleterFor(input);
+		if (completer != null) {
+			ControlDecoration dec = new ControlDecoration(text, SWT.TOP
+					| SWT.LEFT);
+			// Add lightbulb
+			FieldDecoration completerIndicator = FieldDecorationRegistry
+					.getDefault().getFieldDecoration(
+							FieldDecorationRegistry.DEC_CONTENT_PROPOSAL);
+			dec.setImage(completerIndicator.getImage());
+			dec.setDescriptionText(completerIndicator.getDescription());
 
-				// Register auto-complete
-				KeyStroke activationKeyStroke = KeyStroke.getInstance(
-						SWT.CONTROL, SWT.SPACE);
-				result = new ContentProposalAdapter(text,
-						new TextContentAdapter(),
-						new InputComponentProposalProvider(input, completer),
-						activationKeyStroke, null);
-				result.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
-			}
+			// Register auto-complete
+			KeyStroke activationKeyStroke = KeyStroke.getInstance(SWT.CONTROL,
+					SWT.SPACE);
+			result = new ContentProposalAdapter(text, new TextContentAdapter(),
+					new InputComponentProposalProvider(context, input,
+							completer), activationKeyStroke, null);
+			result.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		}
 		return result;
 	}
