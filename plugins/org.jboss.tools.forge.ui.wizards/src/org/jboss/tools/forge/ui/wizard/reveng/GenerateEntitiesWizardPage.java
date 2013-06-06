@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizardPage;
+import org.jboss.tools.forge.ui.wizard.project.NewProjectWizard;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
@@ -115,6 +116,17 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		newProjectButton.setText("New...");
 		newProjectButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false));
+		newProjectButton.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				openNewProjectWizard();
+			}
+		});
+	}
+	
+	private void openNewProjectWizard() {
+		WizardDialog dialog = new WizardDialog(getShell(), new NewProjectWizard());
+		dialog.open();
 	}
 
 	private void updateEntityPackageText() {
