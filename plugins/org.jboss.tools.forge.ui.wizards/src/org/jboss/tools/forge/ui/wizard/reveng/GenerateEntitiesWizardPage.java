@@ -141,6 +141,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				projectNameCombo.add(name);
 				if (name.equals(selectedProjectName)) {
 					projectNameCombo.setText(name);
+					updateEntityPackageText();
 					return;
 				}
 			}
@@ -149,6 +150,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	}
 
 	private void updateEntityPackageText() {
+		if (entityPackageText == null) return;
 		try {
 			String projectName = projectNameCombo.getText();
 			if (projectName == null || "".equals(projectName))
@@ -179,6 +181,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 						entityPackageText.getText());
 			}
 		});
+		updateEntityPackageText();
 		browsePackageButton = new Button(parent, SWT.NONE);
 		browsePackageButton.setText("Browse...");
 		browsePackageButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
