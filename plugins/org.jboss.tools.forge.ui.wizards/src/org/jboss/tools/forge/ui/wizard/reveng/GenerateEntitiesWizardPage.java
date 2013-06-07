@@ -141,6 +141,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 				projectNameCombo.add(name);
 				if (name.equals(selectedProjectName)) {
 					projectNameCombo.setText(name);
+					getWizardDescriptor().put(PROJECT_NAME, name);
 					updateEntityPackageText();
 					return;
 				}
@@ -162,7 +163,9 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 			File pomFile = project.getFile("pom.xml").getLocation().toFile();
 			Model model = MavenPlugin.getMavenModelManager().readMavenModel(
 					pomFile);
-			entityPackageText.setText(model.getGroupId() + ".model");
+			String entityPackage = model.getGroupId() + ".model";
+			entityPackageText.setText(entityPackage);
+			getWizardDescriptor().put(ENTITY_PACKAGE, entityPackage);
 		} catch (CoreException e) {
 			WizardsPlugin.log(e);
 		}
