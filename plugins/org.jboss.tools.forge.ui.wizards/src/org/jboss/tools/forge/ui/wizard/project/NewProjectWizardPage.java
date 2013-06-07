@@ -32,11 +32,13 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 	final static String CREATE_MAIN = "NewProjectWizardPage.createMain";
 	final static String FINAL_NAME = "NewProjectWizardPage.finalName";
 	
-	private final static String defaultProvider = "HIBERNATE";
-	private final static String defaultContainer = "JBOSS_AS7"; 
+	private final static String DEFAULT_PROVIDER = "HIBERNATE";
+	private final static String DEFAULT_CONTAINER = "JBOSS_AS7"; 
+	private final static String INITIAL_LOCATION = 
+			ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
 
 	private Button setupPersistenceButton;
-	private Text projectNameText, topLevelPackageText;
+	private Text projectNameText, topLevelPackageText, projectLocationText;
 	private Combo projectTypeCombo, providerCombo, containerCombo;
 	private boolean projectNameAndPackageNameAreSynchronized = true;
 	
@@ -78,7 +80,7 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 		for (ProviderType type : ProviderType.values()) {
 			providerCombo.add(type.name());
 		}
-		providerCombo.setText(defaultProvider);
+		providerCombo.setText(DEFAULT_PROVIDER);
 		providerCombo.setEnabled(setupPersistenceButton.getSelection());
 		Label filler = new Label(parent, SWT.NONE);
 		filler.setText("");
@@ -99,7 +101,7 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 		for (ContainerType type : ContainerType.values()) {
 			containerCombo.add(type.name());
 		}
-		containerCombo.setText(defaultContainer);
+		containerCombo.setText(DEFAULT_CONTAINER);
 		containerCombo.setEnabled(setupPersistenceButton.getSelection());
 		Label filler = new Label(parent, SWT.NONE);
 		filler.setText("");
@@ -132,11 +134,12 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 	private void createLocationEditor(Composite parent) {
 		Label projectLocationLabel = new Label(parent, SWT.NONE);
 		projectLocationLabel.setText("Project Location: ");
-		final Text projectLocationText = new Text(parent, SWT.BORDER);
+		projectLocationText = new Text(parent, SWT.BORDER);
 		GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
 		gridData.widthHint = 250;
 		projectLocationText.setLayoutData(gridData);
-		projectLocationText.setText(getInitialLocation());
+		projectLocationText.setText(INITIAL_LOCATION);
+		getWizardDescriptor().put(PROJECT_LOCATION, INITIAL_LOCATION);
 		projectLocationText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -159,20 +162,10 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 	
 	private void updateProjectName() {
 		String projectName = projectNameText.getText();
-		getWizardDescriptor().put(PROJECT_LOCATION, projectName);
+		getWizardDescriptor().put(PROJECT_NAME, projectName);
 		if (projectNameAndPackageNameAreSynchronized) {
 			topLevelPackageText.setText("com.example." + projectName);
 		}
-		
-	}
-	
-	private String getInitialLocation() {
-		String result = (String)getWizardDescriptor().get(PROJECT_LOCATION);
-		if (result == null) {
-			result = ResourcesPlugin.getWorkspace().getRoot().getLocation().toOSString();
-			getWizardDescriptor().put(PROJECT_LOCATION, result);
-		}
-		return result;
 	}
 	
 	private void createTopLevelPackageEditor(Composite parent) {
@@ -233,7 +226,7 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 			projectTypeCombo.add(type.getName());
 		}
 		projectTypeCombo.setText("");
-		getWizardDescriptor().put(PROJECT_TYPE, NONE);
+		getWizardDescriptor().put(PROJECT_TYPE, ProjectType.NONE);
 	}
 	
 	private void createMainClassEditor(Composite parent) {
@@ -286,6 +279,7 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 		GridData gridData = new GridData(SWT.LEFT, SWT.CENTER, true, false, 3, 1);
 		setupPersistenceButton.setLayoutData(gridData);
 		setupPersistenceButton.setSelection(true);
+		getWizardDescriptor().put(SETUP_PERSISTENCE, true);
 		setupPersistenceButton.addSelectionListener(new SelectionAdapter() {			
 			@Override
 			public void widgetSelected(SelectionEvent e) {

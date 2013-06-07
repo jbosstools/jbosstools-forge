@@ -26,13 +26,13 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 	}
 	
 	private void doInit(IWorkbench workbench, final IStructuredSelection sel) {
+		initializeProject(sel);
 		Runnable runner = new Runnable() {
 			@Override
 			public void run() {
 				if (!isHibernateToolsPluginAvailable()) {
 					new HibernateToolsInstaller().install(getShell());
 				}
-				initializeProject(sel);
 			}			
 		};
 		new Thread(runner).start();

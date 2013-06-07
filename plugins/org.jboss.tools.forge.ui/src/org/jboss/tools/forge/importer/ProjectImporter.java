@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
@@ -20,10 +21,16 @@ public class ProjectImporter {
 	
 	private String baseDirPath;
 	private String projectName;
+	private IJobChangeListener listener;
 	
-	public ProjectImporter(String baseDirPath, String projectName) {
+	public ProjectImporter(String baseDirPath, String projectName, IJobChangeListener listener) {
 		this.baseDirPath = baseDirPath;
 		this.projectName = projectName;
+		this.listener = listener;
+	}
+	
+	public ProjectImporter(String baseDirPath, String projectName) {
+		this(baseDirPath, projectName, null);
 	}
 	
 	public void importProject() {		
@@ -41,6 +48,9 @@ public class ProjectImporter {
 	        }
 	      };
 	      job.setRule(MavenPlugin.getProjectConfigurationManager().getRule());
+	      if (listener != null) {
+	    	  job.addJobChangeListener(listener);
+	      }
 	      job.schedule();
 	}
 	
@@ -63,5 +73,5 @@ public class ProjectImporter {
 		result.add(createMavenProjectInfo());
 		return result;
 	}
-
+	
 }

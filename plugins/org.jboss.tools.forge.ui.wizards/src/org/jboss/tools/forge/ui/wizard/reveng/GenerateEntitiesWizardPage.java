@@ -1,5 +1,7 @@
 package org.jboss.tools.forge.ui.wizard.reveng;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -92,17 +94,8 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		projectNameCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
 		projectNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
 				false));
-		IProject[] allProjects = ResourcesPlugin.getWorkspace().getRoot()
-				.getProjects();
-		for (IProject project : allProjects) {
-			if (WizardsHelper.isJPAProject(project)) {
-				projectNameCombo.add(project.getName());
-			}
-		}
 		String projectName = (String) getWizardDescriptor().get(PROJECT_NAME);
-		if (projectName != null) {
-			projectNameCombo.setText(projectName);
-		}
+		updateProjectComboBox(projectName);
 		projectNameCombo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -125,8 +118,34 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 	}
 	
 	private void openNewProjectWizard() {
-		WizardDialog dialog = new WizardDialog(getShell(), new NewProjectWizard());
+		PropertyChangeListener listener = new PropertyChangeListener() {			
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				updateProjectComboBox((String)evt.getNewValue());
+			}
+		};
+		WizardDialog dialog = new WizardDialog(
+				getShell(), 
+				new NewProjectWizard(listener));
 		dialog.open();
+	}
+	
+	private void updateProjectComboBox(String selectedProjectName) {
+		String currentSelection = projectNameCombo.getText();
+		projectNameCombo.removeAll();
+		IProject[] allProjects = ResourcesPlugin.getWorkspace().getRoot()
+				.getProjects();
+		for (IProject project : allProjects) {
+			if (WizardsHelper.isJPAProject(project)) {
+				String name = project.getName();
+				projectNameCombo.add(name);
+				if (name.equals(selectedProjectName)) {
+					projectNameCombo.setText(name);
+					return;
+				}
+			}
+		}
+		projectNameCombo.setText(currentSelection);
 	}
 
 	private void updateEntityPackageText() {

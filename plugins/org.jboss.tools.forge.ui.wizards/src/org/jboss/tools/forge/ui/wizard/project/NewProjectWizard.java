@@ -1,12 +1,26 @@
 package org.jboss.tools.forge.ui.wizard.project;
 
-import org.eclipse.core.resources.ResourcesPlugin;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.importer.ProjectImporter;
+import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
 
 public class NewProjectWizard extends AbstractForgeWizard {
 
 	private NewProjectWizardPage newProjectWizardPage = new NewProjectWizardPage();
+	private PropertyChangeListener listener;
+	
+	public NewProjectWizard(PropertyChangeListener listener) {
+		this();
+		this.listener = listener;
+	}
 
 	public NewProjectWizard() {
 		setWindowTitle("Create New Project");
@@ -19,9 +33,6 @@ public class NewProjectWizard extends AbstractForgeWizard {
 
 	@Override
 	public void doExecute() {
-//		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
-//		runtime.sendCommand("cd " + getProjectLocation());
-//		runtime.sendCommand("new-project --named " + getProjectName());
 		executeNewProject();
 		if (needsPersistenceSetup()) {
 			executePersistenceSetup();
@@ -32,7 +43,7 @@ public class NewProjectWizard extends AbstractForgeWizard {
 		String command = "persistence setup ";
 		command += " --provider " + getProviderName();
 		command += " --container " + getContainerName();
-		System.out.println(command);
+		ForgeHelper.getDefaultRuntime().sendCommand(command);
 	}
 	
 	private String getProviderName() {
@@ -46,15 +57,15 @@ public class NewProjectWizard extends AbstractForgeWizard {
 	private void executeNewProject() {
 		String command = "new-project";
 		command += " --named " + getProjectName();
-		command += " --projectFolder " + getProjectLocation();
+		command += " --projectFolder " + getProjectFolder();
 		String topLevelPackage = getTopLevelPackage();
 		if (topLevelPackage != null) {
 			command += " --topLevelPackage " + topLevelPackage;
 		}
-//		String type = getProjectType();
-//		if (type != null) {
-//			command += " --type " + type;
-//		}
+		String type = getProjectType();
+		if (type != null) {
+			command += " --type " + type;
+		}
 		if (createMain()) {
 			command += " --createMain ";
 		}
@@ -62,7 +73,7 @@ public class NewProjectWizard extends AbstractForgeWizard {
 		if (finalName != null) {
 			command += " --finalName " + finalName;
 		}
-		System.out.println(command);
+		ForgeHelper.getDefaultRuntime().sendCommand(command);
 	}
 	
 	private String getFinalName() {
@@ -79,11 +90,11 @@ public class NewProjectWizard extends AbstractForgeWizard {
 		}
 	}
 	
-//	private String getProjectType() {
-//		Object obj = getWizardDescriptor().get(NewProjectWizardPage.PROJECT_TYPE);
-//		return notEmptyString(
-//				(String)obj);
-//	}
+	private String getProjectType() {
+		Object obj = getWizardDescriptor().get(NewProjectWizardPage.PROJECT_TYPE);
+		return notEmptyString(
+				((ProjectType)obj).getName());
+	}
 	
 	private String getTopLevelPackage() {
 		return notEmptyString(
@@ -109,10 +120,23 @@ public class NewProjectWizard extends AbstractForgeWizard {
 
 	@Override
 	public void doRefresh() {
-		new ProjectImporter(
-				getProjectLocation(), 
-				getProjectName())
-		.importProject();
+		IJobChangeListener jobChangeListener = new JobChangeAdapter() {
+			@Override
+			public void done(IJobChangeEvent event) {
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						listener.propertyChange(new PropertyChangeEvent(this, null, null, getProjectName()));
+					}					
+				});
+			}
+		};
+		ProjectImporter importer = 
+				new ProjectImporter(
+						getProjectLocation(), 
+						getProjectName(),
+						jobChangeListener);
+		importer.importProject();
 	}
 	
 	@Override
@@ -121,15 +145,14 @@ public class NewProjectWizard extends AbstractForgeWizard {
 	}
 	
 	private String getProjectLocation() {
-		return ResourcesPlugin
-				.getWorkspace()
-				.getRoot()
-				.getLocation()
-				.toOSString();
+		return (String)getWizardDescriptor().get(NewProjectWizardPage.PROJECT_LOCATION);
 	}
 	
 	private String getProjectName() {
 		return (String)getWizardDescriptor().get(NewProjectWizardPage.PROJECT_NAME);
 	}
 	
+	private String getProjectFolder() {
+		return getProjectLocation() + File.separator + getProjectName();
+	}
 }
