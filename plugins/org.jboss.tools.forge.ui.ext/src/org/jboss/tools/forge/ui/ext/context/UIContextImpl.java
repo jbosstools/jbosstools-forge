@@ -15,6 +15,7 @@ import java.util.List;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -60,15 +61,25 @@ public class UIContextImpl extends AbstractUIContext {
 			} else {
 				for (Object object : selectedElements) {
 					if (object instanceof IResource) {
-						File file = ((IResource) object).getLocation().toFile();
-						result.add(Proxies.unwrap(converter.convert(file)));
-					} else if (object instanceof IJavaElement) {
-						File file;
-						try {
-							file = ((IJavaElement) object)
-									.getCorrespondingResource().getLocation()
-									.toFile();
+						IPath location = ((IResource) object).getLocation();
+						if (location != null) {
+							File file = location.toFile();
 							result.add(Proxies.unwrap(converter.convert(file)));
+						}
+					} else if (object instanceof IJavaElement) {
+						try {
+							IJavaElement javaElem = (IJavaElement) object;
+							IResource correspondingResource = javaElem
+									.getCorrespondingResource();
+							if (correspondingResource != null) {
+								IPath location = correspondingResource
+										.getLocation();
+								if (location != null) {
+									File file = location.toFile();
+									result.add(Proxies.unwrap(converter
+											.convert(file)));
+								}
+							}
 						} catch (JavaModelException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
