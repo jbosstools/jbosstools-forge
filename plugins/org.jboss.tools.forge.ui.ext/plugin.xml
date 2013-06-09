@@ -27,7 +27,7 @@
             commandId="org.jboss.tools.forge.ui.command.runForgeCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="CTRL+5">
+            sequence="M1+5">
       </key>
    </extension>
     <extension
