@@ -27,6 +27,7 @@ import org.jboss.forge.furnace.addons.Addon;
 import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UIContextImpl extends AbstractUIContext {
@@ -81,11 +82,8 @@ public class UIContextImpl extends AbstractUIContext {
 								}
 							}
 						} catch (JavaModelException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							ForgeUIPlugin.log(e);
 						}
-					} else {
-						System.err.println("");
 					}
 				}
 			}
