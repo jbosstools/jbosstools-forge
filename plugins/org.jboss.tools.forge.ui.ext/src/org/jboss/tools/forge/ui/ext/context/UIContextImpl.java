@@ -88,10 +88,7 @@ public class UIContextImpl extends AbstractUIContext {
 				}
 			}
 		}
-		UISelectionImpl<?> uiSelection = null;
-		if (!result.isEmpty()) {
-			uiSelection = new UISelectionImpl(result, selection);
-		}
+		UISelectionImpl<?> uiSelection = new UISelectionImpl(result, selection);
 		return new UIContextImpl(uiSelection);
 	}
 

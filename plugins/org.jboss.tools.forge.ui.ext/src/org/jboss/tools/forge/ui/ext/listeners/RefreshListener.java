@@ -19,9 +19,6 @@ public enum RefreshListener implements WizardListener {
 	@Override
 	public void onFinish(UIContextImpl context) {
 		UISelectionImpl<?> initialSelection = context.getInitialSelection();
-		if (initialSelection == null) {
-			return;
-		}
 		IResource resource = initialSelection.getResource();
 		if (resource != null && resource.getProject() != null)
 			try {

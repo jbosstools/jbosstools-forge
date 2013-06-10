@@ -24,14 +24,13 @@ public class UISelectionImpl<T> implements UISelection<T> {
 
 	public UISelectionImpl(List<T> selection, IStructuredSelection ss) {
 		Assert.notNull(selection, "Selection must not be null.");
-		Assert.isTrue(!selection.isEmpty(), "Selection must not be empty.");
 		this.selection = Collections.unmodifiableList(selection);
 		this.resource = extractSelection(ss);
 	}
 
 	@Override
 	public T get() {
-		return selection.get(0);
+		return selection.isEmpty() ? null : selection.get(0);
 	}
 
 	@Override
@@ -42,6 +41,11 @@ public class UISelectionImpl<T> implements UISelection<T> {
 	@Override
 	public int size() {
 		return selection.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return selection.isEmpty();
 	}
 
 	public IResource getResource() {
