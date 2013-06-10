@@ -173,10 +173,4 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 		setPageComplete(isPageComplete());
 	}
 	
-	private IProject getProject(String projectName) {
-		return ResourcesPlugin
-				.getWorkspace()
-				.getRoot()
-				.getProject(projectName);
-	}
 }

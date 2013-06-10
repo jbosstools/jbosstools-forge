@@ -1,5 +1,6 @@
 package org.jboss.tools.forge.ui.wizard.scaffold;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,7 +16,6 @@ import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 public class ScaffoldWizard extends AbstractForgeWizard {
 
 	private ScaffoldProjectWizardPage scaffoldProjectWizardPage = new ScaffoldProjectWizardPage();
-	private ScaffoldEntitiesWizardPage scaffoldEntitiesWizardPage = new ScaffoldEntitiesWizardPage();
 
 	boolean setupNeeded = false;
 	private boolean busy = false;
@@ -31,13 +31,13 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 	}
 	
 	private void doInit(IWorkbench workbench, final IStructuredSelection sel) {
+		initializeProject(sel);
 		Runnable runner = new Runnable() {
 			@Override
 			public void run() {
 				if (!isAngularJsPluginAvailable()) {
 					new AngularJsInstaller().install(getShell());
 				}
-				initializeProject(sel);
 			}			
 		};
 		new Thread(runner).start();
@@ -68,7 +68,6 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 	@Override
 	public void addPages() {
 		addPage(scaffoldProjectWizardPage);
-		addPage(scaffoldEntitiesWizardPage);
 	}
 
 	@Override
@@ -102,29 +101,19 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 	
 	@SuppressWarnings("unchecked")
 	private List<String> getEntityNames() {
-		return (List<String>)getWizardDescriptor().get(ScaffoldEntitiesWizardPage.ENTITY_NAMES);
+		List<String> result = (List<String>)getWizardDescriptor().get(ScaffoldProjectWizardPage.ENTITY_NAMES);
+		if (result == null) {
+			result = Collections.EMPTY_LIST;
+		}
+		return result;
 	}
 	
 	String getProjectLocation() {
 		return getProject(getProjectName()).getLocation().toOSString();
 	}
 	
-	void handleProjectChange() {
-		if (getWizardDescriptor().get(ScaffoldProjectWizardPage.SCAFFOLD_TYPE) != null) {
-			setBusy(true);
-			checkIfSetupNeeded();
-			scaffoldEntitiesWizardPage.handleProjectChange();
-		}
-	}
-	
-	void handleScaffoldTypeChange() {
-		if (getProjectName() != null && getProject(getProjectName()) != null) {
-			setBusy(true);
-			checkIfSetupNeeded();
-		}
-	}
-	
-	private void checkIfSetupNeeded() {
+	void checkIfSetupNeeded() {
+		setBusy(true);
 		new ScaffoldWizardHelper(this).checkIfSetupNeeded();
 	}
 	

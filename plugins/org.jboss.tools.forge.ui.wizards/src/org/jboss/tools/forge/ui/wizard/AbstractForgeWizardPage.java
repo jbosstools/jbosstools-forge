@@ -2,6 +2,8 @@ package org.jboss.tools.forge.ui.wizard;
 
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
@@ -31,4 +33,11 @@ public abstract class AbstractForgeWizardPage extends WizardPage {
 		return getWizard().getWizardDescriptor();
 	}
 	
+	protected IProject getProject(String projectName) {
+		return ResourcesPlugin
+				.getWorkspace()
+				.getRoot()
+				.getProject(projectName);
+	}
+
 }
