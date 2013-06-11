@@ -11,6 +11,7 @@ import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.furnace.ContainerStatus;
 import org.jboss.forge.furnace.Furnace;
 import org.jboss.forge.furnace.addons.AddonRegistry;
+import org.jboss.forge.furnace.lock.LockManager;
 import org.jboss.forge.furnace.services.ExportedInstance;
 
 /**
@@ -63,5 +64,9 @@ public enum FurnaceService {
 					service);
 		}
 		return (exportedInstance == null) ? null : exportedInstance.get();
+	}
+
+	public LockManager getLockManager() {
+		return forge.getLockManager();
 	}
 }

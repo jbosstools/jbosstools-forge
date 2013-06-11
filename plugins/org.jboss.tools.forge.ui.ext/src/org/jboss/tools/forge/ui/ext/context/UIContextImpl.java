@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -24,7 +25,10 @@ import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
 import org.jboss.forge.furnace.addons.Addon;
+import org.jboss.forge.furnace.addons.AddonFilter;
 import org.jboss.forge.furnace.addons.AddonRegistry;
+import org.jboss.forge.furnace.lock.LockManager;
+import org.jboss.forge.furnace.lock.LockMode;
 import org.jboss.forge.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
@@ -92,17 +96,35 @@ public class UIContextImpl extends AbstractUIContext {
 		return new UIContextImpl(uiSelection);
 	}
 
-	private static <T> Class<T> locateNativeClass(Class<T> type) {
-		Class<T> result = type;
-		AddonRegistry registry = FurnaceService.INSTANCE.getAddonRegistry();
-		for (Addon addon : registry.getAddons()) {
-			try {
-				ClassLoader classLoader = addon.getClassLoader();
-				result = (Class<T>) classLoader.loadClass(type.getName());
-				break;
-			} catch (ClassNotFoundException e) {
-			}
-		}
+	private static <T> Class<T> locateNativeClass(final Class<T> type) {
+		LockManager manager = FurnaceService.INSTANCE.getLockManager();
+		Class<T> result = manager.performLocked(LockMode.READ,
+				new Callable<Class<T>>() {
+
+					@Override
+					public Class<T> call() throws Exception {
+						AddonRegistry registry = FurnaceService.INSTANCE
+								.getAddonRegistry();
+						Class<T> result = type;
+						for (Addon addon : registry
+								.getAddons(new AddonFilter() {
+									@Override
+									public boolean accept(Addon addon) {
+										return addon.getStatus().isStarted();
+									}
+								})) {
+							try {
+								ClassLoader classLoader = addon
+										.getClassLoader();
+								result = (Class<T>) classLoader.loadClass(type
+										.getName());
+								break;
+							} catch (ClassNotFoundException e) {
+							}
+						}
+						return result;
+					}
+				});
 		return result;
 	}
 
