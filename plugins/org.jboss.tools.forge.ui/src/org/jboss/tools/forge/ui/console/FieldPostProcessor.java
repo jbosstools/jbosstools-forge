@@ -10,10 +10,13 @@ import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 
@@ -32,13 +35,24 @@ public class FieldPostProcessor implements ForgeCommandPostProcessor {
 				try {
 					IType type = ((ICompilationUnit)javaElement).getTypes()[0];
 					IField field = getFieldToPostProcess(par, type);
+					IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();
 					if (field != null) {
 						ISourceRange sourceRange = field.getSourceRange();
-						IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();
 						IEditorPart editorPart = IDE.openEditor(workbenchPage, file);
 						if (sourceRange != null && editorPart != null && editorPart instanceof ITextEditor) {
 							((ITextEditor)editorPart).selectAndReveal(sourceRange.getOffset(), sourceRange.getLength());
 						}
+					}
+					IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
+					if (projectExplorer != null && projectExplorer instanceof ISetSelectionTarget) {
+						((ISetSelectionTarget)projectExplorer).selectReveal(new StructuredSelection(file));
+					} 
+					IViewPart packageExplorer = workbenchPage.findView("org.eclipse.jdt.ui.PackageExplorer"); 
+					if (packageExplorer == null && projectExplorer == null) {
+						packageExplorer = workbenchPage.showView("org.eclipse.jdt.ui.PackageExplorer");
+					} 
+					if (packageExplorer != null && packageExplorer instanceof ISetSelectionTarget) {
+						((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(file));
 					}
 				} catch (JavaModelException e) {
 					ForgeUIPlugin.log(e);

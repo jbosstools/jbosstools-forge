@@ -30,6 +30,7 @@ public class ForgeCommandProcessor {
 			POST_PROCESSORS.put("field", new FieldPostProcessor());
 			POST_PROCESSORS.put("cd", new CdPostProcessor());
 			POST_PROCESSORS.put("rm", new RmPostProcessor());
+			POST_PROCESSORS.put("entity", new EntityPostProcessor());
 		}
 		return POST_PROCESSORS;
 	}
