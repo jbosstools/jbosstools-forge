@@ -103,16 +103,14 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			if (input.isRequired()) {
 				decorateRequiredField(input, control);
 			}
-
-			// Update page status
-			control.addListener(SWT.Modify, this);
-			control.addListener(SWT.DefaultSelection, this);
-			control.addListener(SWT.Selection, this);
-
-			// if a page is changed, subsequent pages should be invalidated
-			ChangeListener cl = new ChangeListener();
-			control.addListener(SWT.Modify, cl);
-			control.addListener(SWT.Selection, cl);
+			if (control instanceof Composite) {
+				Control[] children = ((Composite) control).getChildren();
+				for (Control child : children) {
+					registerListeners(child);
+				}
+			} else {
+				registerListeners(control);
+			}
 
 			componentControlEntries[i] = new ComponentControlEntry(input,
 					controlBuilder, control);
@@ -123,6 +121,18 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		setErrorMessage(null);
 		setMessage(null);
 		setControl(container);
+	}
+
+	private void registerListeners(Control control) {
+		// Update page status
+		control.addListener(SWT.Modify, this);
+		control.addListener(SWT.DefaultSelection, this);
+		control.addListener(SWT.Selection, this);
+
+		// if a page is changed, subsequent pages should be invalidated
+		ChangeListener cl = new ChangeListener();
+		control.addListener(SWT.Modify, cl);
+		control.addListener(SWT.Selection, cl);
 	}
 
 	/**
