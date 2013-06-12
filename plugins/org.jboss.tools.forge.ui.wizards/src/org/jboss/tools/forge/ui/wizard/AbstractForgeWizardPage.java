@@ -10,11 +10,13 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public abstract class AbstractForgeWizardPage extends WizardPage {
+	
+	public final String DEFAULT_MESSAGE = "Powered by JBoss Forge.";
 
 	protected AbstractForgeWizardPage(String pageName, String title,
 			ImageDescriptor titleImage) {
 		super(pageName, title, titleImage);
-		setMessage("Powered by JBoss Forge");
+		setMessage(DEFAULT_MESSAGE);
 		setImageDescriptor(WizardsPlugin.imageDescriptorFromPlugin(WizardsPlugin.PLUGIN_ID, "icons/forge.png"));
 	}
 

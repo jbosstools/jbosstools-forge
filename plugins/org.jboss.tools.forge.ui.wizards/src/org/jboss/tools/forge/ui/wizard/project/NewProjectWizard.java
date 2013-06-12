@@ -155,4 +155,5 @@ public class NewProjectWizard extends AbstractForgeWizard {
 	private String getProjectFolder() {
 		return getProjectLocation() + File.separator + getProjectName();
 	}
+	
 }

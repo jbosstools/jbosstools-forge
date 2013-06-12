@@ -44,6 +44,8 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 	
 	protected NewProjectWizardPage() {
 		super("org.jboss.tools.forge.ui.wizard.newproject", "Create New Project", null);
+		setDescription("This is the description: blablablah");
+		setMessage("Enter the project name.");
 	}
 
 	@Override
@@ -143,7 +145,7 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 		projectLocationText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				getWizardDescriptor().put(PROJECT_LOCATION, projectLocationText.getText());
+				updateProjectLocation();
 			}
 		});
 		Button projectLocationButton = new Button(parent, SWT.NONE);
@@ -159,10 +161,16 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 				String result = dialog.open();
 				if (result != null) {
 					projectLocationText.setText(result);
+					updateProjectLocation();
 				}
 			}
-		});
-		
+		});		
+	}
+	
+	private void updateProjectLocation() {
+		String projectLocation = projectLocationText.getText();
+		getWizardDescriptor().put(PROJECT_LOCATION, projectLocation);
+		setPageComplete(checkPageComplete());
 	}
 	
 	private void updateProjectName() {
@@ -171,6 +179,12 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 		if (projectNameAndPackageNameAreSynchronized) {
 			topLevelPackageText.setText("com.example." + projectName);
 		}
+		if (!checkProjectName()) {
+			setErrorMessage("The project name cannot be empty.");
+		} else {
+			setErrorMessage(null);
+		}
+		setPageComplete(checkPageComplete());
 	}
 	
 	private void createTopLevelPackageEditor(Composite parent) {
@@ -184,7 +198,9 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 		topLevelPackageText.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				getWizardDescriptor().put(TOP_LEVEL_PACKAGE, topLevelPackageText.getText());
+				String topLevelPackage = topLevelPackageText.getText();
+				getWizardDescriptor().put(TOP_LEVEL_PACKAGE, topLevelPackage);
+				setPageComplete(checkPageComplete());
 			}
 		});
 		topLevelPackageText.addKeyListener(new KeyAdapter() {			
@@ -294,6 +310,55 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 				getWizardDescriptor().put(SETUP_PERSISTENCE, selection);
 			}
 		});
+	}
+	
+	public boolean isPageComplete() {
+		return checkProjectName() && checkProjectLocation() && checkTopLevelPackage();
+	}
+	
+	private boolean checkPageComplete() {
+		if (!checkProjectName()) {
+			setErrorMessage("The project name cannot be empty.");
+			return false;
+		} 
+		if (!checkProjectLocation()) {
+			setErrorMessage("The project location cannot be empty.");
+			return false;
+		}
+		if (!checkTopLevelPackage()) {
+			setErrorMessage("The top level package cannot be empty.");
+			return false;
+		}
+		setErrorMessage(null);
+		setMessage("Push the Finish button to create the project.");
+		return true;
+	}
+	
+	private boolean checkProjectName() {
+		String projectName = (String)getWizardDescriptor().get(PROJECT_NAME);
+		if (projectName == null || "".equals(projectName)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	private boolean checkProjectLocation() {
+		String projectLocation = (String)getWizardDescriptor().get(PROJECT_LOCATION);
+		if (projectLocation == null || "".equals(projectLocation)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	private boolean checkTopLevelPackage() {
+		String topLevelPackage = (String)getWizardDescriptor().get(TOP_LEVEL_PACKAGE);
+		if (topLevelPackage == null || "".equals(topLevelPackage)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 }
