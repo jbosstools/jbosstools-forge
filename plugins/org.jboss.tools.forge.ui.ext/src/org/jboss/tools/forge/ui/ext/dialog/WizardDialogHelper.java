@@ -39,7 +39,7 @@ public final class WizardDialogHelper {
 
 	public WizardDialogHelper(Shell parentShell, IStructuredSelection selection) {
 		this.parentShell = parentShell;
-		context = UIContextImpl.createContext(selection);
+		context = new UIContextImpl(selection);
 	}
 
 	public WizardDialogHelper(Shell parentShell, UIContextImpl context) {

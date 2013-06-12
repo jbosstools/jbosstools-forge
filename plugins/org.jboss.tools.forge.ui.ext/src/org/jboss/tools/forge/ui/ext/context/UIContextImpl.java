@@ -41,12 +41,7 @@ public class UIContextImpl extends AbstractUIContext {
 		this.currentSelection = selection;
 	}
 
-	@Override
-	public UISelectionImpl<?> getInitialSelection() {
-		return currentSelection;
-	}
-
-	public static UIContextImpl createContext(IStructuredSelection selection) {
+	public UIContextImpl(IStructuredSelection selection) {
 		List<Object> selectedElements = selection == null ? Collections.EMPTY_LIST
 				: selection.toList();
 		List<Object> result = new LinkedList<Object>();
@@ -92,8 +87,12 @@ public class UIContextImpl extends AbstractUIContext {
 				}
 			}
 		}
-		UISelectionImpl<?> uiSelection = new UISelectionImpl(result, selection);
-		return new UIContextImpl(uiSelection);
+		this.currentSelection = new UISelectionImpl(result, selection);
+	}
+
+	@Override
+	public UISelectionImpl<?> getInitialSelection() {
+		return currentSelection;
 	}
 
 	private static <T> Class<T> locateNativeClass(final Class<T> type) {
