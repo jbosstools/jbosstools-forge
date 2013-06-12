@@ -41,6 +41,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	private Button editButton;
 	private ArrayList<ForgeRuntime> runtimes = null;
 	private ForgeRuntime defaultRuntime = null;
+	private boolean refreshNeeded = false;
 	
 	public ForgeInstallationsPreferencePage() {
 		super("Installed Forge Runtimes");
@@ -103,6 +104,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 				if (dialog.open() != Dialog.CANCEL) {
 					runtimes.add(new ForgeExternalRuntime(dialog.getName(), dialog.getLocation()));
 					refreshForgeInstallations();
+					refreshNeeded = true;
 				}
 			}
 		});
@@ -122,8 +124,14 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 						ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
 						dialog.initialize("Edit Forge Runtime", installation.getName(), installation.getLocation());
 						if (dialog.open() != Dialog.CANCEL) {
-							installation.setName(dialog.getName());
-							installation.setLocation(dialog.getLocation());
+							if (dialog.getName() != null && !dialog.getName().equals(installation.getName())) {
+								installation.setName(dialog.getName());
+								refreshNeeded = true;
+							}
+							if (dialog.getLocation() != null && !dialog.getLocation().equals(installation.getLocation())) {
+								installation.setLocation(dialog.getLocation());
+								refreshNeeded = true;
+							}
 							refreshForgeInstallations();
 						}
 					}
@@ -172,9 +180,10 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		runtimesTableViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(final CheckStateChangedEvent event) {
 				Object object = event.getElement();
-				if (object != null && object instanceof ForgeRuntime) {
+				if (object != null && object instanceof ForgeRuntime && !object.equals(defaultRuntime)) {
 					defaultRuntime = (ForgeRuntime)object;
 					refreshForgeInstallations();
+					refreshNeeded = true;
 				}
 			}
 		});		
@@ -276,16 +285,19 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	}	
 	
 	public boolean performOk() {
-		final boolean[] canceled = new boolean[] {false};
-		BusyIndicator.showWhile(null, new Runnable() {
-			public void run() {
-				ForgeRuntime[] runtimes = (ForgeRuntime[])runtimesTableViewer.getInput();
-				ForgeRuntime defaultRuntime = (ForgeRuntime)runtimesTableViewer.getCheckedElements()[0];
-				ForgeRuntimesPreferences.INSTANCE.setRuntimes(runtimes, defaultRuntime);
+		if (refreshNeeded) {
+			final boolean[] canceled = new boolean[] {false};
+			BusyIndicator.showWhile(null, new Runnable() {
+				public void run() {
+					ForgeRuntime[] runtimes = (ForgeRuntime[])runtimesTableViewer.getInput();
+					ForgeRuntime defaultRuntime = (ForgeRuntime)runtimesTableViewer.getCheckedElements()[0];
+					ForgeRuntimesPreferences.INSTANCE.setRuntimes(runtimes, defaultRuntime);
+					refreshNeeded = false;
+				}
+			});	
+			if(canceled[0]) {
+				return false;
 			}
-		});		
-		if(canceled[0]) {
-			return false;
 		}
 		return super.performOk();
 	}	
