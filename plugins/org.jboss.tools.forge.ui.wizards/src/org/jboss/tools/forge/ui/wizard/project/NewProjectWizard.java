@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.maven.model.Model;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
@@ -39,18 +37,23 @@ public class NewProjectWizard extends AbstractForgeWizard {
 	}
 
 	@Override
-	public void doExecute() {
-		executeNewProject();
+	public void doExecute(IProgressMonitor monitor) {
+		executeNewProject(monitor);
 		if (needsPersistenceSetup()) {
-			executePersistenceSetup();
+			executePersistenceSetup(monitor);
 		}
 	}
 	
-	private void executePersistenceSetup() {
+	@Override
+	protected int getAmountOfWorkExecute() {
+		return needsPersistenceSetup() ? 2 : 1;
+	}
+	
+	private void executePersistenceSetup(IProgressMonitor monitor) {
 		String command = "persistence setup ";
 		command += " --provider " + getProviderName();
 		command += " --container " + getContainerName();
-		ForgeHelper.getDefaultRuntime().sendCommand(command);
+		sendRuntimeCommand(command, monitor);
 	}
 	
 	private String getProviderName() {
@@ -61,7 +64,7 @@ public class NewProjectWizard extends AbstractForgeWizard {
 		return (String)getWizardDescriptor().get(NewProjectWizardPage.CONTAINER_NAME);
 	}
 	
-	private void executeNewProject() {
+	private void executeNewProject(IProgressMonitor monitor) {
 		String command = "new-project";
 		command += " --named " + getProjectName();
 		command += " --projectFolder " + getProjectFolder();
@@ -80,7 +83,7 @@ public class NewProjectWizard extends AbstractForgeWizard {
 		if (finalName != null) {
 			command += " --finalName " + finalName;
 		}
-		ForgeHelper.getDefaultRuntime().sendCommand(command);
+		sendRuntimeCommand(command, monitor);
 	}
 	
 	private String getFinalName() {
@@ -143,27 +146,40 @@ public class NewProjectWizard extends AbstractForgeWizard {
 	}
 	
 	@Override
-	public void doRefresh() {
+	public void doRefresh(IProgressMonitor monitor) {
+		importProject(getProjectLocation(), getProjectName(), monitor);
+		updateProjectConfiguration(getProject(getProjectName()), monitor);
+		updateListener(monitor);
+ 	}
+	
+	private void updateListener(IProgressMonitor monitor) {
+		monitor.setTaskName("Updating calling wizard...");
+ 	  	Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				listener.propertyChange(new PropertyChangeEvent(this, null, null, getProjectName()));
+			}
+		});
+ 	  	monitor.worked(1);
+	}
+	
+	protected void importProject(String location, String name, IProgressMonitor monitor) {
 		try {
+			monitor.setTaskName("Importing project " + getProjectName());
 			MavenPlugin.getProjectConfigurationManager().importProjects(
 					getProjectToImport(getProjectLocation(), getProjectName()), 
 				  new ProjectImportConfiguration(), 
 				  new NullProgressMonitor());
-			IProject project = 
-					ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName());
-      	  	MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration(
-    			  project, 
-    			  new NullProgressMonitor());
-      	  Display.getDefault().syncExec(new Runnable() {
-				@Override
-				public void run() {
-					listener.propertyChange(new PropertyChangeEvent(this, null, null, getProjectName()));
-				}
-				
-			});
+			monitor.worked(1);
 		} catch (CoreException e) {
 			WizardsPlugin.log(e);
 		}
+		
+	}
+	
+	@Override
+	protected int getAmountOfWorkRefresh() {
+		return 3;
 	}
 	
 	private MavenProjectInfo createMavenProjectInfo(String location, String name) {

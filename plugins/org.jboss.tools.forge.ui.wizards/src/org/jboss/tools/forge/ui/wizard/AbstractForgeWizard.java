@@ -9,13 +9,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
@@ -68,10 +68,14 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 		try {
 			getContainer().run(true, true, new IRunnableWithProgress() {				
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException,
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException {
-					monitor.beginTask(getStatusMessage(), IProgressMonitor.UNKNOWN);
-					execute();
+					monitor.beginTask(getStatusMessage(), getTotalAmountOfWork());
+					before(monitor);
+					execute(monitor);
+					after(monitor);
+					refresh(monitor);
+					monitor.done();
 				}
 			});
 		} catch (Exception e) {
@@ -80,11 +84,43 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 		return true;
 	}
 	
-	protected void execute() {
-		doBefore();
-		doExecute();
-		doAfter();
-		doRefresh();
+	protected int getTotalAmountOfWork() {
+		return getAmountOfWorkBefore() 
+				+ getAmountOfWorkExecute() 
+				+ getAmountOfWorkAfter() 
+				+ getAmountOfWorkRefresh();
+	}
+	
+	protected void before(IProgressMonitor monitor) {
+		SubProgressMonitor subMonitor = new SubProgressMonitor(monitor, getAmountOfWorkBefore());
+		subMonitor.beginTask("Preparing...", getAmountOfWorkBefore());
+		subMonitor.setTaskName("Preparing...");
+		doBefore(subMonitor);
+		subMonitor.done();
+	}
+	
+	protected void execute(IProgressMonitor monitor) {
+		SubProgressMonitor subMonitor = new SubProgressMonitor(monitor, getAmountOfWorkExecute());
+		subMonitor.beginTask("Executing...", getAmountOfWorkExecute());
+		subMonitor.setTaskName("Executing...");
+		doExecute(subMonitor);
+		subMonitor.done();
+	}
+	
+	protected void after(IProgressMonitor monitor) {
+		SubProgressMonitor subMonitor = new SubProgressMonitor(monitor, getAmountOfWorkAfter());
+		subMonitor.beginTask("Cleaning up...", getAmountOfWorkAfter());
+		subMonitor.setTaskName("Cleaning up...");
+		doAfter(subMonitor);
+		subMonitor.done();
+	}
+	
+	protected void refresh(IProgressMonitor monitor) {
+		SubProgressMonitor subMonitor = new SubProgressMonitor(monitor, getAmountOfWorkRefresh());
+		subMonitor.beginTask("Refreshing...", getAmountOfWorkRefresh());
+		subMonitor.setTaskName("Refreshing...");
+		doRefresh(subMonitor);
+		subMonitor.done();
 	}
 	
 	@Override
@@ -92,11 +128,17 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 		return true;
 	}
 	
-	protected void doBefore() {
-		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
-		startDir = runtime.sendCommand("pwd").trim();
+	protected String sendRuntimeCommand(String command, IProgressMonitor monitor) {
+		monitor.setTaskName("Executing '" + command + "'");
+		String result = ForgeHelper.getDefaultRuntime().sendCommand(command);
+		monitor.worked(1);
+		return result;
+	}
+	
+	protected void doBefore(IProgressMonitor monitor) {
+		startDir = sendRuntimeCommand("pwd", monitor).trim();
 		acceptDefaults = false;
-		String variables = runtime.sendCommand("set");
+		String variables = sendRuntimeCommand("set", monitor);
 		int start = variables.indexOf("ACCEPT_DEFAULTS=");
 		if (start != -1) {
 			start = start + "ACCEPT_DEFAULTS=".length();
@@ -104,14 +146,29 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 			acceptDefaults = end > start
 					&& "true".equals(variables.substring(start, end));
 		}
-		runtime.sendCommand("set ACCEPT_DEFAULTS true");
+		sendRuntimeCommand("set ACCEPT_DEFAULTS true", monitor);
 	}
 	
-	protected void doAfter() {
-		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
-		runtime.sendCommand("cd " + startDir);
-		runtime.sendCommand("set ACCEPT_DEFAULTS "
-				+ (acceptDefaults ? "true" : "false"));
+	protected int getAmountOfWorkBefore() {
+		return 3;
+	}
+	
+	protected void doAfter(IProgressMonitor monitor) {	
+		sendRuntimeCommand("cd " + startDir, monitor);
+		sendRuntimeCommand("set ACCEPT_DEFAULTS "
+				+ (acceptDefaults ? "true" : "false"), monitor);
+	}
+	
+	protected int getAmountOfWorkAfter() {
+		return 2;
+	}
+	
+	protected int getAmountOfWorkExecute() {
+		return 1;
+	}
+	
+	protected int getAmountOfWorkRefresh() {
+		return 1;
 	}
 	
 	protected IProject getProject(String projectName) {
@@ -121,16 +178,20 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 				.getProject(projectName);
 	}
 
-	protected void refreshResource(IResource project) {
+	protected void refreshResource(IResource project, IProgressMonitor monitor) {
 		try {
+			monitor.setTaskName("Refreshing resource " + project.getName());
 			project.refreshLocal(IResource.DEPTH_INFINITE, null);
+			monitor.worked(1);
 		} catch (CoreException e) {
 			WizardsPlugin.log(e);
 		}
 	}
 	
-	protected void updateProjectConfiguration(IProject project) {
+	protected void updateProjectConfiguration(IProject project, IProgressMonitor monitor) {
+		monitor.setTaskName("Updating configuration of project " + project.getName());
 		ProjectConfigurationUpdater.updateProject(project);
+		monitor.worked(1);
 	}
 	
 	public Map<Object, Object> getWizardDescriptor() {

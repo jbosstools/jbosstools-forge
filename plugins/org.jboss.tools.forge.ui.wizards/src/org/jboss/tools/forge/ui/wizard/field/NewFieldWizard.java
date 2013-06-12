@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -11,8 +12,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
@@ -53,16 +52,21 @@ public class NewFieldWizard extends AbstractForgeWizard {
 		addPage(newFieldWizardPage);
 	}
 
-	public void doExecute() {
-		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
-		runtime.sendCommand("pick-up " + getTargetEntityLocation());
-		runtime.sendCommand(
-				"field " + getFieldType() + " --named " + getFieldName());
+	@Override
+	public void doExecute(IProgressMonitor monitor) {
+		sendRuntimeCommand("pick-up " + getTargetEntityLocation(), monitor);
+		sendRuntimeCommand(
+				"field " + getFieldType() + " --named " + getFieldName(), monitor);
 	}
 	
 	@Override
-	public void doRefresh() {
-		refreshResource(getTargetEntity().getResource());
+	protected int getAmountOfWorkExecute() {
+		return 2;
+	}
+	
+	@Override
+	public void doRefresh(IProgressMonitor monitor) {
+		refreshResource(getTargetEntity().getResource(), monitor);
 	}
 	
 	@Override

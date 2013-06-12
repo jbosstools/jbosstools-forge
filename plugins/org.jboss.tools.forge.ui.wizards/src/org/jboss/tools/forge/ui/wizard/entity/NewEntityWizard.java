@@ -4,10 +4,9 @@ import java.util.Iterator;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
@@ -48,15 +47,19 @@ public class NewEntityWizard extends AbstractForgeWizard {
 	}
 
 	@Override
-	public void doExecute() {
-		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
-		runtime.sendCommand("cd " + getProjectLocation());
-		runtime.sendCommand("entity --named " + getEntityName());
+	public void doExecute(IProgressMonitor monitor) {
+		sendRuntimeCommand("cd " + getProjectLocation(), monitor);
+		sendRuntimeCommand("entity --named " + getEntityName(), monitor);
 	}
 	
 	@Override
-	public void doRefresh() {
-		refreshResource(getProject(getProjectName()));
+	protected int getAmountOfWorkExecute() {
+		return 2;
+	}
+	
+	@Override
+	public void doRefresh(IProgressMonitor monitor) {
+		refreshResource(getProject(getProjectName()), monitor);
 	}
 	
 	@Override

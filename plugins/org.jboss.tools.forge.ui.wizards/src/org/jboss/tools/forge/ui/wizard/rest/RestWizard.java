@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
 import org.jboss.tools.forge.ui.wizard.util.WizardsHelper;
 
@@ -52,22 +51,32 @@ public class RestWizard extends AbstractForgeWizard {
 	}
 
 	@Override
-	public void doExecute() {
-		ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
-		runtime.sendCommand("cd " + getProjectLocation());
+	public void doExecute(IProgressMonitor monitor) {
+		sendRuntimeCommand("cd " + getProjectLocation(), monitor);
 		if (setupNeeded) {
-			runtime.sendCommand("rest setup --activatorType WEB_XML");
+			sendRuntimeCommand("rest setup --activatorType WEB_XML", monitor);
 		}
 		for (String entityName : getEntityNames()) {
-			runtime.sendCommand("rest endpoint-from-entity " + entityName);
+			sendRuntimeCommand("rest endpoint-from-entity " + entityName, monitor);
 		}
 	}
 	
 	@Override
-	public void doRefresh() {
+	protected int getAmountOfWorkExecute() {
+		int entities = getEntityNames().size();
+		return setupNeeded ? entities + 2 : entities + 1;
+	}
+	
+	@Override
+	public void doRefresh(IProgressMonitor monitor) {
 		IProject project = getProject(getProjectName());
-		refreshResource(project);
-		updateProjectConfiguration(project);
+		refreshResource(project, monitor);
+		updateProjectConfiguration(project, monitor);
+	}
+	
+	@Override
+	protected int getAmountOfWorkRefresh() {
+		return 2;
 	}
 	
 	@Override
