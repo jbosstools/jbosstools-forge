@@ -53,7 +53,7 @@ public class RadioControlBuilder extends ControlBuilder {
 				final Button button = new Button(container, SWT.RADIO);
 				button.setText(itemLabel);
 				button.setToolTipText(input.getDescription());
-				boolean selected = choice.equals(originalValue);
+				boolean selected = Proxies.areEquivalent(choice, originalValue);
 				button.setSelection(selected);
 				button.addSelectionListener(new SelectionAdapter() {
 					@Override
