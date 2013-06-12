@@ -85,11 +85,4 @@ public abstract class AbstractTextButtonControl extends ControlBuilder {
 	protected abstract void browseButtonPressed(final ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Text containerText);
 
-	@Override
-	public void setEnabled(Control control, boolean enabled) {
-		Composite c = (Composite) control;
-		for (Control child : c.getChildren()) {
-			child.setEnabled(enabled);
-		}
-	}
 }

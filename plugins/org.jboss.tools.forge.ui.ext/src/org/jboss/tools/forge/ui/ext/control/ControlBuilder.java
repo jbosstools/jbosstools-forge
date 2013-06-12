@@ -100,7 +100,14 @@ public abstract class ControlBuilder {
 	}
 
 	public void setEnabled(Control control, boolean enabled) {
-		control.setEnabled(enabled);
+		if (control instanceof Composite) {
+			Composite c = (Composite) control;
+			for (Control child : c.getChildren()) {
+				child.setEnabled(enabled);
+			}
+		} else {
+			control.setEnabled(enabled);
+		}
 	}
 
 	protected ContentProposalAdapter setupAutoCompleteForText(
