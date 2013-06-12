@@ -7,12 +7,8 @@ import java.util.Map;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -69,15 +65,18 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 	
 	@Override
 	public boolean performFinish() {
-		Job job = new WorkspaceJob(getStatusMessage()) {
-			@Override
-			public IStatus runInWorkspace(IProgressMonitor monitor)
-					throws CoreException {
-				execute();
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
+		try {
+			getContainer().run(true, true, new IRunnableWithProgress() {				
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException,
+						InterruptedException {
+					monitor.beginTask(getStatusMessage(), IProgressMonitor.UNKNOWN);
+					execute();
+				}
+			});
+		} catch (Exception e) {
+			// ignore
+		}
 		return true;
 	}
 	
@@ -86,6 +85,11 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 		doExecute();
 		doAfter();
 		doRefresh();
+	}
+	
+	@Override
+	public boolean needsProgressMonitor() {
+		return true;
 	}
 	
 	protected void doBefore() {

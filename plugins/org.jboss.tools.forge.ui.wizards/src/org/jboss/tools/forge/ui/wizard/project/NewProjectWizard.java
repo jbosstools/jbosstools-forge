@@ -3,14 +3,21 @@ package org.jboss.tools.forge.ui.wizard.project;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.IJobChangeListener;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.apache.maven.model.Model;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.project.MavenProjectInfo;
+import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.forge.importer.ProjectImporter;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizard.AbstractForgeWizard;
+import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public class NewProjectWizard extends AbstractForgeWizard {
 
@@ -119,27 +126,6 @@ public class NewProjectWizard extends AbstractForgeWizard {
 	}
 
 	@Override
-	public void doRefresh() {
-		IJobChangeListener jobChangeListener = new JobChangeAdapter() {
-			@Override
-			public void done(IJobChangeEvent event) {
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						listener.propertyChange(new PropertyChangeEvent(this, null, null, getProjectName()));
-					}					
-				});
-			}
-		};
-		ProjectImporter importer = 
-				new ProjectImporter(
-						getProjectLocation(), 
-						getProjectName(),
-						jobChangeListener);
-		importer.importProject();
-	}
-	
-	@Override
 	public String getStatusMessage() {
 		return "Creating new project '" + getProjectName() + "'.";
 	}
@@ -156,4 +142,48 @@ public class NewProjectWizard extends AbstractForgeWizard {
 		return getProjectLocation() + File.separator + getProjectName();
 	}
 	
+	@Override
+	public void doRefresh() {
+		try {
+			MavenPlugin.getProjectConfigurationManager().importProjects(
+					getProjectToImport(getProjectLocation(), getProjectName()), 
+				  new ProjectImportConfiguration(), 
+				  new NullProgressMonitor());
+			IProject project = 
+					ResourcesPlugin.getWorkspace().getRoot().getProject(getProjectName());
+      	  	MavenPlugin.getProjectConfigurationManager().updateProjectConfiguration(
+    			  project, 
+    			  new NullProgressMonitor());
+      	  Display.getDefault().syncExec(new Runnable() {
+				@Override
+				public void run() {
+					listener.propertyChange(new PropertyChangeEvent(this, null, null, getProjectName()));
+				}
+				
+			});
+		} catch (CoreException e) {
+			WizardsPlugin.log(e);
+		}
+	}
+	
+	private MavenProjectInfo createMavenProjectInfo(String location, String name) {
+		MavenProjectInfo result = null;
+		try {
+			File projectDir = new File(location, name);
+			File pomFile = new File(projectDir, "pom.xml");
+			Model model = MavenPlugin.getMavenModelManager().readMavenModel(pomFile);
+			String pomName = name + "/" + "pom.xml";
+			result = new MavenProjectInfo(pomName, pomFile, model, null);
+		} catch (CoreException e) {
+			
+		}
+		return result;
+	}
+	
+	private Collection<MavenProjectInfo> getProjectToImport(String location, String name) {
+		ArrayList<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>(1);
+		result.add(createMavenProjectInfo(location, name));
+		return result;
+	}
+
 }
