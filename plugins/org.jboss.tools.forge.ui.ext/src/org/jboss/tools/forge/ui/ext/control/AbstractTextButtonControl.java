@@ -69,7 +69,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder {
 				}
 			}
 		});
-
+		decorateContainerText(page, input, containerText);
 		Button button = new Button(container, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
@@ -78,8 +78,13 @@ public abstract class AbstractTextButtonControl extends ControlBuilder {
 				browseButtonPressed(page, input, containerText);
 			}
 		});
-		setupAutoCompleteForText(page.getUIContext(), input, containerText);
+		setupAutoCompleteForText(page.getUIContext(), input, InputComponents.getCompleterFor(input), containerText);
 		return container;
+	}
+
+	protected void decorateContainerText(final ForgeWizardPage page,
+			final InputComponent<?, Object> input, final Text containerText) {
+
 	}
 
 	protected abstract void browseButtonPressed(final ForgeWizardPage page,

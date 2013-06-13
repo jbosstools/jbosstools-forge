@@ -111,9 +111,9 @@ public abstract class ControlBuilder {
 	}
 
 	protected ContentProposalAdapter setupAutoCompleteForText(
-			UIContextImpl context, InputComponent<?, Object> input, Text text) {
+			UIContextImpl context, InputComponent<?, Object> input,
+			UICompleter<Object> completer, Text text) {
 		ContentProposalAdapter result = null;
-		UICompleter<Object> completer = InputComponents.getCompleterFor(input);
 		if (completer != null) {
 			ControlDecoration dec = new ControlDecoration(text, SWT.TOP
 					| SWT.LEFT);
