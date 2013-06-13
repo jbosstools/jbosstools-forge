@@ -31,12 +31,6 @@
       </key>
    </extension>
     <extension
-          point="org.eclipse.ui.startup">
-       <startup
-             class="org.jboss.tools.forge.ui.ext.startup.ForgeStarter">
-       </startup>
-    </extension>
-    <extension
           point="org.eclipse.ui.preferencePages">
        <page
              class="org.jboss.tools.forge.ui.ext.preferences.ForgeExtPreferencesPage"
