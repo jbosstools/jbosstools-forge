@@ -12,7 +12,7 @@
    <version>2.0.0-SNAPSHOT</version>
    <packaging>eclipse-plugin</packaging>
    <properties>
-      <version.forge>2.0.0-SNAPSHOT</version.forge>
+      <version.forge>2.0.0.Alpha5</version.forge>
    </properties>
    <build>
       <plugins>
