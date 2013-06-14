@@ -25,6 +25,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.util.Categories;
+import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessContents;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessElement;
 import org.jboss.tools.forge.ui.ext.quickaccess.impl.ForgeQuickAccessElement;
@@ -71,6 +73,12 @@ public class UICommandListDialog extends PopupDialog {
 		BusyIndicator.showWhile(getShell().getDisplay(), new Runnable() {
 			@Override
 			public void run() {
+				try {
+					FurnaceService.INSTANCE.waitUntilContainerIsStarted();
+				} catch (InterruptedException ie) {
+					ForgeUIPlugin.log(ie);
+					return;
+				}
 				final ForgeQuickAccessProvider[] providers = getProviders();
 				QuickAccessContents quickAccessContents = new QuickAccessContents(
 						providers) {

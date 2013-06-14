@@ -46,6 +46,12 @@ public enum FurnaceService {
 		forge.stop();
 	}
 
+	public void waitUntilContainerIsStarted() throws InterruptedException {
+		while (!getContainerStatus().isStarted()) {
+			Thread.sleep(500);
+		}
+	}
+
 	public ContainerStatus getContainerStatus() {
 		return (forge == null) ? ContainerStatus.STOPPED : forge.getStatus();
 	}

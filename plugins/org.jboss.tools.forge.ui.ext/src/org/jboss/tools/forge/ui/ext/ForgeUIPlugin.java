@@ -34,12 +34,11 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 			@Override
 			public void run() {
 				FurnaceService forgeService = FurnaceService.INSTANCE;
-				while (!forgeService.getContainerStatus().isStarted()) {
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						break;
-					}
+				try {
+					forgeService.waitUntilContainerIsStarted();
+				} catch (InterruptedException e) {
+					ForgeUIPlugin.log(e);
+					return;
 				}
 				ProjectFactory projectFactory;
 				while ((projectFactory = forgeService
