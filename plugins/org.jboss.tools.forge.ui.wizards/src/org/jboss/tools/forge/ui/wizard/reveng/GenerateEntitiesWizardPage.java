@@ -25,6 +25,8 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.JavaElementLabelProvider;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
@@ -505,8 +507,26 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		saveButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				ConnectionProfileDescriptor connectionProfile = getSelectedConnectionProfile();
+				if (connectionProfile.name == null || "".equals(connectionProfile.name)) {
+					InputDialog dialog = new InputDialog(
+							getShell(), 
+							"Connection Profile", 
+							"Please enter a name for the connection profile.", 
+							"connection profile", null);
+					if (dialog.open() != Dialog.CANCEL) {
+						connectionProfile.name = dialog.getValue();
+						connectionProfiles.put(connectionProfile.name, connectionProfile);
+						connectionProfiles.put("", new ConnectionProfileDescriptor());
+						
+					} else {
+						return;
+					}
+				}
 				connectionProfileHelper
-						.saveConnectionProfile(getSelectedConnectionProfile());
+						.saveConnectionProfile(connectionProfile);
+				refreshConnectionProfiles(connectionProfiles.values().toArray(new ConnectionProfileDescriptor[connectionProfiles.size()]));
+				connectionProfileCombo.setText(connectionProfile.name);
 				enableButtons(false);
 			}
 		});

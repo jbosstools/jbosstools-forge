@@ -3,8 +3,10 @@ package org.jboss.tools.forge.ui.wizard.reveng;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.eclipse.datatools.connectivity.ConnectionProfileException;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.ProfileManager;
+import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 
 
@@ -48,14 +50,33 @@ public class DataToolsConnectionProfileHelper {
 	}
 	
 	void saveConnectionProfile(ConnectionProfileDescriptor descriptor) {
-		IConnectionProfile connectionProfile = 
-				ProfileManager.getInstance().getProfileByName(descriptor.name);
-		if (connectionProfile != null) {
-			Properties baseProps = connectionProfile.getBaseProperties();
+		try {
+			IConnectionProfile connectionProfile = 
+					ProfileManager.getInstance().getProfileByName(descriptor.name);
+			Properties baseProps;
+			if (connectionProfile != null) {
+				baseProps = connectionProfile.getBaseProperties();
+			} else {
+				baseProps = new Properties();
+			}
 			baseProps.setProperty(DRIVER_CLASS, descriptor.driverClass);
 			baseProps.setProperty(DRIVER_LOCATION, descriptor.driverLocation);
 			baseProps.setProperty(URL, descriptor.url);
 			baseProps.setProperty(USER_NAME, descriptor.user);
+			if (connectionProfile == null) {
+					connectionProfile = 
+							ProfileManager.getInstance().createProfile(
+									descriptor.name, 
+									"", 
+									"org.jboss.tools.forge", 
+									baseProps, 
+									"", 
+									false);
+			} else {
+				ProfileManager.getInstance().modifyProfile(connectionProfile);
+			}
+		} catch (ConnectionProfileException e) {
+			WizardsPlugin.log(e);
 		}
 	}
 	
