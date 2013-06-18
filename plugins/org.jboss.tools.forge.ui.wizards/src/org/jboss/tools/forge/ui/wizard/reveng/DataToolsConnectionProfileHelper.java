@@ -68,7 +68,7 @@ public class DataToolsConnectionProfileHelper {
 							ProfileManager.getInstance().createProfile(
 									descriptor.name, 
 									"", 
-									"org.jboss.tools.forge", 
+									"org.eclipse.datatools.connectivity.db.generic.connectionProfile", 
 									baseProps, 
 									"", 
 									false);
