@@ -16,6 +16,7 @@ public class DataToolsConnectionProfileHelper {
 	private static final String DRIVER_LOCATION = "jarList";
 	private static final String USER_NAME = "org.eclipse.datatools.connectivity.db.username";
 	private static final String URL = "org.eclipse.datatools.connectivity.db.URL";
+	private static final String HIBERNATE_DIALECT = "org.jboss.tools.forge.hibernate.dialect";
 	
 	private GenerateEntitiesWizardPage wizardPage;
 	private ConnectionProfileDescriptor unnamed = new ConnectionProfileDescriptor();
@@ -58,6 +59,7 @@ public class DataToolsConnectionProfileHelper {
 			baseProps.setProperty(DRIVER_LOCATION, descriptor.driverLocation);
 			baseProps.setProperty(URL, descriptor.url);
 			baseProps.setProperty(USER_NAME, descriptor.user);
+			baseProps.setProperty(HIBERNATE_DIALECT, descriptor.dialect);
 			if (connectionProfile == null) {
 					connectionProfile = 
 							ProfileManager.getInstance().createProfile(
@@ -94,22 +96,7 @@ public class DataToolsConnectionProfileHelper {
 		descriptor.driverLocation = props.getProperty(DRIVER_LOCATION);
 		descriptor.url = props.getProperty(URL);
 		descriptor.user = props.getProperty(USER_NAME);		
+		descriptor.dialect = props.getProperty(HIBERNATE_DIALECT);
 	}
 	
-//	boolean testConnectionProfile(ConnectionProfileDescriptor descriptor) {
-//		boolean result = false;
-//		IConnectionProfile connectionProfile = ProfileManager
-//				.getInstance()
-//				.getProfileByName(descriptor.name);
-//		try {
-//			IStatus status = connectionProfile.connectWithoutJob();
-//			if (status.getCode() == IStatus.OK) {
-//				result = true;
-//			}
-//		} finally {
-//			connectionProfile.disconnect();
-//		}
-//		return result;
-//	}
-
 }

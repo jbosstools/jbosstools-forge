@@ -379,6 +379,13 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		hibernateDialectCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fillHibernateDialectCombo();
 		hibernateDialectCombo.addModifyListener(modifyListener);
+		hibernateDialectCombo.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				getSelectedConnectionProfile().dialect = hibernateDialectCombo.getText();
+				enableButtons(true);
+			}
+		});
 		Button dummyButton = new Button(parent, SWT.NONE);
 		dummyButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		dummyButton.setVisible(false);
@@ -565,6 +572,9 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		userPasswordText.setText(password);
 		driverClassName = driverClassName == null ? "" : driverClassName;
 		driverNameText.setText(driverClassName);
+		String hibernateDialect = selectedConnectionProfile.dialect;
+		hibernateDialect = hibernateDialect == null ? "" : hibernateDialect;
+		hibernateDialectCombo.setText(hibernateDialect);
 		String driverLocation = selectedConnectionProfile.driverLocation;
 		driverLocation = driverLocation == null ? "" : driverLocation;
 		driverLocationText.setText(driverLocation);
