@@ -53,12 +53,7 @@ public class DataToolsConnectionProfileHelper {
 		try {
 			IConnectionProfile connectionProfile = 
 					ProfileManager.getInstance().getProfileByName(descriptor.name);
-			Properties baseProps;
-			if (connectionProfile != null) {
-				baseProps = connectionProfile.getBaseProperties();
-			} else {
-				baseProps = new Properties();
-			}
+			Properties baseProps = new Properties();
 			baseProps.setProperty(DRIVER_CLASS, descriptor.driverClass);
 			baseProps.setProperty(DRIVER_LOCATION, descriptor.driverLocation);
 			baseProps.setProperty(URL, descriptor.url);
@@ -73,6 +68,7 @@ public class DataToolsConnectionProfileHelper {
 									"", 
 									false);
 			} else {
+				connectionProfile.setBaseProperties(baseProps);
 				ProfileManager.getInstance().modifyProfile(connectionProfile);
 			}
 		} catch (ConnectionProfileException e) {
