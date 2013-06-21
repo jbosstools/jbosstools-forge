@@ -46,30 +46,33 @@ public class JavaPackageChooserControlBuilder extends AbstractTextButtonControl 
 			return;
 		}
 		final IJavaProject selectedProject = getSelectedProject(page);
-		UICompleter<Object> completer = new UICompleter<Object>() {
-			@Override
-			public Iterable<String> getCompletionProposals(UIContext context,
-					InputComponent<?, Object> input, String value) {
-				Set<String> proposals = new TreeSet<String>();
-				try {
-					for (IPackageFragment pkg : selectedProject
-							.getPackageFragments()) {
-						if (pkg.getKind() == IPackageFragmentRoot.K_BINARY) {
-							continue;
+		if (selectedProject != null) {
+			UICompleter<Object> completer = new UICompleter<Object>() {
+				@Override
+				public Iterable<String> getCompletionProposals(
+						UIContext context, InputComponent<?, Object> input,
+						String value) {
+					Set<String> proposals = new TreeSet<String>();
+					try {
+						for (IPackageFragment pkg : selectedProject
+								.getPackageFragments()) {
+							if (pkg.getKind() == IPackageFragmentRoot.K_BINARY) {
+								continue;
+							}
+							String name = pkg.getElementName();
+							if (name.startsWith(value)) {
+								proposals.add(name);
+							}
 						}
-						String name = pkg.getElementName();
-						if (name.startsWith(value)) {
-							proposals.add(name);
-						}
+					} catch (JavaModelException jme) {
+						ForgeUIPlugin.log(jme);
 					}
-				} catch (JavaModelException jme) {
-					ForgeUIPlugin.log(jme);
+					return proposals;
 				}
-				return proposals;
-			}
-		};
-		setupAutoCompleteForText(page.getUIContext(), input, completer,
-				containerText);
+			};
+			setupAutoCompleteForText(page.getUIContext(), input, completer,
+					containerText);
+		}
 	}
 
 	@Override
