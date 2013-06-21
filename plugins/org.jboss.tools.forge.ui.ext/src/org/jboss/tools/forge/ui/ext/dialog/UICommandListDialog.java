@@ -8,9 +8,12 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -21,7 +24,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.util.Categories;
@@ -44,11 +51,37 @@ public class UICommandListDialog extends PopupDialog {
 				"Start typing to filter the list");
 		ISelection selection = window.getSelectionService().getSelection();
 		IStructuredSelection currentSelection = null;
-		if (selection instanceof IStructuredSelection) {
-			currentSelection = (IStructuredSelection) selection;
+		if (selection instanceof TreeSelection) {
+			currentSelection = (TreeSelection) selection;
+		} else {
+			IFile activeEditorFile = getActiveEditorInput(window);
+			if (activeEditorFile != null) {
+				currentSelection = new StructuredSelection(activeEditorFile);
+			}
 		}
 		wizardHelper = new WizardDialogHelper(getParentShell(),
 				currentSelection);
+	}
+
+	/**
+	 * Retrieves the {@link IFile} represented by the active editor
+	 */
+	private static IFile getActiveEditorInput(IWorkbenchWindow window) {
+		IWorkbenchPage page = window.getActivePage();
+		if (page != null) {
+			IEditorPart part = page.getActiveEditor();
+			if (part != null) {
+				IEditorInput editorInput = part.getEditorInput();
+				if (editorInput != null) {
+					FileEditorInput fileEditorInput = (FileEditorInput) editorInput
+							.getAdapter(FileEditorInput.class);
+					if (fileEditorInput != null) {
+						return fileEditorInput.getFile();
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
