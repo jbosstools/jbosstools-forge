@@ -16,6 +16,8 @@
           <description>
                 Scaffold UI from entities
           </description>
+          <keywordReference
+               id="org.jboss.tools.forge.ui.wizards"/>
        </wizard>
        <wizard
              category="org.jboss.ide.eclipse.ui.wizards/org.jboss.tools.forge.ui.wizards"
@@ -26,6 +28,8 @@
           <description>
                 Generate REST endpoints from entities
           </description>
+          <keywordReference
+               id="org.jboss.tools.forge.ui.wizards"/>
        </wizard>
        <wizard
              category="org.jboss.ide.eclipse.ui.wizards/org.jboss.tools.forge.ui.wizards"
@@ -36,6 +40,14 @@
           <description>
                 Generate entities from database tables
           </description>
+          <keywordReference
+               id="org.jboss.tools.forge.ui.wizards"/>
        </wizard>
     </extension> 
+    <extension
+            point="org.eclipse.ui.keywords">
+        <keyword
+                label="Forge"
+                id="org.jboss.tools.forge.ui.wizards"/>
+   </extension>
 </plugin>
