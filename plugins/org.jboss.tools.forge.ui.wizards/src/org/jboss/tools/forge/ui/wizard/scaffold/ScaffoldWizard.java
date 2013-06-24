@@ -73,12 +73,20 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 	@Override
 	public void doExecute(IProgressMonitor monitor) {
 		sendRuntimeCommand("cd " + getProjectLocation(), monitor);
-		if (setupNeeded) {
+		if (setupNeeded || (Boolean)getWizardDescriptor().get(ScaffoldProjectWizardPage.FORCE_SETUP)) {
 			String scaffoldType = (String)getWizardDescriptor().get(ScaffoldProjectWizardPage.SCAFFOLD_TYPE);
-			sendRuntimeCommand("scaffold-x setup --scaffoldType " + scaffoldType, monitor);
+			String command = "scaffold-x setup --scaffoldType " + scaffoldType;
+			if ((Boolean)getWizardDescriptor().get(ScaffoldProjectWizardPage.OVERWRITE_EXISTING)) {
+				command += " --overwrite";
+			}
+			sendRuntimeCommand(command, monitor);
 		}
 		for (String entityName : getEntityNames()) {
-			sendRuntimeCommand("scaffold-x from " + entityName, monitor);
+			String command = "scaffold-x from " + entityName;
+			if ((Boolean)getWizardDescriptor().get(ScaffoldProjectWizardPage.OVERWRITE_EXISTING)) {
+				command += " --overwrite";
+			}
+			sendRuntimeCommand(command, monitor);
 		}
 	}
 	

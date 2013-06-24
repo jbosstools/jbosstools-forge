@@ -26,12 +26,16 @@ public class ScaffoldProjectWizardPage extends AbstractForgeWizardPage {
 	final static String PROJECT_NAME = "ScaffoldProjectWizardPage.projectName";
 	final static String SCAFFOLD_TYPE = "ScaffoldProjectWizardPage.scaffoldType";
 	final static String ENTITY_NAMES = "ScaffoldProjectWizardPage.entityNames";
+	final static String OVERWRITE_EXISTING = "ScaffoldProjectWizardPage.overwriteExisting";
+	final static String FORCE_SETUP = "ScaffoldProjectWizardPage.forceSetup";
 	
 	final static String SCAFFOLD_TYPE_FACES = "faces";
 	final static String SCAFFOLD_TYPE_ANGULARJS = "angularjs";
 	
 	private Combo projectNameCombo;
 	private Combo scaffoldTypeCombo;
+	private Button overwriteButton;
+	private Button forceSetupButton;
 	private Table selectEntitiesTable;
 	private Label selectEntitiesLabel;
 
@@ -47,8 +51,48 @@ public class ScaffoldProjectWizardPage extends AbstractForgeWizardPage {
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
 		createScaffoldTypeEditor(control);
+		createOverwriteButton(control);
+		createForceSetupButton(control);
 		createEntitiesEditor(control);
 		setControl(control);
+	}
+	
+	private void createForceSetupButton(Composite parent) {
+		forceSetupButton = new Button(parent, SWT.CHECK);
+		forceSetupButton.setSelection(true);
+		getWizardDescriptor().put(FORCE_SETUP, true);
+		forceSetupButton.setText("Force Scaffold Setup");
+		GridData gridData = new GridData();
+		gridData.verticalAlignment = SWT.TOP;
+		gridData.horizontalSpan = 3;
+        gridData.grabExcessHorizontalSpace = true;
+        gridData.horizontalAlignment = SWT.FILL;
+        forceSetupButton.setLayoutData(gridData);
+        forceSetupButton.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				getWizardDescriptor().put(FORCE_SETUP, overwriteButton.getSelection());
+			}
+		});
+	}
+	
+	private void createOverwriteButton(Composite parent) {
+		overwriteButton = new Button(parent, SWT.CHECK);
+		overwriteButton.setSelection(true);
+		getWizardDescriptor().put(OVERWRITE_EXISTING, true);
+		overwriteButton.setText("Overwrite Existing Files");
+		GridData gridData = new GridData();
+		gridData.verticalAlignment = SWT.TOP;
+		gridData.horizontalSpan = 3;
+        gridData.grabExcessHorizontalSpace = true;
+        gridData.horizontalAlignment = SWT.FILL;
+        overwriteButton.setLayoutData(gridData);
+        overwriteButton.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				getWizardDescriptor().put(OVERWRITE_EXISTING, overwriteButton.getSelection());
+			}
+		});
 	}
 	
 	private void createScaffoldTypeEditor(Composite parent) {
