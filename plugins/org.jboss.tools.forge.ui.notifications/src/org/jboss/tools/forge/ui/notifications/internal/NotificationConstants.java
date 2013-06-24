@@ -19,7 +19,7 @@ public class NotificationConstants {
     public static int DEFAULT_WIDTH = 350;
     public static int DEFAULT_HEIGHT = 100;
     public static int FINAL_ALPHA = 225;
-    public static int FADE_IN_STEP = 30;
+    public static int FADE_IN_STEP = 20;
     public static int FADE_OUT_STEP = 8;
     public static int FADE_TIMER = 50;
     public static int DISPLAY_TIME  = 4500;
