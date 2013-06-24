@@ -25,9 +25,10 @@ import org.jboss.tools.forge.ui.notifications.internal.NotificationHelper;
 
 public class NotificationDialog {
 
-    public static void notify(String title, String message, NotificationType type) {
-    	new NotificationDialog(type, title, message).show();
-    }
+	public static void notify(String title, String message,
+			NotificationType type) {
+		new NotificationDialog(type, title, message).show();
+	}
 
 	private static ArrayList<Shell> ACTIVE_DIALOGS = new ArrayList<Shell>();
 
@@ -76,8 +77,8 @@ public class NotificationDialog {
 	}
 
 	private Point calculateInitialLocation() {
-		Rectangle clientArea = Display.getDefault().getActiveShell()
-				.getMonitor().getClientArea();
+		Rectangle clientArea = Display.getDefault().getPrimaryMonitor()
+				.getClientArea();
 		int x = clientArea.x + clientArea.width
 				- NotificationConstants.DEFAULT_WIDTH - 2;
 		int y = clientArea.y + clientArea.height
@@ -108,13 +109,15 @@ public class NotificationDialog {
 		titleLabel.setText(title);
 		titleLabel.setForeground(NotificationColors
 				.getColor(NotificationConstants.TITLE_FOREGROUND_COLOR_NAME));
-		titleLabel.setFont(NotificationFonts.getFont(NotificationConstants.TITLE_FONT_NAME));
+		titleLabel.setFont(NotificationFonts
+				.getFont(NotificationConstants.TITLE_FONT_NAME));
 	}
 
 	private void createMessage() {
 		Label label = new Label(clientComposite, SWT.WRAP);
 		label.setText(message);
-		label.setFont(NotificationFonts.getFont(NotificationConstants.MESSAGE_FONT_NAME));
+		label.setFont(NotificationFonts
+				.getFont(NotificationConstants.MESSAGE_FONT_NAME));
 		label.setForeground(NotificationColors
 				.getColor(NotificationConstants.FOREGROUND_COLOR_NAME));
 		GridData gd = new GridData(GridData.FILL_BOTH);
@@ -154,8 +157,8 @@ public class NotificationDialog {
 		gc.setLineWidth(2);
 		gc.setForeground(NotificationColors
 				.getColor(NotificationConstants.BORDER_COLOR_NAME));
-//		gc.drawRectangle(rect.x + 1, rect.y + 1, rect.width - 2,
-//				rect.height - 2);
+		// gc.drawRectangle(rect.x + 1, rect.y + 1, rect.width - 2,
+		// rect.height - 2);
 		gc.drawRoundRectangle(rect.x + 1, rect.y + 1, rect.width - 2,
 				rect.height - 2, 50, 50);
 	}
@@ -191,7 +194,7 @@ public class NotificationDialog {
 	private void addRegion(Shell shell) {
 		Region region = new Region();
 		Point s = shell.getSize();
-		
+
 		/* Add entire Shell */
 		region.add(0, 0, s.x, s.y);
 
@@ -226,7 +229,7 @@ public class NotificationDialog {
 		region.subtract(s.x - 3, 13, 3, 2);
 		region.subtract(s.x - 2, 15, 2, 2);
 		region.subtract(s.x - 1, 17, 1, 3);
-		
+
 		/* Subtract Bottom-Left Corner */
 		region.subtract(0, s.y - 0, 20, 1);
 		region.subtract(0, s.y - 1, 17, 1);
@@ -238,7 +241,7 @@ public class NotificationDialog {
 		region.subtract(0, s.y - 7, 7, 1);
 		region.subtract(0, s.y - 8, 6, 1);
 		region.subtract(0, s.y - 9, 5, 2);
-		region.subtract(0, s.y - 11, 4, 2);		
+		region.subtract(0, s.y - 11, 4, 2);
 		region.subtract(0, s.y - 13, 3, 2);
 		region.subtract(0, s.y - 15, 2, 2);
 		region.subtract(0, s.y - 17, 1, 3);
