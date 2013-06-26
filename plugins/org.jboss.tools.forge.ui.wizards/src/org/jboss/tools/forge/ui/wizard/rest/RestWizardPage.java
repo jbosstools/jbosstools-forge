@@ -25,14 +25,25 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 	
 	final static String PROJECT_NAME = "RestWizardPage.projectName";
 	final static String ENTITY_NAMES = "RestWizardPage.entityNames";
+	final static String SETUP_NEEDED = "RestWizardPage.setupNeeded";
+	final static String ACTIVATOR_TYPE = "RestWizardPage.activatorType";
+	
+	final static String ACTIVATOR_TYPE_WEB_XML = "WEB_XML";
+	final static String ACTIVATOR_TYPE_APPLICATION_CLASS = "APP_CLASS";
+	final static String ACTIVATOR_TYPE_NONE = "";
+	
+	final static String PAGE_NAME = "org.jboss.tools.forge.ui.wizard.rest";
 
 	private ArrayList<String> entityNames = new ArrayList<String>();
 	
 	private Combo projectNameCombo;
+//	private Combo activatorTypeCombo;
 	private Table selectEntitiesTable;
 	
+	private boolean busy = false;
+
 	protected RestWizardPage() {
-		super("org.jboss.tools.forge.ui.wizard.rest", "Generate REST Endpoints", null);
+		super(PAGE_NAME, "Generate REST Endpoints", null);
 	}	
 
 	@Override
@@ -40,25 +51,30 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 		Composite control = new Composite(parent, SWT.NULL);
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
+//		createActivatorTypeEditor(control);
 		createEntitiesEditor(control);
 		setControl(control);
+		initializeEditors();
+	}
+	
+	private void initializeEditors() {
+		String projectName = (String)getWizardDescriptor().get(PROJECT_NAME); 
+		if (projectName != null) {
+			projectNameCombo.setText(projectName);
+			handleProjectChange();
+		}
 	}
 	
 	private void createProjectEditor(Composite parent) {
 		Label projectNameLabel = new Label(parent, SWT.NONE);
 		projectNameLabel.setText("Project: ");
 		projectNameCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
-		projectNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+		projectNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		IProject[] allProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (IProject project : allProjects) {
 			if (WizardsHelper.isJPAProject(project)) {
 				projectNameCombo.add(project.getName());
 			}
-		}
-		String projectName = (String)getWizardDescriptor().get(PROJECT_NAME); 
-		if (projectName != null) {
-			projectNameCombo.setText(projectName);
-			handleProjectChange();
 		}
 		projectNameCombo.addSelectionListener(new SelectionAdapter() {			
 			@Override
@@ -70,7 +86,27 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 				}
 			}			
 		});
+		Label filler = new Label(parent, SWT.NONE);
+		filler.setText("");
 	}
+	
+//	private void createActivatorTypeEditor(Composite parent) {
+//		Label activatorTypeLabel = new Label(parent, SWT.NONE);
+//		activatorTypeLabel.setText("Activator type:");
+//		activatorTypeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+//		activatorTypeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+//		activatorTypeCombo.add(ACTIVATOR_TYPE_WEB_XML);
+//		activatorTypeCombo.add(ACTIVATOR_TYPE_APPLICATION_CLASS);
+//		activatorTypeCombo.addSelectionListener(new SelectionAdapter() {			
+//			@Override
+//			public void widgetSelected(SelectionEvent arg0) {
+//				getWizardDescriptor().put(ACTIVATOR_TYPE, activatorTypeCombo.getText());
+//			}
+//		});
+//		activatorTypeCombo.setEnabled(false);
+//		Label filler = new Label(parent, SWT.NONE);
+//		filler.setText("");
+//	}
 	
 	private void createEntitiesEditor(Composite parent) {
 		Label selectEntitiesLabel = new Label(parent, SWT.NONE);
@@ -157,14 +193,40 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 	}
 	
 	private void handleProjectChange() {
+//		activatorTypeCombo.setEnabled(false);
 		getWizardDescriptor().put(PROJECT_NAME, projectNameCombo.getText());
-		((RestWizard)getWizard()).handleProjectChange();
+		setBusy(true);
+		updatePageComplete();
+		checkRestSetup();
 		refreshEntitiesTable();
+	}
+	
+	private void checkRestSetup() {
+		new RestSetupHelper((RestWizard)getWizard()).checkRestSetup();
+	}
+	
+	void setSetupNeeded(boolean b) {
+		getWizardDescriptor().put(SETUP_NEEDED, b);
+//		activatorTypeCombo.setEnabled(b);
+	}
+	
+	void setActivatorType(String activatorType) {
+		if (activatorType.equals(ACTIVATOR_TYPE_NONE)) {
+			getWizardDescriptor().put(ACTIVATOR_TYPE, null);
+//			activatorTypeCombo.deselectAll();
+		} else {
+			getWizardDescriptor().put(ACTIVATOR_TYPE, activatorType);
+//			activatorTypeCombo.setText(activatorType);
+		}
+	}
+	
+	void setBusy(boolean b) {
+		busy = b;
+		updatePageComplete();
 	}
 	
 	public boolean isPageComplete() {
 		String projectName = projectNameCombo.getText();
-		boolean busy = ((RestWizard)getWizard()).isBusy();
 		boolean nameComplete = projectName != null && !"".equals(projectName);
 		return nameComplete && !busy;
 	}

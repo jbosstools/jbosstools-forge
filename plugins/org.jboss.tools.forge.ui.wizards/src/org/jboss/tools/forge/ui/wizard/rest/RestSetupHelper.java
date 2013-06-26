@@ -13,14 +13,16 @@ import org.jboss.tools.forge.ui.util.ForgeHelper;
 public class RestSetupHelper {
 	
 	private RestWizard wizard;
+	private RestWizardPage wizardPage;
 	private String installedFacets;
 	private String currentDirectory;
 	
 	RestSetupHelper(RestWizard wizard) {
 		this.wizard = wizard;
+		this.wizardPage = (RestWizardPage)wizard.getPage(RestWizardPage.PAGE_NAME);
 	}
 	
-	void checkIfSetupNeeded() {
+	void checkRestSetup() {
 		Job job = new Job("Setup Needed") {			
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
@@ -38,8 +40,18 @@ public class RestSetupHelper {
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						wizard.setSetupNeeded(!installedFacets.contains(getSetupString()));
-						wizard.setBusy(false);
+						boolean setupNeeded = true;
+						if (installedFacets.contains(getWebXmlString())) {
+							wizardPage.setActivatorType(RestWizardPage.ACTIVATOR_TYPE_WEB_XML);
+							setupNeeded = false;
+						} else if (installedFacets.contains(getApplicationClassString())) {
+							wizardPage.setActivatorType(RestWizardPage.ACTIVATOR_TYPE_APPLICATION_CLASS);
+							setupNeeded = false;
+						} else {
+							wizardPage.setActivatorType(RestWizardPage.ACTIVATOR_TYPE_NONE);
+						}
+						wizardPage.setSetupNeeded(setupNeeded);
+						wizardPage.setBusy(false);
 					}				
 				});
 			}
@@ -47,8 +59,13 @@ public class RestSetupHelper {
 		job.schedule();
 	}
 	
-	private String getSetupString() {
+	
+	private String getWebXmlString() {
 		return "+ forge.spec.jaxrs.webxml	[org.jboss.forge.spec.javaee.rest.RestWebXmlFacetImpl]";
+	}
+	
+	private String getApplicationClassString() {
+		return "+ forge.spec.jaxrs.applicationclass	[org.jboss.forge.spec.javaee.rest.RestApplicationFacetImpl]";
 	}
 	
 }

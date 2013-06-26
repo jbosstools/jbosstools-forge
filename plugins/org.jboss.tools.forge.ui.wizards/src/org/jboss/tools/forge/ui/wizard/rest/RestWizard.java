@@ -15,9 +15,6 @@ public class RestWizard extends AbstractForgeWizard {
 
 	private RestWizardPage restWizardPage = new RestWizardPage();
 
-	boolean setupNeeded = false;
-	private boolean busy = false;
-
 	public RestWizard() {
 		setWindowTitle("Generate REST Endpoints");
 	}
@@ -53,18 +50,23 @@ public class RestWizard extends AbstractForgeWizard {
 	@Override
 	public void doExecute(IProgressMonitor monitor) {
 		sendRuntimeCommand("cd " + getProjectLocation(), monitor);
-		if (setupNeeded) {
-			sendRuntimeCommand("rest setup --activatorType WEB_XML", monitor);
+		if (getSetupNeeded()) {
+			String activatorType = (String)getWizardDescriptor().get(RestWizardPage.ACTIVATOR_TYPE);
+			sendRuntimeCommand("rest setup --activatorType " + activatorType, monitor);
 		}
 		for (String entityName : getEntityNames()) {
 			sendRuntimeCommand("rest endpoint-from-entity " + entityName, monitor);
 		}
 	}
 	
+	private boolean getSetupNeeded() {
+		return ((Boolean)getWizardDescriptor().get(RestWizardPage.SETUP_NEEDED)).booleanValue();
+	}
+	
 	@Override
 	protected int getAmountOfWorkExecute() {
 		int entities = getEntityNames().size();
-		return setupNeeded ? entities + 2 : entities + 1;
+		return getSetupNeeded() ? entities + 2 : entities + 1;
 	}
 	
 	@Override
@@ -95,28 +97,6 @@ public class RestWizard extends AbstractForgeWizard {
 	
 	String getProjectLocation() {
 		return getProject(getProjectName()).getLocation().toOSString();
-	}
-	
-	void handleProjectChange() {
-		setBusy(true);
-		checkIfSetupNeeded();
-	}
-	
-	private void checkIfSetupNeeded() {
-		new RestSetupHelper(this).checkIfSetupNeeded();
-	}
-	
-	void setBusy(boolean b) {
-		busy = b;
-		restWizardPage.updatePageComplete();
-	}
-	
-	void setSetupNeeded(boolean b) {
-		setupNeeded = b;
-	}
-	
-	boolean isBusy() {
-		return busy;
 	}
 	
 }
