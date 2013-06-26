@@ -152,7 +152,8 @@ public class ForgeLaunchHelper {
 		buffer.append("-Dforge.shell.colorEnabled=true").append(' ');
 		buffer.append("-Dforge.compatibility.IDE=true").append(' ');
 		buffer.append(getClassPathArgument(location)).append(' ');
-		buffer.append("-Dforge.workspace=").append(getWorkspaceLocation());
+		buffer.append("-Dforge.workspace=").append(getWorkspaceLocation()).append(' ');
+		buffer.append("-Djava.awt.headless=true");		
 		return buffer.toString();
 	}
 	
