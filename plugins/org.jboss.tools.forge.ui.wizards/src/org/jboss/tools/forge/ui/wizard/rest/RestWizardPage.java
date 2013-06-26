@@ -27,10 +27,14 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 	final static String ENTITY_NAMES = "RestWizardPage.entityNames";
 	final static String SETUP_NEEDED = "RestWizardPage.setupNeeded";
 	final static String ACTIVATOR_TYPE = "RestWizardPage.activatorType";
+	final static String CONTENT_TYPE = "RestWizardPage.contentType";
 	
 	final static String ACTIVATOR_TYPE_WEB_XML = "WEB_XML";
 	final static String ACTIVATOR_TYPE_APPLICATION_CLASS = "APP_CLASS";
 	final static String ACTIVATOR_TYPE_NONE = "";
+	
+	final static String CONTENT_TYPE_XML = "application/xml";
+	final static String CONTENT_TYPE_JSON = "application/json";
 	
 	final static String PAGE_NAME = "org.jboss.tools.forge.ui.wizard.rest";
 
@@ -38,6 +42,7 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 	
 	private Combo projectNameCombo;
 //	private Combo activatorTypeCombo;
+	private Combo contentTypeCombo;
 	private Table selectEntitiesTable;
 	
 	private boolean busy = false;
@@ -52,6 +57,7 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
 //		createActivatorTypeEditor(control);
+		createContentTypeEditor(control);
 		createEntitiesEditor(control);
 		setControl(control);
 		initializeEditors();
@@ -63,6 +69,25 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 			projectNameCombo.setText(projectName);
 			handleProjectChange();
 		}
+	}
+	
+	private void createContentTypeEditor(Composite parent) {
+		Label contentTypeLabel = new Label(parent, SWT.NONE);
+		contentTypeLabel.setText("Content type:");
+		contentTypeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+		contentTypeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		contentTypeCombo.add(CONTENT_TYPE_JSON);
+		contentTypeCombo.add(CONTENT_TYPE_XML);
+		contentTypeCombo.setText(CONTENT_TYPE_JSON);
+		getWizardDescriptor().put(CONTENT_TYPE, CONTENT_TYPE_JSON);
+		contentTypeCombo.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				getWizardDescriptor().put(CONTENT_TYPE, contentTypeCombo.getText());
+			}
+		});
+		Label filler = new Label(parent, SWT.NONE);
+		filler.setText("");
 	}
 	
 	private void createProjectEditor(Composite parent) {

@@ -52,10 +52,15 @@ public class RestWizard extends AbstractForgeWizard {
 		sendRuntimeCommand("cd " + getProjectLocation(), monitor);
 		if (getSetupNeeded()) {
 			String activatorType = (String)getWizardDescriptor().get(RestWizardPage.ACTIVATOR_TYPE);
+			if (activatorType == null) {
+				activatorType = RestWizardPage.ACTIVATOR_TYPE_WEB_XML;
+			}
 			sendRuntimeCommand("rest setup --activatorType " + activatorType, monitor);
 		}
 		for (String entityName : getEntityNames()) {
-			sendRuntimeCommand("rest endpoint-from-entity " + entityName, monitor);
+			String command = "rest endpoint-from-entity " + entityName;
+			command += " --contentType " + (String)getWizardDescriptor().get(RestWizardPage.CONTENT_TYPE);
+			sendRuntimeCommand(command, monitor);
 		}
 	}
 	
