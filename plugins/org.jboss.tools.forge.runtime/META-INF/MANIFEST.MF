@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.runtime
-Bundle-Version: 1.3.1.qualifier
+Bundle-Version: 1.3.2.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
@@ -17,7 +17,7 @@ Export-Package: javax.enterprise.event,
  org.jboss.forge.shell.command,
  org.jboss.forge.shell.events,
  org.jboss.forge.shell.spi
-Bundle-ClassPath: forge-distribution-1.3.1.Final/modules/javax/inject/api/main/javax.inject-1.jar,
- forge-distribution-1.3.1.Final/modules/javax/enterprise/api/main/cdi-api-1.0-SP4.jar,
- forge-distribution-1.3.1.Final/modules/org/jboss/forge/shell/api/main/forge-shell-api-1.3.1.Final.jar,
- forge-distribution-1.3.1.Final/modules/org/jboss/forge/main/forge-shell-1.3.1.Final.jar
+Bundle-ClassPath: forge-distribution-1.3.2.Final/modules/javax/inject/api/main/javax.inject-1.jar,
+ forge-distribution-1.3.2.Final/modules/javax/enterprise/api/main/cdi-api-1.0-SP4.jar,
+ forge-distribution-1.3.2.Final/modules/org/jboss/forge/shell/api/main/forge-shell-api-1.3.2.Final.jar,
+ forge-distribution-1.3.2.Final/modules/org/jboss/forge/main/forge-shell-1.3.2.Final.jar
