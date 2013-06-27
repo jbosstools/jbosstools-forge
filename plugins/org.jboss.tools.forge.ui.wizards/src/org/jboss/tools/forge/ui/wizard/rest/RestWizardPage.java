@@ -41,7 +41,7 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 	private ArrayList<String> entityNames = new ArrayList<String>();
 	
 	private Combo projectNameCombo;
-//	private Combo activatorTypeCombo;
+	private Combo activatorTypeCombo;
 	private Combo contentTypeCombo;
 	private Table selectEntitiesTable;
 	
@@ -56,7 +56,7 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 		Composite control = new Composite(parent, SWT.NULL);
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
-//		createActivatorTypeEditor(control);
+		createActivatorTypeEditor(control);
 		createContentTypeEditor(control);
 		createEntitiesEditor(control);
 		setControl(control);
@@ -115,23 +115,23 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 		filler.setText("");
 	}
 	
-//	private void createActivatorTypeEditor(Composite parent) {
-//		Label activatorTypeLabel = new Label(parent, SWT.NONE);
-//		activatorTypeLabel.setText("Activator type:");
-//		activatorTypeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
-//		activatorTypeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-//		activatorTypeCombo.add(ACTIVATOR_TYPE_WEB_XML);
-//		activatorTypeCombo.add(ACTIVATOR_TYPE_APPLICATION_CLASS);
-//		activatorTypeCombo.addSelectionListener(new SelectionAdapter() {			
-//			@Override
-//			public void widgetSelected(SelectionEvent arg0) {
-//				getWizardDescriptor().put(ACTIVATOR_TYPE, activatorTypeCombo.getText());
-//			}
-//		});
-//		activatorTypeCombo.setEnabled(false);
-//		Label filler = new Label(parent, SWT.NONE);
-//		filler.setText("");
-//	}
+	private void createActivatorTypeEditor(Composite parent) {
+		Label activatorTypeLabel = new Label(parent, SWT.NONE);
+		activatorTypeLabel.setText("Activator type:");
+		activatorTypeCombo = new Combo(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+		activatorTypeCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		activatorTypeCombo.add(ACTIVATOR_TYPE_WEB_XML);
+		activatorTypeCombo.add(ACTIVATOR_TYPE_APPLICATION_CLASS);
+		activatorTypeCombo.addSelectionListener(new SelectionAdapter() {			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				getWizardDescriptor().put(ACTIVATOR_TYPE, activatorTypeCombo.getText());
+			}
+		});
+		activatorTypeCombo.setEnabled(false);
+		Label filler = new Label(parent, SWT.NONE);
+		filler.setText("");
+	}
 	
 	private void createEntitiesEditor(Composite parent) {
 		Label selectEntitiesLabel = new Label(parent, SWT.NONE);
@@ -218,7 +218,7 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 	}
 	
 	private void handleProjectChange() {
-//		activatorTypeCombo.setEnabled(false);
+		activatorTypeCombo.setEnabled(false);
 		getWizardDescriptor().put(PROJECT_NAME, projectNameCombo.getText());
 		setBusy(true);
 		updatePageComplete();
@@ -232,16 +232,16 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 	
 	void setSetupNeeded(boolean b) {
 		getWizardDescriptor().put(SETUP_NEEDED, b);
-//		activatorTypeCombo.setEnabled(b);
+		activatorTypeCombo.setEnabled(b);
 	}
 	
 	void setActivatorType(String activatorType) {
 		if (activatorType.equals(ACTIVATOR_TYPE_NONE)) {
 			getWizardDescriptor().put(ACTIVATOR_TYPE, null);
-//			activatorTypeCombo.deselectAll();
+			activatorTypeCombo.deselectAll();
 		} else {
 			getWizardDescriptor().put(ACTIVATOR_TYPE, activatorType);
-//			activatorTypeCombo.setText(activatorType);
+			activatorTypeCombo.setText(activatorType);
 		}
 	}
 	
