@@ -80,7 +80,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		getShell().setSize(getShell().computeSize(500, 650, true));
+		getShell().setSize(getShell().computeSize(500, getShellHeight(), true));
 		Composite control = new Composite(parent, SWT.NULL);
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
@@ -88,6 +88,11 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		createConnectionProfileEditor(control);
 		createConnectionProfileDetailsEditor(control);
 		setControl(control);
+	}
+	
+	private int getShellHeight() {
+		String os = System.getProperty("os.name").toLowerCase();
+		return os.indexOf("linux") >= 0 ? 660 : 570;
 	}
 
 	private void createProjectEditor(Composite parent) {
