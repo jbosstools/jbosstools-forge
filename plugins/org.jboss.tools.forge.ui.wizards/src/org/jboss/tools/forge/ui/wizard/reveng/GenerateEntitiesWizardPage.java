@@ -80,7 +80,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		getShell().setSize(getShell().computeSize(500, 600, true));
+		getShell().setSize(getShell().computeSize(500, 650, true));
 		Composite control = new Composite(parent, SWT.NULL);
 		control.setLayout(new GridLayout(3, false));
 		createProjectEditor(control);
