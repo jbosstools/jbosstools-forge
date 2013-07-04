@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.jboss.tools.aesh"
+            name="Aesh">
+      </category>
+      <view
+            category="org.jboss.tools.aesh"
+            class="org.jboss.tools.forge.aesh.view.AeshView"
+            icon="icons/aesh.png"
+            id="org.jboss.tools.forge.aesh"
+            name="Aesh Console"
+            restorable="true">
+      </view>
+   </extension>
+</plugin>
