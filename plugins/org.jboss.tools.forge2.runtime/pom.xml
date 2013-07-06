@@ -19,7 +19,7 @@
          <plugin>
             <groupId>org.jboss.forge</groupId>
             <artifactId>forge-maven-plugin</artifactId>
-            <version>1.0.0.Alpha5</version>
+            <version>1.0.0.Alpha6</version>
             <executions>
                <execution>
                   <id>deploy-addons</id>
