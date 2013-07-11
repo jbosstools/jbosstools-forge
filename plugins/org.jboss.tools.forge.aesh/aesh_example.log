@@ -1,0 +1,76 @@
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager alternateBuffer
+WARNING: Failed to get alternate buffer from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager mainBuffer
+WARNING: Failed to get main buffer from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager invertBackground
+WARNING: Failed to invert background from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager normalBackground
+WARNING: Failed to reset to normal background from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager enableBold
+WARNING: Failed to get bold from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager enableUnderline
+WARNING: Failed to get underline from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager disableUnderline
+WARNING: Failed to exit underline from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager enableBlink
+WARNING: Failed to enable blink from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager clearScreen
+WARNING: Failed to get clear from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager saveCursor
+WARNING: Failed to get save_cursor from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager restoreCursor
+WARNING: Failed to get restore_cursor from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.console.Console reset
+INFO: RESET
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getUp
+WARNING: Failed to get up from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getDown
+WARNING: Failed to get down from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getRight
+WARNING: Failed to get right from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getLeft
+WARNING: Failed to get left from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getDelete
+WARNING: Failed to get delete from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getIns
+WARNING: Failed to get insert from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getPgUp
+WARNING: Failed to get pgup from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getPgDown
+WARNING: Failed to get pgdown from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getKeyHome
+WARNING: Failed to get key home from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getCursorHome
+WARNING: Failed to get cursor home from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.terminal.InfocmpManager getEnd
+WARNING: Failed to get end from infocmp, using default
+9-jul-2013 19:05:38 org.jboss.aesh.console.Console reset
+INFO: enable aliasmanager with file: aesh_aliases.txt
+9-jul-2013 19:06:20 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: [0G[2K
+9-jul-2013 19:06:41 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: [0G[2K
+9-jul-2013 19:06:41 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: [0;34;49m[[3;31mt[23;7me[27;9;31;49ms[29;1mt[22;2;34m][22;4;37m$[24;0m 
+9-jul-2013 19:06:49 org.jboss.aesh.console.Console read
+INFO: GOT: [113, 117, 105, 116, 10]
+9-jul-2013 19:06:49 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: quit
+9-jul-2013 19:06:49 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: 
+
+9-jul-2013 19:06:49 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: ======>"quit"
+
+9-jul-2013 19:06:49 org.jboss.aesh.console.alias.AliasManager persist
+INFO: created fileWriter
+9-jul-2013 19:06:49 org.jboss.aesh.console.Console stop
+INFO: Done stopping reading thread. Terminal is reset
+9-jul-2013 19:06:49 org.jboss.aesh.console.Console stop
+INFO: Streams are closed
+9-jul-2013 19:06:52 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: [0G[2K
+9-jul-2013 19:06:52 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: [1;31;49m[FOO] 
+9-jul-2013 19:06:52 org.jboss.aesh.terminal.POSIXTerminal writeToStdOut
+INFO: writing to out: quit

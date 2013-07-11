@@ -3,6 +3,7 @@ package org.jboss.tools.forge.core.io;
 import java.io.IOException;
 import java.io.InputStream;
 
+// TODO remove this class, afaics it is not used
 public class ForgeInputStream extends InputStream {
 
     private byte[] input = new byte[0];
