@@ -32,7 +32,7 @@ public class AngularJsInstaller {
 								public void run() {
 									ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
 									runtime.sendCommand("forge install-plugin angularjs");
-									runtime.sendInput(" ");
+									runtime.sendInput(System.getProperty("line.separator"));
 									done = true;
 								}								
 							};
