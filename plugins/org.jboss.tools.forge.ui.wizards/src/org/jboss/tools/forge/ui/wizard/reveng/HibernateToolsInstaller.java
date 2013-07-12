@@ -36,7 +36,7 @@ public class HibernateToolsInstaller {
 //									prompt = runtime.sendCommand("get-prompt");
 //									promptNoProject = runtime.sendCommand("get-prompt-no-project");		
 									runtime.sendCommand("forge install-plugin hibernate-tools");
-									runtime.sendInput(" ");
+									runtime.sendInput(System.getProperty("line.separator"));
 //									runtime.sendCommand("set-prompt " + prompt);
 //									runtime.sendCommand("set-prompt-no-project " + promptNoProject);
 									done = true;
