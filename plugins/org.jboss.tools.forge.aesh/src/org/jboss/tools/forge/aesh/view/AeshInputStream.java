@@ -10,7 +10,7 @@ public class AeshInputStream extends PipedInputStream {
 
     private PipedOutputStream outputStream = new PipedOutputStream();
     
-    private AeshInputStream() {
+    public AeshInputStream() {
     	super();
     	try {
 			connect(outputStream);

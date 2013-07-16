@@ -29,13 +29,5 @@ public class AeshOutputStream extends OutputStream {
 			listener.charAppended((char)i);
 		}
 	}
-	
-	public void write(byte[] b) throws IOException {
-		super.write(b);
-	}
-	
-	public void write(byte[] b, int off, int len) throws IOException {
-		super.write(b, off, len);
-	}
 
 }

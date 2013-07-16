@@ -16,4 +16,17 @@
             restorable="true">
       </view>
    </extension>
+    <extension
+          point="org.eclipse.ui.themes">
+       <fontDefinition
+             categoryId="org.jboss.tools.forge.aesh"
+             defaultsTo="org.eclipse.debug.ui.consoleFont"
+             id="org.jboss.tools.forge.aesh.font"
+             label="Aesh Console Font">
+       </fontDefinition>
+       <themeElementCategory
+             id="org.jboss.tools.forge.aesh"
+             label="Aesh ">
+       </themeElementCategory>
+    </extension>
 </plugin>

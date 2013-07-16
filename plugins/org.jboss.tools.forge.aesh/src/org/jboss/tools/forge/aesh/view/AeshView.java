@@ -1,10 +1,7 @@
 package org.jboss.tools.forge.aesh.view;
 
-import java.io.IOException;
-
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
-import org.jboss.aesh.console.Console;
 
 public class AeshView extends ViewPart {
 	
@@ -24,11 +21,6 @@ public class AeshView extends ViewPart {
 	
 	@Override
 	public void dispose() {
-		try {
-			Console.getInstance().stop();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		textViewer.cleanup();
 		super.dispose();
 	}
