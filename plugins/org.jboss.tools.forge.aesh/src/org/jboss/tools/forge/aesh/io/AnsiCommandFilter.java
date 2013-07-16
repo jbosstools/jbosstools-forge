@@ -1,6 +1,7 @@
-package org.jboss.tools.forge.aesh.view;
+package org.jboss.tools.forge.aesh.io;
 
-import org.jboss.tools.forge.aesh.view.AeshOutputStream.StreamListener;
+import org.jboss.tools.forge.aesh.io.AeshOutputStream.StreamListener;
+
 
 public abstract class AnsiCommandFilter implements StreamListener {
 

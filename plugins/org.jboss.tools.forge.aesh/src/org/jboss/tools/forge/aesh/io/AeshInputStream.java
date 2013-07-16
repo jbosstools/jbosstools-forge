@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.aesh.view;
+package org.jboss.tools.forge.aesh.io;
 
 import java.io.IOException;
 import java.io.PipedInputStream;

@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.aesh.view;
+package org.jboss.tools.forge.aesh.document;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +7,9 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.aesh.AeshPlugin;
-import org.jboss.tools.forge.aesh.view.AeshOutputStream.StreamListener;
+import org.jboss.tools.forge.aesh.console.AeshConsole;
+import org.jboss.tools.forge.aesh.io.AnsiCommandFilter;
+import org.jboss.tools.forge.aesh.io.AeshOutputStream.StreamListener;
 
 public class AeshDocument extends Document {
 	

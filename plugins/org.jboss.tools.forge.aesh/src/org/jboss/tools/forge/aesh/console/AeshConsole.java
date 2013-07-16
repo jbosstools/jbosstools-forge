@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.aesh.view;
+package org.jboss.tools.forge.aesh.console;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +10,9 @@ import org.jboss.aesh.console.ConsoleOutput;
 import org.jboss.aesh.console.Prompt;
 import org.jboss.aesh.console.settings.Settings;
 import org.jboss.aesh.terminal.TerminalCharacter;
-import org.jboss.tools.forge.aesh.view.AeshOutputStream.StreamListener;
+import org.jboss.tools.forge.aesh.io.AeshInputStream;
+import org.jboss.tools.forge.aesh.io.AeshOutputStream;
+import org.jboss.tools.forge.aesh.io.AeshOutputStream.StreamListener;
 
 public class AeshConsole {
 	
