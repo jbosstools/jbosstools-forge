@@ -3,8 +3,10 @@ package org.jboss.tools.forge.aesh.view;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.forge.aesh.view.AeshDocument.CursorListener;
 
 public class AeshTextViewer extends TextViewer {
 	
@@ -12,6 +14,16 @@ public class AeshTextViewer extends TextViewer {
 
 	private AeshConsole aeshConsole;
 	private AeshDocument aeshDocument;
+	
+	private CursorListener cursorListener = new CursorListener() {		
+		@Override
+		public void cursorMoved() {
+			StyledText textWidget = getTextWidget();
+			if (textWidget != null && !textWidget.isDisposed()) {
+				textWidget.setCaretOffset(aeshDocument.getCursorOffset());
+			}
+		}
+	};
 	
     public AeshTextViewer(Composite parent) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -22,6 +34,7 @@ public class AeshTextViewer extends TextViewer {
     	aeshConsole = new AeshConsole();
     	aeshDocument = new AeshDocument();
     	aeshDocument.connect(aeshConsole);
+    	aeshDocument.addCursorListener(cursorListener);
     	setDocument(aeshDocument);
     	getTextWidget().setFont(JFaceResources.getFont(AESH_CONSOLE_FONT));
     	aeshConsole.start();
@@ -29,6 +42,7 @@ public class AeshTextViewer extends TextViewer {
     
     public void cleanup() {
     	aeshConsole.stop();
+    	aeshDocument.removeCursorListener(cursorListener);
     	aeshDocument.disconnect();
     }
     
