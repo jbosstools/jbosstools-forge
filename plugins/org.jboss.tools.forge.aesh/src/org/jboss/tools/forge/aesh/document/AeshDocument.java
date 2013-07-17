@@ -1,15 +1,19 @@
 package org.jboss.tools.forge.aesh.document;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.aesh.AeshPlugin;
 import org.jboss.tools.forge.aesh.console.AeshConsole;
-import org.jboss.tools.forge.aesh.io.AnsiCommandFilter;
 import org.jboss.tools.forge.aesh.io.AeshOutputStream.StreamListener;
+import org.jboss.tools.forge.aesh.io.AnsiCommandFilter;
 
 public class AeshDocument extends Document {
 	
@@ -22,6 +26,8 @@ public class AeshDocument extends Document {
 	private int cursorOffset = 0;
 	private AeshConsole console;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
+	private List<StyleRange> styleRanges = new ArrayList<StyleRange>();
+	private StyleRange currentStyleRange;
 	
 	public AeshDocument() {
 		stdOutListener = new StreamListener() {			
@@ -59,7 +65,7 @@ public class AeshDocument extends Document {
     	switch (c) {
     		case 'G' : moveCursorAbsoluteInLine(command); break;
     		case 'K' : clearCurrentLine(command); break;
-    		case 'm' : changeColor(command); break;
+    		case 'm' : changeStyle(command); break;
     		case 'H' : setCursorPosition(command); break;
     		case 'J' : clearCurrentScreenPage(command); break;
     		default : AeshPlugin.log(new RuntimeException("Unhandled Ansi control sequence in ForgeTextViewer: "+ command));
@@ -84,9 +90,13 @@ public class AeshDocument extends Document {
         }
     }
     
-    private void changeColor(String command) {
-    	System.out.println("changeColor(" + command + ")");
-    }
+    private void changeStyle(String command) {
+    	String[] args = command.substring(0, command.length() - 1).split(";");
+    	Color foreground = AeshColor.fromCode(Integer.valueOf(args[1])).getColor();
+    	Color background = AeshColor.fromCode(Integer.valueOf(args[2])).getColor();
+		currentStyleRange = new StyleRange(getLength(), 0, foreground, background);
+		styleRanges.add(currentStyleRange);
+     }
     
     private void setCursorPosition(String command) {
     	String str = command.substring(2, command.length() - 1);
@@ -118,8 +128,8 @@ public class AeshDocument extends Document {
     private void reset() {
 		set("");
 		moveCursorTo(0);
-//		styleRanges.clear();
-//		currentStyleRange = null;
+		styleRanges.clear();
+		currentStyleRange = null;
     }
     
 	private void moveCursorTo(int newOffset) {
@@ -132,6 +142,9 @@ public class AeshDocument extends Document {
 	private void handleCharAppended(char c) {
 		try {
 			if (c == '\r') return;
+			if (currentStyleRange != null) {
+				currentStyleRange.length++;
+			}
 			replace(cursorOffset, getLength() - cursorOffset, new String(new char[] { c }));
 			moveCursorTo(++cursorOffset);
 		} catch (BadLocationException e) {
@@ -165,6 +178,10 @@ public class AeshDocument extends Document {
 	
 	public void removeCursorListener(CursorListener listener) {
 		cursorListeners.remove(listener);
+	}
+	
+	public StyleRange getCurrentStyleRange() {
+		return currentStyleRange;
 	}
 	
 }

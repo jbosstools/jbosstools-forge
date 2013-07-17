@@ -1,8 +1,11 @@
 package org.jboss.tools.forge.aesh.view;
 
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -27,6 +30,24 @@ public class AeshTextViewer extends TextViewer {
 		}
 	};
 	
+	private IDocumentListener documentListener = new IDocumentListener() {
+    	@Override
+        public void documentAboutToBeChanged(DocumentEvent event) {
+        }
+        @Override
+        public void documentChanged(final DocumentEvent event) {
+            StyledText textWidget = getTextWidget();
+            if (textWidget != null && !textWidget.isDisposed()) {
+                int lineCount = textWidget.getLineCount();
+                textWidget.setTopIndex(lineCount - 1);
+    			StyleRange styleRange = getDocument().getCurrentStyleRange();
+    			if (styleRange != null) {
+    				textWidget.setStyleRange(styleRange);
+    			}
+            }
+        }
+    };
+	
     public AeshTextViewer(Composite parent) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
     	initialize();
@@ -37,6 +58,7 @@ public class AeshTextViewer extends TextViewer {
     	aeshDocument = new AeshDocument();
     	aeshDocument.connect(aeshConsole);
     	aeshDocument.addCursorListener(cursorListener);
+    	aeshDocument.addDocumentListener(documentListener);
     	setDocument(aeshDocument);
     	getTextWidget().setFont(JFaceResources.getFont(AESH_CONSOLE_FONT));
     	aeshConsole.start();
@@ -44,6 +66,7 @@ public class AeshTextViewer extends TextViewer {
     
     public void cleanup() {
     	aeshConsole.stop();
+    	aeshDocument.removeDocumentListener(documentListener);
     	aeshDocument.removeCursorListener(cursorListener);
     	aeshDocument.disconnect();
     }
@@ -51,6 +74,10 @@ public class AeshTextViewer extends TextViewer {
     protected void handleVerifyEvent(VerifyEvent e) {
     	aeshConsole.sendInput(e.text);
 		e.doit = false;    	
+    }
+    
+    public AeshDocument getDocument() {
+    	return (AeshDocument)super.getDocument();
     }
     
 }
