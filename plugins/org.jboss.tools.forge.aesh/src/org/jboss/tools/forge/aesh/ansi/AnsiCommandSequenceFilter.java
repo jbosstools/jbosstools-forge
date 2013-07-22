@@ -1,18 +1,18 @@
-package org.jboss.tools.forge.aesh.io;
+package org.jboss.tools.forge.aesh.ansi;
 
 import org.jboss.tools.forge.aesh.io.AeshOutputStream.StreamListener;
 
 
-public abstract class AnsiCommandFilter implements StreamListener {
+public abstract class AnsiCommandSequenceFilter implements StreamListener {
 
 	private StreamListener target = null;
 	private StringBuffer escapeSequence = new StringBuffer();
 	
-	public AnsiCommandFilter(StreamListener target) {
+	public AnsiCommandSequenceFilter(StreamListener target) {
 		this.target = target;
 	}
 	
-	public abstract void ansiCommandAvailable(String command);
+	public abstract void ansiCommandSequenceAvailable(String command);
 	
 	@Override
 	public void charAppended(char c) {
@@ -22,8 +22,16 @@ public abstract class AnsiCommandFilter implements StreamListener {
 			escapeSequence.append(c);
 		} else if (escapeSequence.length() > 1) {
 			escapeSequence.append(c);
+			AnsiControlSequenceType ansiControlSequenceType = 
+					AnsiControlSequenceType.fromCharacter(c);
+			if (ansiControlSequenceType != null) {
+				AnsiControlSequence ansiControlSequence = 
+						AnsiControlSequenceFactory.create(
+								ansiControlSequenceType,
+								escapeSequence.toString());
+			}
 			if (isAnsiEnd(c)) {
-				ansiCommandAvailable(escapeSequence.toString());
+				ansiCommandSequenceAvailable(escapeSequence.toString());
 				escapeSequence.setLength(0);
 			} 
 		} else {

@@ -9,6 +9,8 @@ import org.jboss.aesh.console.ConsoleCallback;
 import org.jboss.aesh.console.ConsoleOutput;
 import org.jboss.aesh.console.Prompt;
 import org.jboss.aesh.console.settings.Settings;
+import org.jboss.aesh.terminal.CharacterType;
+import org.jboss.aesh.terminal.Color;
 import org.jboss.aesh.terminal.TerminalCharacter;
 import org.jboss.tools.forge.aesh.io.AeshInputStream;
 import org.jboss.tools.forge.aesh.io.AeshOutputStream;
@@ -40,14 +42,31 @@ public class AeshConsole {
 	
 	private Prompt createPrompt() {
         List<TerminalCharacter> chars = new ArrayList<TerminalCharacter>();
-        chars.add(new TerminalCharacter('['));
-        chars.add(new TerminalCharacter('t'));
-        chars.add(new TerminalCharacter('e'));
-        chars.add(new TerminalCharacter('s'));
-        chars.add(new TerminalCharacter('t'));
-        chars.add(new TerminalCharacter(']'));
-        chars.add(new TerminalCharacter('$'));
-        chars.add(new TerminalCharacter(' '));
+        chars.add(new TerminalCharacter('[', Color.DEFAULT_BG, Color.BLUE_TEXT));
+        chars.add(new TerminalCharacter('t', Color.DEFAULT_BG, Color.RED_TEXT,
+                CharacterType.ITALIC));
+        chars.add(new TerminalCharacter('e', Color.DEFAULT_BG, Color.RED_TEXT,
+                CharacterType.INVERT));
+        chars.add(new TerminalCharacter('s', Color.DEFAULT_BG, Color.RED_TEXT,
+                CharacterType.CROSSED_OUT));
+        chars.add(new TerminalCharacter('t', Color.DEFAULT_BG ,Color.RED_TEXT,
+                CharacterType.BOLD));
+        chars.add(new TerminalCharacter(']', Color.DEFAULT_BG, Color.BLUE_TEXT,
+                CharacterType.PLAIN));
+        chars.add(new TerminalCharacter('$', Color.DEFAULT_BG, Color.WHITE_TEXT,
+                CharacterType.UNDERLINE));
+        chars.add(new TerminalCharacter(' ', Color.DEFAULT_BG, Color.WHITE_TEXT));
+
+//        final Prompt prompt = new Prompt(chars);
+//        List<TerminalCharacter> chars = new ArrayList<TerminalCharacter>();
+//        chars.add(new TerminalCharacter('['));
+//        chars.add(new TerminalCharacter('t'));
+//        chars.add(new TerminalCharacter('e'));
+//        chars.add(new TerminalCharacter('s'));
+//        chars.add(new TerminalCharacter('t'));
+//        chars.add(new TerminalCharacter(']'));
+//        chars.add(new TerminalCharacter('$'));
+//        chars.add(new TerminalCharacter(' '));
         return new Prompt(chars);
 	}
 	

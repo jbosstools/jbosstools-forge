@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.aesh.document;
+package org.jboss.tools.forge.aesh.ansi;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ public enum AeshColor {
 	
 	DEFAULT_TEXT(
 			org.jboss.aesh.terminal.Color.DEFAULT_TEXT,
-			Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND)),
+			Display.getDefault().getSystemColor(SWT.COLOR_INFO_FOREGROUND)),
 	BLACK_TEXT(
 			org.jboss.aesh.terminal.Color.BLACK_TEXT,
 			Display.getDefault().getSystemColor(SWT.COLOR_BLACK)),
@@ -38,7 +38,7 @@ public enum AeshColor {
 			Display.getDefault().getSystemColor(SWT.COLOR_WHITE)),
 	DEFAULT_BG(
 			org.jboss.aesh.terminal.Color.DEFAULT_BG,
-			Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND)),
+			Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND)),
 	BLACK_BG(
 			org.jboss.aesh.terminal.Color.BLACK_BG,
 			Display.getDefault().getSystemColor(SWT.COLOR_BLACK)),

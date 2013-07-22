@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.aesh.document;
+package org.jboss.tools.forge.aesh.ansi;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -8,12 +8,10 @@ import java.util.Set;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.aesh.AeshPlugin;
 import org.jboss.tools.forge.aesh.console.AeshConsole;
 import org.jboss.tools.forge.aesh.io.AeshOutputStream.StreamListener;
-import org.jboss.tools.forge.aesh.io.AnsiCommandFilter;
 
 public class AeshDocument extends Document {
 	
@@ -22,7 +20,7 @@ public class AeshDocument extends Document {
 	}
 	
 	private StreamListener stdOutListener, stdErrListener;
-	private AnsiCommandFilter ansiCommandFilter;
+	private AnsiCommandSequenceFilter ansiCommandSequenceFilter;
 	private int cursorOffset = 0;
 	private AeshConsole console;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
@@ -41,13 +39,13 @@ public class AeshDocument extends Document {
 				});
 			}
 		};
-		ansiCommandFilter = new AnsiCommandFilter(stdOutListener) {			
+		ansiCommandSequenceFilter = new AnsiCommandSequenceFilter(stdOutListener) {			
 			@Override
-			public void ansiCommandAvailable(final String command) {
+			public void ansiCommandSequenceAvailable(final String command) {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
-						handleAnsiCommand(command);
+						handleAnsiCommandSequence(command);
 					}					
 				});
 			}
@@ -60,7 +58,7 @@ public class AeshDocument extends Document {
 		};
 	}
 	
-	private void handleAnsiCommand(String command) {
+	private void handleAnsiCommandSequence(String command) {
     	char c = command.charAt(command.length() - 1);
     	switch (c) {
     		case 'G' : moveCursorAbsoluteInLine(command); break;
@@ -91,11 +89,12 @@ public class AeshDocument extends Document {
     }
     
     private void changeStyle(String command) {
-    	String[] args = command.substring(0, command.length() - 1).split(";");
-    	Color foreground = AeshColor.fromCode(Integer.valueOf(args[1])).getColor();
-    	Color background = AeshColor.fromCode(Integer.valueOf(args[2])).getColor();
-		currentStyleRange = new StyleRange(getLength(), 0, foreground, background);
-		styleRanges.add(currentStyleRange);
+    	System.out.println(command);
+//    	String[] args = command.substring(0, command.length() - 1).split(";");
+//    	Color foreground = AeshColor.fromCode(Integer.valueOf(args[1])).getColor();
+//    	Color background = AeshColor.fromCode(Integer.valueOf(args[2])).getColor();
+//		currentStyleRange = new StyleRange(getLength(), 0, foreground, background);
+//		styleRanges.add(currentStyleRange);
      }
     
     private void setCursorPosition(String command) {
@@ -155,14 +154,14 @@ public class AeshDocument extends Document {
 	public void connect(AeshConsole aeshConsole) {
 		if (console == null) {
 			console = aeshConsole;
-			console.addStdOutListener(ansiCommandFilter);
+			console.addStdOutListener(ansiCommandSequenceFilter);
 			console.addStdErrListener(stdErrListener);
 		}
 	}
 	
 	public void disconnect() {
 		if (console != null) {
-			console.removeStdOutListener(ansiCommandFilter);
+			console.removeStdOutListener(ansiCommandSequenceFilter);
 			console.removeStdErrListener(stdErrListener);
 			console = null;
 		}

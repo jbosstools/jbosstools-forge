@@ -9,9 +9,9 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.forge.aesh.ansi.AeshDocument;
+import org.jboss.tools.forge.aesh.ansi.AeshDocument.CursorListener;
 import org.jboss.tools.forge.aesh.console.AeshConsole;
-import org.jboss.tools.forge.aesh.document.AeshDocument;
-import org.jboss.tools.forge.aesh.document.AeshDocument.CursorListener;
 
 public class AeshTextViewer extends TextViewer {
 	
