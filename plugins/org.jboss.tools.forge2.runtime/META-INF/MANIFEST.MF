@@ -55,4 +55,4 @@ Export-Package: bootpath,
  org.jboss.forge.furnace.spi,
  org.jboss.forge.furnace.util,
  org.jboss.forge.furnace.versions,
- org.jboss.forge.proxy;uses:="javassist.util.proxy,new org.jboss.forge.proxy"
+ org.jboss.forge.furnace.proxy;uses:="javassist.util.proxy,new org.jboss.forge.furnace.proxy"
