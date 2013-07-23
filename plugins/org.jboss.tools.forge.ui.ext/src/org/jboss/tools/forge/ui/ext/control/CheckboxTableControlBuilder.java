@@ -17,6 +17,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
@@ -44,7 +45,10 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		group.setLayoutData(layoutData);
 		group.setText(InputComponents.getLabelFor(input, false));
 
-		final Table table = new Table(group, SWT.CHECK | SWT.BORDER
+		Composite groupPanel = new Composite(group, SWT.NULL);
+		groupPanel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		groupPanel.setLayout(new GridLayout(2, false));
+		final Table table = new Table(groupPanel, SWT.CHECK | SWT.BORDER
 				| SWT.V_SCROLL | SWT.H_SCROLL);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setToolTipText(input.getDescription());
@@ -80,6 +84,33 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 						data.remove(source.getData());
 					}
 					InputComponents.setValueFor(converterFactory, input, data);
+				}
+			}
+		});
+
+		Composite buttons = new Composite(groupPanel, SWT.NULL);
+		buttons.setLayout(new GridLayout(1, true));
+		buttons.setLayoutData(new GridData(GridData.FILL_BOTH));
+		Button selectAllButton = new Button(buttons, SWT.PUSH);
+		selectAllButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		selectAllButton.setText("Select All");
+		selectAllButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				for (TableItem item : table.getItems()) {
+					item.setChecked(true);
+				}
+			}
+		});
+
+		Button selectNoneButton = new Button(buttons, SWT.PUSH);
+		selectNoneButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		selectNoneButton.setText("Select None");
+		selectNoneButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				for (TableItem item : table.getItems()) {
+					item.setChecked(false);
 				}
 			}
 		});
