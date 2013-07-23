@@ -71,7 +71,7 @@ public class ForgeCorePlugin extends Plugin {
 						.size()]), null);
 
 				Class<?> bootstrapType = loader
-						.loadClass("org.jboss.forge.furnace.FurnaceImpl");
+						.loadClass("org.jboss.forge.furnace.impl.FurnaceImpl");
 
 				Object nativeForge = bootstrapType.newInstance();
 				Furnace furnace = (Furnace) ClassLoaderAdapterCallback.enhance(
