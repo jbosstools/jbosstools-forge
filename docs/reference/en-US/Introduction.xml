@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8' ?>
-
-   <chapter id="chap-Forge_Reference_Guide-Introduction">
-	<title>Introduction to Forge</title>
-	<para>
-		Forge allows developers to use the familiar terminal or command line interface within an Integrated Development Environment (IDE).
-	</para>
-</chapter>
-
