@@ -12,7 +12,9 @@ public abstract class AnsiCommandSequenceFilter implements StreamListener {
 		this.target = target;
 	}
 	
-	public abstract void ansiCommandSequenceAvailable(String command);
+//	public abstract void executeAnsiControlSequence(AnsiControlSequence ansiControlSequence);
+	
+	public abstract void ansiCommandSequenceAvailable(String commandSequence);	
 	
 	@Override
 	public void charAppended(char c) {
@@ -22,14 +24,15 @@ public abstract class AnsiCommandSequenceFilter implements StreamListener {
 			escapeSequence.append(c);
 		} else if (escapeSequence.length() > 1) {
 			escapeSequence.append(c);
-			AnsiControlSequenceType ansiControlSequenceType = 
-					AnsiControlSequenceType.fromCharacter(c);
-			if (ansiControlSequenceType != null) {
-				AnsiControlSequence ansiControlSequence = 
-						AnsiControlSequenceFactory.create(
-								ansiControlSequenceType,
-								escapeSequence.toString());
-			}
+//			AnsiControlSequenceType ansiControlSequenceType = 
+//					AnsiControlSequenceType.fromCharacter(c);
+//			if (ansiControlSequenceType != null) {
+//				AnsiControlSequence ansiControlSequence = 
+//						AnsiControlSequenceFactory.create(
+//								ansiControlSequenceType,
+//								escapeSequence.toString());
+//				executeAnsiControlSequence(ansiControlSequence);
+//			}
 			if (isAnsiEnd(c)) {
 				ansiCommandSequenceAvailable(escapeSequence.toString());
 				escapeSequence.setLength(0);
