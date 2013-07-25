@@ -59,6 +59,14 @@ public enum FurnaceService {
 	public ConverterFactory getConverterFactory() {
 		if (converterFactory == null) {
 			converterFactory = lookup(ConverterFactory.class);
+			while (converterFactory == null) {
+				try {
+					Thread.sleep(100);
+					converterFactory = lookup(ConverterFactory.class);
+				} catch (InterruptedException e) {
+					break;
+				}
+			}
 		}
 		return converterFactory;
 	}

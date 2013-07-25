@@ -46,43 +46,41 @@ public class UIContextImpl extends AbstractUIContext {
 				: selection.toList();
 		List<Object> result = new LinkedList<Object>();
 		ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.lookup(ConverterFactory.class);
-		if (converterFactory != null) {
-			Converter<File, Resource> converter = converterFactory
-					.getConverter(File.class, locateNativeClass(Resource.class));
+				.getConverterFactory();
+		Converter<File, Resource> converter = converterFactory.getConverter(
+				File.class, locateNativeClass(Resource.class));
 
-			if (selectedElements.isEmpty()) {
-				// Get the Workspace directory path
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				File workspaceDirectory = workspace.getRoot().getLocation()
-						.toFile();
-				Object convertedObj = converter.convert(workspaceDirectory);
-				result.add(Proxies.unwrap(convertedObj));
-			} else {
-				for (Object object : selectedElements) {
-					if (object instanceof IResource) {
-						IPath location = ((IResource) object).getLocation();
-						if (location != null) {
-							File file = location.toFile();
-							result.add(Proxies.unwrap(converter.convert(file)));
-						}
-					} else if (object instanceof IJavaElement) {
-						try {
-							IJavaElement javaElem = (IJavaElement) object;
-							IResource correspondingResource = javaElem
-									.getCorrespondingResource();
-							if (correspondingResource != null) {
-								IPath location = correspondingResource
-										.getLocation();
-								if (location != null) {
-									File file = location.toFile();
-									result.add(Proxies.unwrap(converter
-											.convert(file)));
-								}
+		if (selectedElements.isEmpty()) {
+			// Get the Workspace directory path
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			File workspaceDirectory = workspace.getRoot().getLocation()
+					.toFile();
+			Object convertedObj = converter.convert(workspaceDirectory);
+			result.add(Proxies.unwrap(convertedObj));
+		} else {
+			for (Object object : selectedElements) {
+				if (object instanceof IResource) {
+					IPath location = ((IResource) object).getLocation();
+					if (location != null) {
+						File file = location.toFile();
+						result.add(Proxies.unwrap(converter.convert(file)));
+					}
+				} else if (object instanceof IJavaElement) {
+					try {
+						IJavaElement javaElem = (IJavaElement) object;
+						IResource correspondingResource = javaElem
+								.getCorrespondingResource();
+						if (correspondingResource != null) {
+							IPath location = correspondingResource
+									.getLocation();
+							if (location != null) {
+								File file = location.toFile();
+								result.add(Proxies.unwrap(converter
+										.convert(file)));
 							}
-						} catch (JavaModelException e) {
-							ForgeUIPlugin.log(e);
 						}
+					} catch (JavaModelException e) {
+						ForgeUIPlugin.log(e);
 					}
 				}
 			}
