@@ -19,6 +19,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -98,7 +99,11 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				for (TableItem item : table.getItems()) {
-					item.setChecked(true);
+					if (!item.getChecked()) {
+						item.setChecked(true);
+						// Notify selection change
+						notifySelectionChange(table, item);
+					}
 				}
 			}
 		});
@@ -110,11 +115,21 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				for (TableItem item : table.getItems()) {
-					item.setChecked(false);
+					if (item.getChecked()) {
+						item.setChecked(false);
+						// Notify selection change
+						notifySelectionChange(table, item);
+					}
 				}
 			}
 		});
 		return table;
+	}
+
+	private void notifySelectionChange(final Table table, TableItem item) {
+		Event event = new Event();
+		event.item = item;
+		table.notifyListeners(SWT.Selection, event);
 	}
 
 	@Override
