@@ -42,7 +42,6 @@
                         <addonId>org.jboss.forge.addon:maven,${version.forge.addons}</addonId>
                         <addonId>org.jboss.forge.addon:projects,${version.forge.addons}</addonId>
                         <addonId>org.jboss.forge.addon:ui,${version.forge.addons}</addonId>
-                        <addonId>org.jboss.forge.addon:scaffold,${version.forge.addons}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
