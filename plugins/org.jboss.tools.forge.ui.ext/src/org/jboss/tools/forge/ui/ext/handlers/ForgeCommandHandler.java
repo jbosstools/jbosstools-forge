@@ -27,20 +27,23 @@ public class ForgeCommandHandler extends AbstractHandler {
 			shell = HandlerUtil.getActiveShell(event);
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);
-			ProgressMonitorDialog pmd = 
-					new ProgressMonitorDialog(HandlerUtil.getActiveShell(event));
-			pmd.run(true, false, new IRunnableWithProgress() {				
-				@Override
-				public void run(IProgressMonitor arg0) throws InvocationTargetException,
-						InterruptedException {
-					FurnaceService.INSTANCE.waitUntilContainerIsStarted();
-					// hack to make progress monitor stick until all commands are loaded
-					ISelection selection = window.getSelectionService().getSelection();
-					if (selection instanceof IStructuredSelection) {
-						new WizardDialogHelper(shell, (IStructuredSelection)selection).getAllCandidatesAsMap();
+			final ISelection selection = window.getSelectionService().getSelection();
+			if (!FurnaceService.INSTANCE.getContainerStatus().isStarted()) {
+				ProgressMonitorDialog pmd = new ProgressMonitorDialog(shell);
+				pmd.run(true, false, new IRunnableWithProgress() {				
+					@Override
+					public void run(IProgressMonitor monitor) throws InvocationTargetException,
+							InterruptedException {
+						String taskName = "Please wait while Forge 2 is started.";
+						monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
+						FurnaceService.INSTANCE.waitUntilContainerIsStarted();
+						// hack to make progress monitor stick until all commands are loaded
+						if (selection instanceof IStructuredSelection) {
+							new WizardDialogHelper(shell, (IStructuredSelection)selection).getAllCandidatesAsMap();
+						}
 					}
-				}
-			});
+				});
+			}
 			new UICommandListDialog(window).open();
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
