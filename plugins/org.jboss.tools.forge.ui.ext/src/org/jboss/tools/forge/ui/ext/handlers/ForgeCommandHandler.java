@@ -17,10 +17,13 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.dialog.UICommandListDialog;
 
+/**
+ * Called when CTRL (Or Command in OSX) + 5 is pressed
+ */
 public class ForgeCommandHandler extends AbstractHandler {
-	
+
 	private ExecutionEvent event;
-	
+
 	private Job checkFurnaceStatusJob = new Job("Check Furnace Status") {
 		@Override
 		protected IStatus run(IProgressMonitor arg0) {
@@ -32,7 +35,7 @@ public class ForgeCommandHandler extends AbstractHandler {
 			return Status.OK_STATUS;
 		}
 	};
-	
+
 	private IJobChangeListener jobChangeListener = new JobChangeAdapter() {
 		@Override
 		public void done(IJobChangeEvent arg0) {
@@ -47,28 +50,20 @@ public class ForgeCommandHandler extends AbstractHandler {
 		checkFurnaceStatusJob.addJobChangeListener(jobChangeListener);
 		checkFurnaceStatusJob.schedule();
 		return null;
-//		try {
-//			
-//			FurnaceService.INSTANCE.waitUntilContainerIsStarted();
-//		} catch (InterruptedException e) {
-//			throw new ExecutionException("Container not started", e);
-//		}
-//		IWorkbenchWindow window = HandlerUtil
-//				.getActiveWorkbenchWindowChecked(event);
-//		return new UICommandListDialog(window).open();
 	}
-		
+
 	private void openUICommandListDialog() {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+					IWorkbenchWindow window = HandlerUtil
+							.getActiveWorkbenchWindowChecked(event);
 					new UICommandListDialog(window).open();
 				} catch (ExecutionException e) {
 					ForgeUIPlugin.log(e);
 				}
-			}			
+			}
 		});
 	}
 
