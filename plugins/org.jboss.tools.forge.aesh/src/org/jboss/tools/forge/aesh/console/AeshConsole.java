@@ -18,14 +18,14 @@ import org.jboss.tools.forge.aesh.io.AeshOutputStream.StreamListener;
 
 public class AeshConsole {
 	
-	private AeshInputStream inputStream;
-	private AeshOutputStream stdOut, stdErr;
+	protected AeshInputStream inputStream;
+	protected AeshOutputStream stdOut, stdErr;
 	
 	public AeshConsole() {
 		initialize();
 	}
 	
-	private void initialize() {
+	protected void initialize() {
 		try {
 			inputStream = new AeshInputStream();
 			Settings.getInstance().setInputStream(inputStream);

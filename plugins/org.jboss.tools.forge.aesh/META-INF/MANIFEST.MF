@@ -9,6 +9,8 @@ Bundle-ClassPath: lib/aesh-0.38.jar,
  .
 Require-Bundle: org.eclipse.ui;bundle-version="3.105.0",
  org.eclipse.core.runtime;bundle-version="3.9.0",
- org.eclipse.jface.text;bundle-version="3.8.100"
+ org.eclipse.jface.text;bundle-version="3.8.100",
+ org.jboss.tools.forge2.runtime;bundle-version="2.0.0",
+ org.jboss.tools.forge.core.ext;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.jboss.tools.forge.aesh.AeshPlugin

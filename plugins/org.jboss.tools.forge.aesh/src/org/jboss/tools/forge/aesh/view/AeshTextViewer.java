@@ -17,8 +17,8 @@ public class AeshTextViewer extends TextViewer {
 	
 	private static final String AESH_CONSOLE_FONT = "org.jboss.tools.forge.aesh.font";
 
-	private AeshConsole aeshConsole;
-	private AeshDocument aeshDocument;
+	protected AeshConsole aeshConsole;
+	protected AeshDocument aeshDocument;
 	
 	private CursorListener cursorListener = new CursorListener() {		
 		@Override
@@ -53,15 +53,31 @@ public class AeshTextViewer extends TextViewer {
     	initialize();
     }
     
-    private void initialize() {
+    protected void initializeConsole() {
     	aeshConsole = new AeshConsole();
+    }
+    
+    protected void initializeDocument() {
     	aeshDocument = new AeshDocument();
     	aeshDocument.connect(aeshConsole);
     	aeshDocument.addCursorListener(cursorListener);
     	aeshDocument.addDocumentListener(documentListener);
     	setDocument(aeshDocument);
+    }
+    
+    protected void initializeTextWidget() {
     	getTextWidget().setFont(JFaceResources.getFont(AESH_CONSOLE_FONT));
+    }
+    
+    protected void startConsole() {
     	aeshConsole.start();
+    }
+    
+    protected void initialize() {
+    	initializeConsole();
+    	initializeDocument();
+    	initializeTextWidget();
+    	startConsole();
     }
     
     public void cleanup() {

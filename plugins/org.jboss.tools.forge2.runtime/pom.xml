@@ -42,6 +42,8 @@
                         <addonId>org.jboss.forge.addon:maven,${version.forge.addons}</addonId>
                         <addonId>org.jboss.forge.addon:projects,${version.forge.addons}</addonId>
                         <addonId>org.jboss.forge.addon:ui,${version.forge.addons}</addonId>
+                        <addonId>org.jboss.forge.addon:scaffold,${version.forge.addons}</addonId>
+                        <addonId>org.jboss.forge.addon:shell,${version.forge.addons}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
@@ -151,6 +153,12 @@
                            <version>${version.forge.addons}</version>
                            <classifier>forge-addon</classifier>
                            <destFileName>ui-spi-${version.forge.addons}.jar</destFileName>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.jboss.forge.addon</groupId>
+                           <artifactId>shell-api</artifactId>
+                           <version>${version.forge}</version>
+                           <destFileName>shell-api-${version.forge}.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>

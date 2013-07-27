@@ -15,6 +15,14 @@
             name="Aesh Console"
             restorable="true">
       </view>
+      <view
+            category="org.jboss.tools.aesh"
+            class="org.jboss.tools.forge.aesh.f2.F2View"
+            icon="icons/aesh.png"
+            id="org.jboss.tools.forge.aesh"
+            name="F2 Console"
+            restorable="true">
+      </view>
    </extension>
     <extension
           point="org.eclipse.ui.themes">
