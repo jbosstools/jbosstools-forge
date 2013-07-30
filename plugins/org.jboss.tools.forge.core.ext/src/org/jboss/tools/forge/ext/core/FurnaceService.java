@@ -12,7 +12,7 @@ import org.jboss.forge.furnace.ContainerStatus;
 import org.jboss.forge.furnace.Furnace;
 import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.lock.LockManager;
-import org.jboss.forge.furnace.services.ExportedInstance;
+import org.jboss.forge.furnace.services.Imported;
 
 /**
  * This is a singleton for the {@link Forge} class.
@@ -72,12 +72,11 @@ public enum FurnaceService {
 	}
 
 	public <S> S lookup(Class<S> service) {
-		ExportedInstance<S> exportedInstance = null;
+		Imported<S> instance = null;
 		if (forge != null) {
-			exportedInstance = forge.getAddonRegistry().getExportedInstance(
-					service);
+			instance = forge.getAddonRegistry().getServices(service);
 		}
-		return (exportedInstance == null) ? null : exportedInstance.get();
+		return (instance == null) ? null : instance.get();
 	}
 
 	public LockManager getLockManager() {
