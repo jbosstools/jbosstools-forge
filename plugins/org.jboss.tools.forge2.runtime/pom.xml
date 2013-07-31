@@ -20,7 +20,7 @@
          <plugin>
             <groupId>org.jboss.forge</groupId>
             <artifactId>forge-maven-plugin</artifactId>
-            <version>1.0.0.Alpha6</version>
+            <version>1.0.0.Alpha7</version>
             <executions>
                <execution>
                   <id>deploy-addons</id>
@@ -46,6 +46,13 @@
                   </configuration>
                </execution>
             </executions>
+            <dependencies>
+               <dependency>
+                  <groupId>org.jboss.forge.furnace</groupId>
+                  <artifactId>furnace-manager-resolver-maven</artifactId>
+                  <version>${version.forge}</version>
+               </dependency>
+            </dependencies>
          </plugin>
          <plugin>
             <artifactId>maven-clean-plugin</artifactId>
