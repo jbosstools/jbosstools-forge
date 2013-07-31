@@ -2,7 +2,6 @@ package org.jboss.tools.forge.aesh.f2;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -10,7 +9,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.furnace.addons.AddonRegistry;
-import org.jboss.forge.furnace.services.ExportedInstance;
+import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 
 public class F2Starter {
@@ -40,10 +39,10 @@ public class F2Starter {
 		Map<String, UICommand> result = new TreeMap<String, UICommand>();
 		AddonRegistry addonRegistry = FurnaceService.INSTANCE
 				.getAddonRegistry();
-		Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry
-				.getExportedInstances(UICommand.class);
-		for (ExportedInstance<UICommand> instance : exportedInstances) {
-			instance.get();
+		Imported<UICommand> instances = addonRegistry
+				.getServices(UICommand.class);
+		for (UICommand uiCommand : instances) {
+			uiCommand.getMetadata();
 		}
 		return result;
 	}
