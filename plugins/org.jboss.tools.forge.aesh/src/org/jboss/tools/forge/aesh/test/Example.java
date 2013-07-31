@@ -15,6 +15,7 @@ import org.jboss.aesh.console.ConsoleOutput;
 import org.jboss.aesh.console.Prompt;
 import org.jboss.aesh.console.helper.InterruptHook;
 import org.jboss.aesh.console.settings.Settings;
+import org.jboss.aesh.console.settings.SettingsBuilder;
 import org.jboss.aesh.edit.actions.Operation;
 import org.jboss.aesh.terminal.CharacterType;
 import org.jboss.aesh.terminal.Color;
@@ -31,16 +32,33 @@ public class Example {
     static ConsoleCallback passwordCallback;
 
     public static void main(String[] args) throws IOException {
+    	
+    	InterruptHook interruptHook = new InterruptHook() {			
+			@Override
+			public void handleInterrupt(Console console) {
+		        try {
+		            console.pushToStdOut("KILLED!\n");
+		            console.stop();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+			}
+		};
 
-        //Settings.getInstance().setAnsiConsole(false);
-        Settings.getInstance().setReadInputrc(false);
-        Settings.getInstance().setLogging(true);
-        Settings.getInstance().setLogFile("aesh_example.log");
-        Settings.getInstance().setAliasEnabled(true);
-        Settings.getInstance().setAliasFile(new File("aesh_aliases.txt"));
-        //Settings.getInstance().enableOperatorParser(false);
-        //Settings.getInstance().setHistoryDisabled(true);
-        //Settings.getInstance().setHistoryPersistent(false);
+    	
+    	Settings settings = new SettingsBuilder()
+//    		.ansi(false)
+    		.readInputrc(false)
+    		.logging(true)
+    		.logfile("aesh_example.log")
+    		.enableAlias(true)
+    		.aliasFile(new File("aesh_aliases.text"))
+    		.interruptHook(interruptHook)
+//    		.parseOperators(false)
+//    		.disableHistory(true)
+//    		.persistHistory(false)
+    		.create();
+
         List<TerminalCharacter> chars = new ArrayList<TerminalCharacter>();
         chars.add(new TerminalCharacter('[', Color.DEFAULT_BG, Color.BLUE_TEXT));
         chars.add(new TerminalCharacter('t', Color.DEFAULT_BG, Color.RED_TEXT,
@@ -60,20 +78,7 @@ public class Example {
         final Prompt prompt = new Prompt(chars);
         //String prompt = ANSI.redText()+"[test@foo]"+ANSI.reset()+"$ ";
 
-        //a simple interruptHook
-        Settings.getInstance().setInterruptHook(new InterruptHook() {
-            @Override
-            public void handleInterrupt(Console console) {
-                try {
-                    console.pushToStdOut("KILLED!\n");
-                    console.stop();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        final Console exampleConsole = Console.getInstance();
+        final Console exampleConsole = new Console(settings);
 
         final ConsoleCommand test = new ConsoleCommand(exampleConsole) {
 
@@ -194,72 +199,76 @@ public class Example {
             public int readConsoleOutput(ConsoleOutput output) throws IOException{
                 //To change body of implemented methods use File | Settings | File Templates.
 
-                exampleConsole.pushToStdOut("======>\"" + output.getBuffer() + "\"\n");
-                if(masking) {
-                    exampleConsole.pushToStdOut("got password: "+output.getBuffer()+", stopping masking");
-                    masking = false;
-                    exampleConsole.setPrompt(prompt);
-                }
-                else if (output.getBuffer().equalsIgnoreCase("quit") || output.getBuffer().equalsIgnoreCase("exit") ||
-                        output.getBuffer().equalsIgnoreCase("reset")) {
-                    exampleConsole.stop();
-                }
-                else if(output.getBuffer().equalsIgnoreCase("password")) {
-                    masking = true;
-                    exampleConsole.setPrompt(new Prompt("password: ", (char) 0));
-                }
-                else if(output.getBuffer().startsWith("blah")) {
-                    exampleConsole.pushToStdErr("blah. command not found.\n");
-                    exampleConsole.pushToStdOut("BAH"+ Config.getLineSeparator());
-                }
-                else if(output.getBuffer().equals("clear"))
-                    exampleConsole.clear();
-                else if(output.getBuffer().startsWith("man")) {
-                    //exampleConsole.attachProcess(test);
-                    test.attach(output);
-                }
-                else if(output.getBuffer().startsWith("login")) {
-                    exampleConsole.setConsoleCallback(passwordCallback);
-                    exampleConsole.setPrompt(new Prompt("Username: "));
-                }
-                 return 0;
-            }
-        };
-        exampleConsole.setConsoleCallback(consoleCallback);
-        exampleConsole.start();
-        exampleConsole.setPrompt(prompt);
+				exampleConsole.pushToStdOut("======>\"" + output.getBuffer()
+						+ "\"\n");
+				if (masking) {
+					exampleConsole.pushToStdOut("got password: "
+							+ output.getBuffer() + ", stopping masking");
+					masking = false;
+					exampleConsole.setPrompt(prompt);
+				} else if (output.getBuffer().equalsIgnoreCase("quit")
+						|| output.getBuffer().equalsIgnoreCase("exit")
+						|| output.getBuffer().equalsIgnoreCase("reset")) {
+					exampleConsole.stop();
+				} else if (output.getBuffer().equalsIgnoreCase("password")) {
+					masking = true;
+					exampleConsole
+							.setPrompt(new Prompt("password: ", (char) 0));
+				} else if (output.getBuffer().startsWith("blah")) {
+					exampleConsole.pushToStdErr("blah. command not found.\n");
+					exampleConsole.pushToStdOut("BAH"
+							+ Config.getLineSeparator());
+				} else if (output.getBuffer().equals("clear"))
+					exampleConsole.clear();
+				else if (output.getBuffer().startsWith("man")) {
+					// exampleConsole.attachProcess(test);
+					test.attach(output);
+				} else if (output.getBuffer().startsWith("login")) {
+					exampleConsole.setConsoleCallback(passwordCallback);
+					exampleConsole.setPrompt(new Prompt("Username: "));
+				}
+				return 0;
+			}
+		};
+		exampleConsole.setConsoleCallback(consoleCallback);
+		exampleConsole.start();
+		exampleConsole.setPrompt(prompt);
 
-        passwordCallback = new ConsoleCallback() {
-            private boolean hasUsername = false;
+		passwordCallback = new ConsoleCallback() {
+			private boolean hasUsername = false;
 
-            @Override
-            public int readConsoleOutput(ConsoleOutput output) throws IOException {
-                if(hasUsername) {
-                    password = output.getBuffer();
-                    hasPassword = true;
-                    exampleConsole.pushToStdOut("Username: "+username+", password: "+password+Config.getLineSeparator());
-                    exampleConsole.setPrompt(prompt);
-                    exampleConsole.setConsoleCallback(consoleCallback);
-                }
-                else {
-                    username = output.getBuffer();
-                    exampleConsole.setPrompt( new Prompt("Password: ", (char) 0));
-                    hasUsername = true;
-                }
-                return 0;
-            }
-        };
+			@Override
+			public int readConsoleOutput(ConsoleOutput output)
+					throws IOException {
+				if (hasUsername) {
+					password = output.getBuffer();
+					hasPassword = true;
+					exampleConsole.pushToStdOut("Username: " + username
+							+ ", password: " + password
+							+ Config.getLineSeparator());
+					exampleConsole.setPrompt(prompt);
+					exampleConsole.setConsoleCallback(consoleCallback);
+				} else {
+					username = output.getBuffer();
+					exampleConsole
+							.setPrompt(new Prompt("Password: ", (char) 0));
+					hasUsername = true;
+				}
+				return 0;
+			}
+		};
 
-        //show how we can change the prompt async
-        try {
-            Thread.sleep(4000);
-            exampleConsole.setPrompt(new Prompt(
-                    new TerminalString("[FOO] ", Color.DEFAULT_BG, Color.RED_TEXT, CharacterType.BOLD)));
-            //exampleConsole.pushToStdOut(new TerminalString("PUSHING", Color.DEFAULT_BG, Color.BLUE_TEXT).getAsString());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+		// show how we can change the prompt async
+		try {
+			Thread.sleep(4000);
+			exampleConsole.setPrompt(new Prompt(new TerminalString("[FOO] ",
+					Color.DEFAULT_BG, Color.RED_TEXT, CharacterType.BOLD)));
+			// exampleConsole.pushToStdOut(new TerminalString("PUSHING",
+			// Color.DEFAULT_BG, Color.BLUE_TEXT).getAsString());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
-    }
-
+	}
+    
 }

@@ -4,7 +4,7 @@ Bundle-Name: Aesh Plugin
 Bundle-SymbolicName: org.jboss.tools.forge.aesh;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: lib/aesh-0.38.jar,
+Bundle-ClassPath: lib/aesh-0.39.jar,
  lib/aesh-extensions-0.38.jar,
  .
 Require-Bundle: org.eclipse.ui;bundle-version="3.105.0",

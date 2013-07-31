@@ -13,7 +13,8 @@
 	<packaging>eclipse-plugin</packaging>
 
     <properties>
-       <version.aesh>0.38</version.aesh>
+       <version.aesh>0.39</version.aesh>
+       <version.aesh.extensions>0.38</version.aesh.extensions>
     </properties>
 
 	<build>
@@ -38,7 +39,7 @@
 								<artifactItem>
 									<groupId>org.jboss.aesh</groupId>
 									<artifactId>aesh-extensions</artifactId>
-									<version>${version.aesh}</version>
+									<version>${version.aesh.extensions}</version>
 							  	</artifactItem>
 							</artifactItems>
 							<skip>false</skip>

@@ -1,6 +1,8 @@
 package org.jboss.tools.forge.aesh.console;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.jboss.aesh.console.ConsoleCallback;
 import org.jboss.aesh.console.ConsoleOutput;
 import org.jboss.aesh.console.Prompt;
 import org.jboss.aesh.console.settings.Settings;
+import org.jboss.aesh.console.settings.SettingsBuilder;
 import org.jboss.aesh.terminal.CharacterType;
 import org.jboss.aesh.terminal.Color;
 import org.jboss.aesh.terminal.TerminalCharacter;
@@ -18,26 +21,41 @@ import org.jboss.tools.forge.aesh.io.AeshOutputStream.StreamListener;
 
 public class AeshConsole {
 	
-	protected AeshInputStream inputStream;
-	protected AeshOutputStream stdOut, stdErr;
+	private AeshInputStream inputStream;
+	private AeshOutputStream stdOut, stdErr;
+	private Console console;
 	
 	public AeshConsole() {
 		initialize();
 	}
 	
 	protected void initialize() {
+		createStreams();
+		createConsole();
+	}
+	
+	protected void createConsole() {
 		try {
-			inputStream = new AeshInputStream();
-			Settings.getInstance().setInputStream(inputStream);
-			stdOut = new AeshOutputStream();
-			Settings.getInstance().setStdOut(stdOut);
-			stdErr = new AeshOutputStream();
-			Settings.getInstance().setStdErr(stdErr);
-			Console.getInstance().setPrompt(createPrompt());
-			Console.getInstance().setConsoleCallback(createConsoleCallback());
+			console = new Console(createAeshSettings());
+			console.setPrompt(createPrompt());
+			console.setConsoleCallback(createConsoleCallback());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	protected Settings createAeshSettings() {
+		return new SettingsBuilder()
+			.inputStream(inputStream)
+			.outputStream(stdOut)
+			.outputStreamError(stdErr)
+			.create();
+	}
+	
+	protected void createStreams() {
+		inputStream = new AeshInputStream();
+		stdOut = new AeshOutputStream();
+		stdErr = new AeshOutputStream();
 	}
 	
 	private Prompt createPrompt() {
@@ -56,17 +74,6 @@ public class AeshConsole {
         chars.add(new TerminalCharacter('$', Color.DEFAULT_BG, Color.WHITE_TEXT,
                 CharacterType.UNDERLINE));
         chars.add(new TerminalCharacter(' ', Color.DEFAULT_BG, Color.WHITE_TEXT));
-
-//        final Prompt prompt = new Prompt(chars);
-//        List<TerminalCharacter> chars = new ArrayList<TerminalCharacter>();
-//        chars.add(new TerminalCharacter('['));
-//        chars.add(new TerminalCharacter('t'));
-//        chars.add(new TerminalCharacter('e'));
-//        chars.add(new TerminalCharacter('s'));
-//        chars.add(new TerminalCharacter('t'));
-//        chars.add(new TerminalCharacter(']'));
-//        chars.add(new TerminalCharacter('$'));
-//        chars.add(new TerminalCharacter(' '));
         return new Prompt(chars);
 	}
 	
@@ -75,7 +82,7 @@ public class AeshConsole {
 			@Override
 			public int readConsoleOutput(ConsoleOutput output)
 					throws IOException {
-				Console.getInstance().pushToStdOut("hoorray\n");
+				console.pushToStdOut("hoorray\n");
 				return 0;
 			}
 		};
@@ -83,7 +90,7 @@ public class AeshConsole {
 	
 	public void start() {
 		try {
-			Console.getInstance().start();
+			console.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -95,7 +102,7 @@ public class AeshConsole {
 	
 	public void stop() {
 		try {
-			Console.getInstance().stop();
+			console.stop();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -115,6 +122,18 @@ public class AeshConsole {
 	
 	public void removeStdErrListener(StreamListener listener) {
 		stdErr.removeStreamListener(listener);
+	}
+	
+	protected InputStream getInputStream() {
+		return inputStream;
+	}
+	
+	protected OutputStream getStdOut() {
+		return stdOut;
+	}
+	
+	protected OutputStream getStdErr() {
+		return stdErr;
 	}
 	
 }
