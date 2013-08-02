@@ -46,13 +46,6 @@
                   </configuration>
                </execution>
             </executions>
-            <dependencies>
-               <dependency>
-                  <groupId>org.jboss.forge.furnace</groupId>
-                  <artifactId>furnace-manager-resolver-maven</artifactId>
-                  <version>${version.forge}</version>
-               </dependency>
-            </dependencies>
          </plugin>
          <plugin>
             <artifactId>maven-clean-plugin</artifactId>
