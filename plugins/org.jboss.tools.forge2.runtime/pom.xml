@@ -12,15 +12,15 @@
    <version>2.0.0-SNAPSHOT</version>
    <packaging>eclipse-plugin</packaging>
    <properties>
-      <version.forge>2.0.0-SNAPSHOT</version.forge>
-      <version.forge.addons>2.0.0-SNAPSHOT</version.forge.addons>
+      <version.furnace>2.0.0.Alpha10</version.furnace>
+      <version.forge.addons>2.0.0.Alpha10</version.forge.addons>
    </properties>
    <build>
       <plugins>
          <plugin>
-            <groupId>org.jboss.forge</groupId>
-            <artifactId>forge-maven-plugin</artifactId>
-            <version>1.0.0.Alpha6</version>
+            <groupId>org.jboss.forge.furnace</groupId>
+            <artifactId>furnace-maven-plugin</artifactId>
+            <version>${version.furnace}</version>
             <executions>
                <execution>
                   <id>deploy-addons</id>
@@ -42,7 +42,6 @@
                         <addonId>org.jboss.forge.addon:maven,${version.forge.addons}</addonId>
                         <addonId>org.jboss.forge.addon:projects,${version.forge.addons}</addonId>
                         <addonId>org.jboss.forge.addon:ui,${version.forge.addons}</addonId>
-                        <addonId>org.jboss.forge.addon:scaffold,${version.forge.addons}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
@@ -94,64 +93,64 @@
                         <artifactItem>
                            <groupId>org.jboss.forge.furnace</groupId>
                            <artifactId>furnace-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>furnace-api-${version.forge}.jar</destFileName>
+                           <version>${version.furnace}</version>
+                           <destFileName>furnace-api-${version.furnace}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.furnace</groupId>
                            <artifactId>furnace-proxy</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>furnace-proxy-${version.forge}.jar</destFileName>
+                           <version>${version.furnace}</version>
+                           <destFileName>furnace-proxy-${version.furnace}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.furnace</groupId>
                            <artifactId>furnace-se</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>furnace-se-${version.forge}.jar</destFileName>
+                           <version>${version.furnace}</version>
+                           <destFileName>furnace-se-${version.furnace}.jar</destFileName>
                         </artifactItem>
                         <!-- Addons API needed -->
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>ui-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>ui-api-${version.forge}.jar</destFileName>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>ui-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>convert-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>convert-api-${version.forge}.jar</destFileName>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>convert-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>facets-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>facets-api-${version.forge}.jar</destFileName>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>facets-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>resources-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>resources-api-${version.forge}.jar</destFileName>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>resources-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>dependencies-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>dependencies-api-${version.forge}.jar</destFileName>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>dependencies-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>projects-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>projects-api-${version.forge}.jar</destFileName>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>projects-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>ui-spi</artifactId>
-                           <version>${version.forge}</version>
+                           <version>${version.forge.addons}</version>
                            <classifier>forge-addon</classifier>
-                           <destFileName>ui-spi-${version.forge}.jar</destFileName>
+                           <destFileName>ui-spi-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>
