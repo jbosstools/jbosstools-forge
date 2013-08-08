@@ -13,6 +13,9 @@
 	<name>forge.plugins</name>
 	<packaging>pom</packaging>
 	<modules>
+		<module>org.jboss.tools.aesh.core</module>
+		<module>org.jboss.tools.aesh.runtime</module>
+		<module>org.jboss.tools.aesh.ui</module>
 		<module>org.jboss.tools.forge.core</module>
 		<module>org.jboss.tools.forge.core.ext</module>
 		<module>org.jboss.tools.forge.runtime</module>

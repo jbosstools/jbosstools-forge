@@ -20,9 +20,7 @@ Bundle-ClassPath: lib/furnace-proxy-2.0.0-SNAPSHOT.jar,
  lib/dependencies-api-2.0.0-SNAPSHOT.jar,
  lib/shell-api-2.0.0-SNAPSHOT.jar,
  lib/shell-spi-2.0.0-SNAPSHOT.jar,
- .,
- lib/aesh-0.38.jar,
- lib/aesh-extensions-0.38.jar
+ .
 Export-Package: bootpath,
  org.jboss.forge.addon.convert,
  org.jboss.forge.addon.convert.exception,
@@ -81,3 +79,4 @@ Export-Package: bootpath,
  org.jboss.forge.furnace.spi;uses:="org.jboss.forge.furnace",
  org.jboss.forge.furnace.util;uses:="org.jboss.forge.furnace.addons",
  org.jboss.forge.furnace.versions;uses:="org.jboss.forge.furnace.exception"
+Require-Bundle: org.jboss.tools.aesh.runtime;bundle-version="0.39.0"
