@@ -115,15 +115,15 @@
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>shell-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>shell-api-${version.forge}.jar</destFileName>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>shell-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>shell-spi</artifactId>
-                           <version>${version.forge}</version>
+                           <version>${version.forge.addons}</version>
                            <classifier>forge-addon</classifier>
-                           <destFileName>shell-spi-${version.forge}.jar</destFileName>
+                           <destFileName>shell-spi-${version.forge.addons}.jar</destFileName>
                         </artifactItem> 
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
@@ -134,9 +134,9 @@
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>ui-spi</artifactId>
-                           <version>${version.forge}</version>
+                           <version>${version.forge.addons}</version>
                            <classifier>forge-addon</classifier>
-                           <destFileName>ui-spi-${version.forge}.jar</destFileName>
+                           <destFileName>ui-spi-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
@@ -167,19 +167,6 @@
                            <artifactId>projects-api</artifactId>
                            <version>${version.forge.addons}</version>
                            <destFileName>projects-api-${version.forge.addons}.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                           <groupId>org.jboss.forge.addon</groupId>
-                           <artifactId>ui-spi</artifactId>
-                           <version>${version.forge.addons}</version>
-                           <classifier>forge-addon</classifier>
-                           <destFileName>ui-spi-${version.forge.addons}.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                           <groupId>org.jboss.forge.addon</groupId>
-                           <artifactId>shell-api</artifactId>
-                           <version>${version.forge}</version>
-                           <destFileName>shell-api-${version.forge}.jar</destFileName>
                         </artifactItem>
 						<artifactItem>
 							<groupId>org.jboss.aesh</groupId>
