@@ -31,11 +31,11 @@ public class AeshDocument extends Document {
 	public AeshDocument() {
 		stdOutListener = new StreamListener() {			
 			@Override
-			public void charAppended(final char c) {
+			public void outputAvailable(final String output) {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
-						handleCharAppended(c);
+						handleOutputAvailable(output);
 					}				
 				});
 			}
@@ -53,8 +53,13 @@ public class AeshDocument extends Document {
 		};
 		stdErrListener = new StreamListener() {		
 			@Override
-			public void charAppended(char c) {
-				handleCharAppended(c);
+			public void outputAvailable(final String output) {
+				Display.getDefault().syncExec(new Runnable() {
+					@Override
+					public void run() {
+						handleOutputAvailable(output);
+					}				
+				});
 			}
 		};
 	}
@@ -139,14 +144,14 @@ public class AeshDocument extends Document {
 		}
 	}
 
-	private void handleCharAppended(char c) {
+	private void handleOutputAvailable(String output) {
 		try {
-			if (c == '\r') return;
+			output.replaceAll("\r", "");
 			if (currentStyleRange != null) {
-				currentStyleRange.length++;
+				currentStyleRange.length += output.length();
 			}
-			replace(cursorOffset, getLength() - cursorOffset, new String(new char[] { c }));
-			moveCursorTo(++cursorOffset);
+			replace(cursorOffset, getLength() - cursorOffset, output);
+			moveCursorTo(cursorOffset + output.length());
 		} catch (BadLocationException e) {
         	e.printStackTrace();							
 		}

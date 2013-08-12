@@ -10,7 +10,7 @@ public class AeshOutputStream extends OutputStream {
 	public static final AeshOutputStream STD_ERR = new AeshOutputStream();
 	
 	public static interface StreamListener {
-		public void charAppended(char c);
+		public void outputAvailable(String str);
 	}
 	
 	private ArrayList<StreamListener> listeners = new ArrayList<AeshOutputStream.StreamListener>();
@@ -26,8 +26,16 @@ public class AeshOutputStream extends OutputStream {
 	@Override
 	public void write(int i) throws IOException {
 		for (StreamListener listener : listeners) {
-			listener.charAppended((char)i);
+			listener.outputAvailable(new String( new char[] { (char)i }));
 		}
 	}
-
+	
+	@Override
+	public void write(byte[] b, int off, int len) throws IOException {
+		String str = new String(b).substring(off, off + len);
+		for (StreamListener listener : listeners) {
+			listener.outputAvailable(str);
+		}
+	}
+	
 }
