@@ -14,7 +14,6 @@
 	<properties>
 		<version.furnace>2.0.0-SNAPSHOT</version.furnace>
 		<version.forge.addons>2.0.0-SNAPSHOT</version.forge.addons>
-		<version.aesh>0.38</version.aesh>
 	</properties>
 	<build>
 		<plugins>
