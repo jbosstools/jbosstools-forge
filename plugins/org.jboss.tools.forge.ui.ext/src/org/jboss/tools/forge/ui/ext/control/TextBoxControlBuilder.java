@@ -30,7 +30,7 @@ public class TextBoxControlBuilder extends ControlBuilder {
 			final InputComponent<?, Object> input, final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
-		label.setText(InputComponents.getLabelFor(input, true));
+		label.setText(getMnemonicLabel(input, true));
 
 		final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
