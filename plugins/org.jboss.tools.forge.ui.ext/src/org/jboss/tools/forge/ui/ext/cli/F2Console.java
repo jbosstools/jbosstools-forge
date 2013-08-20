@@ -8,21 +8,20 @@ import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 
-public class F2Console extends AeshConsole
-{
+public class F2Console extends AeshConsole {
 
-   private Shell shell;
+	@SuppressWarnings("unused")
+	protected void createConsole() {
+		ShellFactory shellFactory = FurnaceService.INSTANCE
+				.lookup(ShellFactory.class);
+		Settings settings = new SettingsBuilder().inputStream(getInputStream())
+				.outputStream(getStdOut()).outputStreamError(getStdErr())
+				.create();
+		Shell shell = shellFactory.createShell(
+				OperatingSystemUtils.getUserHomeDir(), settings);
+	}
 
-   protected void createConsole()
-   {
-      ShellFactory shellFactory = FurnaceService.INSTANCE.lookup(ShellFactory.class);
-      Settings settings = new SettingsBuilder().inputStream(getInputStream()).outputStream(getStdOut())
-               .outputStreamError(getStdErr()).create();
-      shell = shellFactory.createShell(OperatingSystemUtils.getUserHomeDir(), settings);
-   }
-
-   public void start()
-   {
-      // Already started
-   }
+	public void start() {
+		// Already started
+	}
 }
