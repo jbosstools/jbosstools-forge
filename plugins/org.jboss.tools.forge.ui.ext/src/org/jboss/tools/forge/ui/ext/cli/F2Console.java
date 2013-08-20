@@ -1,25 +1,28 @@
 package org.jboss.tools.forge.ui.ext.cli;
 
-import org.jboss.forge.addon.shell.ForgeShell;
+import org.jboss.aesh.console.settings.Settings;
+import org.jboss.aesh.console.settings.SettingsBuilder;
+import org.jboss.forge.addon.shell.Shell;
+import org.jboss.forge.addon.shell.ShellFactory;
+import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 
-public class F2Console extends AeshConsole {
-	
-	private ForgeShell shell;
+public class F2Console extends AeshConsole
+{
 
-	protected void createConsole() {
-		shell = FurnaceService.INSTANCE.lookup(ForgeShell.class);
-		shell.setInputStream(getInputStream());
-		shell.setStdOut(getStdOut());
-		shell.setStdErr(getStdErr());
-	}
-	
-	public void start() {
-		try {
-			shell.startShell();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+   private Shell shell;
+
+   protected void createConsole()
+   {
+      ShellFactory shellFactory = FurnaceService.INSTANCE.lookup(ShellFactory.class);
+      Settings settings = new SettingsBuilder().inputStream(getInputStream()).outputStream(getStdOut())
+               .outputStreamError(getStdErr()).create();
+      shell = shellFactory.createShell(OperatingSystemUtils.getUserHomeDir(), settings);
+   }
+
+   public void start()
+   {
+      // Already started
+   }
 }
