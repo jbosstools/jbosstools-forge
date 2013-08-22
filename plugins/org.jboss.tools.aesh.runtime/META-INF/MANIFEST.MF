@@ -4,8 +4,8 @@ Bundle-Name: Aesh Runtime Plugin
 Bundle-SymbolicName: org.jboss.tools.aesh.runtime;singleton:=true
 Bundle-Version: 0.39.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Bundle-ClassPath: lib/aesh-0.39.jar,
- lib/aesh-extensions-0.38.jar
+Bundle-ClassPath: lib/aesh-0.40.jar,
+ lib/aesh-extensions-0.40.jar
 Export-Package: org.jboss.aesh.cl;uses:="org.jboss.aesh.cl.internal",
  org.jboss.aesh.cl.exception,
  org.jboss.aesh.cl.internal,
