@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
-import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIBuilderImpl;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
@@ -187,20 +186,15 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			}
 		}
 
-		// Validate required
-		if (uiBuilder != null) {
-			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
-				String requiredMsg = InputComponents.validateRequired(input);
-				if (requiredMsg != null) {
-					setErrorMessage(requiredMsg);
-					return false;
-				}
-			}
-		}
-
 		// Invoke custom validation
 		UIValidationContextImpl validationContext = new UIValidationContextImpl(
 				uiContext);
+		// Validate required
+		if (uiBuilder != null) {
+			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
+				input.validate(validationContext);
+			}
+		}
 		// invokes the validation in the current UICommand
 		uiCommand.validate(validationContext);
 		List<String> errors = validationContext.getErrors();
