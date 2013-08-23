@@ -189,15 +189,19 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		// Invoke custom validation
 		UIValidationContextImpl validationContext = new UIValidationContextImpl(
 				uiContext);
+		List<String> errors = validationContext.getErrors();
 		// Validate required
 		if (uiBuilder != null) {
 			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
 				input.validate(validationContext);
+				if (!errors.isEmpty()) {
+					setErrorMessage(errors.get(0));
+					return false;
+				}
 			}
 		}
 		// invokes the validation in the current UICommand
 		uiCommand.validate(validationContext);
-		List<String> errors = validationContext.getErrors();
 		boolean noErrors = errors.isEmpty();
 		if (!noErrors) {
 			setErrorMessage(errors.get(0));
