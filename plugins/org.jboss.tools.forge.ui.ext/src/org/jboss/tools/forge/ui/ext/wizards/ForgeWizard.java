@@ -1,6 +1,7 @@
 package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.util.List;
+import java.util.Stack;
 
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -34,6 +35,8 @@ public class ForgeWizard extends MutableWizard {
 	private UICommand initialCommand;
 	private UIContextImpl uiContext;
 
+	private Stack<Class<? extends UICommand>> subflows = new Stack<Class<? extends UICommand>>();
+
 	public ForgeWizard(UICommand uiCommand, UIContextImpl context) {
 		this.initialCommand = uiCommand;
 		this.uiContext = context;
@@ -62,6 +65,7 @@ public class ForgeWizard extends MutableWizard {
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
 		}
+
 		// No next page
 		if (nextCommand == null) {
 			// Clear any subsequent pages that may exist (occurs when navigation
@@ -69,9 +73,17 @@ public class ForgeWizard extends MutableWizard {
 			List<ForgeWizardPage> pageList = getPageList();
 			int idx = pageList.indexOf(page) + 1;
 			clearNextPagesFrom(idx);
+			if (!subflows.isEmpty()) {
+				Class<? extends UICommand> subflowSuccessor = subflows.pop();
+				return createWizardPage(subflowSuccessor);
+			}
 			return null;
 		} else {
-			Class<? extends UICommand> successor = nextCommand.getNext();
+			Class<? extends UICommand>[] successors = nextCommand.getNext();
+			final Class<? extends UICommand> successor = successors[0];
+			for (int i = 1; i < successors.length; i++) {
+				subflows.push(successors[i]);
+			}
 			// Do we have any pages already displayed ? (Did we went back
 			// already ?) or did we change anything in the current wizard ?
 			// If yes, clear subsequent pages
@@ -86,12 +98,19 @@ public class ForgeWizard extends MutableWizard {
 					// Clear the old pages
 					clearNextPagesFrom(idx);
 				}
-				UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
-				nextPage = new ForgeWizardPage(this, nextStep, getUIContext());
-				addPage(nextPage);
+				nextPage = createWizardPage(successor);
 			}
 			return nextPage;
 		}
+	}
+
+	private ForgeWizardPage createWizardPage(
+			final Class<? extends UICommand> successor) {
+		ForgeWizardPage nextPage;
+		UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
+		nextPage = new ForgeWizardPage(this, nextStep, getUIContext());
+		addPage(nextPage);
+		return nextPage;
 	}
 
 	/**
