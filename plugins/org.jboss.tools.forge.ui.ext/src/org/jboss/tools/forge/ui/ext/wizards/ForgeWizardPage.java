@@ -1,9 +1,9 @@
 /*
+ * Copyright 2013 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Eclipse Public License version 1.0, available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.net.URL;
@@ -42,11 +42,12 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	private UIContextImpl uiContext;
 	private UIBuilderImpl uiBuilder;
 	private boolean changed;
+	private final boolean subflowHead;
 
 	private ComponentControlEntry[] componentControlEntries;
 
 	public ForgeWizardPage(ForgeWizard wizard, UICommand command,
-			UIContextImpl contextImpl) {
+			UIContextImpl contextImpl, boolean startsSubflow) {
 		super(command.getMetadata().getName());
 		setWizard(wizard);
 		setPageComplete(false);
@@ -56,6 +57,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		setImageDescriptor(ForgeUIPlugin.getForgeLogo());
 		this.uiCommand = command;
 		this.uiContext = contextImpl;
+		this.subflowHead = startsSubflow;
 	}
 
 	public UICommand getUICommand() {
@@ -271,5 +273,12 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 
 	public boolean isChanged() {
 		return changed;
+	}
+
+	/**
+	 * @return the subflowHead
+	 */
+	public boolean isSubflowHead() {
+		return subflowHead;
 	}
 }
