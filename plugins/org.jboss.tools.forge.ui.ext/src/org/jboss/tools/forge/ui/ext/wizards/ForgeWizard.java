@@ -1,7 +1,7 @@
 package org.jboss.tools.forge.ui.ext.wizards;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -35,7 +35,7 @@ public class ForgeWizard extends MutableWizard {
 	private UICommand initialCommand;
 	private UIContextImpl uiContext;
 
-	private Stack<Class<? extends UICommand>> subflows = new Stack<Class<? extends UICommand>>();
+	private LinkedList<Class<? extends UICommand>> subflows = new LinkedList<Class<? extends UICommand>>();
 
 	public ForgeWizard(UICommand uiCommand, UIContextImpl context) {
 		this.initialCommand = uiCommand;
