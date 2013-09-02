@@ -13,8 +13,8 @@
 	<packaging>eclipse-plugin</packaging>
 
     <properties>
-       <version.aesh>0.39</version.aesh>
-       <version.aesh.extensions>0.38</version.aesh.extensions>
+       <version.aesh>0.40</version.aesh>
+       <version.aesh.extensions>0.40</version.aesh.extensions>
     </properties>
 
 	<build>

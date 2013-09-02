@@ -20,8 +20,10 @@ public enum ControlBuilderRegistry {
 
 	private ControlBuilder[] controlBuilders = { new CheckboxControlBuilder(),
 			new ComboControlBuilder(), new RadioControlBuilder(),
-			new FileChooserControlBuilder(), new CheckboxTableControlBuilder(),
-			new TextBoxControlBuilder(), new PasswordTextBoxControlBuilder(),
+			new FileChooserControlBuilder(),
+			new DirectoryChooserControlBuilder(),
+			new CheckboxTableControlBuilder(), new TextBoxControlBuilder(),
+			new PasswordTextBoxControlBuilder(),
 			new JavaPackageChooserControlBuilder(),
 			new JavaClassChooserControlBuilder(),
 			new FallbackTextBoxControlBuilder() };

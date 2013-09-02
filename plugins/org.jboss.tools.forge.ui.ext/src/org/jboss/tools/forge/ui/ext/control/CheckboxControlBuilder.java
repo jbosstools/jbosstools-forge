@@ -34,7 +34,7 @@ public class CheckboxControlBuilder extends ControlBuilder {
 		layoutData.horizontalSpan = 1;
 		Button cmb = new Button(container, SWT.CHECK);
 		cmb.setLayoutData(layoutData);
-		cmb.setText(InputComponents.getLabelFor(input, false));
+		cmb.setText(getMnemonicLabel(input, false));
 		cmb.setToolTipText(input.getDescription());
 		// Set Default Value
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE

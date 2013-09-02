@@ -13,6 +13,7 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.rse.ui.Mnemonics;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -133,5 +134,15 @@ public abstract class ControlBuilder {
 			result.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		}
 		return result;
+	}
+
+	protected String getMnemonicLabel(InputComponent<?, Object> input,
+			boolean addColon) {
+		String label = InputComponents.getLabelFor(input, addColon);
+		char shortName = input.getShortName();
+		if (shortName != InputComponents.DEFAULT_SHORT_NAME) {
+			label = Mnemonics.applyMnemonic(label, shortName);
+		}
+		return label;
 	}
 }

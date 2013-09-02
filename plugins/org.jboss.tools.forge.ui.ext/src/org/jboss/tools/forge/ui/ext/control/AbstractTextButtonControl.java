@@ -33,7 +33,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder {
 			final InputComponent<?, Object> input, final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
-		label.setText(InputComponents.getLabelFor(input, true));
+		label.setText(getMnemonicLabel(input, true));
 
 		Composite container = new Composite(parent, SWT.NULL);
 		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

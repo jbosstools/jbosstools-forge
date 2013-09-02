@@ -12,22 +12,22 @@ import java.io.File;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class FileChooserControlBuilder extends AbstractTextButtonControl {
+public class DirectoryChooserControlBuilder extends AbstractTextButtonControl {
 
 	@Override
 	protected void browseButtonPressed(ForgeWizardPage page,
 			InputComponent<?, Object> input, Text containerText) {
 		String selectedPath;
-		FileDialog dialog = new FileDialog(page.getShell(), SWT.OPEN);
-		dialog.setText("Select a file");
-		dialog.setFileName(containerText.getText());
+		DirectoryDialog dialog = new DirectoryDialog(page.getShell(), SWT.OPEN);
+		dialog.setText("Select a directory");
+		dialog.setFilterPath(containerText.getText());
 		selectedPath = dialog.open();
 		if (selectedPath != null) {
 			containerText.setText(selectedPath);
@@ -50,7 +50,7 @@ public class FileChooserControlBuilder extends AbstractTextButtonControl {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputType.FILE_PICKER;
+		return InputType.DIRECTORY_PICKER;
 	}
 
 	@Override
