@@ -82,7 +82,9 @@ public class ForgeWizard extends MutableWizard {
 			Class<? extends UICommand>[] successors = nextCommand.getNext();
 			final Class<? extends UICommand> successor = successors[0];
 			for (int i = 1; i < successors.length; i++) {
-				subflows.push(successors[i]);
+				if (successors[i] != null) {
+					subflows.push(successors[i]);
+				}
 			}
 			// Do we have any pages already displayed ? (Did we went back
 			// already ?) or did we change anything in the current wizard ?
