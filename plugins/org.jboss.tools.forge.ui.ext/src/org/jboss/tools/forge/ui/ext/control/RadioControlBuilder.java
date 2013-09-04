@@ -76,7 +76,7 @@ public class RadioControlBuilder extends ControlBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputType.SELECT_ONE_RADIO;
+		return InputType.RADIO;
 	}
 
 	@Override

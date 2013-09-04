@@ -96,7 +96,7 @@ public class ComboControlBuilder extends ControlBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputType.SELECT_ONE_DROPDOWN;
+		return InputType.DROPDOWN;
 	}
 
 	@Override

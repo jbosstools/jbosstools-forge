@@ -139,7 +139,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputType.SELECT_MANY_CHECKBOX;
+		return InputType.CHECKBOX;
 	}
 
 	@Override
