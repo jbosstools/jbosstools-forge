@@ -7,14 +7,19 @@ import java.util.Collection;
 import org.apache.maven.model.Model;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
+import org.eclipse.ui.dialogs.IOverwriteQuery;
+import org.eclipse.ui.wizards.datatransfer.FileSystemStructureProvider;
+import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 
 /**
  * Imports a maven-ized project into the workspace
@@ -40,8 +45,15 @@ class ProjectImporter {
 	}
 
 	public void importProject() {
-		Job job = new MavenImportWorkspaceJob("Importing project "
-				+ projectName);
+		final Job job;
+		File projectDir = new File(baseDirPath, moduleLocation);
+		File pomFile = new File(projectDir, "pom.xml");
+		String name = "Importing project " + projectName;
+		if (pomFile.isFile()) {
+			job = new MavenImportWorkspaceJob(name);
+		} else {
+			job = new GeneralImportWorkspaceJob(name);
+		}
 		job.schedule();
 	}
 
@@ -64,6 +76,35 @@ class ProjectImporter {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	private class GeneralImportWorkspaceJob extends WorkspaceJob {
+
+		public GeneralImportWorkspaceJob(String name) {
+			super(name);
+		}
+
+		@Override
+		public IStatus runInWorkspace(IProgressMonitor monitor)
+				throws CoreException {
+			File projectDir = new File(baseDirPath, moduleLocation);
+			IOverwriteQuery overwriteQuery = new IOverwriteQuery() {
+				public String queryOverwrite(String file) {
+					return ALL;
+				}
+			};
+			IPath projectPath = Path.fromOSString(projectName);
+			ImportOperation importOperation = new ImportOperation(projectPath,
+					projectDir, FileSystemStructureProvider.INSTANCE,
+					overwriteQuery);
+			importOperation.setCreateContainerStructure(false);
+			try {
+				importOperation.run(monitor);
+			} catch (Exception e) {
+				return Status.CANCEL_STATUS;
+			}
+			return Status.OK_STATUS;
+		}
 	}
 
 	private class MavenImportWorkspaceJob extends WorkspaceJob {
