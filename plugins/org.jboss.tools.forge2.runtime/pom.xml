@@ -33,7 +33,9 @@
 							<addonRepository>${basedir}/addon-repository</addonRepository>
 							<addonIds>
 								<addonId>org.jboss.forge.addon:core,${version.forge.addons}</addonId>
-								<!-- Remove the line below when shell is added to core -->
+								<!-- Remove the addons below when shell and scaffold are added to 
+									core -->
+								<addonId>org.jboss.forge.addon:scaffold,${version.forge.addons}</addonId>
 								<addonId>org.jboss.forge.addon:shell,${version.forge.addons}</addonId>
 							</addonIds>
 						</configuration>
