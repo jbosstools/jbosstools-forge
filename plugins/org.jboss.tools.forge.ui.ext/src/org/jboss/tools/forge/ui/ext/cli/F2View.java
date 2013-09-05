@@ -27,9 +27,7 @@ public class F2View extends ViewPart {
 	}
 	
 	static {
-		System.out.println("verifying property 'forge.compatibility.IDE'");
 		if (!Boolean.getBoolean("forge.compatibility.IDE")) {
-			System.out.println("property was not set, setting to 'true'");
 			System.setProperty("forge.compatibility.IDE", "true");
 		}
 	}
