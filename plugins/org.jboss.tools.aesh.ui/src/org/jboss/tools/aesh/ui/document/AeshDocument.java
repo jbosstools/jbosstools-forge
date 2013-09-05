@@ -9,7 +9,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.aesh.core.ansi.AnsiCommandSequenceFilter;
+import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
 import org.jboss.tools.aesh.ui.AeshUIPlugin;
@@ -21,7 +21,7 @@ public class AeshDocument extends Document {
 	}
 	
 	private StreamListener stdOutListener, stdErrListener;
-	private AnsiCommandSequenceFilter ansiCommandSequenceFilter;
+	private ControlSequenceFilter ansiCommandSequenceFilter;
 	private int cursorOffset = 0;
 	private AeshConsole console;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
@@ -40,9 +40,9 @@ public class AeshDocument extends Document {
 				});
 			}
 		};
-		ansiCommandSequenceFilter = new AnsiCommandSequenceFilter(stdOutListener) {			
+		ansiCommandSequenceFilter = new ControlSequenceFilter(stdOutListener) {			
 			@Override
-			public void ansiCommandSequenceAvailable(final String command) {
+			public void controlSequenceAvailable(final String command) {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
