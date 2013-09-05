@@ -31,7 +31,6 @@ public class FileChooserControlBuilder extends AbstractTextButtonControl {
 		selectedPath = dialog.open();
 		if (selectedPath != null) {
 			containerText.setText(selectedPath);
-
 		}
 	}
 

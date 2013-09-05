@@ -97,7 +97,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 
 		for (int i = 0; i < size; i++) {
 			final InputComponent<?, ?> input = inputs.get(i);
-			ControlBuilder controlBuilder = ControlBuilderRegistry.INSTANCE
+			ControlBuilder controlBuilder = ControlBuilderRegistry
 					.getBuilderFor(input);
 			Control control = controlBuilder.build(this,
 					(InputComponent<?, Object>) input, container);

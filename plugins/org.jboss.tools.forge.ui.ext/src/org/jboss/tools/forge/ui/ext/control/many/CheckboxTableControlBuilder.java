@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ui.ext.control;
+package org.jboss.tools.forge.ui.ext.control.many;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +30,7 @@ import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.control.ControlBuilder;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class CheckboxTableControlBuilder extends ControlBuilder {

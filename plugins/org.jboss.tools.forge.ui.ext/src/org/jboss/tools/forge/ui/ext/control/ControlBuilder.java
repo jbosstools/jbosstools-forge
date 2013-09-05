@@ -18,11 +18,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UICompleter;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.forge.furnace.proxy.Proxies;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.autocomplete.InputComponentProposalProvider;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
@@ -144,5 +146,9 @@ public abstract class ControlBuilder {
 			label = Mnemonics.applyMnemonic(label, shortName);
 		}
 		return label;
+	}
+
+	protected ConverterFactory getConverterFactory() {
+		return FurnaceService.INSTANCE.getConverterFactory();
 	}
 }

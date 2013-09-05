@@ -31,7 +31,6 @@ public class DirectoryChooserControlBuilder extends AbstractTextButtonControl {
 		selectedPath = dialog.open();
 		if (selectedPath != null) {
 			containerText.setText(selectedPath);
-
 		}
 	}
 
