@@ -2,7 +2,7 @@
 <feature
       id="org.jboss.tools.forge.ext.feature"
       label="%featureName"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="%featureProvider"
       plugin="org.jboss.tools.forge.ui">
 
@@ -34,6 +34,26 @@
 
    <plugin
          id="org.jboss.tools.forge.ui.ext"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jboss.tools.aesh.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.jboss.tools.aesh.runtime"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.jboss.tools.aesh.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
