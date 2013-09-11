@@ -73,21 +73,22 @@ public class ForgeWizard extends MutableWizard {
 		}
 		ForgeWizardPage nextPage = (ForgeWizardPage) super.getNextPage(page);
 
+		// Clear any subsequent pages that may exist (occurs when navigation
+		// changes)
+		if (nextPage != null) {
+			if (currentWizardPage.isChanged() && (!nextPage.isSubflowHead())) {
+				List<ForgeWizardPage> pageList = getPageList();
+				int idx = pageList.indexOf(page) + 1;
+				clearNextPagesFrom(idx);
+				nextPage = null;
+			} else {
+				// Nothing changed, just return the already created page
+				return nextPage;
+			}
+		}
+
 		// No next page
 		if (nextCommand == null) {
-			// Clear any subsequent pages that may exist (occurs when navigation
-			// changes)
-			if (nextPage != null) {
-				if (currentWizardPage.isChanged()
-						&& (!nextPage.isSubflowHead())) {
-					List<ForgeWizardPage> pageList = getPageList();
-					int idx = pageList.indexOf(page) + 1;
-					clearNextPagesFrom(idx);
-				} else {
-					// Nothing changed, just return the already created page
-					return nextPage;
-				}
-			}
 			if (!subflows.isEmpty()) {
 				Class<? extends UICommand> subflowSuccessor = subflows.pop();
 				return createWizardPage(subflowSuccessor, true);
@@ -96,17 +97,8 @@ public class ForgeWizard extends MutableWizard {
 		} else {
 			Class<? extends UICommand>[] successors = nextCommand.getNext();
 			final Class<? extends UICommand> successor = successors[0];
-			// Do we have any pages already displayed ? (Did we went back
-			// already ?) or did we change anything in the current wizard ?
-			// If yes, clear subsequent pages
 			if (nextPage == null
 					|| !isNextPageAssignableFrom(nextPage, successor)) {
-				if (nextPage != null && currentWizardPage.isChanged()) {
-					List<ForgeWizardPage> pageList = getPageList();
-					int idx = pageList.indexOf(nextPage);
-					// Clear the old pages
-					clearNextPagesFrom(idx);
-				}
 				for (int i = 1; i < successors.length; i++) {
 					if (successors[i] != null) {
 						subflows.push(successors[i]);
