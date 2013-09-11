@@ -58,6 +58,7 @@ public class ForgeWizard extends MutableWizard {
 
 	@Override
 	public ForgeWizardPage getNextPage(final IWizardPage page) {
+		final ForgeWizardPage result;
 		final ForgeWizardPage currentWizardPage = (ForgeWizardPage) page;
 		UICommand uiCommand = currentWizardPage.getUICommand();
 		// If it's not a wizard, we don't care
@@ -65,71 +66,95 @@ public class ForgeWizard extends MutableWizard {
 			return null;
 		}
 		UIWizard wiz = (UIWizard) uiCommand;
-		NavigationResult nextCommand = null;
-		try {
-			nextCommand = wiz.next(getUIContext());
-		} catch (Exception e) {
-			ForgeUIPlugin.log(e);
-		}
-		ForgeWizardPage nextPage = (ForgeWizardPage) super.getNextPage(page);
+		ForgeWizardPage originalNextPage = (ForgeWizardPage) super
+				.getNextPage(currentWizardPage);
 
-		// Clear any subsequent pages that may exist (occurs when navigation
-		// changes)
-		if (nextPage != null) {
-			if (currentWizardPage.isChanged() && (!nextPage.isSubflowHead())) {
-				List<ForgeWizardPage> pageList = getPageList();
-				int idx = pageList.indexOf(page) + 1;
-				clearNextPagesFrom(idx);
-				nextPage = null;
-			} else {
-				// Nothing changed, just return the already created page
-				return nextPage;
-			}
-		}
-
-		// No next page
-		if (nextCommand == null) {
-			if (!subflows.isEmpty()) {
-				Class<? extends UICommand> subflowSuccessor = subflows.pop();
-				return createWizardPage(subflowSuccessor, true);
-			}
-			return null;
+		if (!currentWizardPage.isChanged() && originalNextPage != null) {
+			result = originalNextPage;
 		} else {
-			Class<? extends UICommand>[] successors = nextCommand.getNext();
-			final Class<? extends UICommand> successor = successors[0];
-			if (nextPage == null
-					|| !isNextPageAssignableFrom(nextPage, successor)) {
+			Class<? extends UICommand>[] successors = null;
+			try {
+				NavigationResult nav = wiz.next(getUIContext());
+				successors = (nav == null) ? null : nav.getNext();
+			} catch (Exception e) {
+				ForgeUIPlugin.log(e);
+			}
+			int pageIndex = invalidateNextPage(currentWizardPage, successors);
+
+			// No next page
+			if (successors == null) {
+				if (subflows.isEmpty()) {
+					result = originalNextPage;
+				} else {
+					result = createWizardPage(subflows.pop(), pageIndex, true);
+				}
+			} else {
+				result = createWizardPage(successors[0], pageIndex, false);
 				for (int i = 1; i < successors.length; i++) {
 					if (successors[i] != null) {
 						subflows.push(successors[i]);
 					}
 				}
-				nextPage = createWizardPage(successor, false);
 			}
-			return nextPage;
 		}
-	}
-
-	private ForgeWizardPage createWizardPage(
-			final Class<? extends UICommand> successor, boolean subflow) {
-		ForgeWizardPage nextPage;
-		UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
-		nextPage = new ForgeWizardPage(this, nextStep, getUIContext(), subflow);
-		addPage(nextPage);
-		return nextPage;
+		currentWizardPage.setChanged(false);
+		return result;
 	}
 
 	/**
-	 * Clears the next pages from a specific index to the end of the list
+	 * Invalidates the pages after the original page
 	 */
-	private void clearNextPagesFrom(int indexFrom) {
+	private int invalidateNextPage(ForgeWizardPage currentWizardPage,
+			Class<? extends UICommand>[] successors) {
+		ForgeWizardPage originalNextPage = (ForgeWizardPage) super
+				.getNextPage(currentWizardPage);
 		List<ForgeWizardPage> pageList = getPageList();
-		pageList.subList(indexFrom, pageList.size()).clear();
+		int idx = getPageCount();
+		if (originalNextPage != null) {
+			idx = clearNextPagesFrom(originalNextPage);
+			if (successors != null) {
+				for (Class<? extends UICommand> successor : successors) {
+					for (int i = pageList.size() - 1; i > -1; i--) {
+						if (Proxies.isInstance(successor, pageList.get(i)
+								.getUICommand())) {
+							pageList.remove(i);
+						}
+					}
+					subflows.remove(successor);
+				}
+			}
+		}
+		return idx;
 	}
 
-	private boolean isNextPageAssignableFrom(ForgeWizardPage nextPage,
-			Class<? extends UICommand> successor) {
-		return Proxies.isInstance(successor, nextPage.getUICommand());
+	/**
+	 * Clears the next pages from a specific page to the end of the list
+	 * 
+	 * Returns the position where the next page should be added
+	 */
+	private int clearNextPagesFrom(final IWizardPage page) {
+		List<ForgeWizardPage> pageList = getPageList();
+		int idx = pageList.indexOf(page);
+		int finalIdx = pageList.size();
+		for (int i = idx; i < finalIdx; i++) {
+			if (pageList.get(i).isSubflowHead()) {
+				finalIdx = i;
+				break;
+			}
+		}
+		pageList.subList(idx, finalIdx).clear();
+		return idx;
+	}
+
+	private ForgeWizardPage createWizardPage(
+			final Class<? extends UICommand> successor, int index,
+			boolean subflow) {
+		ForgeWizardPage nextPage;
+		UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
+		nextPage = new ForgeWizardPage(this, nextStep, getUIContext(), subflow);
+		nextPage.setWizard(this);
+		getPageList().add(index, nextPage);
+		return nextPage;
 	}
 
 	@Override
