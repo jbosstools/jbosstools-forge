@@ -13,9 +13,11 @@ import java.util.List;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIValidationContext;
 import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.forge.furnace.util.Assert;
 
 public class UIValidationContextImpl implements UIValidationContext {
 	private List<String> errors = new ArrayList<String>();
+	private List<String> warnings = new ArrayList<String>();
 	private UIContext context;
 
 	public UIValidationContextImpl(UIContext context) {
@@ -33,8 +35,18 @@ public class UIValidationContextImpl implements UIValidationContext {
 		}
 	}
 
+	@Override
+	public void addValidationWarning(InputComponent<?, ?> input, String message) {
+		Assert.notNull(input, message);
+		warnings.add(message);
+	}
+
 	public List<String> getErrors() {
 		return errors;
+	}
+
+	public List<String> getWarnings() {
+		return warnings;
 	}
 
 	@Override

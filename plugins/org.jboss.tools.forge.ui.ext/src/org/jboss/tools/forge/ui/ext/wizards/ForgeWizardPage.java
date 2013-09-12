@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -120,9 +121,13 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		setPageComplete(validatePage());
 
 		// Clear error messages when opening
+		clearMessages();
+		setControl(container);
+	}
+
+	private void clearMessages() {
 		setErrorMessage(null);
 		setMessage(null);
-		setControl(container);
 	}
 
 	private void registerListeners(Control control) {
@@ -205,11 +210,25 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		// invokes the validation in the current UICommand
 		uiCommand.validate(validationContext);
 		boolean noErrors = errors.isEmpty();
-		if (!noErrors) {
+		if (noErrors) {
+			List<String> warnings = validationContext.getWarnings();
+			if (!warnings.isEmpty()) {
+				setWarningMessage(warnings.get(0));
+			} else {
+				clearMessages();
+			}
+		} else {
 			setErrorMessage(errors.get(0));
 		}
 		// if no errors were found, the page is ready to go to the next step
 		return noErrors;
+	}
+
+	public void setWarningMessage(String warningMessage) {
+		setMessage(warningMessage, DialogPage.WARNING);
+		if (isCurrentPage()) {
+			getContainer().updateMessage();
+		}
 	}
 
 	@Override
