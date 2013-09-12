@@ -68,7 +68,7 @@ public class SpinnerControlBuilder extends ControlBuilder {
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputType.TEXTBOX;
+		return InputType.DEFAULT;
 	}
 
 	@Override

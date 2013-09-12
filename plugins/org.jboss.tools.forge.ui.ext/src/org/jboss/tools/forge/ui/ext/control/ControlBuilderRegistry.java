@@ -23,11 +23,15 @@ import org.jboss.tools.forge.ui.ext.control.many.TextBoxMultipleControlBuilder;
 public class ControlBuilderRegistry {
 
 	private static ControlBuilder[] controlBuilders = {
-			new CheckboxControlBuilder(), new ComboControlBuilder(),
-			new RadioControlBuilder(), new FileChooserControlBuilder(),
+			new CheckboxControlBuilder(),
+			new ComboControlBuilder(),
+			new RadioControlBuilder(),
+			new FileChooserControlBuilder(),
 			new DirectoryChooserControlBuilder(),
-			new CheckboxTableControlBuilder(), new TextBoxControlBuilder(),
-			new SpinnerControlBuilder(), new PasswordTextBoxControlBuilder(),
+			new CheckboxTableControlBuilder(),
+			new TextBoxControlBuilder(),
+			// new SpinnerControlBuilder(),
+			new PasswordTextBoxControlBuilder(),
 			new JavaPackageChooserControlBuilder(),
 			new JavaClassChooserControlBuilder(),
 			new TextBoxMultipleControlBuilder(),
