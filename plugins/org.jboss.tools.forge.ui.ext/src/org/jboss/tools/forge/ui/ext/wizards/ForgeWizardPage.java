@@ -215,13 +215,25 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			if (!warnings.isEmpty()) {
 				setWarningMessage(warnings.get(0));
 			} else {
-				clearMessages();
+				List<String> infos = validationContext.getInformations();
+				if (!infos.isEmpty()) {
+					setInfoMessage(infos.get(0));
+				} else {
+					clearMessages();
+				}
 			}
 		} else {
 			setErrorMessage(errors.get(0));
 		}
 		// if no errors were found, the page is ready to go to the next step
 		return noErrors;
+	}
+
+	public void setInfoMessage(String warningMessage) {
+		setMessage(warningMessage, DialogPage.INFORMATION);
+		if (isCurrentPage()) {
+			getContainer().updateMessage();
+		}
 	}
 
 	public void setWarningMessage(String warningMessage) {
