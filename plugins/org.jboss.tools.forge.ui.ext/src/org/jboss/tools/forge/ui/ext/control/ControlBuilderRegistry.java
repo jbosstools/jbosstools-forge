@@ -27,7 +27,7 @@ public class ControlBuilderRegistry {
 			new RadioControlBuilder(), new FileChooserControlBuilder(),
 			new DirectoryChooserControlBuilder(),
 			new CheckboxTableControlBuilder(), new TextBoxControlBuilder(),
-			new PasswordTextBoxControlBuilder(),
+			new SpinnerControlBuilder(), new PasswordTextBoxControlBuilder(),
 			new JavaPackageChooserControlBuilder(),
 			new JavaClassChooserControlBuilder(),
 			new TextBoxMultipleControlBuilder(),

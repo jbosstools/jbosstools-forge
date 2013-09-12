@@ -17,7 +17,6 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -106,15 +105,11 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			if (input.isRequired()) {
 				decorateRequiredField(input, control);
 			}
-			if (!(control instanceof Combo) && control instanceof Composite) {
-				Control[] children = ((Composite) control).getChildren();
-				for (Control child : children) {
-					registerListeners(child);
-				}
-			} else {
-				registerListeners(control);
+			Control[] modifiableControls = controlBuilder
+					.getModifiableControlsFor(control);
+			for (Control child : modifiableControls) {
+				registerListeners(child);
 			}
-
 			componentControlEntries[i] = new ComponentControlEntry(input,
 					controlBuilder, control);
 		}
