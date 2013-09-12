@@ -25,11 +25,4 @@ public class F2View extends ViewPart {
 		textViewer.cleanup();
 		super.dispose();
 	}
-	
-	static {
-		if (!Boolean.getBoolean("forge.compatibility.IDE")) {
-			System.setProperty("forge.compatibility.IDE", "true");
-		}
-	}
-
 }
