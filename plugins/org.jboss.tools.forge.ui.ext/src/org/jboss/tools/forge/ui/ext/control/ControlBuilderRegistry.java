@@ -22,7 +22,7 @@ import org.jboss.tools.forge.ui.ext.control.many.TextBoxMultipleControlBuilder;
  */
 public class ControlBuilderRegistry {
 
-	private static ControlBuilder[] controlBuilders = {
+	private static final ControlBuilder[] CONTROL_BUILDERS = {
 			new CheckboxControlBuilder(),
 			new ComboControlBuilder(),
 			new RadioControlBuilder(),
@@ -41,7 +41,7 @@ public class ControlBuilderRegistry {
 			new FallbackTextBoxControlBuilder() };
 
 	public static ControlBuilder getBuilderFor(InputComponent<?, ?> input) {
-		for (ControlBuilder builder : controlBuilders) {
+		for (ControlBuilder builder : CONTROL_BUILDERS) {
 			if (builder.handles(input)) {
 				return builder;
 			}
