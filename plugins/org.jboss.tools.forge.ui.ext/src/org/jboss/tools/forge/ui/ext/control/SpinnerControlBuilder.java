@@ -22,6 +22,7 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**
@@ -37,7 +38,10 @@ public class SpinnerControlBuilder extends ControlBuilder {
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
 
-		final Spinner txt = new Spinner(container, SWT.BORDER | SWT.SINGLE);
+		final Spinner txt = new Spinner(container, SWT.BORDER);
+		// TODO: Ranges may be configurable in the future
+		txt.setMinimum(Integer.MIN_VALUE);
+		txt.setMaximum(Integer.MAX_VALUE);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txt.setToolTipText(input.getDescription());
 		// Set Default Value
@@ -54,8 +58,13 @@ public class SpinnerControlBuilder extends ControlBuilder {
 		txt.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				InputComponents.setValueFor(converterFactory, input,
-						txt.getText());
+				try {
+					InputComponents.setValueFor(converterFactory, input,
+							txt.getText());
+				} catch (Exception ex) {
+					ForgeUIPlugin.log(ex);
+					InputComponents.setValueFor(converterFactory, input, null);
+				}
 			}
 		});
 		return txt;
@@ -63,7 +72,7 @@ public class SpinnerControlBuilder extends ControlBuilder {
 
 	@Override
 	protected Class<?> getProducedType() {
-		return Number.class;
+		return Integer.class;
 	}
 
 	@Override

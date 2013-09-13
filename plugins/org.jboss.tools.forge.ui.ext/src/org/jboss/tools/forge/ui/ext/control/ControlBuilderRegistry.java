@@ -30,7 +30,7 @@ public class ControlBuilderRegistry {
 			new DirectoryChooserControlBuilder(),
 			new CheckboxTableControlBuilder(),
 			new TextBoxControlBuilder(),
-			// new SpinnerControlBuilder(),
+			new SpinnerControlBuilder(),
 			new PasswordTextBoxControlBuilder(),
 			new JavaPackageChooserControlBuilder(),
 			new JavaClassChooserControlBuilder(),
