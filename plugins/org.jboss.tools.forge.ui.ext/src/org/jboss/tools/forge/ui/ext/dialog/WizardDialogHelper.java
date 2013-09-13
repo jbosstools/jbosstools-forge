@@ -25,6 +25,7 @@ import org.jboss.forge.addon.ui.wizard.UIWizardStep;
 import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
@@ -57,9 +58,13 @@ public final class WizardDialogHelper {
 		Imported<UICommand> instances = addonRegistry
 				.getServices(UICommand.class);
 		for (UICommand uiCommand : instances) {
-			if (!(uiCommand instanceof UIWizardStep)
-					&& uiCommand.isEnabled(context)) {
-				result.add(uiCommand);
+			try {
+				if (!(uiCommand instanceof UIWizardStep)
+						&& uiCommand.isEnabled(context)) {
+					result.add(uiCommand);
+				}
+			} catch (Exception e) {
+				ForgeUIPlugin.log(e);
 			}
 		}
 		return result;
@@ -72,11 +77,16 @@ public final class WizardDialogHelper {
 		Imported<UICommand> instances = addonRegistry
 				.getServices(UICommand.class);
 		for (UICommand uiCommand : instances) {
-			if (!(uiCommand instanceof UIWizardStep)
-					&& uiCommand.isEnabled(context)) {
-				UICommandMetadata metadata = uiCommand.getMetadata();
-				result.put(metadata.getName(), uiCommand);
+			try {
+				if (!(uiCommand instanceof UIWizardStep)
+						&& uiCommand.isEnabled(context)) {
+					UICommandMetadata metadata = uiCommand.getMetadata();
+					result.put(metadata.getName(), uiCommand);
+				}
+			} catch (Exception e) {
+				ForgeUIPlugin.log(e);
 			}
+
 		}
 		return result;
 	}

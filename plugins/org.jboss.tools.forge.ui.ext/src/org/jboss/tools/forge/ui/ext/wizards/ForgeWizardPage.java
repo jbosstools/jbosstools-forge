@@ -30,6 +30,7 @@ import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UIValidationContextImpl;
 import org.jboss.tools.forge.ui.ext.control.ControlBuilder;
 import org.jboss.tools.forge.ui.ext.control.ControlBuilderRegistry;
+import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
  * A Forge Wizard Page
@@ -75,6 +76,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			uiCommand.initializeUI(uiBuilder);
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
+			ForgeUIPlugin.displayMessage(
+					"Error has occurred. See Error Log for details",
+					e.getMessage(), NotificationType.ERROR);
+			return;
 		}
 
 		List<InputComponent<?, ?>> inputs = uiBuilder.getInputs();
