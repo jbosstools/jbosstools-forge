@@ -10,8 +10,6 @@ package org.jboss.tools.forge.ui.ext.control;
 import java.io.File;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -31,14 +29,6 @@ public class DirectoryChooserControlBuilder extends AbstractTextButtonControl {
 		selectedPath = dialog.open();
 		if (selectedPath != null) {
 			containerText.setText(selectedPath);
-		}
-	}
-
-	@Override
-	public void setEnabled(Control control, boolean enabled) {
-		Composite container = (Composite) control;
-		for (Control childControl : container.getChildren()) {
-			childControl.setEnabled(enabled);
 		}
 	}
 
