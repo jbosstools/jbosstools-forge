@@ -194,6 +194,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		// Validate required
 		if (uiBuilder != null) {
 			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
+				validationContext.setCurrentInputComponent(input);
 				input.validate(validationContext);
 				if (!errors.isEmpty()) {
 					setErrorMessage(errors.get(0));
@@ -201,6 +202,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 				}
 			}
 		}
+		validationContext.setCurrentInputComponent(null);
 		// invokes the validation in the current UICommand
 		uiCommand.validate(validationContext);
 		boolean noErrors = errors.isEmpty();
