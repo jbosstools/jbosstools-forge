@@ -74,8 +74,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		try {
 			uiCommand.initializeUI(uiBuilder);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ForgeUIPlugin.log(e);
 		}
 
 		List<InputComponent<?, ?>> inputs = uiBuilder.getInputs();
