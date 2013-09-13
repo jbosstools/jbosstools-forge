@@ -91,6 +91,11 @@ public class ComboControlBuilder extends ControlBuilder {
 	}
 
 	@Override
+	public void setEnabled(Control control, boolean enabled) {
+		control.setEnabled(enabled);
+	}
+
+	@Override
 	protected Class<Object> getProducedType() {
 		return Object.class;
 	}

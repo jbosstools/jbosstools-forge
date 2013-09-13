@@ -71,6 +71,11 @@ public class SpinnerControlBuilder extends ControlBuilder {
 	}
 
 	@Override
+	public void setEnabled(Control control, boolean enabled) {
+		control.setEnabled(enabled);
+	}
+
+	@Override
 	protected Class<?> getProducedType() {
 		return Integer.class;
 	}
