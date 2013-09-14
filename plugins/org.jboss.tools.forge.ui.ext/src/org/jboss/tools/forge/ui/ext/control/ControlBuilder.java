@@ -113,6 +113,17 @@ public abstract class ControlBuilder {
 		}
 	}
 
+	/**
+	 * Return the controls that accept listeners for modifications
+	 */
+	public Control[] getModifiableControlsFor(Control control) {
+		if (control instanceof Composite) {
+			return ((Composite) control).getChildren();
+		} else {
+			return new Control[] { control };
+		}
+	}
+
 	protected ContentProposalAdapter setupAutoCompleteForText(
 			UIContextImpl context, InputComponent<?, Object> input,
 			UICompleter<Object> completer, Text text) {

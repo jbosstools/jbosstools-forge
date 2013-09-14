@@ -50,6 +50,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		Composite groupPanel = new Composite(group, SWT.NULL);
 		groupPanel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		groupPanel.setLayout(new GridLayout(2, false));
+		
 		final Table table = new Table(groupPanel, SWT.CHECK | SWT.BORDER
 				| SWT.V_SCROLL | SWT.H_SCROLL);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -92,7 +93,6 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 
 		Composite buttons = new Composite(groupPanel, SWT.NULL);
 		buttons.setLayout(new GridLayout(1, true));
-		buttons.setLayoutData(new GridData(GridData.FILL_BOTH));
 		Button selectAllButton = new Button(buttons, SWT.PUSH);
 		selectAllButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectAllButton.setText("Select All");

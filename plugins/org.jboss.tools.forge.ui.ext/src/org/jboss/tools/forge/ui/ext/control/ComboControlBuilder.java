@@ -17,6 +17,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
@@ -90,6 +91,11 @@ public class ComboControlBuilder extends ControlBuilder {
 	}
 
 	@Override
+	public void setEnabled(Control control, boolean enabled) {
+		control.setEnabled(enabled);
+	}
+
+	@Override
 	protected Class<Object> getProducedType() {
 		return Object.class;
 	}
@@ -102,5 +108,10 @@ public class ComboControlBuilder extends ControlBuilder {
 	@Override
 	protected Class<?>[] getSupportedInputComponentTypes() {
 		return new Class<?>[] { UISelectOne.class };
+	}
+
+	@Override
+	public Control[] getModifiableControlsFor(Control control) {
+		return new Control[] { control };
 	}
 }

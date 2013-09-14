@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2013 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Eclipse Public License version 1.0, available at
@@ -12,8 +12,9 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Spinner;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -24,27 +25,34 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class TextBoxControlBuilder extends ControlBuilder {
+/**
+ * 
+ * @author <a href="ggastald@redhat.com">George Gastaldi</a>
+ */
+public class SpinnerControlBuilder extends ControlBuilder {
 
 	@Override
-	public Text build(final ForgeWizardPage page,
+	public Spinner build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
 
-		final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
+		final Spinner txt = new Spinner(container, SWT.BORDER);
+		// TODO: Ranges may be configurable in the future
+		txt.setMinimum(Integer.MIN_VALUE);
+		txt.setMaximum(Integer.MAX_VALUE);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txt.setToolTipText(input.getDescription());
 		// Set Default Value
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		if (converterFactory != null) {
-			Converter<Object, String> converter = converterFactory
-					.getConverter(input.getValueType(), String.class);
-			String value = converter
-					.convert(InputComponents.getValueFor(input));
-			txt.setText(value == null ? "" : value);
+			Converter<Object, Integer> converter = converterFactory
+					.getConverter(input.getValueType(), Integer.class);
+			Integer value = converter.convert(InputComponents
+					.getValueFor(input));
+			txt.setSelection(value == null ? 0 : value);
 		}
 
 		txt.addModifyListener(new ModifyListener() {
@@ -54,29 +62,37 @@ public class TextBoxControlBuilder extends ControlBuilder {
 					InputComponents.setValueFor(converterFactory, input,
 							txt.getText());
 				} catch (Exception ex) {
-					ForgeUIPlugin.log(ex.getCause());
-					// FIXME: Display error message in wizard
+					ForgeUIPlugin.log(ex);
 					InputComponents.setValueFor(converterFactory, input, null);
 				}
 			}
 		});
-		setupAutoCompleteForText(page.getUIContext(), input,
-				InputComponents.getCompleterFor(input), txt);
 		return txt;
 	}
 
 	@Override
-	protected Class<String> getProducedType() {
-		return String.class;
+	public void setEnabled(Control control, boolean enabled) {
+		control.setEnabled(enabled);
+	}
+
+	@Override
+	protected Class<?> getProducedType() {
+		return Integer.class;
 	}
 
 	@Override
 	protected InputType getSupportedInputType() {
-		return InputType.TEXTBOX;
+		return InputType.DEFAULT;
 	}
 
 	@Override
 	protected Class<?>[] getSupportedInputComponentTypes() {
-		return new Class<?>[] { UIInput.class };
+		return new Class[] { UIInput.class };
 	}
+
+	@Override
+	public Control[] getModifiableControlsFor(Control control) {
+		return new Control[] { control };
+	}
+
 }

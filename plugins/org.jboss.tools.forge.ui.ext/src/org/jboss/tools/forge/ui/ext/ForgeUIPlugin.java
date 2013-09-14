@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.ProjectListener;
@@ -15,6 +16,8 @@ import org.jboss.tools.forge.ui.ext.importer.ImportEclipseProjectListener;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
 import org.jboss.tools.forge.ui.ext.listeners.PickUpListener;
 import org.jboss.tools.forge.ui.ext.listeners.RefreshListener;
+import org.jboss.tools.forge.ui.notifications.NotificationDialog;
+import org.jboss.tools.forge.ui.notifications.NotificationType;
 import org.osgi.framework.BundleContext;
 
 public class ForgeUIPlugin extends AbstractUIPlugin {
@@ -95,4 +98,15 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(ForgeUIPlugin.PLUGIN_ID,
 				"icons/icon.png");
 	}
+
+	public static void displayMessage(final String title, final String message,
+			final NotificationType type) {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				NotificationDialog.notify(title, message, type);
+			}
+		});
+	}
+
 }

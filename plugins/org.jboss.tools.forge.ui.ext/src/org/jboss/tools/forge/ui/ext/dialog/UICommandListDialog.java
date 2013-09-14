@@ -38,6 +38,7 @@ import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessContents;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessElement;
 import org.jboss.tools.forge.ui.ext.quickaccess.impl.ForgeQuickAccessElement;
 import org.jboss.tools.forge.ui.ext.quickaccess.impl.ForgeQuickAccessProvider;
+import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 public class UICommandListDialog extends PopupDialog {
 
@@ -112,7 +113,16 @@ public class UICommandListDialog extends PopupDialog {
 					ForgeUIPlugin.log(ie);
 					return;
 				}
-				final ForgeQuickAccessProvider[] providers = getProviders();
+				final ForgeQuickAccessProvider[] providers;
+				try {
+					providers = getProviders();
+				} catch (Exception e) {
+					ForgeUIPlugin.log(e);
+					ForgeUIPlugin.displayMessage(
+							"Error has occurred. See Error Log for details",
+							e.getMessage(), NotificationType.ERROR);
+					return;
+				}
 				QuickAccessContents quickAccessContents = new QuickAccessContents(
 						providers) {
 					@Override
