@@ -232,6 +232,7 @@ public class ForgeWizard extends MutableWizard {
 								NotificationType.ERROR);
 				return Status.CANCEL_STATUS;
 			} finally {
+				uiContext.destroy();
 				monitor.done();
 			}
 		}

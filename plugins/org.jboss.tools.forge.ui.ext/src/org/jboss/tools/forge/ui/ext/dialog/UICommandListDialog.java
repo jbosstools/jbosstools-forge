@@ -42,7 +42,7 @@ import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 public class UICommandListDialog extends PopupDialog {
 
-	private WizardDialogHelper wizardHelper;
+	private final WizardDialogHelper wizardHelper;
 
 	public UICommandListDialog(IWorkbenchWindow window) {
 		super(window.getShell(), SWT.RESIZE, true,

@@ -39,10 +39,6 @@ import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
 public class UIContextImpl extends AbstractUIContext {
 	private UISelectionImpl<?> currentSelection;
 
-	public UIContextImpl(UISelectionImpl<?> selection) {
-		this.currentSelection = selection;
-	}
-
 	public UIContextImpl(IStructuredSelection selection) {
 		List<Object> selectedElements = selection == null ? Collections.EMPTY_LIST
 				: selection.toList();
@@ -88,6 +84,7 @@ public class UIContextImpl extends AbstractUIContext {
 			}
 		}
 		this.currentSelection = new UISelectionImpl(result, selection);
+		ForgeUIProvider.INSTANCE.fireInteractionStarted(this);
 	}
 
 	@Override
@@ -125,6 +122,10 @@ public class UIContextImpl extends AbstractUIContext {
 					}
 				});
 		return result;
+	}
+
+	public void destroy() {
+		ForgeUIProvider.INSTANCE.fireInteractionStopped(this);
 	}
 
 	@Override

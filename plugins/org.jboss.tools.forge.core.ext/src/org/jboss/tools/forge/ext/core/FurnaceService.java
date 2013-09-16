@@ -71,6 +71,14 @@ public enum FurnaceService {
 		return converterFactory;
 	}
 
+	public <S> Imported<S> lookupImported(Class<S> service) {
+		Imported<S> instance = null;
+		if (forge != null) {
+			instance = forge.getAddonRegistry().getServices(service);
+		}
+		return instance;
+	}
+
 	public <S> S lookup(Class<S> service) {
 		Imported<S> instance = null;
 		if (forge != null) {

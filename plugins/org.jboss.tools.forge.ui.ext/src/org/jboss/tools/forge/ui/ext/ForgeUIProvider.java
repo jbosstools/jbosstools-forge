@@ -14,8 +14,11 @@ import org.jboss.forge.addon.ui.CommandExecutionListener;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.context.UIContextListener;
 import org.jboss.forge.addon.ui.result.Result;
+import org.jboss.forge.furnace.services.Imported;
 import org.jboss.forge.furnace.spi.ListenerRegistration;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 
 /**
  * Eclipse implementation of {@link UIProvider}
@@ -28,10 +31,29 @@ public enum ForgeUIProvider implements UIProvider {
 	private List<CommandExecutionListener> commandListeners = new ArrayList<CommandExecutionListener>();
 
 	public void fireInteractionStarted(UIContext context) {
+		Imported<UIContextListener> services = FurnaceService.INSTANCE
+				.lookupImported(UIContextListener.class);
+		if (services != null)
+			for (UIContextListener listener : services) {
+				try {
+					listener.contextInitialized(context);
+				} catch (Exception e) {
+					ForgeUIPlugin.log(e);
+				}
+			}
 	}
 
 	public void fireInteractionStopped(UIContext context) {
-
+		Imported<UIContextListener> services = FurnaceService.INSTANCE
+				.lookupImported(UIContextListener.class);
+		if (services != null)
+			for (org.jboss.forge.addon.ui.context.UIContextListener listener : services) {
+				try {
+					listener.contextDestroyed(context);
+				} catch (Exception e) {
+					ForgeUIPlugin.log(e);
+				}
+			}
 	}
 
 	public void firePreCommandExecuted(UICommand command, UIContext context) {
@@ -42,6 +64,16 @@ public enum ForgeUIProvider implements UIProvider {
 				ForgeUIPlugin.log(e);
 			}
 		}
+		Imported<CommandExecutionListener> services = FurnaceService.INSTANCE
+				.lookupImported(CommandExecutionListener.class);
+		if (services != null)
+			for (CommandExecutionListener listener : services) {
+				try {
+					listener.preCommandExecuted(command, context);
+				} catch (Exception e) {
+					ForgeUIPlugin.log(e);
+				}
+			}
 	}
 
 	public void firePostCommandExecuted(UICommand command, UIContext context,
@@ -53,6 +85,16 @@ public enum ForgeUIProvider implements UIProvider {
 				ForgeUIPlugin.log(e);
 			}
 		}
+		Imported<CommandExecutionListener> services = FurnaceService.INSTANCE
+				.lookupImported(CommandExecutionListener.class);
+		if (services != null)
+			for (CommandExecutionListener listener : services) {
+				try {
+					listener.postCommandExecuted(command, context, result);
+				} catch (Exception e) {
+					ForgeUIPlugin.log(e);
+				}
+			}
 	}
 
 	public void firePostCommandFailure(UICommand command, UIContext context,
@@ -64,6 +106,16 @@ public enum ForgeUIProvider implements UIProvider {
 				ForgeUIPlugin.log(e);
 			}
 		}
+		Imported<CommandExecutionListener> services = FurnaceService.INSTANCE
+				.lookupImported(CommandExecutionListener.class);
+		if (services != null)
+			for (CommandExecutionListener listener : services) {
+				try {
+					listener.postCommandFailure(command, context, failure);
+				} catch (Exception e) {
+					ForgeUIPlugin.log(e);
+				}
+			}
 	}
 
 	@Override
