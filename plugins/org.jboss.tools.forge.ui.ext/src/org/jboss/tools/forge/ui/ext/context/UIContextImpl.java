@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.resource.Resource;
+import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
 import org.jboss.forge.furnace.addons.Addon;
 import org.jboss.forge.furnace.addons.AddonFilter;
@@ -32,6 +33,7 @@ import org.jboss.forge.furnace.lock.LockMode;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UIContextImpl extends AbstractUIContext {
@@ -123,6 +125,11 @@ public class UIContextImpl extends AbstractUIContext {
 					}
 				});
 		return result;
+	}
+
+	@Override
+	public UIProvider getProvider() {
+		return ForgeUIProvider.INSTANCE;
 	}
 
 }

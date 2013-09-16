@@ -24,6 +24,7 @@ import org.jboss.forge.addon.ui.wizard.UIWizard;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
@@ -189,17 +190,22 @@ public class ForgeWizard extends MutableWizard {
 		@Override
 		public IStatus runInWorkspace(IProgressMonitor monitor)
 				throws CoreException {
+			UICommand currentCommand = initialCommand;
 			try {
 				monitor.beginTask("Executing wizard pages", getPageCount());
 				for (IWizardPage wizardPage : getPages()) {
-					UICommand cmd = ((ForgeWizardPage) wizardPage)
+					currentCommand = ((ForgeWizardPage) wizardPage)
 							.getUICommand();
-					Result result = cmd.execute(uiContext);
+					ForgeUIProvider.INSTANCE.firePreCommandExecuted(
+							currentCommand, uiContext);
+					Result result = currentCommand.execute(uiContext);
+					ForgeUIProvider.INSTANCE.firePostCommandExecuted(
+							currentCommand, uiContext, result);
 					if (result != null) {
 						String message = result.getMessage();
 						if (message != null) {
-							ForgeUIPlugin.displayMessage("Forge Command", message,
-									NotificationType.INFO);
+							ForgeUIPlugin.displayMessage("Forge Command",
+									message, NotificationType.INFO);
 						}
 						if (result instanceof Failed) {
 							Throwable exception = ((Failed) result)
@@ -217,9 +223,13 @@ public class ForgeWizard extends MutableWizard {
 				EventBus.INSTANCE.fireWizardFinished(uiContext);
 				return Status.OK_STATUS;
 			} catch (Exception ex) {
+				ForgeUIProvider.INSTANCE.firePostCommandFailure(currentCommand,
+						uiContext, ex);
 				ForgeUIPlugin.log(ex);
-				ForgeUIPlugin.displayMessage("Forge Command",
-						String.valueOf(ex.getMessage()), NotificationType.ERROR);
+				ForgeUIPlugin
+						.displayMessage("Forge Command",
+								String.valueOf(ex.getMessage()),
+								NotificationType.ERROR);
 				return Status.CANCEL_STATUS;
 			} finally {
 				monitor.done();
