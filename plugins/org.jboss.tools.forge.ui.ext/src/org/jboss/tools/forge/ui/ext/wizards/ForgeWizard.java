@@ -159,7 +159,7 @@ public class ForgeWizard extends MutableWizard {
 	@Override
 	public boolean performFinish() {
 		FinishJob finishJob = new FinishJob("Finishing '"
-				+ initialCommand.getMetadata().getName() + "'");
+				+ initialCommand.getMetadata(uiContext).getName() + "'");
 		finishJob.schedule();
 		return true;
 	}

@@ -35,6 +35,7 @@ public class F2Starter {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private static Map<String, UICommand> getAllCandidatesAsMap() {
 		Map<String, UICommand> result = new TreeMap<String, UICommand>();
 		AddonRegistry addonRegistry = FurnaceService.INSTANCE
@@ -42,7 +43,6 @@ public class F2Starter {
 		Imported<UICommand> instances = addonRegistry
 				.getServices(UICommand.class);
 		for (UICommand uiCommand : instances) {
-			uiCommand.getMetadata();
 		}
 		return result;
 	}

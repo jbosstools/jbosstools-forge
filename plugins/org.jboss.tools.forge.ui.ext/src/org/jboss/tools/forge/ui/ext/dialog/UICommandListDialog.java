@@ -30,6 +30,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.tools.forge.ext.core.FurnaceService;
@@ -173,7 +174,8 @@ public class UICommandListDialog extends PopupDialog {
 	private ForgeQuickAccessProvider[] getProviders() {
 		Map<String, List<UICommand>> categories = new TreeMap<String, List<UICommand>>();
 		for (UICommand command : wizardHelper.getAllCandidatesAsList()) {
-			String categoryName = getCategoryName(command);
+			String categoryName = getCategoryName(wizardHelper.getContext(),
+					command);
 			List<UICommand> list = categories.get(categoryName);
 			if (list == null) {
 				list = new ArrayList<UICommand>();
@@ -184,15 +186,15 @@ public class UICommandListDialog extends PopupDialog {
 		// Create Providers for each category
 		Set<ForgeQuickAccessProvider> providers = new TreeSet<ForgeQuickAccessProvider>();
 		for (Entry<String, List<UICommand>> entry : categories.entrySet()) {
-			providers.add(new ForgeQuickAccessProvider(entry.getKey(), entry
-					.getValue()));
+			providers.add(new ForgeQuickAccessProvider(entry.getKey(),
+					wizardHelper.getContext(), entry.getValue()));
 		}
 		return providers
 				.toArray(new ForgeQuickAccessProvider[providers.size()]);
 	}
 
-	private String getCategoryName(UICommand command) {
-		UICategory category = command.getMetadata().getCategory();
+	private String getCategoryName(UIContext context, UICommand command) {
+		UICategory category = command.getMetadata(context).getCategory();
 		if (category != null) {
 			return category.toString();
 		} else {

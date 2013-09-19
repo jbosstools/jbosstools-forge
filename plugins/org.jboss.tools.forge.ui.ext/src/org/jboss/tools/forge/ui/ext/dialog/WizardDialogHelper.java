@@ -80,7 +80,7 @@ public final class WizardDialogHelper {
 			try {
 				if (!(uiCommand instanceof UIWizardStep)
 						&& uiCommand.isEnabled(context)) {
-					UICommandMetadata metadata = uiCommand.getMetadata();
+					UICommandMetadata metadata = uiCommand.getMetadata(getContext());
 					result.put(metadata.getName(), uiCommand);
 				}
 			} catch (Exception e) {

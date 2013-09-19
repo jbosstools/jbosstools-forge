@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessElement;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessProvider;
 
@@ -23,12 +24,13 @@ public class ForgeQuickAccessProvider extends QuickAccessProvider implements
 	private Map<String, QuickAccessElement> candidates = new HashMap<String, QuickAccessElement>();
 	private String category;
 
-	public ForgeQuickAccessProvider(String category, List<UICommand> commands) {
+	public ForgeQuickAccessProvider(String category, UIContext context,
+			List<UICommand> commands) {
 		this.category = category;
 		if (commands != null)
 			for (UICommand command : commands) {
 				ForgeQuickAccessElement elem = new ForgeQuickAccessElement(
-						this, command);
+						this, context, command);
 				candidates.put(elem.getId(), elem);
 			}
 	}

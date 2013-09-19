@@ -6,7 +6,6 @@
  */
 package org.jboss.tools.forge.ui.ext.wizards;
 
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
@@ -49,10 +48,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 
 	public ForgeWizardPage(ForgeWizard wizard, UICommand command,
 			UIContextImpl contextImpl, boolean startsSubflow) {
-		super(command.getMetadata().getName());
+		super(command.getMetadata(contextImpl).getName());
 		setWizard(wizard);
 		setPageComplete(false);
-		UICommandMetadata id = command.getMetadata();
+		UICommandMetadata id = command.getMetadata(contextImpl);
 		setTitle(id.getName());
 		setDescription(id.getDescription());
 		setImageDescriptor(ForgeUIPlugin.getForgeLogo());
@@ -241,15 +240,6 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		setMessage(warningMessage, DialogPage.WARNING);
 		if (isCurrentPage()) {
 			getContainer().updateMessage();
-		}
-	}
-
-	@Override
-	public void performHelp() {
-		UICommandMetadata metadata = uiCommand.getMetadata();
-		URL docLocation = metadata.getDocLocation();
-		if (docLocation != null) {
-			// PlatformUI.getWorkbench().getHelpSystem().displayHelp(docLocation.toExternalForm());
 		}
 	}
 
