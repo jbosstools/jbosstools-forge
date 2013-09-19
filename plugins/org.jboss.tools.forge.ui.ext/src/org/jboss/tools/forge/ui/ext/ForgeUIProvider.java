@@ -129,5 +129,10 @@ public enum ForgeUIProvider implements UIProvider {
 			}
 		};
 	}
+	
+	@Override
+	public boolean isGUI() {
+		return true;
+	}
 
 }
