@@ -75,9 +75,8 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			uiCommand.initializeUI(uiBuilder);
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
-			ForgeUIPlugin.displayMessage(
-					"Error has occurred. See Error Log for details",
-					e.getMessage(), NotificationType.ERROR);
+			ForgeUIPlugin.displayMessage("Error has occurred!",
+					"See Error Log for details", NotificationType.ERROR);
 			return;
 		}
 
