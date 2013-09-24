@@ -7,7 +7,6 @@
 
 package org.jboss.tools.forge.ui.ext.control.many;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -60,11 +59,10 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		final Set<Object> data = new LinkedHashSet<Object>();
 		Iterable<Object> valueChoices = selectMany.getValueChoices();
 		// Adding default values in a separate set
-		Set<Object> defaultValuesSet = new HashSet<Object>();
 		Iterable<Object> defaultValues = selectMany.getValue();
 		if (defaultValues != null) {
 			for (Object object : defaultValues) {
-				defaultValuesSet.add(object);
+				data.add(object);
 			}
 		}
 		if (valueChoices != null) {
@@ -72,10 +70,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setData(Proxies.unwrap(next));
 				item.setText(next.toString());
-				item.setChecked(defaultValuesSet.contains(next));
-				if (item.getChecked()) {
-					data.add(item.getData());
-				}
+				item.setChecked(data.contains(next));
 			}
 		}
 		table.addSelectionListener(new SelectionAdapter() {
