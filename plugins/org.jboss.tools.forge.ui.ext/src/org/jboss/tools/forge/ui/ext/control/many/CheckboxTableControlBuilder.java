@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
@@ -125,6 +126,11 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 			}
 		});
 		return table;
+	}
+
+	@Override
+	public Control[] getModifiableControlsFor(Control control) {
+		return new Control[] { control };
 	}
 
 	private void notifySelectionChange(final Table table, TableItem item) {
