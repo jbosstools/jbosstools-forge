@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
@@ -66,10 +67,12 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 			}
 		}
 		if (valueChoices != null) {
+			Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
+					.getItemLabelConverter(converterFactory, selectMany);
 			for (Object next : valueChoices) {
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setData(Proxies.unwrap(next));
-				item.setText(next.toString());
+				item.setText(itemLabelConverter.convert(next));
 				item.setChecked(data.contains(next));
 			}
 		}
