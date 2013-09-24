@@ -7,9 +7,8 @@
 
 package org.jboss.tools.forge.ui.ext.control.many;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
@@ -50,7 +49,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		Composite groupPanel = new Composite(group, SWT.NULL);
 		groupPanel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		groupPanel.setLayout(new GridLayout(2, false));
-		
+
 		final Table table = new Table(groupPanel, SWT.CHECK | SWT.BORDER
 				| SWT.V_SCROLL | SWT.H_SCROLL);
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -58,7 +57,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 		final UISelectMany<Object> selectMany = (UISelectMany) input;
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
-		final List<Object> data = new ArrayList<Object>();
+		final Set<Object> data = new LinkedHashSet<Object>();
 		Iterable<Object> valueChoices = selectMany.getValueChoices();
 		// Adding default values in a separate set
 		Set<Object> defaultValuesSet = new HashSet<Object>();
@@ -74,14 +73,15 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 				item.setData(Proxies.unwrap(next));
 				item.setText(next.toString());
 				item.setChecked(defaultValuesSet.contains(next));
-				data.add(item.getData());
+				if (item.getChecked()) {
+					data.add(item.getData());
+				}
 			}
-			InputComponents.setDefaultValueFor(converterFactory, input, data);
 		}
 		table.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				if (e.item instanceof TableItem) {
+				if (e.item instanceof TableItem && e.detail == SWT.CHECK) {
 					TableItem source = (TableItem) e.item;
 					if (source.getChecked()) {
 						data.add(source.getData());
@@ -132,6 +132,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 	private void notifySelectionChange(final Table table, TableItem item) {
 		Event event = new Event();
 		event.item = item;
+		event.detail = SWT.CHECK;
 		table.notifyListeners(SWT.Selection, event);
 	}
 
