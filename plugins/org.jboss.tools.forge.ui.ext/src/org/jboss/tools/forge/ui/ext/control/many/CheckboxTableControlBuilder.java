@@ -74,7 +74,9 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 				item.setData(Proxies.unwrap(next));
 				item.setText(next.toString());
 				item.setChecked(defaultValuesSet.contains(next));
+				data.add(item.getData());
 			}
+			InputComponents.setDefaultValueFor(converterFactory, input, data);
 		}
 		table.addSelectionListener(new SelectionAdapter() {
 			@Override
