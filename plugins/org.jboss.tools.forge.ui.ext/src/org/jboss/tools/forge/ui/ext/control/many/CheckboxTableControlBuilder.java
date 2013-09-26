@@ -94,6 +94,8 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 
 		Composite buttons = new Composite(groupPanel, SWT.NULL);
 		buttons.setLayout(new GridLayout(1, true));
+		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_BEGINNING));
+
 		Button selectAllButton = new Button(buttons, SWT.PUSH);
 		selectAllButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectAllButton.setText("Select All");

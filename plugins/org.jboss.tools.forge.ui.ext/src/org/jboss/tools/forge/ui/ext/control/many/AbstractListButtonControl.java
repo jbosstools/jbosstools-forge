@@ -72,6 +72,8 @@ public abstract class AbstractListButtonControl extends ControlBuilder {
 		containerList.setToolTipText(input.getDescription());
 		Composite buttons = new Composite(groupPanel, SWT.NULL);
 		buttons.setLayout(new GridLayout(1, true));
+		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_BEGINNING));
+		
 		Button addButton = new Button(buttons, SWT.PUSH);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addButton.setText("Add...");
