@@ -41,7 +41,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 			final InputComponent<?, Object> input, final Composite container) {
 
 		final Group group = new Group(container, SWT.SHADOW_NONE);
-		GridData layoutData = new GridData(GridData.FILL_BOTH);
+		GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		layoutData.horizontalSpan = 2;
 		group.setLayout(new GridLayout());
 		group.setLayoutData(layoutData);
@@ -53,7 +53,10 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 
 		final Table table = new Table(groupPanel, SWT.CHECK | SWT.BORDER
 				| SWT.V_SCROLL | SWT.H_SCROLL);
-		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData tableLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		tableLayoutData.widthHint = 300;
+		tableLayoutData.heightHint = 300;
+		table.setLayoutData(tableLayoutData);
 		table.setToolTipText(input.getDescription());
 		final UISelectMany<Object> selectMany = (UISelectMany) input;
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
@@ -94,7 +97,8 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 
 		Composite buttons = new Composite(groupPanel, SWT.NULL);
 		buttons.setLayout(new GridLayout(1, true));
-		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_BEGINNING));
+		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER
+				| GridData.VERTICAL_ALIGN_BEGINNING));
 
 		Button selectAllButton = new Button(buttons, SWT.PUSH);
 		selectAllButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
