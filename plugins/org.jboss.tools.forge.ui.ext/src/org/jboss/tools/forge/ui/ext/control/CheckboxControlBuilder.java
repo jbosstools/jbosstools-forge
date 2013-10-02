@@ -23,7 +23,7 @@ import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class CheckboxControlBuilder extends ControlBuilder {
+public class CheckboxControlBuilder extends ControlBuilder<Button> {
 
 	@Override
 	public Button build(ForgeWizardPage page,

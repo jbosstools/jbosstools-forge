@@ -26,7 +26,7 @@ import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public abstract class AbstractTextButtonControl extends ControlBuilder {
+public abstract class AbstractTextButtonControl extends ControlBuilder<Control> {
 
 	@Override
 	public Control build(final ForgeWizardPage page,

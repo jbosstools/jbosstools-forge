@@ -29,7 +29,7 @@ import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class ComboControlBuilder extends ControlBuilder {
+public class ComboControlBuilder extends ControlBuilder<Combo> {
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
@@ -91,7 +91,7 @@ public class ComboControlBuilder extends ControlBuilder {
 	}
 
 	@Override
-	public void setEnabled(Control control, boolean enabled) {
+	public void setEnabled(Combo control, boolean enabled) {
 		control.setEnabled(enabled);
 	}
 
@@ -111,7 +111,7 @@ public class ComboControlBuilder extends ControlBuilder {
 	}
 
 	@Override
-	public Control[] getModifiableControlsFor(Control control) {
+	public Control[] getModifiableControlsFor(Combo control) {
 		return new Control[] { control };
 	}
 }

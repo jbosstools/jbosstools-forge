@@ -33,7 +33,7 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.control.ControlBuilder;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class CheckboxTableControlBuilder extends ControlBuilder {
+public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -135,7 +135,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder {
 	}
 
 	@Override
-	public Control[] getModifiableControlsFor(Control control) {
+	public Control[] getModifiableControlsFor(Table control) {
 		return new Control[] { control };
 	}
 

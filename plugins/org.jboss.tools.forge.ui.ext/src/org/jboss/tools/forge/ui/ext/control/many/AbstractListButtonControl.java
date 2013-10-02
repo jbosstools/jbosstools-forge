@@ -31,7 +31,7 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
  * 
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
-public abstract class AbstractListButtonControl extends ControlBuilder {
+public abstract class AbstractListButtonControl extends ControlBuilder<Control> {
 
 	@SuppressWarnings("unchecked")
 	@Override

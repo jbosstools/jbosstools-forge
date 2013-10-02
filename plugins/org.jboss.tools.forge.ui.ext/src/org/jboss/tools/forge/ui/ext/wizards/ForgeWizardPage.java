@@ -80,13 +80,12 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			return;
 		}
 
-		List<InputComponent<?, ?>> inputs = uiBuilder.getInputs();
+		List<InputComponent<?, Object>> inputs = uiBuilder.getInputs();
 		createControls(parent, inputs);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void createControls(Composite parent,
-			List<InputComponent<?, ?>> inputs) {
+			List<InputComponent<?, Object>> inputs) {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
@@ -98,8 +97,8 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		componentControlEntries = new ComponentControlEntry[size];
 
 		for (int i = 0; i < size; i++) {
-			final InputComponent<?, ?> input = inputs.get(i);
-			ControlBuilder controlBuilder = ControlBuilderRegistry
+			final InputComponent<?, Object> input = inputs.get(i);
+			ControlBuilder<Control> controlBuilder = ControlBuilderRegistry
 					.getBuilderFor(input);
 			Control control = controlBuilder.build(this,
 					(InputComponent<?, Object>) input, container);
@@ -183,10 +182,11 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		// Change enabled state
 		if (componentControlEntries != null) {
 			for (ComponentControlEntry entry : componentControlEntries) {
-				InputComponent<?, ?> component = entry.getComponent();
+				InputComponent<?, Object> component = entry.getComponent();
+				ControlBuilder<Control> controlBuilder = entry
+						.getControlBuilder();
 				Control control = entry.getControl();
-				ControlBuilder controlBuilder = entry.getControlBuilder();
-				controlBuilder.setEnabled(control, component.isEnabled());
+				controlBuilder.updateState(control, component);
 			}
 		}
 
@@ -255,22 +255,22 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 * Stores a component/control relationship
 	 */
 	private class ComponentControlEntry {
-		private InputComponent<?, ?> component;
-		private ControlBuilder controlBuilder;
+		private InputComponent<?, Object> component;
+		private ControlBuilder<Control> controlBuilder;
 		private Control control;
 
-		public ComponentControlEntry(InputComponent<?, ?> component,
-				ControlBuilder controlBuilder, Control control) {
+		public ComponentControlEntry(InputComponent<?, Object> component,
+				ControlBuilder<Control> controlBuilder, Control control) {
 			this.component = component;
 			this.controlBuilder = controlBuilder;
 			this.control = control;
 		}
 
-		public ControlBuilder getControlBuilder() {
+		public ControlBuilder<Control> getControlBuilder() {
 			return controlBuilder;
 		}
 
-		public InputComponent<?, ?> getComponent() {
+		public InputComponent<?, Object> getComponent() {
 			return component;
 		}
 

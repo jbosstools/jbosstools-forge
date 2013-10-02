@@ -35,7 +35,7 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  * 
  */
-public abstract class ControlBuilder {
+public abstract class ControlBuilder<CONTROL extends Control> {
 
 	/**
 	 * Builds an Eclipse {@link Control} object based on the input
@@ -48,7 +48,7 @@ public abstract class ControlBuilder {
 	 * 
 	 * @return
 	 */
-	public abstract Control build(final ForgeWizardPage page,
+	public abstract CONTROL build(final ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container);
 
 	/**
@@ -102,7 +102,7 @@ public abstract class ControlBuilder {
 		return handles;
 	}
 
-	public void setEnabled(Control control, boolean enabled) {
+	public void setEnabled(CONTROL control, boolean enabled) {
 		if (control instanceof Composite) {
 			Composite c = (Composite) control;
 			for (Control child : c.getChildren()) {
@@ -116,7 +116,7 @@ public abstract class ControlBuilder {
 	/**
 	 * Return the controls that accept listeners for modifications
 	 */
-	public Control[] getModifiableControlsFor(Control control) {
+	public Control[] getModifiableControlsFor(CONTROL control) {
 		if (control instanceof Composite) {
 			return ((Composite) control).getChildren();
 		} else {
@@ -157,6 +157,10 @@ public abstract class ControlBuilder {
 			label = Mnemonics.applyMnemonic(label, shortName);
 		}
 		return label;
+	}
+
+	public void updateState(CONTROL control, InputComponent<?, Object> input) {
+		setEnabled(control, input.isEnabled());
 	}
 
 	protected ConverterFactory getConverterFactory() {

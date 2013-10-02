@@ -7,6 +7,7 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
+import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.tools.forge.ui.ext.control.many.CheckboxTableControlBuilder;
 import org.jboss.tools.forge.ui.ext.control.many.DirectoryChooserMultipleControlBuilder;
@@ -22,16 +23,12 @@ import org.jboss.tools.forge.ui.ext.control.many.TextBoxMultipleControlBuilder;
  */
 public class ControlBuilderRegistry {
 
-	private static final ControlBuilder[] CONTROL_BUILDERS = {
-			new CheckboxControlBuilder(),
-			new ComboControlBuilder(),
-			new RadioControlBuilder(),
-			new FileChooserControlBuilder(),
+	private static final ControlBuilder<?>[] CONTROL_BUILDERS = {
+			new CheckboxControlBuilder(), new ComboControlBuilder(),
+			new RadioControlBuilder(), new FileChooserControlBuilder(),
 			new DirectoryChooserControlBuilder(),
-			new CheckboxTableControlBuilder(),
-			new TextBoxControlBuilder(),
-			new SpinnerControlBuilder(),
-			new PasswordTextBoxControlBuilder(),
+			new CheckboxTableControlBuilder(), new TextBoxControlBuilder(),
+			new SpinnerControlBuilder(), new PasswordTextBoxControlBuilder(),
 			new JavaPackageChooserControlBuilder(),
 			new JavaClassChooserControlBuilder(),
 			new TextBoxMultipleControlBuilder(),
@@ -40,10 +37,12 @@ public class ControlBuilderRegistry {
 			new JavaClassChooserMultipleControlBuilder(),
 			new FallbackTextBoxControlBuilder() };
 
-	public static ControlBuilder getBuilderFor(InputComponent<?, ?> input) {
-		for (ControlBuilder builder : CONTROL_BUILDERS) {
+	@SuppressWarnings("unchecked")
+	public static <T extends Control> ControlBuilder<T> getBuilderFor(
+			InputComponent<?, Object> input) {
+		for (ControlBuilder<?> builder : CONTROL_BUILDERS) {
 			if (builder.handles(input)) {
-				return builder;
+				return (ControlBuilder<T>) builder;
 			}
 		}
 		throw new IllegalArgumentException(

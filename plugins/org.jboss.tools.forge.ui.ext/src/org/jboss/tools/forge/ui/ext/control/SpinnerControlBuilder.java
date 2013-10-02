@@ -29,7 +29,7 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
  * 
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
-public class SpinnerControlBuilder extends ControlBuilder {
+public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 
 	@Override
 	public Spinner build(ForgeWizardPage page,
@@ -71,7 +71,7 @@ public class SpinnerControlBuilder extends ControlBuilder {
 	}
 
 	@Override
-	public void setEnabled(Control control, boolean enabled) {
+	public void setEnabled(Spinner control, boolean enabled) {
 		control.setEnabled(enabled);
 	}
 
@@ -91,7 +91,7 @@ public class SpinnerControlBuilder extends ControlBuilder {
 	}
 
 	@Override
-	public Control[] getModifiableControlsFor(Control control) {
+	public Control[] getModifiableControlsFor(Spinner control) {
 		return new Control[] { control };
 	}
 

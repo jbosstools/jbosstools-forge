@@ -26,7 +26,7 @@ import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class RadioControlBuilder extends ControlBuilder {
+public class RadioControlBuilder extends ControlBuilder<Control> {
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
