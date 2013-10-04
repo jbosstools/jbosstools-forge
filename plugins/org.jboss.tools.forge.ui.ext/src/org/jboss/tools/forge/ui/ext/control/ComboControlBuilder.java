@@ -13,8 +13,8 @@ import java.util.Map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -30,9 +30,12 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class ComboControlBuilder extends ControlBuilder<Combo> {
-
+	
+	
+	private static final ConverterFactory CONVERTER_FACTORY = 
+			FurnaceService.INSTANCE.getConverterFactory();
+	
 	@Override
-	@SuppressWarnings({ "unchecked" })
 	public Combo build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
 		// Create the label
@@ -42,57 +45,31 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN
 				| SWT.READ_ONLY);
 
-		final ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.getConverterFactory();
-		UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-		Converter<Object, String> converter = (Converter<Object, String>) InputComponents
-				.getItemLabelConverter(converterFactory, selectOne);
-		String value = converter.convert(InputComponents.getValueFor(input));
-		final Map<String, Object> items = new LinkedHashMap<String, Object>();
-		Iterable<Object> valueChoices = selectOne.getValueChoices();
-		if (valueChoices != null) {
-			for (Object choice : valueChoices) {
-				String itemLabel = converter.convert(choice);
-				items.put(itemLabel, Proxies.unwrap(choice));
-				combo.add(itemLabel);
-			}
-		}
-		combo.addSelectionListener(new SelectionAdapter() {
+		combo.addModifyListener(new ModifyListener() {			
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				int selectionIndex = combo.getSelectionIndex();
-				if (selectionIndex != -1) {
-					String item = combo.getItem(selectionIndex);
-					Object selectedObj = items.get(item);
-					InputComponents.setValueFor(converterFactory, input,
-							selectedObj);
-				}
+			public void modifyText(ModifyEvent e) {
+				Object selectedObj = getItems(combo).get(combo.getText());
+				InputComponents.setValueFor(CONVERTER_FACTORY, input,
+						selectedObj);
 			}
 		});
 
-		// Set Default Value
-		if (value == null) {
-			if (combo.getVisibleItemCount() > 0) {
-				combo.select(0);
-			}
-		} else {
-			combo.setText(value);
-		}
-
-		// Cleaning the map when the input is disposed
 		combo.addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
-				items.clear();
+				getItems(combo).clear();
 			}
 		});
 		combo.setToolTipText(input.getDescription());
+		updateValues(combo, input);
 		return combo;
 	}
-
+	
 	@Override
 	public void setEnabled(Combo control, boolean enabled) {
-		control.setEnabled(enabled);
+		if (enabled != control.isEnabled()) {
+			control.setEnabled(enabled);
+		}
 	}
 
 	@Override
@@ -114,4 +91,72 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	public Control[] getModifiableControlsFor(Combo control) {
 		return new Control[] { control };
 	}
+	
+	@Override
+	public void updateState(Combo combo, InputComponent<?, Object> input) {
+		super.updateState(combo, input);
+		updateValues(combo, input);
+	}
+	
+	private Converter<Object, String> getConverter(UISelectOne<Object> selectOne) {
+		return (Converter<Object, String>)InputComponents.getItemLabelConverter(CONVERTER_FACTORY, selectOne);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> getItems(Combo combo) {
+		Map<String, Object> result = (Map<String, Object>)combo.getData();
+		if (result == null) {
+			result = new LinkedHashMap<String, Object>();
+			combo.setData(result);
+		}
+		return result;
+	}
+
+	private void updateDefaultValue(Combo combo, UISelectOne<Object> selectOne) {
+		Converter<Object, String> converter = getConverter(selectOne);
+		String value = converter.convert(InputComponents.getValueFor(selectOne));
+		if (value == null) {
+			combo.setText("");
+		} else if (!value.equals(combo.getText())){
+			combo.setText(value);
+		}
+	}
+
+	private void updateValueChoices(Combo combo, UISelectOne<Object> selectOne) {
+		Map<String, Object> oldItems = getItems(combo);
+		Map<String, Object> newItems = new LinkedHashMap<String, Object>();
+		boolean changed = false;
+		Iterable<Object> valueChoices = selectOne.getValueChoices();
+		Converter<Object, String> converter = getConverter(selectOne);
+		if (valueChoices != null) {
+			for (Object choice : valueChoices) {
+				String itemLabel = converter.convert(choice);
+				Object newObject = Proxies.unwrap(choice);
+				newItems.put(itemLabel, newObject);
+				if (!changed) {
+					Object oldObject = oldItems.get(itemLabel);
+					if (oldObject == null || !oldObject.equals(newObject)) {
+						changed = true;
+					}
+				}
+			}
+		} else if (!oldItems.isEmpty()) {
+			changed = true;
+		}
+		if (changed) {
+			combo.removeAll();
+			combo.setData(newItems);
+			for (String label : newItems.keySet()) {
+				combo.add(label);
+			}
+		}
+	}
+		
+	@SuppressWarnings("unchecked")
+	private void updateValues(Combo combo, InputComponent<?, Object> input) {
+		UISelectOne<Object> selectOne = (UISelectOne<Object>)input;
+		updateValueChoices(combo, selectOne);
+		updateDefaultValue(combo, selectOne);
+	}
+	
 }
