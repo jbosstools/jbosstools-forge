@@ -233,13 +233,23 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 		projectTypeCombo.addSelectionListener(new SelectionAdapter() {		
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				getWizardDescriptor().put(
-						PROJECT_TYPE, 
-						ProjectType.getType(projectTypeCombo.getText()));
+				ProjectType type = ProjectType.getType(projectTypeCombo.getText());
+				getWizardDescriptor().put(PROJECT_TYPE, type);
+				enableSetupPersistence(
+						!ProjectType.POM.equals(type) && !ProjectType.EAR.equals(type));
 			}
 		});
 		Label filler = new Label(parent, SWT.NONE);
 		filler.setText("");
+	}
+	
+	private void enableSetupPersistence(boolean enabled) {
+		getWizardDescriptor().put(
+				SETUP_PERSISTENCE, 
+				enabled ? setupPersistenceButton.getSelection() : false);
+		setupPersistenceButton.setEnabled(enabled);
+		providerCombo.setEnabled(setupPersistenceButton.getSelection() && setupPersistenceButton.isEnabled());
+		containerCombo.setEnabled(setupPersistenceButton.getSelection() && setupPersistenceButton.isEnabled());
 	}
 	
 	private void fillProjectTypeCombo() {
