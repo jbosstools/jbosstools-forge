@@ -7,12 +7,13 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Combo;
@@ -20,20 +21,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public class ComboControlBuilder extends ControlBuilder<Combo> {
-	
-	
-	private static final ConverterFactory CONVERTER_FACTORY = 
-			FurnaceService.INSTANCE.getConverterFactory();
 	
 	@Override
 	public Combo build(ForgeWizardPage page,
@@ -48,18 +43,13 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		combo.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
-				Object selectedObj = getItems(combo).get(combo.getText());
-				InputComponents.setValueFor(CONVERTER_FACTORY, input,
-						selectedObj);
+				InputComponents.setValueFor(
+						FurnaceService.INSTANCE.getConverterFactory(), 
+						input,
+						combo.getText());
 			}
 		});
 
-		combo.addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-				getItems(combo).clear();
-			}
-		});
 		combo.setToolTipText(input.getDescription());
 		updateValues(combo, input);
 		return combo;
@@ -99,19 +89,10 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	}
 	
 	private Converter<Object, String> getConverter(UISelectOne<Object> selectOne) {
-		return (Converter<Object, String>)InputComponents.getItemLabelConverter(CONVERTER_FACTORY, selectOne);
+		return (Converter<Object, String>)InputComponents.getItemLabelConverter(
+				FurnaceService.INSTANCE.getConverterFactory(), selectOne);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private Map<String, Object> getItems(Combo combo) {
-		Map<String, Object> result = (Map<String, Object>)combo.getData();
-		if (result == null) {
-			result = new LinkedHashMap<String, Object>();
-			combo.setData(result);
-		}
-		return result;
-	}
-
 	private void updateDefaultValue(Combo combo, UISelectOne<Object> selectOne) {
 		Converter<Object, String> converter = getConverter(selectOne);
 		String value = converter.convert(InputComponents.getValueFor(selectOne));
@@ -121,23 +102,19 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 			combo.setText(value);
 		}
 	}
-
+	
 	private void updateValueChoices(Combo combo, UISelectOne<Object> selectOne) {
-		Map<String, Object> oldItems = getItems(combo);
-		Map<String, Object> newItems = new LinkedHashMap<String, Object>();
+		List<String> newItems = new ArrayList<String>();
+		List<String> oldItems = Arrays.asList(combo.getItems());
 		boolean changed = false;
 		Iterable<Object> valueChoices = selectOne.getValueChoices();
 		Converter<Object, String> converter = getConverter(selectOne);
 		if (valueChoices != null) {
 			for (Object choice : valueChoices) {
 				String itemLabel = converter.convert(choice);
-				Object newObject = Proxies.unwrap(choice);
-				newItems.put(itemLabel, newObject);
-				if (!changed) {
-					Object oldObject = oldItems.get(itemLabel);
-					if (oldObject == null || !oldObject.equals(newObject)) {
-						changed = true;
-					}
+				newItems.add(itemLabel);
+				if (!oldItems.contains(itemLabel)) {
+					changed = true;
 				}
 			}
 		} else if (!oldItems.isEmpty()) {
@@ -145,8 +122,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		}
 		if (changed) {
 			combo.removeAll();
-			combo.setData(newItems);
-			for (String label : newItems.keySet()) {
+			for (String label : newItems) {
 				combo.add(label);
 			}
 		}
