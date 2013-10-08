@@ -9,9 +9,7 @@ package org.jboss.tools.forge.ui.ext.control;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
