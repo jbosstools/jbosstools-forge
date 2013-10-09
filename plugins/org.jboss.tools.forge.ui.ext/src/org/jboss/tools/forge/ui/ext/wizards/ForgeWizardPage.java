@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
+import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIBuilderImpl;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
@@ -114,10 +115,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			componentControlEntries[i] = new ComponentControlEntry(input,
 					controlBuilder, control);
 		}
-		setPageComplete(validatePage());
-
-		// Clear error messages when opening
-		clearMessages();
+		initValidatePage();
 		setControl(container);
 	}
 
@@ -168,6 +166,24 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	}
 
 	/**
+	 * Called when the page is opened for the first time.
+	 * 
+	 * It should display error messages unless the error message indicates a
+	 * required field
+	 */
+	private void initValidatePage() {
+		if (uiBuilder != null) {
+			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
+				if (InputComponents.validateRequired(input) != null) {
+					setPageComplete(false);
+					return;
+				}
+			}
+		}
+		setPageComplete(validatePage());
+	}
+
+	/**
 	 * Returns whether this page's controls currently all contain valid values.
 	 * It also calls {@link ForgeWizardPage#setErrorMessage(String)} if an error
 	 * is found
@@ -175,9 +191,9 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 * @return <code>true</code> if all controls are valid, and
 	 *         <code>false</code> if at least one is invalid
 	 */
-	public boolean validatePage() {
+	private boolean validatePage() {
 		// clear error message
-		setErrorMessage(null);
+		clearMessages();
 
 		// Change enabled state
 		if (componentControlEntries != null) {
