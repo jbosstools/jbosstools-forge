@@ -309,7 +309,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	/**
 	 * @return the subflowHead
 	 */
-	public boolean isSubflowHead() {
+	boolean isSubflowHead() {
 		return subflowHead;
 	}
 }
