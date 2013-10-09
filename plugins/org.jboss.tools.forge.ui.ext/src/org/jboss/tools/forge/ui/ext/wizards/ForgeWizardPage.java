@@ -80,13 +80,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 					"See Error Log for details", NotificationType.ERROR);
 			return;
 		}
-
 		List<InputComponent<?, Object>> inputs = uiBuilder.getInputs();
-		createControls(parent, inputs);
-	}
-
-	protected void createControls(Composite parent,
-			List<InputComponent<?, Object>> inputs) {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
