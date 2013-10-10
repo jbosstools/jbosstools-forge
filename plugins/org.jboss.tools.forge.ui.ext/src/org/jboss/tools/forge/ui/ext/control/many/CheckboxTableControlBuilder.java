@@ -42,7 +42,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 
 		final Group group = new Group(container, SWT.SHADOW_NONE);
 		GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		layoutData.horizontalSpan = 2;
+		layoutData.horizontalSpan = 3;
 		group.setLayout(new GridLayout());
 		group.setLayoutData(layoutData);
 		group.setText(InputComponents.getLabelFor(input, false));

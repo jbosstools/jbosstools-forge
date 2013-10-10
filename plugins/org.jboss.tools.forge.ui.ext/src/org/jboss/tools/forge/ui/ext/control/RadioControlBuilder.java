@@ -66,6 +66,11 @@ public class RadioControlBuilder extends ControlBuilder<Control> {
 				});
 			}
 		}
+		
+		// skip the thrid column
+		Label dummy = new Label(parent, SWT.NONE);
+		dummy.setText("");
+		
 		return container;
 	}
 

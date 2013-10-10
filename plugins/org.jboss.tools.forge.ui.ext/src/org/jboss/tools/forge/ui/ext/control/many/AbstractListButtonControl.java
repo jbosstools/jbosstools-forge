@@ -40,7 +40,7 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 
 		final Group group = new Group(container, SWT.SHADOW_NONE);
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
-		layoutData.horizontalSpan = 2;
+		layoutData.horizontalSpan = 3;
 		group.setLayout(new GridLayout());
 		group.setLayoutData(layoutData);
 		group.setText(InputComponents.getLabelFor(input, false));

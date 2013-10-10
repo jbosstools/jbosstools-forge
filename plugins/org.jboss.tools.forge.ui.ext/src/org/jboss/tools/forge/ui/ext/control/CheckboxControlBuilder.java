@@ -28,8 +28,11 @@ public class CheckboxControlBuilder extends ControlBuilder<Button> {
 	@Override
 	public Button build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
-		// Checkbox should be placed in second column
-		new Label(container, SWT.NONE);
+
+	   // Checkbox should be placed in second column
+		Label dummy1 = new Label(container, SWT.NONE);
+		dummy1.setText("");
+		
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 1;
 		Button cmb = new Button(container, SWT.CHECK);
@@ -55,6 +58,11 @@ public class CheckboxControlBuilder extends ControlBuilder<Button> {
 				InputComponents.setValueFor(converterFactory, input, selection);
 			}
 		});
+		
+		// skip third column
+		Label dummy2 = new Label(container, SWT.NONE);
+		dummy2.setText("");
+		
 		return cmb;
 	}
 

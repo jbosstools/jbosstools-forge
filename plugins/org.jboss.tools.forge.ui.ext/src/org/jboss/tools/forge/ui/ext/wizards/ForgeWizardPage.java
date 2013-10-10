@@ -84,7 +84,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
-		layout.numColumns = 2;
+		layout.numColumns = 3;
 		layout.verticalSpacing = 9;
 
 		// Init component control array

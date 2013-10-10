@@ -62,6 +62,11 @@ public class TextBoxControlBuilder extends ControlBuilder<Text> {
 		});
 		setupAutoCompleteForText(page.getUIContext(), input,
 				InputComponents.getCompleterFor(input), txt);
+		
+		// skip the third column
+		Label dummy = new Label(container, SWT.NONE);
+		dummy.setText("");
+		
 		return txt;
 	}
 

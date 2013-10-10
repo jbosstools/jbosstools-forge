@@ -13,7 +13,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -35,17 +34,18 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
 
-		Composite container = new Composite(parent, SWT.NULL);
-		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+//		Composite container = new Composite(parent, SWT.NULL);
+//		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		layout.numColumns = 2;
-		layout.verticalSpacing = 9;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
+//		GridLayout layout = new GridLayout();
+//		container.setLayout(layout);
+//		layout.numColumns = 2;
+//		layout.verticalSpacing = 9;
+//		layout.marginWidth = 0;
+//		layout.marginHeight = 0;
 
-		final Text containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
+//      final Text containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
+      final Text containerText = new Text(parent, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerText.setLayoutData(gd);
 
@@ -70,7 +70,8 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 			}
 		});
 		decorateContainerText(page, input, containerText);
-		Button button = new Button(container, SWT.PUSH);
+//      Button button = new Button(container, SWT.PUSH);
+      Button button = new Button(parent, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -79,7 +80,8 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 			}
 		});
 		setupAutoCompleteForText(page.getUIContext(), input, InputComponents.getCompleterFor(input), containerText);
-		return container;
+//      return container;
+      return parent;
 	}
 
 	protected void decorateContainerText(final ForgeWizardPage page,

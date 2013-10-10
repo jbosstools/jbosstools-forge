@@ -67,6 +67,11 @@ public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 				}
 			}
 		});
+		
+		// skip the third column
+		Label dummy = new Label(container, SWT.NONE);
+		dummy.setText("");
+		
 		return txt;
 	}
 

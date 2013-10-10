@@ -14,6 +14,7 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -31,13 +32,14 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	@Override
 	public Combo build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
-		// Create the label
+
+	   // Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
 
 		final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN
 				| SWT.READ_ONLY);
-
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addModifyListener(new ModifyListener() {			
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -47,8 +49,12 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 						combo.getText());
 			}
 		});
-
 		combo.setToolTipText(input.getDescription());
+		
+		// skip the third column
+		Label dummy = new Label(container, SWT.NONE);
+		dummy.setText("");
+		
 		updateValues(combo, input);
 		return combo;
 	}
