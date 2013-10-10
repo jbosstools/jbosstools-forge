@@ -34,17 +34,6 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
 
-//		Composite container = new Composite(parent, SWT.NULL);
-//		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-//		GridLayout layout = new GridLayout();
-//		container.setLayout(layout);
-//		layout.numColumns = 2;
-//		layout.verticalSpacing = 9;
-//		layout.marginWidth = 0;
-//		layout.marginHeight = 0;
-
-//      final Text containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
       final Text containerText = new Text(parent, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerText.setLayoutData(gd);
@@ -70,7 +59,6 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 			}
 		});
 		decorateContainerText(page, input, containerText);
-//      Button button = new Button(container, SWT.PUSH);
       Button button = new Button(parent, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
@@ -80,7 +68,6 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 			}
 		});
 		setupAutoCompleteForText(page.getUIContext(), input, InputComponents.getCompleterFor(input), containerText);
-//      return container;
       return parent;
 	}
 

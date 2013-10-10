@@ -50,7 +50,6 @@ public class CheckboxControlBuilder extends ControlBuilder<Button> {
 			cmb.setSelection(value == null ? false : value);
 		}
 
-		// cmd.setSelection(value == null ? false : value);
 		cmb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
