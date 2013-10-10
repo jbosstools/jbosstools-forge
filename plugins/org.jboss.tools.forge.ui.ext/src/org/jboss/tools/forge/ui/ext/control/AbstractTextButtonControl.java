@@ -34,7 +34,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
 
-      final Text containerText = new Text(parent, SWT.BORDER | SWT.SINGLE);
+		final Text containerText = new Text(parent, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerText.setLayoutData(gd);
 
@@ -59,7 +59,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 			}
 		});
 		decorateContainerText(page, input, containerText);
-      Button button = new Button(parent, SWT.PUSH);
+		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -67,8 +67,10 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 				browseButtonPressed(page, input, containerText);
 			}
 		});
-		setupAutoCompleteForText(page.getUIContext(), input, InputComponents.getCompleterFor(input), containerText);
-      return parent;
+		setupAutoCompleteForText(page.getUIContext(), input,
+				InputComponents.getCompleterFor(input), containerText);
+
+		return containerText;
 	}
 
 	protected void decorateContainerText(final ForgeWizardPage page,
