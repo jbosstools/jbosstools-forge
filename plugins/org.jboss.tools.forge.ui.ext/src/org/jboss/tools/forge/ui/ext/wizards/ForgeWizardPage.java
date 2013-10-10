@@ -159,13 +159,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		event.doit = true;
 	}
 
-	/**
-	 * Called when the page is opened for the first time.
-	 * 
-	 * It should display error messages unless the error message indicates a
-	 * required field
-	 */
-	private void initValidatePage() {
+	private void updatePageState() {
 		// Change enabled state
 		if (componentControlEntries != null) {
 			for (ComponentControlEntry entry : componentControlEntries) {
@@ -175,7 +169,17 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 				Control control = entry.getControl();
 				controlBuilder.updateState(control, component);
 			}
-		}		
+		}
+	}
+
+	/**
+	 * Called when the page is opened for the first time.
+	 * 
+	 * It should display error messages unless the error message indicates a
+	 * required field
+	 */
+	private void initValidatePage() {
+		updatePageState();
 		if (uiBuilder != null) {
 			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
 				if (InputComponents.validateRequired(input) != null) {
@@ -199,16 +203,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		// clear error message
 		clearMessages();
 
-		// Change enabled state
-		if (componentControlEntries != null) {
-			for (ComponentControlEntry entry : componentControlEntries) {
-				InputComponent<?, Object> component = entry.getComponent();
-				ControlBuilder<Control> controlBuilder = entry
-						.getControlBuilder();
-				Control control = entry.getControl();
-				controlBuilder.updateState(control, component);
-			}
-		}
+		updatePageState();
 
 		// Invoke custom validation
 		UIValidationContextImpl validationContext = new UIValidationContextImpl(
