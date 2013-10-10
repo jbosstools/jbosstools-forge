@@ -166,6 +166,16 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 * required field
 	 */
 	private void initValidatePage() {
+		// Change enabled state
+		if (componentControlEntries != null) {
+			for (ComponentControlEntry entry : componentControlEntries) {
+				InputComponent<?, Object> component = entry.getComponent();
+				ControlBuilder<Control> controlBuilder = entry
+						.getControlBuilder();
+				Control control = entry.getControl();
+				controlBuilder.updateState(control, component);
+			}
+		}		
 		if (uiBuilder != null) {
 			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
 				if (InputComponents.validateRequired(input) != null) {
