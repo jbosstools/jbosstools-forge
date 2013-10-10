@@ -69,8 +69,27 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 		});
 		setupAutoCompleteForText(page.getUIContext(), input,
 				InputComponents.getCompleterFor(input), containerText);
-
 		return containerText;
+	}
+
+	/**
+	 * Ugly workaround because the Browse button is not exposed to the caller
+	 * class
+	 * 
+	 * TODO: Refactor ControlBuilder
+	 */
+	@Override
+	public void setEnabled(Control control, boolean enabled) {
+		control.setEnabled(enabled);
+		// Enable/disable Browse button
+		Composite parent = control.getParent();
+		Control[] children = parent.getChildren();
+		for (int i = 0; i < children.length; i++) {
+			if (children[i] == control) {
+				children[i + 1].setEnabled(enabled);
+				break;
+			}
+		}
 	}
 
 	protected void decorateContainerText(final ForgeWizardPage page,
