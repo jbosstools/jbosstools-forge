@@ -47,9 +47,10 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		combo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				String text = combo.getText();
 				InputComponents.setValueFor(
 						FurnaceService.INSTANCE.getConverterFactory(), input,
-						combo.getText());
+						text);
 			}
 		});
 		combo.setToolTipText(input.getDescription());
@@ -91,8 +92,15 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 
 	@Override
 	public void updateState(Combo combo, InputComponent<?, Object> input) {
-		super.updateState(combo, input);
-		updateValues(combo, input);
+		if (!COMBO_STATUS_CHANGE.add(combo)) {
+			return;
+		}
+		try {
+			super.updateState(combo, input);
+			updateValues(combo, input);
+		} finally {
+			COMBO_STATUS_CHANGE.remove(combo);
+		}
 	}
 
 	private Converter<Object, String> getConverter(UISelectOne<Object> selectOne) {
@@ -100,6 +108,13 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 				.getItemLabelConverter(
 						FurnaceService.INSTANCE.getConverterFactory(),
 						selectOne);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void updateValues(Combo combo, InputComponent<?, Object> input) {
+		UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
+		updateValueChoices(combo, selectOne);
+		updateDefaultValue(combo, selectOne);
 	}
 
 	private void updateDefaultValue(Combo combo, UISelectOne<Object> selectOne) {
@@ -114,40 +129,21 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	}
 
 	private void updateValueChoices(Combo combo, UISelectOne<Object> selectOne) {
-		if (!COMBO_STATUS_CHANGE.add(combo)) {
-			return;
-		}
-		try {
-			String selectedText = combo.getText();
-			List<String> newItems = new ArrayList<String>();
-			List<String> oldItems = Arrays.asList(combo.getItems());
-			Iterable<Object> valueChoices = selectOne.getValueChoices();
-			Converter<Object, String> converter = getConverter(selectOne);
-			if (valueChoices != null) {
-				for (Object choice : valueChoices) {
-					String itemLabel = converter.convert(choice);
-					newItems.add(itemLabel);
-				}
+		List<String> newItems = new ArrayList<String>();
+		Iterable<Object> valueChoices = selectOne.getValueChoices();
+		Converter<Object, String> converter = getConverter(selectOne);
+		if (valueChoices != null) {
+			for (Object choice : valueChoices) {
+				String itemLabel = converter.convert(choice);
+				newItems.add(itemLabel);
 			}
-			if (!Arrays.equals(newItems.toArray(), oldItems.toArray())) {
-				combo.removeAll();
-				for (String label : newItems) {
-					combo.add(label);
-					if (label.equals(selectedText)) {
-						combo.setText(label);
-					}
-				}
-			}
-		} finally {
-			COMBO_STATUS_CHANGE.remove(combo);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void updateValues(Combo combo, InputComponent<?, Object> input) {
-		UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-		updateValueChoices(combo, selectOne);
-		updateDefaultValue(combo, selectOne);
+		int newSize = newItems.size();
+		String[] newItemsArray = newItems.toArray(new String[newSize]);
+		String[] oldItems = combo.getItems();
+		if (Arrays.equals(newItemsArray, oldItems) == false) {
+			combo.setItems(newItemsArray);
+		}
 	}
 
 }
