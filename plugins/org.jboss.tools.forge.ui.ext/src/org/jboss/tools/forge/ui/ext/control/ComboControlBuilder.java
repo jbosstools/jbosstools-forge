@@ -144,6 +144,22 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		if (Arrays.equals(newItemsArray, oldItems) == false) {
 			combo.setItems(newItemsArray);
 		}
+
+		String value = converter
+				.convert(InputComponents.getValueFor(selectOne));
+		if (value != null) {
+			boolean valueValid = false;
+			for (Object choice : selectOne.getValueChoices()) {
+				if (converter.convert(choice).equals(value)) {
+					valueValid = true;
+					break;
+				}
+			}
+
+			if (!valueValid) {
+				selectOne.setValue(null);
+			}
+		}
 	}
 
 }
