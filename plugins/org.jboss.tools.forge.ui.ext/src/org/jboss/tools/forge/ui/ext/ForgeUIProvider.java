@@ -7,6 +7,7 @@
 
 package org.jboss.tools.forge.ui.ext;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIContextListener;
+import org.jboss.forge.addon.ui.output.UIOutput;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.forge.furnace.spi.ListenerRegistration;
@@ -25,7 +27,7 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
  * 
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
-public enum ForgeUIProvider implements UIProvider {
+public enum ForgeUIProvider implements UIProvider, UIOutput {
 	INSTANCE;
 
 	private List<CommandExecutionListener> commandListeners = new ArrayList<CommandExecutionListener>();
@@ -129,10 +131,27 @@ public enum ForgeUIProvider implements UIProvider {
 			}
 		};
 	}
-	
+
 	@Override
 	public boolean isGUI() {
 		return true;
+	}
+
+	@Override
+	public UIOutput getOutput() {
+		return this;
+	}
+
+	@Override
+	public PrintStream out() {
+		// TODO: Change this
+		return System.out;
+	}
+
+	@Override
+	public PrintStream err() {
+		// TODO: Change this
+		return System.err;
 	}
 
 }

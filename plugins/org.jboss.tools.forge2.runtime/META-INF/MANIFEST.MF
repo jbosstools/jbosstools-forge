@@ -54,6 +54,7 @@ Export-Package: bootpath,
  org.jboss.forge.addon.ui.hints;uses:="org.jboss.forge.addon.environment",
  org.jboss.forge.addon.ui.input;uses:="org.jboss.forge.addon.convert,org.jboss.forge.addon.ui.context,org.jboss.forge.addon.facets",
  org.jboss.forge.addon.ui.metadata;uses:="org.jboss.forge.addon.ui.hints",
+ org.jboss.forge.addon.ui.output,
  org.jboss.forge.addon.ui.result,
  org.jboss.forge.addon.ui.util;
   uses:="org.jboss.forge.addon.ui.input,
