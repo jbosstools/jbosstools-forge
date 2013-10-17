@@ -60,6 +60,7 @@ public class RestWizard extends AbstractForgeWizard {
 		for (String entityName : getEntityNames()) {
 			String command = "rest endpoint-from-entity " + entityName;
 			command += " --contentType " + (String)getWizardDescriptor().get(RestWizardPage.CONTENT_TYPE);
+			command += " --strategy ROOT_AND_NESTED_DTO";
 			sendRuntimeCommand(command, monitor);
 		}
 	}
