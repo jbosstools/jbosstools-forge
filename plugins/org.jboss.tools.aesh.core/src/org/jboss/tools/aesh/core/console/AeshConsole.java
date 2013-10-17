@@ -6,10 +6,18 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.aesh.console.Console;
-import org.jboss.aesh.console.ConsoleCallback;
-import org.jboss.aesh.console.ConsoleOutput;
+import org.jboss.aesh.cl.builder.CommandBuilder;
+import org.jboss.aesh.cl.builder.OptionBuilder;
+import org.jboss.aesh.cl.exception.CommandLineParserException;
+import org.jboss.aesh.cl.exception.OptionParserException;
+import org.jboss.aesh.cl.internal.ProcessedCommand;
+import org.jboss.aesh.console.AeshConsoleBuilder;
 import org.jboss.aesh.console.Prompt;
+import org.jboss.aesh.console.command.AeshCommandRegistryBuilder;
+import org.jboss.aesh.console.command.Command;
+import org.jboss.aesh.console.command.CommandInvocation;
+import org.jboss.aesh.console.command.CommandRegistry;
+import org.jboss.aesh.console.command.CommandResult;
 import org.jboss.aesh.console.settings.Settings;
 import org.jboss.aesh.console.settings.SettingsBuilder;
 import org.jboss.aesh.terminal.CharacterType;
@@ -23,7 +31,7 @@ public class AeshConsole {
 
 	private AeshInputStream inputStream;
 	private AeshOutputStream stdOut, stdErr;
-	private Console console;
+	private org.jboss.aesh.console.AeshConsole console;
 
 	public AeshConsole() {
 		initialize();
@@ -35,12 +43,46 @@ public class AeshConsole {
 	}
 
 	protected void createConsole() {
+		ProcessedCommand fooCommand;
 		try {
-			console = new Console(createAeshSettings());
-			console.setPrompt(createPrompt());
-			console.setConsoleCallback(createConsoleCallback());
-		} catch (IOException e) {
+			fooCommand = new CommandBuilder()
+					.name("foo")
+					.description("fooing")
+					.addOption(
+							new OptionBuilder().name("bar")
+									.addDefaultValue("en 1 0")
+									.addDefaultValue("to 2 0").fieldName("bar")
+									.type(String.class).create())
+					.generateParameter();
+			CommandRegistry registry = new AeshCommandRegistryBuilder()
+					.command(fooCommand, FooCommand.class).create();
+			console = new AeshConsoleBuilder().commandRegistry(registry)
+					.settings(createAeshSettings()).prompt(createPrompt())
+					.create();
+		} catch (OptionParserException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (CommandLineParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	// this command use a builder defined above to specify the meta data needed
+	public static class FooCommand implements Command<CommandInvocation> {
+
+		private String bar;
+
+		@Override
+		public CommandResult execute(CommandInvocation commandInvocation)
+				throws IOException {
+			if (bar == null)
+				commandInvocation.getShell().out().println("NO BAR!");
+			else
+				commandInvocation.getShell().out()
+						.println("you set bar to: " + bar);
+			return CommandResult.SUCCESS;
 		}
 	}
 
@@ -74,23 +116,8 @@ public class AeshConsole {
 		return new Prompt(chars);
 	}
 
-	private ConsoleCallback createConsoleCallback() {
-		return new ConsoleCallback() {
-			@Override
-			public int readConsoleOutput(ConsoleOutput output)
-					throws IOException {
-				console.out().println("hoorray");
-				return 0;
-			}
-		};
-	}
-
 	public void start() {
-		try {
-			console.start();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		console.start();
 	}
 
 	public void sendInput(String input) {
@@ -98,11 +125,7 @@ public class AeshConsole {
 	}
 
 	public void stop() {
-		try {
-			console.stop();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		console.stop();
 	}
 
 	public void addStdOutListener(StreamListener listener) {

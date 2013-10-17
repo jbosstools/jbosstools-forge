@@ -10,18 +10,20 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 
 public class F2Console extends AeshConsole {
 
-	@SuppressWarnings("unused")
 	protected void createConsole() {
-		ShellFactory shellFactory = FurnaceService.INSTANCE
-				.lookup(ShellFactory.class);
-		Settings settings = new SettingsBuilder().inputStream(getInputStream())
-				.outputStream(getStdOut()).outputStreamError(getStdErr())
-				.create();
-		Shell shell = shellFactory.createShell(
-				OperatingSystemUtils.getUserHomeDir(), settings);
+		super.createConsole();
+		// ShellFactory shellFactory = FurnaceService.INSTANCE
+		// .lookup(ShellFactory.class);
+		// Settings settings = new
+		// SettingsBuilder().inputStream(getInputStream())
+		// .outputStream(getStdOut()).outputStreamError(getStdErr())
+		// .create();
+		// Shell shell = shellFactory.createShell(
+		// OperatingSystemUtils.getUserHomeDir(), settings);
 	}
 
 	public void start() {
 		// Already started
+		super.start();
 	}
 }
