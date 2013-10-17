@@ -1,6 +1,10 @@
 package org.jboss.tools.forge.ui.wizard.project;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jdt.core.JavaConventions;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -336,11 +340,12 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 			return false;
 		}
 		if (!checkTopLevelPackage()) {
-			setErrorMessage("The top level package cannot be empty.");
 			return false;
 		}
 		setErrorMessage(null);
-		setMessage("Push the Finish button to create the project.");
+		if (getMessageType() != IMessageProvider.WARNING) {
+			setMessage("Push the Finish button to create the project.");
+		}
 		return true;
 	}
 	
@@ -365,8 +370,16 @@ public class NewProjectWizardPage extends AbstractForgeWizardPage {
 	private boolean checkTopLevelPackage() {
 		String topLevelPackage = (String)getWizardDescriptor().get(TOP_LEVEL_PACKAGE);
 		if (topLevelPackage == null || "".equals(topLevelPackage)) {
+			setErrorMessage("The package name cannot be empty.");
 			return false;
 		} else {
+			IStatus status = JavaConventions.validatePackageName(topLevelPackage, JavaCore.VERSION_1_3, JavaCore.VERSION_1_3);
+			if (status.getSeverity() == IStatus.ERROR) {
+				setErrorMessage("The package name is not valid. " + status.getMessage());
+				return false;
+			} else if (status.getSeverity() == IStatus.WARNING) {
+				setMessage("This package name is discouraged. " + status.getMessage(), IMessageProvider.WARNING);
+			}
 			return true;
 		}
 	}
