@@ -1,33 +1,29 @@
 package org.jboss.tools.forge.ui.ext.cli;
 
-import org.jboss.forge.addon.shell.Shell;
-import org.jboss.forge.addon.shell.ShellFactory;
+import java.io.File;
+
+import org.jboss.forge.addon.shell.ShellHolder;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 
 public class F2Console extends AeshConsole {
-	private Shell shell;
+	private ShellHolder shell;
 
 	protected void createConsole() {
 		// super.createConsole();
-		ShellFactory shellFactory = FurnaceService.INSTANCE
-				.lookup(ShellFactory.class);
-		shell = shellFactory.createShell(OperatingSystemUtils.getUserHomeDir(),
-				createAeshSettings());
+		shell = FurnaceService.INSTANCE.lookup(ShellHolder.class);
+		File currentDir = OperatingSystemUtils.getUserHomeDir();
+		shell.initialize(currentDir, getInputStream(), getStdOut(), getStdErr());
 	}
 
 	public void start() {
-		// Already started
-		if (shell == null)
-			createConsole();
-
-//		super.start();
+		// super.start();
 	}
 
 	@Override
 	public void stop() {
-		shell.close();
+		shell.destroy();
 		shell = null;
 	}
 }
