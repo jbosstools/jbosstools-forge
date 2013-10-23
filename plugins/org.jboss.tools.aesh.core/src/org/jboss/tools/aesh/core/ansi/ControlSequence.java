@@ -8,10 +8,10 @@ public abstract class ControlSequence {
 		this.controlSequenceString = controlSequenceString;
 	}
 	
-	protected String getControlSequenceString() {
+	public String getControlSequenceString() {
 		return controlSequenceString;
 	}
 	
-	protected abstract ControlSequenceType getType();
+	public abstract ControlSequenceType getType();
 
 }

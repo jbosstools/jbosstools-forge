@@ -8,7 +8,7 @@ public class CursorDown extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.CURSOR_DOWN;
 	}
 

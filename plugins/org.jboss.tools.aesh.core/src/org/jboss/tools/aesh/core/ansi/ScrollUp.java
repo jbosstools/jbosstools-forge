@@ -8,7 +8,7 @@ public class ScrollUp extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.SCROLL_UP;
 	}
 

@@ -8,7 +8,7 @@ public class ScrollDown extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.SCROLL_DOWN;
 	}
 

@@ -8,7 +8,7 @@ public class CursorForward extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.CURSOR_FORWARD;
 	}
 

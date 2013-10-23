@@ -8,7 +8,7 @@ public class CursorUp extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.CURSOR_UP;
 	}
 

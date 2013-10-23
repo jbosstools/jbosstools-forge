@@ -8,7 +8,7 @@ public class ShowCursor extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.SHOW_CURSOR;
 	}
 

@@ -8,7 +8,7 @@ public class CursorHorizontalAbsolute extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.CURSOR_HORIZONTAL_ABSOLUTE;
 	}
 

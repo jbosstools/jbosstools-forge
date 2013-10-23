@@ -9,6 +9,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Display;
+import org.jboss.tools.aesh.core.ansi.ControlSequence;
 import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
@@ -42,11 +43,11 @@ public class AeshDocument extends Document {
 		};
 		ansiCommandSequenceFilter = new ControlSequenceFilter(stdOutListener) {			
 			@Override
-			public void controlSequenceAvailable(final String command) {
+			public void controlSequenceAvailable(final ControlSequence controlSequence) {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
-						handleAnsiCommandSequence(command);
+						handleControlSequence(controlSequence);
 					}					
 				});
 			}
@@ -64,20 +65,37 @@ public class AeshDocument extends Document {
 		};
 	}
 	
-	private void handleAnsiCommandSequence(String command) {
-    	char c = command.charAt(command.length() - 1);
-    	switch (c) {
-    		case 'G' : moveCursorAbsoluteInLine(command); break;
-    		case 'K' : clearCurrentLine(command); break;
-    		case 'm' : changeStyle(command); break;
-    		case 'H' : setCursorPosition(command); break;
-    		case 'J' : clearCurrentScreenPage(command); break;
-    		default : AeshUIPlugin.log(new RuntimeException("Unhandled Ansi control sequence in ForgeTextViewer: "+ command));
+	private void handleControlSequence(ControlSequence controlSequence) {
+    	switch (controlSequence.getType()) {
+    		case CURSOR_UP: break;
+    		case CURSOR_DOWN: break;
+    		case CURSOR_FORWARD: break;
+    		case CURSOR_BACK: break;
+    		case CURSOR_NEXT_LINE: break;
+    		case CURSOR_PREVIOUS_LINE: break;
+    		case CURSOR_HORIZONTAL_ABSOLUTE: handleCursorHorizontalAbsolute(controlSequence); break;
+    		case CURSOR_POSITION: handleCursorPosition(controlSequence); break;
+    		case ERASE_DATA: handleEraseData(controlSequence); break;
+    		case ERASE_IN_LINE: handleEraseInLine(controlSequence); break;
+    		case SCROLL_UP: break;
+    		case SCROLL_DOWN: break;
+    		case HORIZONTAL_AND_VERTICAL_POSITION: break;
+    		case SELECT_GRAPHIC_RENDITION: handleSelectGraphicRendition(controlSequence); break;
+    		case DEVICE_STATUS_REPORT: break;
+    		case SAVE_CURSOR_POSITION: break;
+    		case RESTORE_CURSOR_POSITION: break;
+    		case HIDE_CURSOR: break;
+    		case SHOW_CURSOR: break;
+    		default : 
+    			AeshUIPlugin.log(new RuntimeException(
+    				"Unhandled Ansi control sequence in ForgeTextViewer: " + 
+    		        controlSequence.getControlSequenceString()));
     	}
 	}
 	
-    private void moveCursorAbsoluteInLine(final String command) {
+    private void handleCursorHorizontalAbsolute(ControlSequence controlSequence) {
     	try {
+    		String command = controlSequence.getControlSequenceString();
     		int column = Integer.valueOf(command.substring(2, command.length() - 1));
     		int lineStart = getLineOffset(getLineOfOffset(cursorOffset));
     		moveCursorTo(lineStart + column); 
@@ -86,7 +104,7 @@ public class AeshDocument extends Document {
     	}				
     }
     
-    private void clearCurrentLine(String command) {
+    private void handleEraseInLine(ControlSequence controlSequence) {
     	try {
         	replace(cursorOffset, getLength() - cursorOffset, "");
         } catch (BadLocationException e) {
@@ -94,8 +112,8 @@ public class AeshDocument extends Document {
         }
     }
     
-    private void changeStyle(String command) {
-    	System.out.println(command);
+    private void handleSelectGraphicRendition(ControlSequence controlSequence) {
+    	System.out.println(controlSequence.getControlSequenceString());
 //    	String[] args = command.substring(0, command.length() - 1).split(";");
 //    	Color foreground = AeshColor.fromCode(Integer.valueOf(args[1])).getColor();
 //    	Color background = AeshColor.fromCode(Integer.valueOf(args[2])).getColor();
@@ -103,7 +121,8 @@ public class AeshDocument extends Document {
 //		styleRanges.add(currentStyleRange);
      }
     
-    private void setCursorPosition(String command) {
+    private void handleCursorPosition(ControlSequence controlSequence) {
+    	String command = controlSequence.getControlSequenceString();
     	String str = command.substring(2, command.length() - 1);
     	int i = str.indexOf(';');
     	int line = 0, column = 0;
@@ -123,7 +142,8 @@ public class AeshDocument extends Document {
     	}
     }
     
-    private void clearCurrentScreenPage(String command) {
+    private void handleEraseData(ControlSequence controlSequence) {
+    	String command = controlSequence.getControlSequenceString();
     	String str = command.substring(2, command.length() - 1);
     	if ("2".equals(str)) {
     		reset();

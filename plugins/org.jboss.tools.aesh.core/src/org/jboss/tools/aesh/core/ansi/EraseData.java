@@ -8,7 +8,7 @@ public class EraseData extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.ERASE_DATA;
 	}
 

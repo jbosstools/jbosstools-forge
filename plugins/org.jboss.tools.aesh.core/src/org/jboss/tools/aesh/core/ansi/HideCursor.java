@@ -8,7 +8,7 @@ public class HideCursor extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.HIDE_CURSOR;
 	}
 

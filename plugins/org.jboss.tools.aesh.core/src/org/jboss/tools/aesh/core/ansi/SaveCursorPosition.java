@@ -8,7 +8,7 @@ public class SaveCursorPosition extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.SAVE_CURSOR_POSITION;
 	}
 

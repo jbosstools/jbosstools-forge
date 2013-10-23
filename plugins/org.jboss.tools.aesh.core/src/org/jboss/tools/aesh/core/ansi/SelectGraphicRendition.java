@@ -8,7 +8,7 @@ public class SelectGraphicRendition extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.SELECT_GRAPHIC_RENDITION;
 	}
 

@@ -8,7 +8,7 @@ public class CursorNextLine extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.CURSOR_NEXT_LINE;
 	}
 

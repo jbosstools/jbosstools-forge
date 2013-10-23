@@ -12,7 +12,7 @@ public abstract class ControlSequenceFilter implements StreamListener {
 		this.target = target;
 	}
 	
-	public abstract void controlSequenceAvailable(String commandSequence);	
+	public abstract void controlSequenceAvailable(ControlSequence controlSequence);	
 	
 	@Override
 	public void outputAvailable(String output) {
@@ -40,9 +40,8 @@ public abstract class ControlSequenceFilter implements StreamListener {
 			escapeSequence.append(c);
 			ControlSequence command = ControlSequenceFactory.create(escapeSequence.toString());
 			if (command != null) {
-				String escapeString = escapeSequence.toString();
 				escapeSequence.setLength(0);
-				controlSequenceAvailable(escapeString);
+				controlSequenceAvailable(command);
 			}
 		} else {
 			targetBuffer.append(c);

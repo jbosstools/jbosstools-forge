@@ -8,7 +8,7 @@ public class DeviceStatusReport extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.DEVICE_STATUS_REPORT;
 	}
 

@@ -8,7 +8,7 @@ public class HorizontalAndVerticalPosition extends ControlSequence {
 	}
 
 	@Override
-	protected ControlSequenceType getType() {
+	public ControlSequenceType getType() {
 		return ControlSequenceType.HORIZONTAL_AND_VERTICAL_POSITION;
 	}
 
