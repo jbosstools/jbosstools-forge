@@ -18,6 +18,7 @@
 		<module>org.jboss.tools.aesh.ui</module>
 		<module>org.jboss.tools.forge.core</module>
 		<module>org.jboss.tools.forge.core.ext</module>
+        <module>org.jboss.tools.forge.m2e</module>
 		<module>org.jboss.tools.forge.runtime</module>
 		<module>org.jboss.tools.forge.runtime.ext</module>
 		<module>org.jboss.tools.forge2.runtime</module>
