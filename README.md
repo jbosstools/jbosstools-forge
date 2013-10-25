@@ -48,9 +48,9 @@ But *do not* push changes without having the new and existing unit tests pass!
 
 If you intend to install the just built Forge tools in an existing Eclipse installation, do the following:
 
-    In Eclipse, go to Help -> Install New Software... 
-    Click in "Add.." and then "Archive..."
-    Choose forge.site-x.x.x-SNAPSHOT.zip from jbosstools-forge/site/target
+- In Eclipse, go to Help -> Install New Software... 
+- Click in "Add.." and then "Archive..."
+- Choose forge.site-x.x.x-SNAPSHOT.zip from jbosstools-forge/site/target
 
 We *HIGHLY* recommend you to install the _Forge m2e extension for addon classifiers_ as it will solve
 some problems with m2e when running tests for JBoss Forge 2 addons 
