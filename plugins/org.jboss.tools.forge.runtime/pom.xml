@@ -78,11 +78,11 @@
 	</build>
 
 
-	<repositories>
+<!--  	<repositories>
 		<repository>
 			<id>jboss-nexus</id>
 			<name>JBoss Maven repository</name>
 			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
 		</repository>
-	</repositories>
+	</repositories> -->
 </project>
