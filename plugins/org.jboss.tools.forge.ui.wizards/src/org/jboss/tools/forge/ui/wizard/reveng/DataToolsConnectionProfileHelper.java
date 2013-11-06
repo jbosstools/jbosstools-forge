@@ -35,8 +35,6 @@ public class DataToolsConnectionProfileHelper {
 		return true;
 	}
 	
-	
-	
 	private ArrayList<ConnectionProfileDescriptor> getConnectionProfiles() {
 		IConnectionProfile[] connectionProfiles = ProfileManager
 				.getInstance()
