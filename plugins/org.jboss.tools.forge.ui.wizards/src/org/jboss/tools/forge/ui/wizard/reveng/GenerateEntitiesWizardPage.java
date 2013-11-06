@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -293,16 +294,31 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 		getWizardDescriptor().put(CONNECTION_PROFILE,
 				getSelectedConnectionProfile());
 	}
-
+	
+	@SuppressWarnings("unchecked")
 	void refreshConnectionProfiles(
-			ConnectionProfileDescriptor[] connectionProfiles) {
+			ConnectionProfileDescriptor[] newConnectionProfiles) {
+		Set<String> oldConnectionProfileNames = ((HashMap<String, ConnectionProfileDescriptor>)connectionProfiles.clone()).keySet();
+		String newConnectionProfileName = null;
 		this.connectionProfiles.clear();
 		connectionProfileCombo.removeAll();
-		for (ConnectionProfileDescriptor connectionProfile : connectionProfiles) {
+		for (ConnectionProfileDescriptor connectionProfile : newConnectionProfiles) {
 			connectionProfileCombo.add(connectionProfile.name);
 			this.connectionProfiles.put(connectionProfile.name,
 					connectionProfile);
+			if (!oldConnectionProfileNames.contains(connectionProfile.name)) {
+				newConnectionProfileName = connectionProfile.name;
+			}
+			if (newConnectionProfileName != null && isConnectionDetailsControlCreated()) {
+				connectionProfileCombo.setText(newConnectionProfileName);
+				updateConnectionProfileDetails();
+				getWizardDescriptor().put(CONNECTION_PROFILE,
+						getSelectedConnectionProfile());			}
 		}
+	}
+	
+	private boolean isConnectionDetailsControlCreated() {
+		return urlText != null;
 	}
 
 	private void createConnectionProfileDetailsEditor(Composite parent) {
