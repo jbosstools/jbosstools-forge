@@ -8,10 +8,13 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.hibernate.forge.addon.connections.ConnectionProfileManagerProvider;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.ProjectListener;
+import org.jboss.forge.furnace.services.Imported;
 import org.jboss.forge.furnace.spi.ListenerRegistration;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.database.ConnectionProfileManagerImpl;
 import org.jboss.tools.forge.ui.ext.importer.ImportEclipseProjectListener;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
 import org.jboss.tools.forge.ui.ext.listeners.PickUpListener;
@@ -57,6 +60,14 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 							.addProjectListener(ImportEclipseProjectListener.INSTANCE);
 					EventBus.INSTANCE
 							.register(ImportEclipseProjectListener.INSTANCE);
+				}
+				try {
+					Imported<ConnectionProfileManagerProvider> provider = forgeService.lookupImported(ConnectionProfileManagerProvider.class);
+					if (provider != null) {
+						provider.get().setConnectionProfileManager(new ConnectionProfileManagerImpl());;
+					}
+				} catch (Throwable t) {
+					t.printStackTrace();
 				}
 				EventBus.INSTANCE.register(RefreshListener.INSTANCE);
 				EventBus.INSTANCE.register(PickUpListener.INSTANCE);
