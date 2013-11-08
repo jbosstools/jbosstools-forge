@@ -155,6 +155,12 @@
                            <version>${version.forge.addons}</version>
                            <destFileName>projects-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
+                        <artifactItem>
+                           <groupId>org.jboss.forge.addon</groupId>
+                           <artifactId>hibernate-tools-api</artifactId>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>database-tools-api-${version.forge.addons}.jar</destFileName>
+                        </artifactItem>
                      </artifactItems>
                      <skip>false</skip>
                      <outputDirectory>${basedir}/lib</outputDirectory>
