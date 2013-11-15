@@ -14,9 +14,7 @@
 
 	<modules>
 		<module>org.jboss.tools.forge.core.test</module>
-		<module>org.jboss.tools.forge.core.ext.test</module>
 		<module>org.jboss.tools.forge.ui.test</module>
-		<module>org.jboss.tools.forge.ui.ext.test</module>
 	</modules>
 </project>
 	
