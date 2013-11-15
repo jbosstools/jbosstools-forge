@@ -17,10 +17,10 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.jboss.forge.furnace.Furnace;
+import org.jboss.forge.furnace.proxy.ClassLoaderAdapterCallback;
 import org.jboss.forge.furnace.repositories.AddonRepository;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
 import org.jboss.forge.furnace.util.ClassLoaders;
-import org.jboss.forge.proxy.ClassLoaderAdapterCallback;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
@@ -40,7 +40,6 @@ public class ForgeCorePlugin extends Plugin {
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		System.setProperty("modules.ignore.jdk.factory", "true");
 		Furnace furnace = getFurnace(context);
 		FurnaceService.INSTANCE.setFurnace(furnace);
 		FurnaceService.INSTANCE.start(loader);
@@ -71,7 +70,7 @@ public class ForgeCorePlugin extends Plugin {
 						.size()]), null);
 
 				Class<?> bootstrapType = loader
-						.loadClass("org.jboss.forge.furnace.FurnaceImpl");
+						.loadClass("org.jboss.forge.furnace.impl.FurnaceImpl");
 
 				Object nativeForge = bootstrapType.newInstance();
 				Furnace furnace = (Furnace) ClassLoaderAdapterCallback.enhance(

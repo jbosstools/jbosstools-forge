@@ -16,21 +16,22 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.furnace.util.Assert;
 
 public class UIBuilderImpl implements UIBuilder {
-	private List<InputComponent<?, ?>> inputs = new ArrayList<InputComponent<?, ?>>();
+	private List<InputComponent<?, Object>> inputs = new ArrayList<InputComponent<?, Object>>();
 	private UIContext context;
 
 	public UIBuilderImpl(UIContext context) {
 		this.context = context;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public UIBuilder add(InputComponent<?, ?> input) {
 		Assert.notNull(input, "Input must not be null");
-		inputs.add(input);
+		inputs.add((InputComponent<?, Object>) input);
 		return this;
 	}
 
-	public List<InputComponent<?, ?>> getInputs() {
+	public List<InputComponent<?, Object>> getInputs() {
 		return inputs;
 	}
 

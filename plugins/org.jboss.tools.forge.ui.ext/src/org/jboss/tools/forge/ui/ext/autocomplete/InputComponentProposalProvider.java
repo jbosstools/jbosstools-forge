@@ -33,9 +33,11 @@ public class InputComponentProposalProvider implements IContentProposalProvider 
 	@Override
 	public IContentProposal[] getProposals(String contents, int position) {
 		List<IContentProposal> proposals = new ArrayList<IContentProposal>();
-		for (String proposal : completer.getCompletionProposals(context,
+		for (Object proposal : completer.getCompletionProposals(context,
 				component, contents)) {
-			proposals.add(new ContentProposal(proposal));
+			if (proposal != null) {
+				proposals.add(new ContentProposal(proposal.toString()));
+			}
 		}
 		return proposals.toArray(new IContentProposal[proposals.size()]);
 	}

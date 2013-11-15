@@ -11,6 +11,9 @@
 	<version>1.2.1-SNAPSHOT</version>
 	<name>forge.all</name>
 	<packaging>pom</packaging>
+	<properties>
+		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-forge.git</tycho.scmUrl>
+	</properties>
 	<modules>
 		<module>plugins</module>
 		<module>tests</module>
@@ -18,4 +21,4 @@
 		<module>site</module>
 	</modules>
 </project>
-	
+

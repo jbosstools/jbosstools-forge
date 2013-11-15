@@ -10,9 +10,6 @@ package org.jboss.tools.forge.ui.ext.control;
 import java.io.File;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.ui.hints.InputType;
@@ -25,32 +22,13 @@ public class FileChooserControlBuilder extends AbstractTextButtonControl {
 	@Override
 	protected void browseButtonPressed(ForgeWizardPage page,
 			InputComponent<?, Object> input, Text containerText) {
-		// TODO: Check if it is a Directory or a file selection
-		boolean directory = true;
 		String selectedPath;
-		if (directory) {
-			DirectoryDialog dialog = new DirectoryDialog(page.getShell(),
-					SWT.OPEN);
-			dialog.setText("Select a directory");
-			dialog.setFilterPath(containerText.getText());
-			selectedPath = dialog.open();
-		} else {
-			FileDialog dialog = new FileDialog(page.getShell(), SWT.OPEN);
-			dialog.setText("Select a file");
-			dialog.setFileName(containerText.getText());
-			selectedPath = dialog.open();
-		}
+		FileDialog dialog = new FileDialog(page.getShell(), SWT.OPEN);
+		dialog.setText("Select a file");
+		dialog.setFileName(containerText.getText());
+		selectedPath = dialog.open();
 		if (selectedPath != null) {
 			containerText.setText(selectedPath);
-
-		}
-	}
-
-	@Override
-	public void setEnabled(Control control, boolean enabled) {
-		Composite container = (Composite) control;
-		for (Control childControl : container.getChildren()) {
-			childControl.setEnabled(enabled);
 		}
 	}
 

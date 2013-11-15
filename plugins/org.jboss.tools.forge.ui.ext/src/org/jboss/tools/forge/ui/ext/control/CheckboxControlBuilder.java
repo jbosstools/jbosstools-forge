@@ -23,18 +23,21 @@ import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class CheckboxControlBuilder extends ControlBuilder {
+public class CheckboxControlBuilder extends ControlBuilder<Button> {
 
 	@Override
 	public Button build(ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
-		// Checkbox should be placed in second column
-		new Label(container, SWT.NONE);
+
+	   // Checkbox should be placed in second column
+		Label dummy1 = new Label(container, SWT.NONE);
+		dummy1.setText("");
+		
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 1;
 		Button cmb = new Button(container, SWT.CHECK);
 		cmb.setLayoutData(layoutData);
-		cmb.setText(InputComponents.getLabelFor(input, false));
+		cmb.setText(getMnemonicLabel(input, false));
 		cmb.setToolTipText(input.getDescription());
 		// Set Default Value
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
@@ -47,7 +50,6 @@ public class CheckboxControlBuilder extends ControlBuilder {
 			cmb.setSelection(value == null ? false : value);
 		}
 
-		// cmd.setSelection(value == null ? false : value);
 		cmb.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -55,6 +57,11 @@ public class CheckboxControlBuilder extends ControlBuilder {
 				InputComponents.setValueFor(converterFactory, input, selection);
 			}
 		});
+		
+		// skip third column
+		Label dummy2 = new Label(container, SWT.NONE);
+		dummy2.setText("");
+		
 		return cmb;
 	}
 

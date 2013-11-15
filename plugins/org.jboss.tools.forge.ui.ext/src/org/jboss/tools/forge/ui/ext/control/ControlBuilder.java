@@ -13,15 +13,18 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.rse.ui.Mnemonics;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
+import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UICompleter;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.proxy.Proxies;
+import org.jboss.forge.furnace.proxy.Proxies;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.autocomplete.InputComponentProposalProvider;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
@@ -32,7 +35,7 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  * 
  */
-public abstract class ControlBuilder {
+public abstract class ControlBuilder<CONTROL extends Control> {
 
 	/**
 	 * Builds an Eclipse {@link Control} object based on the input
@@ -45,7 +48,7 @@ public abstract class ControlBuilder {
 	 * 
 	 * @return
 	 */
-	public abstract Control build(final ForgeWizardPage page,
+	public abstract CONTROL build(final ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container);
 
 	/**
@@ -99,7 +102,7 @@ public abstract class ControlBuilder {
 		return handles;
 	}
 
-	public void setEnabled(Control control, boolean enabled) {
+	public void setEnabled(CONTROL control, boolean enabled) {
 		if (control instanceof Composite) {
 			Composite c = (Composite) control;
 			for (Control child : c.getChildren()) {
@@ -107,6 +110,17 @@ public abstract class ControlBuilder {
 			}
 		} else {
 			control.setEnabled(enabled);
+		}
+	}
+
+	/**
+	 * Return the controls that accept listeners for modifications
+	 */
+	public Control[] getModifiableControlsFor(CONTROL control) {
+		if (control instanceof Composite) {
+			return ((Composite) control).getChildren();
+		} else {
+			return new Control[] { control };
 		}
 	}
 
@@ -133,5 +147,23 @@ public abstract class ControlBuilder {
 			result.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		}
 		return result;
+	}
+
+	protected String getMnemonicLabel(InputComponent<?, Object> input,
+			boolean addColon) {
+		String label = InputComponents.getLabelFor(input, addColon);
+		char shortName = input.getShortName();
+		if (shortName != InputComponents.DEFAULT_SHORT_NAME) {
+			label = Mnemonics.applyMnemonic(label, shortName);
+		}
+		return label;
+	}
+
+	public void updateState(CONTROL control, InputComponent<?, Object> input) {
+		setEnabled(control, input.isEnabled());
+	}
+
+	protected ConverterFactory getConverterFactory() {
+		return FurnaceService.INSTANCE.getConverterFactory();
 	}
 }

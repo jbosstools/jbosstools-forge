@@ -7,7 +7,13 @@
 
 package org.jboss.tools.forge.ui.ext.control;
 
+import org.eclipse.swt.widgets.Control;
 import org.jboss.forge.addon.ui.input.InputComponent;
+import org.jboss.tools.forge.ui.ext.control.many.CheckboxTableControlBuilder;
+import org.jboss.tools.forge.ui.ext.control.many.DirectoryChooserMultipleControlBuilder;
+import org.jboss.tools.forge.ui.ext.control.many.FileChooserMultipleControlBuilder;
+import org.jboss.tools.forge.ui.ext.control.many.JavaClassChooserMultipleControlBuilder;
+import org.jboss.tools.forge.ui.ext.control.many.TextBoxMultipleControlBuilder;
 
 /**
  * A factory for {@link ControlBuilder} instances.
@@ -15,21 +21,28 @@ import org.jboss.forge.addon.ui.input.InputComponent;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  * 
  */
-public enum ControlBuilderRegistry {
-	INSTANCE;
+public class ControlBuilderRegistry {
 
-	private ControlBuilder[] controlBuilders = { new CheckboxControlBuilder(),
-			new ComboControlBuilder(), new RadioControlBuilder(),
-			new FileChooserControlBuilder(), new CheckboxTableControlBuilder(),
-			new TextBoxControlBuilder(), new PasswordTextBoxControlBuilder(),
+	private static final ControlBuilder<?>[] CONTROL_BUILDERS = {
+			new CheckboxControlBuilder(), new ComboControlBuilder(),
+			new RadioControlBuilder(), new FileChooserControlBuilder(),
+			new DirectoryChooserControlBuilder(),
+			new CheckboxTableControlBuilder(), new TextBoxControlBuilder(),
+			new SpinnerControlBuilder(), new PasswordTextBoxControlBuilder(),
 			new JavaPackageChooserControlBuilder(),
 			new JavaClassChooserControlBuilder(),
+			new TextBoxMultipleControlBuilder(),
+			new FileChooserMultipleControlBuilder(),
+			new DirectoryChooserMultipleControlBuilder(),
+			new JavaClassChooserMultipleControlBuilder(),
 			new FallbackTextBoxControlBuilder() };
 
-	public ControlBuilder getBuilderFor(InputComponent<?, ?> input) {
-		for (ControlBuilder builder : controlBuilders) {
+	@SuppressWarnings("unchecked")
+	public static <T extends Control> ControlBuilder<T> getBuilderFor(
+			InputComponent<?, Object> input) {
+		for (ControlBuilder<?> builder : CONTROL_BUILDERS) {
 			if (builder.handles(input)) {
-				return builder;
+				return (ControlBuilder<T>) builder;
 			}
 		}
 		throw new IllegalArgumentException(

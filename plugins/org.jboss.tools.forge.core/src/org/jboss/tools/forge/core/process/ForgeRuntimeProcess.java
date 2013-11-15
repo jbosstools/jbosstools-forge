@@ -8,7 +8,7 @@ import org.eclipse.debug.core.model.RuntimeProcess;
 
 public class ForgeRuntimeProcess extends RuntimeProcess {
 
-	public ForgeRuntimeProcess(ILaunch launch, Process process, String name, Map<Object, Object> attributes) {
+	public ForgeRuntimeProcess(ILaunch launch, Process process, String name, Map<String, String> attributes) {
 		super(launch, process, name, attributes);
 	}
 

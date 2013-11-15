@@ -1,5 +1,12 @@
+/*
+ * Copyright 2013 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Eclipse Public License version 1.0, available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.jboss.tools.forge.ui.ext.wizards;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.core.resources.WorkspaceJob;
@@ -9,18 +16,17 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.swt.widgets.Display;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.NavigationResult;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.addon.ui.wizard.UIWizard;
-import org.jboss.forge.proxy.Proxies;
+import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
-import org.jboss.tools.forge.ui.notifications.NotificationDialog;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
@@ -34,6 +40,8 @@ public class ForgeWizard extends MutableWizard {
 	private UICommand initialCommand;
 	private UIContextImpl uiContext;
 
+	private LinkedList<Class<? extends UICommand>> subflows = new LinkedList<Class<? extends UICommand>>();
+
 	public ForgeWizard(UICommand uiCommand, UIContextImpl context) {
 		this.initialCommand = uiCommand;
 		this.uiContext = context;
@@ -44,11 +52,12 @@ public class ForgeWizard extends MutableWizard {
 
 	@Override
 	public void addPages() {
-		addPage(new ForgeWizardPage(this, initialCommand, uiContext));
+		addPage(new ForgeWizardPage(this, initialCommand, uiContext, false));
 	}
 
 	@Override
-	public IWizardPage getNextPage(final IWizardPage page) {
+	public ForgeWizardPage getNextPage(final IWizardPage page) {
+		final ForgeWizardPage result;
 		final ForgeWizardPage currentWizardPage = (ForgeWizardPage) page;
 		UICommand uiCommand = currentWizardPage.getUICommand();
 		// If it's not a wizard, we don't care
@@ -56,73 +65,103 @@ public class ForgeWizard extends MutableWizard {
 			return null;
 		}
 		UIWizard wiz = (UIWizard) uiCommand;
-		NavigationResult nextCommand = null;
-		try {
-			nextCommand = wiz.next(getUIContext());
-		} catch (Exception e) {
-			ForgeUIPlugin.log(e);
-		}
-		// No next page
-		if (nextCommand == null) {
-			// Clear any subsequent pages that may exist (occurs when navigation
-			// changes)
-			List<ForgeWizardPage> pageList = getPageList();
-			int idx = pageList.indexOf(page) + 1;
-			clearNextPagesFrom(idx);
-			return null;
+		ForgeWizardPage originalNextPage = (ForgeWizardPage) super
+				.getNextPage(currentWizardPage);
+
+		if (!currentWizardPage.isChanged() && originalNextPage != null) {
+			result = originalNextPage;
 		} else {
-			Class<? extends UICommand> successor = nextCommand.getNext();
-			// Do we have any pages already displayed ? (Did we went back
-			// already ?) or did we change anything in the current wizard ?
-			// If yes, clear subsequent pages
-			ForgeWizardPage nextPage = (ForgeWizardPage) super
-					.getNextPage(page);
-			if (nextPage == null
-					|| (!isNextPageAssignableFrom(nextPage, successor) || currentWizardPage
-							.isChanged())) {
-				if (nextPage != null) {
-					List<ForgeWizardPage> pageList = getPageList();
-					int idx = pageList.indexOf(nextPage);
-					// Clear the old pages
-					clearNextPagesFrom(idx);
-				}
-				UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
-				nextPage = new ForgeWizardPage(this, nextStep, getUIContext());
-				addPage(nextPage);
+			Class<? extends UICommand>[] successors = null;
+			try {
+				NavigationResult nav = wiz.next(getUIContext());
+				successors = (nav == null) ? null : nav.getNext();
+			} catch (Exception e) {
+				ForgeUIPlugin.log(e);
 			}
-			return nextPage;
+			int pageIndex = invalidateNextPage(currentWizardPage, successors);
+
+			// No next page
+			if (successors == null) {
+				if (subflows.isEmpty()) {
+					result = originalNextPage;
+				} else {
+					result = createWizardPage(subflows.pop(), pageIndex, true);
+				}
+			} else {
+				result = createWizardPage(successors[0], pageIndex, false);
+				for (int i = 1; i < successors.length; i++) {
+					if (successors[i] != null) {
+						subflows.push(successors[i]);
+					}
+				}
+			}
 		}
+		currentWizardPage.setChanged(false);
+		return result;
 	}
 
 	/**
-	 * Clears the next pages from a specific index to the end of the list
+	 * Invalidates the pages after the original page
 	 */
-	private void clearNextPagesFrom(int indexFrom) {
+	private int invalidateNextPage(ForgeWizardPage currentWizardPage,
+			Class<? extends UICommand>[] successors) {
+		ForgeWizardPage originalNextPage = (ForgeWizardPage) super
+				.getNextPage(currentWizardPage);
 		List<ForgeWizardPage> pageList = getPageList();
-		pageList.subList(indexFrom, pageList.size()).clear();
+		int idx = getPageCount();
+		if (originalNextPage != null) {
+			idx = clearNextPagesFrom(originalNextPage);
+			if (successors != null) {
+				for (Class<? extends UICommand> successor : successors) {
+					for (int i = pageList.size() - 1; i > -1; i--) {
+						if (Proxies.isInstance(successor, pageList.get(i)
+								.getUICommand())) {
+							pageList.remove(i);
+						}
+					}
+					subflows.remove(successor);
+				}
+			}
+		}
+		return idx;
 	}
 
-	private boolean isNextPageAssignableFrom(ForgeWizardPage nextPage,
-			Class<? extends UICommand> successor) {
-		return Proxies.isInstance(successor, nextPage.getUICommand());
+	/**
+	 * Clears the next pages from a specific page to the end of the list
+	 * 
+	 * Returns the position where the next page should be added
+	 */
+	private int clearNextPagesFrom(final IWizardPage page) {
+		List<ForgeWizardPage> pageList = getPageList();
+		int idx = pageList.indexOf(page);
+		int finalIdx = pageList.size();
+		for (int i = idx; i < finalIdx; i++) {
+			if (pageList.get(i).isSubflowHead()) {
+				finalIdx = i;
+				break;
+			}
+		}
+		pageList.subList(idx, finalIdx).clear();
+		return idx;
+	}
+
+	private ForgeWizardPage createWizardPage(
+			final Class<? extends UICommand> successor, int index,
+			boolean subflow) {
+		ForgeWizardPage nextPage;
+		UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
+		nextPage = new ForgeWizardPage(this, nextStep, getUIContext(), subflow);
+		nextPage.setWizard(this);
+		getPageList().add(index, nextPage);
+		return nextPage;
 	}
 
 	@Override
 	public boolean performFinish() {
 		FinishJob finishJob = new FinishJob("Finishing '"
-				+ initialCommand.getMetadata().getName() + "'");
+				+ initialCommand.getMetadata(uiContext).getName() + "'");
 		finishJob.schedule();
 		return true;
-	}
-
-	protected void displayMessage(final String title, final String message,
-			final NotificationType type) {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				NotificationDialog.notify(title, message, type);
-			}
-		});
 	}
 
 	@Override
@@ -151,24 +190,29 @@ public class ForgeWizard extends MutableWizard {
 		@Override
 		public IStatus runInWorkspace(IProgressMonitor monitor)
 				throws CoreException {
+			UICommand currentCommand = initialCommand;
 			try {
 				monitor.beginTask("Executing wizard pages", getPageCount());
 				for (IWizardPage wizardPage : getPages()) {
-					UICommand cmd = ((ForgeWizardPage) wizardPage)
+					currentCommand = ((ForgeWizardPage) wizardPage)
 							.getUICommand();
-					Result result = cmd.execute(uiContext);
+					ForgeUIProvider.INSTANCE.firePreCommandExecuted(
+							currentCommand, uiContext);
+					Result result = currentCommand.execute(uiContext);
+					ForgeUIProvider.INSTANCE.firePostCommandExecuted(
+							currentCommand, uiContext, result);
 					if (result != null) {
 						String message = result.getMessage();
 						if (message != null) {
-							displayMessage("Forge Command", message,
-									NotificationType.INFO);
+							ForgeUIPlugin.displayMessage("Forge Command",
+									message, NotificationType.INFO);
 						}
 						if (result instanceof Failed) {
 							Throwable exception = ((Failed) result)
 									.getException();
 							if (exception != null) {
 								ForgeUIPlugin.log(exception);
-								displayMessage("Forge Command",
+								ForgeUIPlugin.displayMessage("Forge Command",
 										String.valueOf(exception.getMessage()),
 										NotificationType.ERROR);
 							}
@@ -179,11 +223,16 @@ public class ForgeWizard extends MutableWizard {
 				EventBus.INSTANCE.fireWizardFinished(uiContext);
 				return Status.OK_STATUS;
 			} catch (Exception ex) {
+				ForgeUIProvider.INSTANCE.firePostCommandFailure(currentCommand,
+						uiContext, ex);
 				ForgeUIPlugin.log(ex);
-				displayMessage("Forge Command",
-						String.valueOf(ex.getMessage()), NotificationType.ERROR);
+				ForgeUIPlugin
+						.displayMessage("Forge Command",
+								String.valueOf(ex.getMessage()),
+								NotificationType.ERROR);
 				return Status.CANCEL_STATUS;
 			} finally {
+				uiContext.destroy();
 				monitor.done();
 			}
 		}

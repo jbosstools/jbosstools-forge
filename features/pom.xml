@@ -17,6 +17,7 @@
 		<module>org.jboss.tools.forge.ext.feature</module>
 		<module>org.jboss.tools.forge.test.feature</module>
 		<module>org.jboss.tools.forge.ext.test.feature</module>
+        <module>org.jboss.tools.forge.m2e.feature</module>
 	</modules>
 </project>
 	

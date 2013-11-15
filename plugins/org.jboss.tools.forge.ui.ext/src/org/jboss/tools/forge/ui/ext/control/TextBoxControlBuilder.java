@@ -21,16 +21,17 @@ import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public class TextBoxControlBuilder extends ControlBuilder {
+public class TextBoxControlBuilder extends ControlBuilder<Text> {
 
 	@Override
-	public Text build(ForgeWizardPage page,
+	public Text build(final ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
-		label.setText(InputComponents.getLabelFor(input, true));
+		label.setText(getMnemonicLabel(input, true));
 
 		final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -49,11 +50,23 @@ public class TextBoxControlBuilder extends ControlBuilder {
 		txt.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				InputComponents.setValueFor(converterFactory, input,
-						txt.getText());
+				try {
+					InputComponents.setValueFor(converterFactory, input,
+							txt.getText());
+				} catch (Exception ex) {
+					ForgeUIPlugin.log(ex.getCause());
+					// FIXME: Display error message in wizard
+					InputComponents.setValueFor(converterFactory, input, null);
+				}
 			}
 		});
-		setupAutoCompleteForText(page.getUIContext(), input, InputComponents.getCompleterFor(input), txt);
+		setupAutoCompleteForText(page.getUIContext(), input,
+				InputComponents.getCompleterFor(input), txt);
+		
+		// skip the third column
+		Label dummy = new Label(container, SWT.NONE);
+		dummy.setText("");
+		
 		return txt;
 	}
 

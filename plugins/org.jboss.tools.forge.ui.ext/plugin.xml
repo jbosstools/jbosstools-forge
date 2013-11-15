@@ -39,4 +39,16 @@
        </page>
     </extension>
 
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.jboss.tools.forge.ui"
+            class="org.jboss.tools.forge.ui.ext.cli.F2View"
+            icon="icons/icon.png"
+            id="org.jboss.tools.forge.ui.f2"
+            name="F2 Console"
+            restorable="true">
+      </view>
+   </extension>
+
 </plugin>

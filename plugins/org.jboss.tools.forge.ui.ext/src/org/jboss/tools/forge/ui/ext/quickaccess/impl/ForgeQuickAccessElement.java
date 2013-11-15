@@ -9,6 +9,7 @@ package org.jboss.tools.forge.ui.ext.quickaccess.impl;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessElement;
@@ -18,12 +19,12 @@ public class ForgeQuickAccessElement extends QuickAccessElement {
 	private String tooltip;
 	private UICommand command;
 
-	public ForgeQuickAccessElement(ForgeQuickAccessProvider provider,
+	public ForgeQuickAccessElement(ForgeQuickAccessProvider provider, UIContext context,
 			UICommand command) {
 		super(provider);
 		this.command = command;
 
-		UICommandMetadata metadata = command.getMetadata();
+		UICommandMetadata metadata = command.getMetadata(context);
 		this.label = metadata.getName();
 		this.tooltip = metadata.getDescription();
 	}

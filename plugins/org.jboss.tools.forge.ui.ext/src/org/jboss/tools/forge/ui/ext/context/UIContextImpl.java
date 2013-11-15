@@ -23,71 +23,68 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.resource.Resource;
+import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
 import org.jboss.forge.furnace.addons.Addon;
 import org.jboss.forge.furnace.addons.AddonFilter;
 import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.lock.LockManager;
 import org.jboss.forge.furnace.lock.LockMode;
-import org.jboss.forge.proxy.Proxies;
+import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UIContextImpl extends AbstractUIContext {
 	private UISelectionImpl<?> currentSelection;
-
-	public UIContextImpl(UISelectionImpl<?> selection) {
-		this.currentSelection = selection;
-	}
 
 	public UIContextImpl(IStructuredSelection selection) {
 		List<Object> selectedElements = selection == null ? Collections.EMPTY_LIST
 				: selection.toList();
 		List<Object> result = new LinkedList<Object>();
 		ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.lookup(ConverterFactory.class);
-		if (converterFactory != null) {
-			Converter<File, Resource> converter = converterFactory
-					.getConverter(File.class, locateNativeClass(Resource.class));
+				.getConverterFactory();
+		Converter<File, Resource> converter = converterFactory.getConverter(
+				File.class, locateNativeClass(Resource.class));
 
-			if (selectedElements.isEmpty()) {
-				// Get the Workspace directory path
-				IWorkspace workspace = ResourcesPlugin.getWorkspace();
-				File workspaceDirectory = workspace.getRoot().getLocation()
-						.toFile();
-				Object convertedObj = converter.convert(workspaceDirectory);
-				result.add(Proxies.unwrap(convertedObj));
-			} else {
-				for (Object object : selectedElements) {
-					if (object instanceof IResource) {
-						IPath location = ((IResource) object).getLocation();
-						if (location != null) {
-							File file = location.toFile();
-							result.add(Proxies.unwrap(converter.convert(file)));
-						}
-					} else if (object instanceof IJavaElement) {
-						try {
-							IJavaElement javaElem = (IJavaElement) object;
-							IResource correspondingResource = javaElem
-									.getCorrespondingResource();
-							if (correspondingResource != null) {
-								IPath location = correspondingResource
-										.getLocation();
-								if (location != null) {
-									File file = location.toFile();
-									result.add(Proxies.unwrap(converter
-											.convert(file)));
-								}
+		if (selectedElements.isEmpty()) {
+			// Get the Workspace directory path
+			IWorkspace workspace = ResourcesPlugin.getWorkspace();
+			File workspaceDirectory = workspace.getRoot().getLocation()
+					.toFile();
+			Object convertedObj = converter.convert(workspaceDirectory);
+			result.add(Proxies.unwrap(convertedObj));
+		} else {
+			for (Object object : selectedElements) {
+				if (object instanceof IResource) {
+					IPath location = ((IResource) object).getLocation();
+					if (location != null) {
+						File file = location.toFile();
+						result.add(Proxies.unwrap(converter.convert(file)));
+					}
+				} else if (object instanceof IJavaElement) {
+					try {
+						IJavaElement javaElem = (IJavaElement) object;
+						IResource correspondingResource = javaElem
+								.getCorrespondingResource();
+						if (correspondingResource != null) {
+							IPath location = correspondingResource
+									.getLocation();
+							if (location != null) {
+								File file = location.toFile();
+								result.add(Proxies.unwrap(converter
+										.convert(file)));
 							}
-						} catch (JavaModelException e) {
-							ForgeUIPlugin.log(e);
 						}
+					} catch (JavaModelException e) {
+						ForgeUIPlugin.log(e);
 					}
 				}
 			}
 		}
 		this.currentSelection = new UISelectionImpl(result, selection);
+		ForgeUIProvider.INSTANCE.fireInteractionStarted(this);
 	}
 
 	@Override
@@ -125,6 +122,15 @@ public class UIContextImpl extends AbstractUIContext {
 					}
 				});
 		return result;
+	}
+
+	public void destroy() {
+		ForgeUIProvider.INSTANCE.fireInteractionStopped(this);
+	}
+
+	@Override
+	public UIProvider getProvider() {
+		return ForgeUIProvider.INSTANCE;
 	}
 
 }

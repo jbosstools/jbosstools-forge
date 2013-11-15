@@ -10,7 +10,6 @@ package org.jboss.tools.forge.ui.ext.dialog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -24,8 +23,9 @@ import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
 import org.jboss.forge.furnace.addons.AddonRegistry;
-import org.jboss.forge.furnace.services.ExportedInstance;
+import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
@@ -55,13 +55,16 @@ public final class WizardDialogHelper {
 		List<UICommand> result = new ArrayList<UICommand>();
 		AddonRegistry addonRegistry = FurnaceService.INSTANCE
 				.getAddonRegistry();
-		Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry
-				.getExportedInstances(UICommand.class);
-		for (ExportedInstance<UICommand> instance : exportedInstances) {
-			UICommand uiCommand = instance.get();
-			if (!(uiCommand instanceof UIWizardStep)
-					&& uiCommand.isEnabled(context)) {
-				result.add(uiCommand);
+		Imported<UICommand> instances = addonRegistry
+				.getServices(UICommand.class);
+		for (UICommand uiCommand : instances) {
+			try {
+				if (!(uiCommand instanceof UIWizardStep)
+						&& uiCommand.isEnabled(context)) {
+					result.add(uiCommand);
+				}
+			} catch (Exception e) {
+				ForgeUIPlugin.log(e);
 			}
 		}
 		return result;
@@ -71,15 +74,19 @@ public final class WizardDialogHelper {
 		Map<String, UICommand> result = new TreeMap<String, UICommand>();
 		AddonRegistry addonRegistry = FurnaceService.INSTANCE
 				.getAddonRegistry();
-		Set<ExportedInstance<UICommand>> exportedInstances = addonRegistry
-				.getExportedInstances(UICommand.class);
-		for (ExportedInstance<UICommand> instance : exportedInstances) {
-			UICommand uiCommand = instance.get();
-			if (!(uiCommand instanceof UIWizardStep)
-					&& uiCommand.isEnabled(context)) {
-				UICommandMetadata metadata = uiCommand.getMetadata();
-				result.put(metadata.getName(), uiCommand);
+		Imported<UICommand> instances = addonRegistry
+				.getServices(UICommand.class);
+		for (UICommand uiCommand : instances) {
+			try {
+				if (!(uiCommand instanceof UIWizardStep)
+						&& uiCommand.isEnabled(context)) {
+					UICommandMetadata metadata = uiCommand.getMetadata(getContext());
+					result.put(metadata.getName(), uiCommand);
+				}
+			} catch (Exception e) {
+				ForgeUIPlugin.log(e);
 			}
+
 		}
 		return result;
 	}

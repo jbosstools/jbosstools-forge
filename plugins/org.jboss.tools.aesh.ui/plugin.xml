@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.jboss.tools.aesh.ui"
+            name="Aesh">
+      </category>
+      <view
+            category="org.jboss.tools.aesh.ui"
+            class="org.jboss.tools.aesh.ui.view.AeshView"
+            icon="icons/aesh.png"
+            id="org.jboss.tools.aesh.ui"
+            name="Aesh Console"
+            restorable="true">
+      </view>
+   </extension>
+    <extension
+          point="org.eclipse.ui.themes">
+       <fontDefinition
+             categoryId="org.jboss.tools.aesh.ui"
+             defaultsTo="org.eclipse.debug.ui.consoleFont"
+             id="org.jboss.tools.aesh.ui.font"
+             label="Aesh Console Font">
+       </fontDefinition>
+       <themeElementCategory
+             id="org.jboss.tools.aesh.ui"
+             label="Aesh ">
+       </themeElementCategory>
+    </extension>
+</plugin>

@@ -1,0 +1,33 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Aesh Runtime Plugin
+Bundle-SymbolicName: org.jboss.tools.aesh.runtime;singleton:=true
+Bundle-Version: 1.2.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/aesh-0.42.jar
+Export-Package: org.jboss.aesh.cl;uses:="org.jboss.aesh.cl.internal",
+ org.jboss.aesh.cl.builder,
+ org.jboss.aesh.cl.exception,
+ org.jboss.aesh.cl.internal,
+ org.jboss.aesh.complete,
+ org.jboss.aesh.console;
+  uses:="org.jboss.aesh.terminal,
+   org.jboss.aesh.edit.actions,
+   org.jboss.aesh.console.operator,
+   org.jboss.aesh.cl,
+   org.jboss.aesh.complete,
+   org.jboss.aesh.history,
+   org.jboss.aesh.console.settings",
+ org.jboss.aesh.console.alias;uses:="org.jboss.aesh.complete",
+ org.jboss.aesh.console.command,
+ org.jboss.aesh.console.helper;uses:="org.jboss.aesh.edit.actions,org.jboss.aesh.console,sun.misc",
+ org.jboss.aesh.console.operator;uses:="org.jboss.aesh.complete",
+ org.jboss.aesh.console.reader,
+ org.jboss.aesh.console.settings;uses:="org.jboss.aesh.terminal,org.jboss.aesh.console.helper,org.jboss.aesh.edit",
+ org.jboss.aesh.edit;uses:="org.jboss.aesh.terminal,org.jboss.aesh.edit.actions",
+ org.jboss.aesh.edit.actions,
+ org.jboss.aesh.edit.mapper;uses:="org.jboss.aesh.edit.actions,org.jboss.aesh.edit",
+ org.jboss.aesh.history,
+ org.jboss.aesh.terminal;uses:="new org.jboss.aesh.terminal,org.jboss.aesh.console.settings",
+ org.jboss.aesh.undo,
+ org.jboss.aesh.util;uses:="org.jboss.aesh.complete"

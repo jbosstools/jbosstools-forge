@@ -13,7 +13,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -26,26 +25,16 @@ import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
-public abstract class AbstractTextButtonControl extends ControlBuilder {
+public abstract class AbstractTextButtonControl extends ControlBuilder<Control> {
 
 	@Override
 	public Control build(final ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
-		label.setText(InputComponents.getLabelFor(input, true));
+		label.setText(getMnemonicLabel(input, true));
 
-		Composite container = new Composite(parent, SWT.NULL);
-		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-		GridLayout layout = new GridLayout();
-		container.setLayout(layout);
-		layout.numColumns = 2;
-		layout.verticalSpacing = 9;
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-
-		final Text containerText = new Text(container, SWT.BORDER | SWT.SINGLE);
+		final Text containerText = new Text(parent, SWT.BORDER | SWT.SINGLE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerText.setLayoutData(gd);
 
@@ -70,7 +59,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder {
 			}
 		});
 		decorateContainerText(page, input, containerText);
-		Button button = new Button(container, SWT.PUSH);
+		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -78,8 +67,29 @@ public abstract class AbstractTextButtonControl extends ControlBuilder {
 				browseButtonPressed(page, input, containerText);
 			}
 		});
-		setupAutoCompleteForText(page.getUIContext(), input, InputComponents.getCompleterFor(input), containerText);
-		return container;
+		setupAutoCompleteForText(page.getUIContext(), input,
+				InputComponents.getCompleterFor(input), containerText);
+		return containerText;
+	}
+
+	/**
+	 * Ugly workaround because the Browse button is not exposed to the caller
+	 * class
+	 * 
+	 * TODO: Refactor ControlBuilder
+	 */
+	@Override
+	public void setEnabled(Control control, boolean enabled) {
+		control.setEnabled(enabled);
+		// Enable/disable Browse button
+		Composite parent = control.getParent();
+		Control[] children = parent.getChildren();
+		for (int i = 0; i < children.length; i++) {
+			if (children[i] == control) {
+				children[i + 1].setEnabled(enabled);
+				break;
+			}
+		}
 	}
 
 	protected void decorateContainerText(final ForgeWizardPage page,
