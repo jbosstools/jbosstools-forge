@@ -28,6 +28,7 @@ import org.jboss.tools.forge.ui.ext.control.ControlBuilder;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**
+ * Abstract class for {@link UIInputMany} elements
  * 
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
@@ -37,7 +38,6 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 	@Override
 	public Control build(final ForgeWizardPage page,
 			final InputComponent<?, Object> input, final Composite container) {
-
 		final Group group = new Group(container, SWT.SHADOW_NONE);
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 3;
@@ -72,8 +72,9 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 		containerList.setToolTipText(input.getDescription());
 		Composite buttons = new Composite(groupPanel, SWT.NULL);
 		buttons.setLayout(new GridLayout(1, true));
-		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_BEGINNING));
-		
+		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER
+				| GridData.VERTICAL_ALIGN_BEGINNING));
+
 		Button addButton = new Button(buttons, SWT.PUSH);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		addButton.setText("Add...");
@@ -93,7 +94,8 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 				removeButtonPressed(page, input, containerList);
 			}
 		});
-		return container;
+		group.setData(new Control[] { containerList, addButton, removeButton });
+		return group;
 	}
 
 	protected abstract void addButtonPressed(final ForgeWizardPage page,
@@ -109,6 +111,11 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 			final List containerList) {
 		InputComponents.setValueFor(getConverterFactory(), input,
 				Arrays.asList(containerList.getItems()));
+	}
+
+	@Override
+	public Control[] getModifiableControlsFor(Control control) {
+		return (Control[]) control.getData();
 	}
 
 	@Override
