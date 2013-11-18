@@ -1,14 +1,17 @@
 package org.jboss.tools.forge.ui.ext.handlers;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -29,22 +32,40 @@ public class ForgeCommandHandler extends AbstractHandler {
 					.getActiveWorkbenchWindowChecked(event);
 			final ISelection selection = window.getSelectionService().getSelection();
 			if (!FurnaceService.INSTANCE.getContainerStatus().isStarted()) {
-				ProgressMonitorDialog pmd = new ProgressMonitorDialog(shell);
-				pmd.run(true, false, new IRunnableWithProgress() {				
+				WorkspaceJob job = new WorkspaceJob("Starting Forge 2") {					
 					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException,
-							InterruptedException {
+					public IStatus runInWorkspace(IProgressMonitor monitor)
+							throws CoreException {
 						String taskName = "Please wait while Forge 2 is started.";
-						monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
-						FurnaceService.INSTANCE.waitUntilContainerIsStarted();
-						// hack to make progress monitor stick until all commands are loaded
-						if (selection instanceof IStructuredSelection) {
-							new WizardDialogHelper(shell, (IStructuredSelection)selection).getAllCandidatesAsMap();
+						try {
+							monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
+							FurnaceService.INSTANCE.waitUntilContainerIsStarted();
+							// hack to make progress monitor stick until all commands are loaded
+							if (selection instanceof IStructuredSelection) {
+								new WizardDialogHelper(shell, (IStructuredSelection)selection).getAllCandidatesAsMap();
+							}
+						} catch (InterruptedException e) {
+							ForgeUIPlugin.log(e);
 						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setUser(true);
+				job.addJobChangeListener(new JobChangeAdapter() {
+					@Override
+					public void done(IJobChangeEvent event) {
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								new UICommandListDialog(window).open();
+							}				
+						});
 					}
 				});
+				job.schedule();
+			} else {
+				new UICommandListDialog(window).open();
 			}
-			new UICommandListDialog(window).open();
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
 		}
