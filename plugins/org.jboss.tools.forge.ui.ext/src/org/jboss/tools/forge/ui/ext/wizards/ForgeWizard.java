@@ -60,11 +60,6 @@ public class ForgeWizard extends MutableWizard {
 		final ForgeWizardPage result;
 		final ForgeWizardPage currentWizardPage = (ForgeWizardPage) page;
 		UICommand uiCommand = currentWizardPage.getUICommand();
-		// If it's not a wizard, we don't care
-		if (!(uiCommand instanceof UIWizard)) {
-			return null;
-		}
-		UIWizard wiz = (UIWizard) uiCommand;
 		ForgeWizardPage originalNextPage = (ForgeWizardPage) super
 				.getNextPage(currentWizardPage);
 
@@ -73,8 +68,12 @@ public class ForgeWizard extends MutableWizard {
 		} else {
 			Class<? extends UICommand>[] successors = null;
 			try {
-				NavigationResult nav = wiz.next(getUIContext());
-				successors = (nav == null) ? null : nav.getNext();
+				// If it's a wizard, we drill down and get the next page of the wizard
+				if (uiCommand instanceof UIWizard) {
+					UIWizard wiz = (UIWizard) uiCommand;
+					NavigationResult nav = wiz.next(getUIContext());
+					successors = (nav == null) ? null : nav.getNext();
+				}
 			} catch (Exception e) {
 				ForgeUIPlugin.log(e);
 			}
