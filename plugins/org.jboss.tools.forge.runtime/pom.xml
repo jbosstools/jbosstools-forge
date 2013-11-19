@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>org.jboss.tools.forge.plugins</groupId>
 	<artifactId>org.jboss.tools.forge.runtime</artifactId>
-	<version>1.4.2-SNAPSHOT</version>
+	<version>1.4.143-SNAPSHOT</version>
 
 	<packaging>eclipse-plugin</packaging>
 
@@ -29,7 +29,7 @@
 								<artifactItem>
 									<groupId>org.jboss.forge</groupId>
 									<artifactId>forge-distribution</artifactId>
-									<version>1.4.2.Final</version>
+									<version>1.4.3.Final</version>
 									<type>zip</type>
 							  	</artifactItem>
 							</artifactItems>
