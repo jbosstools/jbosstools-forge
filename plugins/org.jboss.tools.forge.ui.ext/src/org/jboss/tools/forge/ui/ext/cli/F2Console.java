@@ -1,6 +1,8 @@
 package org.jboss.tools.forge.ui.ext.cli;
 
 import java.io.File;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 import org.jboss.forge.addon.shell.ShellHandle;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
@@ -14,7 +16,13 @@ public class F2Console extends AeshConsole {
 		// super.createConsole();
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);
 		File currentDir = OperatingSystemUtils.getUserHomeDir();
-		handle.initialize(currentDir, getInputStream(), getStdOut(), getStdErr());
+		OutputStream stdOut = getStdOut();
+		OutputStream stdErr = getStdErr();
+
+		PrintStream out = new PrintStream(stdOut, true);
+		PrintStream err = new PrintStream(stdErr, true);
+
+		handle.initialize(currentDir, getInputStream(), out, err);
 	}
 
 	public void start() {
