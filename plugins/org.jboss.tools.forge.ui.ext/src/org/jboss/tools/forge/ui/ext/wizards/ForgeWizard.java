@@ -168,17 +168,30 @@ public class ForgeWizard extends MutableWizard {
 									.getUICommand();
 							ForgeUIProvider.INSTANCE.firePreCommandExecuted(
 									currentCommand, uiContext);
-							Result result = currentCommand.execute(uiContext);
+							CommandExecutor executor = new CommandExecutor(currentCommand);
+							Thread executorThread = new Thread(executor);
+							executorThread.start();
+							while (executorThread.isAlive()) {
+								if (monitor.isCanceled()) {
+									executorThread.interrupt();
+									break;
+								} else {
+									Thread.sleep(100);
+								}
+							}
 							ForgeUIProvider.INSTANCE.firePostCommandExecuted(
-									currentCommand, uiContext, result);
-							if (result != null) {
-								String message = result.getMessage();
+									currentCommand, uiContext, executor.result);
+							if (executor.exception != null) {
+								throw executor.exception;
+							}
+							if (executor.result != null) {
+								String message = executor.result.getMessage();
 								if (message != null) {
 									ForgeUIPlugin.displayMessage("Forge Command",
 											message, NotificationType.INFO);
 								}
-								if (result instanceof Failed) {
-									Throwable exception = ((Failed) result)
+								if (executor.result instanceof Failed) {
+									Throwable exception = ((Failed) executor.result)
 											.getException();
 									if (exception != null) {
 										ForgeUIPlugin.log(exception);
@@ -219,6 +232,27 @@ public class ForgeWizard extends MutableWizard {
 
 	protected UIContextImpl getUIContext() {
 		return uiContext;
+	}
+	
+	private class CommandExecutor implements Runnable {
+		
+		private UICommand command;
+		Result result;
+		Exception exception;
+		
+		CommandExecutor(UICommand command) {
+			this.command = command;
+		}
+
+		@Override
+		public void run() {
+			try {
+				result = command.execute(uiContext);
+			} catch (Exception e) {
+				exception = e;
+			}
+		}
+		
 	}
 	
 }
