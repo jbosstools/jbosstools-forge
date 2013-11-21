@@ -179,11 +179,15 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		});
 		runtimesTableViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(final CheckStateChangedEvent event) {
-				Object object = event.getElement();
-				if (object != null && object instanceof ForgeRuntime && !object.equals(defaultRuntime)) {
-					defaultRuntime = (ForgeRuntime)object;
-					refreshForgeInstallations();
-					refreshNeeded = true;
+				if (runtimesTableViewer.getCheckedElements().length == 0) {
+					runtimesTableViewer.setChecked(defaultRuntime, true);
+				} else {
+					Object object = event.getElement();
+					if (object != null && object instanceof ForgeRuntime && !object.equals(defaultRuntime)) {
+						defaultRuntime = (ForgeRuntime)object;
+						refreshForgeInstallations();
+						refreshNeeded = true;
+					}
 				}
 			}
 		});		
