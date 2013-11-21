@@ -6,16 +6,13 @@
  */
 package org.jboss.tools.forge.ui.ext.wizards;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.m2e.core.MavenPlugin;
 import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.NavigationResult;
@@ -158,9 +155,73 @@ public class ForgeWizard extends MutableWizard {
 
 	@Override
 	public boolean performFinish() {
-		FinishJob finishJob = new FinishJob("Finishing '"
-				+ initialCommand.getMetadata(uiContext).getName() + "'");
-		finishJob.schedule();
+		try {
+			getContainer().run(true, true, new IRunnableWithProgress() {				
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException,
+						InterruptedException {
+					UICommand currentCommand = initialCommand;
+					try {
+						monitor.beginTask("Executing wizard pages", getPageCount());
+						for (IWizardPage wizardPage : getPages()) {
+							if (monitor.isCanceled()) break;
+							currentCommand = ((ForgeWizardPage) wizardPage)
+									.getUICommand();
+							ForgeUIProvider.INSTANCE.firePreCommandExecuted(
+									currentCommand, uiContext);
+							CommandExecutor executor = new CommandExecutor(currentCommand);
+							Thread executorThread = new Thread(executor);
+							executorThread.start();
+							while (executorThread.isAlive()) {
+								if (monitor.isCanceled()) {
+									executorThread.interrupt();
+									break;
+								} else {
+									Thread.sleep(100);
+								}
+							}
+							ForgeUIProvider.INSTANCE.firePostCommandExecuted(
+									currentCommand, uiContext, executor.result);
+							if (executor.exception != null) {
+								throw executor.exception;
+							}
+							if (executor.result != null) {
+								String message = executor.result.getMessage();
+								if (message != null) {
+									ForgeUIPlugin.displayMessage("Forge Command",
+											message, NotificationType.INFO);
+								}
+								if (executor.result instanceof Failed) {
+									Throwable exception = ((Failed) executor.result)
+											.getException();
+									if (exception != null) {
+										ForgeUIPlugin.log(exception);
+										ForgeUIPlugin.displayMessage("Forge Command",
+												String.valueOf(exception.getMessage()),
+												NotificationType.ERROR);
+									}
+								}
+							}
+							monitor.worked(1);
+						}
+						EventBus.INSTANCE.fireWizardFinished(uiContext);
+					} catch (Exception ex) {
+						ForgeUIProvider.INSTANCE.firePostCommandFailure(currentCommand,
+								uiContext, ex);
+						ForgeUIPlugin.log(ex);
+						ForgeUIPlugin
+								.displayMessage("Forge Command",
+										String.valueOf(ex.getMessage()),
+										NotificationType.ERROR);
+					} finally {
+						uiContext.destroy();
+						monitor.done();
+					}
+				}
+			});
+		} catch (Exception e) {
+			ForgeUIPlugin.log(e);
+		}
 		return true;
 	}
 
@@ -173,68 +234,26 @@ public class ForgeWizard extends MutableWizard {
 	protected UIContextImpl getUIContext() {
 		return uiContext;
 	}
-
-	/**
-	 * Called when Finish is called
-	 * 
-	 * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
-	 * 
-	 */
-	private class FinishJob extends WorkspaceJob {
-		public FinishJob(String name) {
-			super(name);
-			// TODO: Check if rule is correct
-			setRule(MavenPlugin.getProjectConfigurationManager().getRule());
+	
+	private class CommandExecutor implements Runnable {
+		
+		private UICommand command;
+		Result result;
+		Exception exception;
+		
+		CommandExecutor(UICommand command) {
+			this.command = command;
 		}
 
 		@Override
-		public IStatus runInWorkspace(IProgressMonitor monitor)
-				throws CoreException {
-			UICommand currentCommand = initialCommand;
+		public void run() {
 			try {
-				monitor.beginTask("Executing wizard pages", getPageCount());
-				for (IWizardPage wizardPage : getPages()) {
-					currentCommand = ((ForgeWizardPage) wizardPage)
-							.getUICommand();
-					ForgeUIProvider.INSTANCE.firePreCommandExecuted(
-							currentCommand, uiContext);
-					Result result = currentCommand.execute(uiContext);
-					ForgeUIProvider.INSTANCE.firePostCommandExecuted(
-							currentCommand, uiContext, result);
-					if (result != null) {
-						String message = result.getMessage();
-						if (message != null) {
-							ForgeUIPlugin.displayMessage("Forge Command",
-									message, NotificationType.INFO);
-						}
-						if (result instanceof Failed) {
-							Throwable exception = ((Failed) result)
-									.getException();
-							if (exception != null) {
-								ForgeUIPlugin.log(exception);
-								ForgeUIPlugin.displayMessage("Forge Command",
-										String.valueOf(exception.getMessage()),
-										NotificationType.ERROR);
-							}
-						}
-					}
-					monitor.worked(1);
-				}
-				EventBus.INSTANCE.fireWizardFinished(uiContext);
-				return Status.OK_STATUS;
-			} catch (Exception ex) {
-				ForgeUIProvider.INSTANCE.firePostCommandFailure(currentCommand,
-						uiContext, ex);
-				ForgeUIPlugin.log(ex);
-				ForgeUIPlugin
-						.displayMessage("Forge Command",
-								String.valueOf(ex.getMessage()),
-								NotificationType.ERROR);
-				return Status.CANCEL_STATUS;
-			} finally {
-				uiContext.destroy();
-				monitor.done();
+				result = command.execute(uiContext);
+			} catch (Exception e) {
+				exception = e;
 			}
 		}
+		
 	}
+	
 }
