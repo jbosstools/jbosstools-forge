@@ -70,7 +70,7 @@ public class ForgeWizard extends MutableWizard {
 				// wizard
 				if (uiCommand instanceof UIWizard) {
 					UIWizard wiz = (UIWizard) uiCommand;
-					NavigationResult nav = wiz.next(getUIContext());
+					NavigationResult nav = wiz.next(uiContext);
 					successors = (nav == null) ? null : nav.getNext();
 				}
 			} catch (Exception e) {
@@ -148,7 +148,7 @@ public class ForgeWizard extends MutableWizard {
 			boolean subflow) {
 		ForgeWizardPage nextPage;
 		UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
-		nextPage = new ForgeWizardPage(this, nextStep, getUIContext(), subflow);
+		nextPage = new ForgeWizardPage(this, nextStep, uiContext, subflow);
 		nextPage.setWizard(this);
 		getPageList().add(index, nextPage);
 		return nextPage;
@@ -238,10 +238,6 @@ public class ForgeWizard extends MutableWizard {
 	public boolean performCancel() {
 		EventBus.INSTANCE.fireWizardClosed(uiContext);
 		return true;
-	}
-
-	protected UIContextImpl getUIContext() {
-		return uiContext;
 	}
 
 	private class CommandExecutor implements Runnable {
