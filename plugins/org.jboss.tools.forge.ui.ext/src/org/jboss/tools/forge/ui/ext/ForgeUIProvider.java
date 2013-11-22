@@ -16,6 +16,7 @@ import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.context.UIContextListener;
+import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.output.UIOutput;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.furnace.services.Imported;
@@ -58,7 +59,7 @@ public enum ForgeUIProvider implements UIProvider, UIOutput {
 			}
 	}
 
-	public void firePreCommandExecuted(UICommand command, UIContext context) {
+	public void firePreCommandExecuted(UICommand command, UIExecutionContext context) {
 		for (CommandExecutionListener listener : commandListeners) {
 			try {
 				listener.preCommandExecuted(command, context);
@@ -78,7 +79,7 @@ public enum ForgeUIProvider implements UIProvider, UIOutput {
 			}
 	}
 
-	public void firePostCommandExecuted(UICommand command, UIContext context,
+	public void firePostCommandExecuted(UICommand command, UIExecutionContext context,
 			Result result) {
 		for (CommandExecutionListener listener : commandListeners) {
 			try {
@@ -99,7 +100,7 @@ public enum ForgeUIProvider implements UIProvider, UIOutput {
 			}
 	}
 
-	public void firePostCommandFailure(UICommand command, UIContext context,
+	public void firePostCommandFailure(UICommand command, UIExecutionContext context,
 			Throwable failure) {
 		for (CommandExecutionListener listener : commandListeners) {
 			try {
