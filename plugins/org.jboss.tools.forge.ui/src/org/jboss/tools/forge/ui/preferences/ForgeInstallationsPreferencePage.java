@@ -283,8 +283,11 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 			removeButton.setEnabled(false);
 			editButton.setEnabled(false);
 		} else {
-			removeButton.setEnabled(selectedObject != runtimesTableViewer.getCheckedElements()[0]);
-			editButton.setEnabled(true);
+			Object[] checkedElements = runtimesTableViewer.getCheckedElements();
+			if (checkedElements.length > 0) {
+				removeButton.setEnabled(selectedObject != runtimesTableViewer.getCheckedElements()[0]);
+				editButton.setEnabled(true);
+			}	
 		}
 	}	
 	
