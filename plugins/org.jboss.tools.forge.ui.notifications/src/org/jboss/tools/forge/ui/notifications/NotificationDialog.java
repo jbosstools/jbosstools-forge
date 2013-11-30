@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.ui.notifications.internal.NotificationColors;
 import org.jboss.tools.forge.ui.notifications.internal.NotificationConstants;
 import org.jboss.tools.forge.ui.notifications.internal.NotificationFonts;
@@ -58,8 +59,8 @@ public class NotificationDialog {
 	}
 
 	private void createShell() {
-		shell = new Shell(Display.getDefault().getActiveShell(), SWT.NO_FOCUS
-				| SWT.NO_TRIM);
+		Shell parentShell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		shell = new Shell(parentShell, SWT.NO_FOCUS | SWT.NO_TRIM);
 		shell.addDisposeListener(disposeListener);
 		shell.setLayout(new FillLayout());
 		shell.setForeground(NotificationColors
