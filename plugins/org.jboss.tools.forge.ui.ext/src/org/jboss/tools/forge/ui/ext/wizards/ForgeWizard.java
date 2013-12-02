@@ -83,10 +83,12 @@ public class ForgeWizard extends MutableWizard {
 				if (subflows.isEmpty()) {
 					result = originalNextPage;
 				} else {
-					result = createWizardPage(subflows.pop(), pageIndex, true);
+					result = createWizardPage(subflows.pop(), true);
+					getPageList().add(pageIndex, result);
 				}
 			} else {
-				result = createWizardPage(successors[0], pageIndex, false);
+				result = createWizardPage(successors[0], false);
+				getPageList().add(pageIndex, result);
 				for (int i = 1; i < successors.length; i++) {
 					if (successors[i] != null) {
 						subflows.push(successors[i]);
@@ -144,14 +146,9 @@ public class ForgeWizard extends MutableWizard {
 	}
 
 	private ForgeWizardPage createWizardPage(
-			final Class<? extends UICommand> successor, int index,
-			boolean subflow) {
-		ForgeWizardPage nextPage;
+			final Class<? extends UICommand> successor, boolean subflow) {
 		UICommand nextStep = FurnaceService.INSTANCE.lookup(successor);
-		nextPage = new ForgeWizardPage(this, nextStep, uiContext, subflow);
-		nextPage.setWizard(this);
-		getPageList().add(index, nextPage);
-		return nextPage;
+		return new ForgeWizardPage(this, nextStep, uiContext, subflow);
 	}
 
 	@Override
