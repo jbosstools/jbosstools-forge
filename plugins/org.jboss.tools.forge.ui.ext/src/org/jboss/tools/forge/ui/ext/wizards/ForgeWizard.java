@@ -91,7 +91,7 @@ public class ForgeWizard extends MutableWizard {
 				getPageList().add(pageIndex, result);
 				for (int i = 1; i < successors.length; i++) {
 					if (successors[i] != null) {
-						subflows.push(successors[i]);
+						subflows.add(successors[i]);
 					}
 				}
 			}
