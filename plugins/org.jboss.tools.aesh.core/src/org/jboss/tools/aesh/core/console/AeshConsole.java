@@ -3,6 +3,7 @@ package org.jboss.tools.aesh.core.console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,16 +14,17 @@ import org.jboss.aesh.cl.exception.OptionParserException;
 import org.jboss.aesh.cl.internal.ProcessedCommand;
 import org.jboss.aesh.console.AeshConsoleBuilder;
 import org.jboss.aesh.console.Prompt;
-import org.jboss.aesh.console.command.AeshCommandRegistryBuilder;
 import org.jboss.aesh.console.command.Command;
-import org.jboss.aesh.console.command.CommandInvocation;
-import org.jboss.aesh.console.command.CommandRegistry;
 import org.jboss.aesh.console.command.CommandResult;
+import org.jboss.aesh.console.command.invocation.CommandInvocation;
+import org.jboss.aesh.console.command.registry.AeshCommandRegistryBuilder;
+import org.jboss.aesh.console.command.registry.CommandRegistry;
 import org.jboss.aesh.console.settings.Settings;
 import org.jboss.aesh.console.settings.SettingsBuilder;
 import org.jboss.aesh.terminal.CharacterType;
 import org.jboss.aesh.terminal.Color;
 import org.jboss.aesh.terminal.TerminalCharacter;
+import org.jboss.aesh.terminal.TerminalColor;
 import org.jboss.tools.aesh.core.io.AeshInputStream;
 import org.jboss.tools.aesh.core.io.AeshOutputStream;
 import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
@@ -87,8 +89,11 @@ public class AeshConsole {
 	}
 
 	protected Settings createAeshSettings() {
-		return new SettingsBuilder().inputStream(inputStream)
-				.outputStream(stdOut).outputStreamError(stdErr).create();
+		return new SettingsBuilder()
+			.inputStream(inputStream)
+			.outputStream(new PrintStream(stdOut))
+			.outputStreamError(new PrintStream(stdErr))
+			.create();
 	}
 
 	protected void createStreams() {
@@ -99,20 +104,20 @@ public class AeshConsole {
 
 	private Prompt createPrompt() {
 		List<TerminalCharacter> chars = new ArrayList<TerminalCharacter>();
-		chars.add(new TerminalCharacter('[', Color.DEFAULT_BG, Color.BLUE_TEXT));
-		chars.add(new TerminalCharacter('t', Color.DEFAULT_BG, Color.RED_TEXT,
+		chars.add(new TerminalCharacter('[', new TerminalColor(Color.DEFAULT, Color.BLUE)));
+		chars.add(new TerminalCharacter('t', new TerminalColor(Color.DEFAULT, Color.RED),
 				CharacterType.ITALIC));
-		chars.add(new TerminalCharacter('e', Color.DEFAULT_BG, Color.RED_TEXT,
+		chars.add(new TerminalCharacter('e', new TerminalColor(Color.DEFAULT, Color.RED),
 				CharacterType.INVERT));
-		chars.add(new TerminalCharacter('s', Color.DEFAULT_BG, Color.RED_TEXT,
+		chars.add(new TerminalCharacter('s', new TerminalColor(Color.DEFAULT, Color.RED),
 				CharacterType.CROSSED_OUT));
-		chars.add(new TerminalCharacter('t', Color.DEFAULT_BG, Color.RED_TEXT,
+		chars.add(new TerminalCharacter('t', new TerminalColor(Color.DEFAULT, Color.RED),
 				CharacterType.BOLD));
-		chars.add(new TerminalCharacter(']', Color.DEFAULT_BG, Color.BLUE_TEXT,
-				CharacterType.PLAIN));
-		chars.add(new TerminalCharacter('$', Color.DEFAULT_BG,
-				Color.WHITE_TEXT, CharacterType.UNDERLINE));
-		chars.add(new TerminalCharacter(' ', Color.DEFAULT_BG, Color.WHITE_TEXT));
+		chars.add(new TerminalCharacter(']', new TerminalColor(Color.DEFAULT, Color.BLUE),
+				CharacterType.FAINT));
+		chars.add(new TerminalCharacter('$', new TerminalColor(Color.DEFAULT,
+				Color.WHITE), CharacterType.UNDERLINE));
+		chars.add(new TerminalCharacter(' ', new TerminalColor(Color.DEFAULT, Color.WHITE)));
 		return new Prompt(chars);
 	}
 

@@ -10,58 +10,58 @@ import org.eclipse.swt.widgets.Display;
 public enum AeshColor {
 	
 	DEFAULT_TEXT(
-			org.jboss.aesh.terminal.Color.DEFAULT_TEXT,
+			org.jboss.aesh.terminal.Color.DEFAULT,
 			Display.getDefault().getSystemColor(SWT.COLOR_INFO_FOREGROUND)),
 	BLACK_TEXT(
-			org.jboss.aesh.terminal.Color.BLACK_TEXT,
+			org.jboss.aesh.terminal.Color.BLACK,
 			Display.getDefault().getSystemColor(SWT.COLOR_BLACK)),
 	RED_TEXT(
-			org.jboss.aesh.terminal.Color.RED_TEXT,
+			org.jboss.aesh.terminal.Color.RED,
 			Display.getDefault().getSystemColor(SWT.COLOR_DARK_RED)),
 	GREEN_TEXT(
-			org.jboss.aesh.terminal.Color.GREEN_TEXT,
+			org.jboss.aesh.terminal.Color.GREEN,
 			Display.getDefault().getSystemColor(SWT.COLOR_DARK_GREEN)),
 	YELLOW_TEXT(
-			org.jboss.aesh.terminal.Color.YELLOW_TEXT,
+			org.jboss.aesh.terminal.Color.YELLOW,
 			Display.getDefault().getSystemColor(SWT.COLOR_DARK_YELLOW)),
 	BLUE_TEXT(
-			org.jboss.aesh.terminal.Color.BLUE_TEXT,
+			org.jboss.aesh.terminal.Color.BLUE,
 			Display.getDefault().getSystemColor(SWT.COLOR_DARK_BLUE)),
 	MAGENTA_TEXT(
-			org.jboss.aesh.terminal.Color.MAGENTA_TEXT,
+			org.jboss.aesh.terminal.Color.MAGENTA,
 			Display.getDefault().getSystemColor(SWT.COLOR_DARK_MAGENTA)),
 	CYAN_TEXT(
-			org.jboss.aesh.terminal.Color.CYAN_TEXT,
+			org.jboss.aesh.terminal.Color.CYAN,
 			Display.getDefault().getSystemColor(SWT.COLOR_DARK_CYAN)),
 	WHITE_TEXT(
-			org.jboss.aesh.terminal.Color.WHITE_TEXT,
+			org.jboss.aesh.terminal.Color.WHITE,
 			Display.getDefault().getSystemColor(SWT.COLOR_WHITE)),
 	DEFAULT_BG(
-			org.jboss.aesh.terminal.Color.DEFAULT_BG,
+			org.jboss.aesh.terminal.Color.DEFAULT,
 			Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND)),
 	BLACK_BG(
-			org.jboss.aesh.terminal.Color.BLACK_BG,
+			org.jboss.aesh.terminal.Color.BLACK,
 			Display.getDefault().getSystemColor(SWT.COLOR_BLACK)),
 	RED_BG(
-			org.jboss.aesh.terminal.Color.RED_BG,
+			org.jboss.aesh.terminal.Color.RED,
 			Display.getDefault().getSystemColor(SWT.COLOR_RED)),
 	GREEN_BG(
-			org.jboss.aesh.terminal.Color.GREEN_BG,
+			org.jboss.aesh.terminal.Color.GREEN,
 			Display.getDefault().getSystemColor(SWT.COLOR_GREEN)),
 	YELLOW_BG(
-			org.jboss.aesh.terminal.Color.YELLOW_BG,
+			org.jboss.aesh.terminal.Color.YELLOW,
 			Display.getDefault().getSystemColor(SWT.COLOR_YELLOW)),
 	BLUE_BG(
-			org.jboss.aesh.terminal.Color.BLUE_BG,
+			org.jboss.aesh.terminal.Color.BLUE,
 			Display.getDefault().getSystemColor(SWT.COLOR_BLUE)),
 	MAGENTA_BG(
-			org.jboss.aesh.terminal.Color.MAGENTA_BG,
+			org.jboss.aesh.terminal.Color.MAGENTA,
 			Display.getDefault().getSystemColor(SWT.COLOR_MAGENTA)),
 	CYAN_BG(
-			org.jboss.aesh.terminal.Color.CYAN_BG,
+			org.jboss.aesh.terminal.Color.CYAN,
 			Display.getDefault().getSystemColor(SWT.COLOR_CYAN)),
 	WHITE_BG(
-			org.jboss.aesh.terminal.Color.WHITE_BG,
+			org.jboss.aesh.terminal.Color.WHITE,
 			Display.getDefault().getSystemColor(SWT.COLOR_WHITE));
 	
 	private int code;
