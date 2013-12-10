@@ -92,6 +92,11 @@ public class UICommandListDialog extends PopupDialog {
 	}
 
 	@Override
+	protected Color getForeground() {
+		return getShell().getDisplay().getSystemColor(SWT.COLOR_BLACK);
+	}
+
+	@Override
 	protected Point getDefaultSize() {
 		return new Point(640, 480);
 	}
