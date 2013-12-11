@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge2.runtime;singleton:=true
 Bundle-Version: 2.0.1.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Eclipse-BundleShape: dir

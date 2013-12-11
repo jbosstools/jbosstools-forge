@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.ui.ext;singleton:=true
 Bundle-Version: 1.1.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.jboss.tools.forge.ui.ext.ForgeUIPlugin
 Bundle-Vendor: %BundleProvider

@@ -4,7 +4,7 @@ Bundle-Name: Forge UI Tests
 Bundle-SymbolicName: org.jboss.tools.forge.ui.ext.test
 Bundle-Version: 1.1.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.junit,
  org.eclipse.ui;bundle-version="3.103.0",
  org.jboss.tools.forge.ui.ext;bundle-version="1.0.0"
