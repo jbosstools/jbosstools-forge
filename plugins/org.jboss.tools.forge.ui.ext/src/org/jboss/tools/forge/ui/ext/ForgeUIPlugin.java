@@ -62,9 +62,10 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 							.register(ImportEclipseProjectListener.INSTANCE);
 				}
 				try {
-					Imported<ConnectionProfileManagerProvider> provider = forgeService.lookupImported(ConnectionProfileManagerProvider.class);
-					if (provider != null) {
-						provider.get().setConnectionProfileManager(new ConnectionProfileManagerImpl());
+					Imported<ConnectionProfileManagerProvider> imported = forgeService.lookupImported(ConnectionProfileManagerProvider.class);
+					if (imported != null) {
+						ConnectionProfileManagerProvider provider = imported.get();
+						provider.setConnectionProfileManager(new ConnectionProfileManagerImpl());
 					}
 				} catch (Throwable t) {
 					t.printStackTrace();
