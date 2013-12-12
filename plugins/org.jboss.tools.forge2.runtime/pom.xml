@@ -159,7 +159,7 @@
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>hibernate-tools-api</artifactId>
                            <version>${version.forge.addons}</version>
-                           <destFileName>database-tools-api-${version.forge.addons}.jar</destFileName>
+                           <destFileName>hibernate-tools-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>
