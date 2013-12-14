@@ -70,7 +70,7 @@ public class AeshDocument extends Document {
     	switch (controlSequence.getType()) {
     		case CURSOR_UP: break;
     		case CURSOR_DOWN: break;
-    		case CURSOR_FORWARD: break;
+    		case CURSOR_FORWARD: handleCursorForward(controlSequence); break;
     		case CURSOR_BACK: handleCursorBack(controlSequence); break;
     		case CURSOR_NEXT_LINE: break;
     		case CURSOR_PREVIOUS_LINE: break;
@@ -99,6 +99,13 @@ public class AeshDocument extends Document {
 		int amount = Integer.valueOf(command.substring(2, command.length() - 1));
 		int current = getCursorOffset();
 		moveCursorTo(current - amount);
+	}
+	
+	private void handleCursorForward(ControlSequence controlSequence) {
+		String command = controlSequence.getControlSequenceString();
+		int amount = Integer.valueOf(command.substring(2, command.length() - 1));
+		int current = getCursorOffset();
+		moveCursorTo(current + amount);
 	}
 	
     private void handleCursorHorizontalAbsolute(ControlSequence controlSequence) {
