@@ -66,11 +66,12 @@ public class AeshDocument extends Document {
 	}
 	
 	private void handleControlSequence(ControlSequence controlSequence) {
+		System.out.println("handleControlSequence(" + controlSequence.getControlSequenceString() + ")");
     	switch (controlSequence.getType()) {
     		case CURSOR_UP: break;
     		case CURSOR_DOWN: break;
     		case CURSOR_FORWARD: break;
-    		case CURSOR_BACK: break;
+    		case CURSOR_BACK: handleCursorBack(controlSequence); break;
     		case CURSOR_NEXT_LINE: break;
     		case CURSOR_PREVIOUS_LINE: break;
     		case CURSOR_HORIZONTAL_ABSOLUTE: handleCursorHorizontalAbsolute(controlSequence); break;
@@ -91,6 +92,13 @@ public class AeshDocument extends Document {
     				"Unhandled Ansi control sequence in ForgeTextViewer: " + 
     		        controlSequence.getControlSequenceString()));
     	}
+	}
+	
+	private void handleCursorBack(ControlSequence controlSequence) {
+		String command = controlSequence.getControlSequenceString();
+		int amount = Integer.valueOf(command.substring(2, command.length() - 1));
+		int current = getCursorOffset();
+		moveCursorTo(current - amount);
 	}
 	
     private void handleCursorHorizontalAbsolute(ControlSequence controlSequence) {
@@ -165,6 +173,7 @@ public class AeshDocument extends Document {
 	}
 
 	private void handleOutputAvailable(String output) {
+		System.out.println("handleOutputAvailable(" + output + ")");
 		try {
 			output.replaceAll("\r", "");
 			if (currentStyleRange != null) {
