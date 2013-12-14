@@ -14,3 +14,4 @@ Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Export-Package: org.jboss.tools.aesh.ui.document,
  org.jboss.tools.aesh.ui.view
+Bundle-Activator: org.jboss.tools.aesh.ui.AeshUIPlugin
