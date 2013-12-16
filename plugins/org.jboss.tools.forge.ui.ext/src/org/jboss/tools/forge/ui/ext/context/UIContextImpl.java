@@ -25,14 +25,12 @@ import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.context.AbstractUIContext;
-import org.jboss.forge.addon.ui.context.UIContextListener;
 import org.jboss.forge.furnace.addons.Addon;
 import org.jboss.forge.furnace.addons.AddonFilter;
 import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.lock.LockManager;
 import org.jboss.forge.furnace.lock.LockMode;
 import org.jboss.forge.furnace.proxy.Proxies;
-import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
@@ -86,7 +84,7 @@ public class UIContextImpl extends AbstractUIContext {
 			}
 		}
 		this.currentSelection = new UISelectionImpl(result, selection);
-		initialize();
+		ForgeUIProvider.INSTANCE.fireInteractionStarted(this);
 	}
 
 	@Override
@@ -126,31 +124,8 @@ public class UIContextImpl extends AbstractUIContext {
 		return result;
 	}
 
-	public void initialize() {
-		Imported<UIContextListener> services = FurnaceService.INSTANCE
-				.lookupImported(UIContextListener.class);
-		if (services != null)
-			for (UIContextListener listener : services) {
-				try {
-					listener.contextInitialized(this);
-				} catch (Exception e) {
-					ForgeUIPlugin.log(e);
-				}
-			}
-	}
-
-	public void close() {
-		super.close();
-		Imported<UIContextListener> services = FurnaceService.INSTANCE
-				.lookupImported(UIContextListener.class);
-		if (services != null)
-			for (org.jboss.forge.addon.ui.context.UIContextListener listener : services) {
-				try {
-					listener.contextDestroyed(this);
-				} catch (Exception e) {
-					ForgeUIPlugin.log(e);
-				}
-			}
+	public void destroy() {
+		ForgeUIProvider.INSTANCE.fireInteractionStopped(this);
 	}
 
 	@Override
