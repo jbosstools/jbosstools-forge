@@ -220,7 +220,7 @@ public class ForgeWizard extends MutableWizard {
 								String.valueOf(ex.getMessage()),
 								NotificationType.ERROR);
 					} finally {
-						uiContext.destroy();
+						uiContext.close();
 						monitor.done();
 					}
 				}

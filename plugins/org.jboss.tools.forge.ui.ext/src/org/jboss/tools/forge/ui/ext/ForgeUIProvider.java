@@ -33,32 +33,6 @@ public enum ForgeUIProvider implements UIProvider, UIOutput {
 
 	private List<CommandExecutionListener> commandListeners = new ArrayList<CommandExecutionListener>();
 
-	public void fireInteractionStarted(UIContext context) {
-		Imported<UIContextListener> services = FurnaceService.INSTANCE
-				.lookupImported(UIContextListener.class);
-		if (services != null)
-			for (UIContextListener listener : services) {
-				try {
-					listener.contextInitialized(context);
-				} catch (Exception e) {
-					ForgeUIPlugin.log(e);
-				}
-			}
-	}
-
-	public void fireInteractionStopped(UIContext context) {
-		Imported<UIContextListener> services = FurnaceService.INSTANCE
-				.lookupImported(UIContextListener.class);
-		if (services != null)
-			for (org.jboss.forge.addon.ui.context.UIContextListener listener : services) {
-				try {
-					listener.contextDestroyed(context);
-				} catch (Exception e) {
-					ForgeUIPlugin.log(e);
-				}
-			}
-	}
-
 	public void firePreCommandExecuted(UICommand command, UIExecutionContext context) {
 		for (CommandExecutionListener listener : commandListeners) {
 			try {
