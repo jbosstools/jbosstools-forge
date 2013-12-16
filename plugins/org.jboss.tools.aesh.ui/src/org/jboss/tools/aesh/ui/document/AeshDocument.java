@@ -29,6 +29,8 @@ public class AeshDocument extends Document {
 	private List<StyleRange> styleRanges = new ArrayList<StyleRange>();
 	private StyleRange currentStyleRange;
 	
+	private int savedCursor = 0;
+	
 	public AeshDocument() {
 		stdOutListener = new StreamListener() {			
 			@Override
@@ -83,8 +85,8 @@ public class AeshDocument extends Document {
     		case HORIZONTAL_AND_VERTICAL_POSITION: break;
     		case SELECT_GRAPHIC_RENDITION: handleSelectGraphicRendition(controlSequence); break;
     		case DEVICE_STATUS_REPORT: break;
-    		case SAVE_CURSOR_POSITION: break;
-    		case RESTORE_CURSOR_POSITION: break;
+    		case SAVE_CURSOR_POSITION: handleSaveCursorPosition(controlSequence); break;
+    		case RESTORE_CURSOR_POSITION: handleRestoreCursorPosition(controlSequence); break;
     		case HIDE_CURSOR: break;
     		case SHOW_CURSOR: break;
     		default : 
@@ -92,6 +94,14 @@ public class AeshDocument extends Document {
     				"Unhandled Ansi control sequence in ForgeTextViewer: " + 
     		        controlSequence.getControlSequenceString()));
     	}
+	}
+	
+	private void handleSaveCursorPosition(ControlSequence controlSequence) {
+		savedCursor = getCursorOffset();
+	}
+	
+	private void handleRestoreCursorPosition(ControlSequence controlSequence) {
+		moveCursorTo(savedCursor);
 	}
 	
 	private void handleCursorBack(ControlSequence controlSequence) {
@@ -112,7 +122,7 @@ public class AeshDocument extends Document {
     	try {
     		String command = controlSequence.getControlSequenceString();
     		int column = Integer.valueOf(command.substring(2, command.length() - 1));
-    		int lineStart = getLineOffset(getLineOfOffset(cursorOffset));
+    		int lineStart = getLineOffset(getLineOfOffset(getCursorOffset()));
     		moveCursorTo(lineStart + column); 
     	} catch (BadLocationException e) {
     		AeshUIPlugin.log(e);
@@ -121,7 +131,7 @@ public class AeshDocument extends Document {
     
     private void handleEraseInLine(ControlSequence controlSequence) {
     	try {
-        	replace(cursorOffset, getLength() - cursorOffset, "");
+        	replace(getCursorOffset(), getLength() - getCursorOffset(), "");
         } catch (BadLocationException e) {
         	AeshUIPlugin.log(e);
         }
@@ -186,8 +196,8 @@ public class AeshDocument extends Document {
 			if (currentStyleRange != null) {
 				currentStyleRange.length += output.length();
 			}
-			replace(cursorOffset, getLength() - cursorOffset, output);
-			moveCursorTo(cursorOffset + output.length());
+			replace(getCursorOffset(), getLength() - getCursorOffset(), output);
+			moveCursorTo(getCursorOffset() + output.length());
 		} catch (BadLocationException e) {
         	e.printStackTrace();							
 		}
