@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Aesh Runtime Plugin
 Bundle-SymbolicName: org.jboss.tools.aesh.runtime;singleton:=true
-Bundle-Version: 0.43.0.qualifier
+Bundle-Version: 0.45.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: lib/aesh-0.43.jar
-Export-Package: .,
- org.jboss.aesh.cl,
+Bundle-ClassPath: lib/aesh-0.45-SNAPSHOT.jar
+Export-Package: org.jboss.aesh.cl,
  org.jboss.aesh.cl.activation,
  org.jboss.aesh.cl.builder,
  org.jboss.aesh.cl.completer,
@@ -20,9 +19,13 @@ Export-Package: .,
  org.jboss.aesh.console,
  org.jboss.aesh.console.alias,
  org.jboss.aesh.console.command,
+ org.jboss.aesh.console.command.completer,
  org.jboss.aesh.console.command.container,
+ org.jboss.aesh.console.command.converter,
  org.jboss.aesh.console.command.invocation,
  org.jboss.aesh.console.command.registry,
+ org.jboss.aesh.console.command.validator,
+ org.jboss.aesh.console.export,
  org.jboss.aesh.console.helper,
  org.jboss.aesh.console.man,
  org.jboss.aesh.console.man.parser,
