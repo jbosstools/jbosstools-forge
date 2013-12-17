@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ext.core.FurnaceService;
@@ -27,9 +28,10 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 public abstract class AbstractTextButtonControl extends ControlBuilder<Control> {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite parent) {
+			final InputComponent<?, ?> input, final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -42,7 +44,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		if (converterFactory != null) {
-			Converter<Object, String> converter = converterFactory
+			Converter<Object, String> converter = (Converter<Object, String>) converterFactory
 					.getConverter(input.getValueType(), String.class);
 			String value = converter
 					.convert(InputComponents.getValueFor(input));
@@ -54,7 +56,8 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 			public void modifyText(ModifyEvent e) {
 				String text = containerText.getText();
 				if (text != null) {
-					InputComponents.setValueFor(converterFactory, input, text);
+					final CommandController controller = page.getController();
+					controller.setValueFor(input.getName(), text);
 				}
 			}
 		});
@@ -67,7 +70,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 				browseButtonPressed(page, input, containerText);
 			}
 		});
-		setupAutoCompleteForText(page.getUIContext(), input,
+		setupAutoCompleteForText(page.getWizard().getUIContext(), input,
 				InputComponents.getCompleterFor(input), containerText);
 		return containerText;
 	}
@@ -93,11 +96,11 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 	}
 
 	protected void decorateContainerText(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Text containerText) {
+			final InputComponent<?, ?> input, final Text containerText) {
 
 	}
 
 	protected abstract void browseButtonPressed(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Text containerText);
+			final InputComponent<?, ?> input, final Text containerText);
 
 }

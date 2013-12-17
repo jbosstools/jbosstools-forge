@@ -22,7 +22,7 @@ public class TextBoxMultipleControlBuilder extends AbstractListButtonControl {
 
 	@Override
 	protected void addButtonPressed(ForgeWizardPage page,
-			InputComponent<?, Object> input, List containerList) {
+			InputComponent<?, ?> input, List containerList) {
 		InputDialog dlg = new InputDialog(page.getShell(), "", "Enter a value",
 				"", null);
 		if (dlg.open() == Window.OK) {

@@ -37,7 +37,7 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite container) {
+			final InputComponent<?, ?> input, final Composite container) {
 		final Group group = new Group(container, SWT.SHADOW_NONE);
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 3;
@@ -57,7 +57,7 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 
 		// Set Default Value
 		final ConverterFactory converterFactory = getConverterFactory();
-		Converter<Object, String> converter = converterFactory.getConverter(
+		Converter<Object, String> converter = (Converter<Object, String>) converterFactory.getConverter(
 				input.getValueType(), String.class);
 		Iterable<Object> value = inputMany.getValue();
 		if (value != null) {
@@ -99,15 +99,15 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 	}
 
 	protected abstract void addButtonPressed(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final List containerList);
+			final InputComponent<?, ?> input, final List containerList);
 
 	protected void removeButtonPressed(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final List containerList) {
+			final InputComponent<?, ?> input, final List containerList) {
 		containerList.remove(containerList.getSelectionIndices());
 		updateItems(input, containerList);
 	}
 
-	protected void updateItems(final InputComponent<?, Object> input,
+	protected void updateItems(final InputComponent<?, ?> input,
 			final List containerList) {
 		InputComponents.setValueFor(getConverterFactory(), input,
 				Arrays.asList(containerList.getItems()));

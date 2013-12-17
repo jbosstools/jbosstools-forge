@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
@@ -31,9 +32,10 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
  */
 public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Spinner build(ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite container) {
+	public Spinner build(final ForgeWizardPage page,
+			final InputComponent<?, ?> input, final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -48,7 +50,7 @@ public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		if (converterFactory != null) {
-			Converter<Object, Integer> converter = converterFactory
+			Converter<Object, Integer> converter = (Converter<Object, Integer>) converterFactory
 					.getConverter(input.getValueType(), Integer.class);
 			Integer value = converter.convert(InputComponents
 					.getValueFor(input));
@@ -58,20 +60,20 @@ public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 		txt.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				CommandController controller = page.getController();
 				try {
-					InputComponents.setValueFor(converterFactory, input,
-							txt.getText());
+					controller.setValueFor(input.getName(), txt.getText());
 				} catch (Exception ex) {
 					ForgeUIPlugin.log(ex);
-					InputComponents.setValueFor(converterFactory, input, null);
+					controller.setValueFor(input.getName(), null);
 				}
 			}
 		});
-		
+
 		// skip the third column
 		Label dummy = new Label(container, SWT.NONE);
 		dummy.setText("");
-		
+
 		return txt;
 	}
 

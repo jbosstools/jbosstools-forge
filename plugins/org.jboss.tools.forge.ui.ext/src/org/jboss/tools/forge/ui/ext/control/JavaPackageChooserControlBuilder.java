@@ -40,7 +40,7 @@ public class JavaPackageChooserControlBuilder extends AbstractTextButtonControl 
 	 */
 	@Override
 	protected void decorateContainerText(ForgeWizardPage page,
-			InputComponent<?, Object> input, Text containerText) {
+			InputComponent<?, ?> input, Text containerText) {
 
 		if (InputComponents.getCompleterFor(input) != null) {
 			return;
@@ -70,14 +70,14 @@ public class JavaPackageChooserControlBuilder extends AbstractTextButtonControl 
 					return proposals;
 				}
 			};
-			setupAutoCompleteForText(page.getUIContext(), input, completer,
+			setupAutoCompleteForText(page.getWizard().getUIContext(), input, completer,
 					containerText);
 		}
 	}
 
 	@Override
 	protected void browseButtonPressed(ForgeWizardPage page,
-			InputComponent<?, Object> input, Text containerText) {
+			InputComponent<?, ?> input, Text containerText) {
 		final IJavaProject project = getSelectedProject(page);
 		if (project == null) {
 			MessageDialog.openError(page.getShell(), "No project selected",
@@ -105,7 +105,7 @@ public class JavaPackageChooserControlBuilder extends AbstractTextButtonControl 
 	 * @return null if no selected project was found
 	 */
 	private IJavaProject getSelectedProject(ForgeWizardPage page) {
-		UISelectionImpl<?> initialSelection = page.getUIContext()
+		UISelectionImpl<?> initialSelection = page.getWizard().getUIContext()
 				.getInitialSelection();
 		final IJavaProject project;
 		if (initialSelection != null) {

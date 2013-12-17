@@ -20,12 +20,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.controller.CommandController;
+import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
+import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
 import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.ext.ForgeUIRuntime;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
@@ -80,7 +84,8 @@ public final class WizardDialogHelper {
 			try {
 				if (!(uiCommand instanceof UIWizardStep)
 						&& uiCommand.isEnabled(context)) {
-					UICommandMetadata metadata = uiCommand.getMetadata(getContext());
+					UICommandMetadata metadata = uiCommand
+							.getMetadata(getContext());
 					result.put(metadata.getName(), uiCommand);
 				}
 			} catch (Exception e) {
@@ -92,9 +97,21 @@ public final class WizardDialogHelper {
 	}
 
 	public void openWizard(String windowTitle, UICommand selectedCommand) {
-		ForgeWizard wizard = new ForgeWizard(selectedCommand, context);
+		CommandControllerFactory controllerFactory = FurnaceService.INSTANCE
+				.lookup(CommandControllerFactory.class);
+		ForgeUIRuntime runtime = new ForgeUIRuntime();
+		CommandController controller = controllerFactory.createController(
+				context, selectedCommand, runtime);
+		ForgeWizard wizard = new ForgeWizard(controller, context, runtime);
 		wizard.setWindowTitle(windowTitle);
-		final WizardDialog wizardDialog = new WizardDialog(parentShell, wizard);
+		final WizardDialog wizardDialog;
+		// TODO: Review this
+		if (controller instanceof WizardCommandController) {
+			wizardDialog = new ForgeWizardDialog(parentShell, wizard,
+					(WizardCommandController) controller);
+		} else {
+			wizardDialog = new WizardDialog(parentShell, wizard);
+		}
 		// TODO: Show help button when it's possible to display the docs for
 		// each UICommand
 		wizardDialog.setHelpAvailable(false);
@@ -126,5 +143,4 @@ public final class WizardDialogHelper {
 		});
 		wizardDialog.open();
 	}
-
 }

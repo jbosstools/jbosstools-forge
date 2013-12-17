@@ -25,7 +25,7 @@ public class DirectoryChooserMultipleControlBuilder extends
 
 	@Override
 	protected void addButtonPressed(ForgeWizardPage page,
-			InputComponent<?, Object> input, List containerList) {
+			InputComponent<?, ?> input, List containerList) {
 		String selectedPath;
 		DirectoryDialog dialog = new DirectoryDialog(page.getShell(), SWT.OPEN);
 		dialog.setText("Select a directory");

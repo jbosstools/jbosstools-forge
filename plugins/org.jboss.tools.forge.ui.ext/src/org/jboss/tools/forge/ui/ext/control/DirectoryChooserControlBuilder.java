@@ -21,7 +21,7 @@ public class DirectoryChooserControlBuilder extends AbstractTextButtonControl {
 
 	@Override
 	protected void browseButtonPressed(ForgeWizardPage page,
-			InputComponent<?, Object> input, Text containerText) {
+			InputComponent<?, ?> input, Text containerText) {
 		String selectedPath;
 		DirectoryDialog dialog = new DirectoryDialog(page.getShell(), SWT.OPEN);
 		dialog.setText("Select a directory");

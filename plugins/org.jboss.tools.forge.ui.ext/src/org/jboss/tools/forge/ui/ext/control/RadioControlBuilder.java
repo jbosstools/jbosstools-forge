@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
@@ -30,8 +31,8 @@ public class RadioControlBuilder extends ControlBuilder<Control> {
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
-	public Control build(ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite parent) {
+	public Control build(final ForgeWizardPage page,
+			final InputComponent<?, ?> input, final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -59,18 +60,20 @@ public class RadioControlBuilder extends ControlBuilder<Control> {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						if (button.getSelection()) {
-							InputComponents.setValueFor(converterFactory,
-									input, Proxies.unwrap(choice));
+							final CommandController controller = page
+									.getController();
+							controller.setValueFor(input.getName(),
+									Proxies.unwrap(choice));
 						}
 					}
 				});
 			}
 		}
-		
+
 		// skip the thrid column
 		Label dummy = new Label(parent, SWT.NONE);
 		dummy.setText("");
-		
+
 		return container;
 	}
 

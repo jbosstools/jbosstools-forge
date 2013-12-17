@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
@@ -37,8 +38,8 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Table build(ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite container) {
+	public Table build(final ForgeWizardPage page,
+			final InputComponent<?, ?> input, final Composite container) {
 
 		final Group group = new Group(container, SWT.SHADOW_NONE);
 		GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -90,7 +91,8 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 					} else {
 						data.remove(source.getData());
 					}
-					InputComponents.setValueFor(converterFactory, input, data);
+					CommandController controller = page.getController();
+					controller.setValueFor(input.getName(), data);
 				}
 			}
 		});

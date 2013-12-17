@@ -19,22 +19,23 @@ import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 
 public class InputComponentProposalProvider implements IContentProposalProvider {
 
-	private InputComponent<?, Object> component;
-	private UICompleter<Object> completer;
+	private InputComponent<?, ?> component;
+	private UICompleter<?> completer;
 	private UIContextImpl context;
 
 	public InputComponentProposalProvider(UIContextImpl context,
-			InputComponent<?, Object> component, UICompleter<Object> completer) {
+			InputComponent<?, ?> component, UICompleter<?> completer) {
 		this.context = context;
 		this.component = component;
 		this.completer = completer;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public IContentProposal[] getProposals(String contents, int position) {
 		List<IContentProposal> proposals = new ArrayList<IContentProposal>();
 		for (Object proposal : completer.getCompletionProposals(context,
-				component, contents)) {
+				(InputComponent) component, contents)) {
 			if (proposal != null) {
 				proposals.add(new ContentProposal(proposal.toString()));
 			}

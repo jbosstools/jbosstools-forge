@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.addon.convert.Converter;
+import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
@@ -34,9 +35,9 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	private static final Set<Combo> COMBO_STATUS_CHANGE = new HashSet<Combo>();
 
 	@Override
-	public Combo build(ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite container) {
-
+	public Combo build(final ForgeWizardPage page, final InputComponent<?, ?> input,
+			final Composite container) {
+		final CommandController controller = page.getController();
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -48,9 +49,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				String text = combo.getText();
-				InputComponents.setValueFor(
-						FurnaceService.INSTANCE.getConverterFactory(), input,
-						text);
+				controller.setValueFor(input.getName(), text);
 			}
 		});
 		combo.setToolTipText(input.getDescription());
@@ -91,7 +90,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	}
 
 	@Override
-	public void updateState(Combo combo, InputComponent<?, Object> input) {
+	public void updateState(Combo combo, InputComponent<?, ?> input) {
 		if (!COMBO_STATUS_CHANGE.add(combo)) {
 			return;
 		}
@@ -111,7 +110,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void updateValues(Combo combo, InputComponent<?, Object> input) {
+	private void updateValues(Combo combo, InputComponent<?, ?> input) {
 		UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
 		updateValueChoices(combo, selectOne);
 		updateDefaultValue(combo, selectOne);

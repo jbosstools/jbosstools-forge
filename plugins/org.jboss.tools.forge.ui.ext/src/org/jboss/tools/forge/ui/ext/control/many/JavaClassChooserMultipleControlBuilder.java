@@ -32,7 +32,7 @@ public class JavaClassChooserMultipleControlBuilder extends
 
 	@Override
 	protected void addButtonPressed(ForgeWizardPage page,
-			InputComponent<?, Object> input, List containerList) {
+			InputComponent<?, ?> input, List containerList) {
 		IRunnableContext context = new BusyIndicatorRunnableContext();
 		IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
 		int style = IJavaElementSearchConstants.CONSIDER_ALL_TYPES;

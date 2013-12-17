@@ -21,7 +21,7 @@ public class FileChooserControlBuilder extends AbstractTextButtonControl {
 
 	@Override
 	protected void browseButtonPressed(ForgeWizardPage page,
-			InputComponent<?, Object> input, Text containerText) {
+			InputComponent<?, ?> input, Text containerText) {
 		String selectedPath;
 		FileDialog dialog = new FileDialog(page.getShell(), SWT.OPEN);
 		dialog.setText("Select a file");

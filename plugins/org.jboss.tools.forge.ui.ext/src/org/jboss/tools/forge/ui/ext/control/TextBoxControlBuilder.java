@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
@@ -24,11 +25,12 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
+@SuppressWarnings("unchecked")
 public class TextBoxControlBuilder extends ControlBuilder<Text> {
 
 	@Override
 	public Text build(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite container) {
+			final InputComponent<?, ?> input, final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -40,7 +42,7 @@ public class TextBoxControlBuilder extends ControlBuilder<Text> {
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		if (converterFactory != null) {
-			Converter<Object, String> converter = converterFactory
+			Converter<Object, String> converter = (Converter<Object, String>) converterFactory
 					.getConverter(input.getValueType(), String.class);
 			String value = converter
 					.convert(InputComponents.getValueFor(input));
@@ -50,17 +52,16 @@ public class TextBoxControlBuilder extends ControlBuilder<Text> {
 		txt.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				CommandController controller = page.getController();
 				try {
-					InputComponents.setValueFor(converterFactory, input,
-							txt.getText());
+					controller.setValueFor(input.getName(), txt.getText());
 				} catch (Exception ex) {
-					ForgeUIPlugin.log(ex.getCause());
-					// FIXME: Display error message in wizard
-					InputComponents.setValueFor(converterFactory, input, null);
+					ForgeUIPlugin.log(ex);
+					controller.setValueFor(input.getName(), null);
 				}
 			}
 		});
-		setupAutoCompleteForText(page.getUIContext(), input,
+		setupAutoCompleteForText(page.getWizard().getUIContext(), input,
 				InputComponents.getCompleterFor(input), txt);
 		
 		// skip the third column

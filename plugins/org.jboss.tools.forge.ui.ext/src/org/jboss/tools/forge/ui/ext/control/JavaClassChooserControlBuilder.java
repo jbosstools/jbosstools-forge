@@ -29,7 +29,7 @@ public class JavaClassChooserControlBuilder extends
 
 	@Override
 	protected void browseButtonPressed(ForgeWizardPage page,
-			InputComponent<?, Object> input, Text containerText) {
+			InputComponent<?, ?> input, Text containerText) {
 		IRunnableContext context = new BusyIndicatorRunnableContext();
 		IJavaSearchScope scope = SearchEngine.createWorkspaceScope();
 		int style = IJavaElementSearchConstants.CONSIDER_ALL_TYPES;

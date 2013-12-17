@@ -39,7 +39,7 @@ public class ControlBuilderRegistry {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Control> ControlBuilder<T> getBuilderFor(
-			InputComponent<?, Object> input) {
+			InputComponent<?, ?> input) {
 		for (ControlBuilder<?> builder : CONTROL_BUILDERS) {
 			if (builder.handles(input)) {
 				return (ControlBuilder<T>) builder;

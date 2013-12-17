@@ -49,7 +49,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 	 * @return
 	 */
 	public abstract CONTROL build(final ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite container);
+			final InputComponent<?, ?> input, final Composite container);
 
 	/**
 	 * Returns the supported type this control may produce
@@ -125,8 +125,8 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 	}
 
 	protected ContentProposalAdapter setupAutoCompleteForText(
-			UIContextImpl context, InputComponent<?, Object> input,
-			UICompleter<Object> completer, Text text) {
+			UIContextImpl context, InputComponent<?, ?> input,
+			UICompleter<?> completer, Text text) {
 		ContentProposalAdapter result = null;
 		if (completer != null) {
 			ControlDecoration dec = new ControlDecoration(text, SWT.TOP
@@ -149,7 +149,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		return result;
 	}
 
-	protected String getMnemonicLabel(InputComponent<?, Object> input,
+	protected String getMnemonicLabel(InputComponent<?, ?> input,
 			boolean addColon) {
 		String label = InputComponents.getLabelFor(input, addColon);
 		char shortName = input.getShortName();
@@ -159,7 +159,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		return label;
 	}
 
-	public void updateState(CONTROL control, InputComponent<?, Object> input) {
+	public void updateState(CONTROL control, InputComponent<?, ?> input) {
 		setEnabled(control, input.isEnabled());
 	}
 

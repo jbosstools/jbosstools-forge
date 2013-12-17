@@ -6,8 +6,9 @@
  */
 package org.jboss.tools.forge.ui.ext.wizards;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -20,14 +21,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.controller.CommandController;
+import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.addon.ui.validation.UIValidationMessage;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.ext.context.UIBuilderImpl;
-import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
-import org.jboss.tools.forge.ui.ext.context.UIValidationContextImpl;
 import org.jboss.tools.forge.ui.ext.control.ControlBuilder;
 import org.jboss.tools.forge.ui.ext.control.ControlBuilderRegistry;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
@@ -39,48 +39,42 @@ import org.jboss.tools.forge.ui.notifications.NotificationType;
  * 
  */
 public class ForgeWizardPage extends WizardPage implements Listener {
-	private UICommand uiCommand;
-	private UIContextImpl uiContext;
-	private UIBuilderImpl uiBuilder;
+	private CommandController controller;
 	private boolean changed;
-	private final boolean subflowHead;
 
-	private ComponentControlEntry[] componentControlEntries;
+	private List<ComponentControlEntry> componentControlEntries = new ArrayList<>();
 
-	public ForgeWizardPage(ForgeWizard wizard, UICommand command,
-			UIContextImpl contextImpl, boolean startsSubflow) {
-		super(command.getMetadata(contextImpl).getName());
+	public ForgeWizardPage(ForgeWizard wizard, CommandController controller) {
+		super(controller.getMetadata().getName());
 		setWizard(wizard);
 		setPageComplete(false);
-		UICommandMetadata id = command.getMetadata(contextImpl);
+		this.controller = controller;
+		UICommandMetadata id = controller.getMetadata();
 		setTitle(id.getName());
 		setDescription(id.getDescription());
 		setImageDescriptor(ForgeUIPlugin.getForgeLogo());
-		this.uiCommand = command;
-		this.uiContext = contextImpl;
-		this.subflowHead = startsSubflow;
 	}
 
-	public UICommand getUICommand() {
-		return uiCommand;
+	public CommandController getController() {
+		return controller;
 	}
 
-	public UIContextImpl getUIContext() {
-		return uiContext;
+	@Override
+	public ForgeWizard getWizard() {
+		return (ForgeWizard) super.getWizard();
 	}
 
 	@Override
 	public void createControl(Composite parent) {
-		uiBuilder = new UIBuilderImpl(uiContext);
 		try {
-			uiCommand.initializeUI(uiBuilder);
+			controller.initialize();
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
 			ForgeUIPlugin.displayMessage("Error has occurred!",
 					"See Error Log for details", NotificationType.ERROR);
 			return;
 		}
-		List<InputComponent<?, Object>> inputs = uiBuilder.getInputs();
+		Map<String, InputComponent<?, ?>> inputs = controller.getInputs();
 		Composite container = new Composite(parent, SWT.NULL);
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
@@ -88,15 +82,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		layout.verticalSpacing = 9;
 
 		// Init component control array
-		int size = inputs.size();
-		componentControlEntries = new ComponentControlEntry[size];
-
-		for (int i = 0; i < size; i++) {
-			final InputComponent<?, Object> input = inputs.get(i);
+		for (InputComponent<?, ?> input : inputs.values()) {
 			ControlBuilder<Control> controlBuilder = ControlBuilderRegistry
 					.getBuilderFor(input);
-			Control control = controlBuilder.build(this,
-					(InputComponent<?, Object>) input, container);
+			Control control = controlBuilder.build(this, input, container);
 
 			if (input.isRequired()) {
 				decorateRequiredField(input, control);
@@ -106,8 +95,8 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			for (Control child : modifiableControls) {
 				registerListeners(child);
 			}
-			componentControlEntries[i] = new ComponentControlEntry(input,
-					controlBuilder, control);
+			componentControlEntries.add(new ComponentControlEntry(input,
+					controlBuilder, control));
 		}
 		initValidatePage();
 		setControl(container);
@@ -163,7 +152,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		// Change enabled state
 		if (componentControlEntries != null) {
 			for (ComponentControlEntry entry : componentControlEntries) {
-				InputComponent<?, Object> component = entry.getComponent();
+				InputComponent<?, ?> component = entry.getComponent();
 				ControlBuilder<Control> controlBuilder = entry
 						.getControlBuilder();
 				Control control = entry.getControl();
@@ -180,12 +169,10 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 */
 	private void initValidatePage() {
 		updatePageState();
-		if (uiBuilder != null) {
-			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
-				if (InputComponents.validateRequired(input) != null) {
-					setPageComplete(false);
-					return;
-				}
+		for (ComponentControlEntry entry : componentControlEntries) {
+			if (InputComponents.validateRequired(entry.getComponent()) != null) {
+				setPageComplete(false);
+				return;
 			}
 		}
 		setPageComplete(validatePage());
@@ -200,47 +187,23 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 *         <code>false</code> if at least one is invalid
 	 */
 	private boolean validatePage() {
-		// clear error message
 		clearMessages();
 
 		updatePageState();
-
-		// Invoke custom validation
-		UIValidationContextImpl validationContext = new UIValidationContextImpl(
-				uiContext);
-		List<String> errors = validationContext.getErrors();
-		// Validate required
-		if (uiBuilder != null) {
-			for (InputComponent<?, ?> input : uiBuilder.getInputs()) {
-				validationContext.setCurrentInputComponent(input);
-				input.validate(validationContext);
-				if (!errors.isEmpty()) {
-					setErrorMessage(errors.get(0));
-					return false;
-				}
+		for (UIValidationMessage message : controller.validate()) {
+			switch (message.getSeverity()) {
+			case ERROR:
+				setErrorMessage(message.getDescription());
+				return false;
+			case WARN:
+				setWarningMessage(message.getDescription());
+				return true;
+			case INFO:
+				setInfoMessage(message.getDescription());
+				return true;
 			}
 		}
-		validationContext.setCurrentInputComponent(null);
-		// invokes the validation in the current UICommand
-		uiCommand.validate(validationContext);
-		boolean noErrors = errors.isEmpty();
-		if (noErrors) {
-			List<String> warnings = validationContext.getWarnings();
-			if (!warnings.isEmpty()) {
-				setWarningMessage(warnings.get(0));
-			} else {
-				List<String> infos = validationContext.getInformations();
-				if (!infos.isEmpty()) {
-					setInfoMessage(infos.get(0));
-				} else {
-					clearMessages();
-				}
-			}
-		} else {
-			setErrorMessage(errors.get(0));
-		}
-		// if no errors were found, the page is ready to go to the next step
-		return noErrors;
+		return true;
 	}
 
 	public void setInfoMessage(String warningMessage) {
@@ -260,21 +223,42 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	@Override
 	public void dispose() {
 		super.dispose();
-		if (componentControlEntries != null) {
-			Arrays.fill(componentControlEntries, null);
-			componentControlEntries = null;
+		componentControlEntries.clear();
+	}
+
+	@Override
+	public boolean canFlipToNextPage() {
+		boolean result;
+		if (isWizard()) {
+			result = ((WizardCommandController) controller).canMoveToNextStep();
+		} else {
+			// Single page wizards cannot move to next step
+			result = false;
 		}
+		return isPageComplete() && result;
+	}
+
+	private boolean isWizard() {
+		return controller instanceof WizardCommandController;
+	}
+
+	public void setChanged(boolean changed) {
+		this.changed = changed;
+	}
+
+	public boolean isChanged() {
+		return changed;
 	}
 
 	/**
 	 * Stores a component/control relationship
 	 */
-	private class ComponentControlEntry {
-		private InputComponent<?, Object> component;
+	class ComponentControlEntry {
+		private InputComponent<?, ?> component;
 		private ControlBuilder<Control> controlBuilder;
 		private Control control;
 
-		public ComponentControlEntry(InputComponent<?, Object> component,
+		public ComponentControlEntry(InputComponent<?, ?> component,
 				ControlBuilder<Control> controlBuilder, Control control) {
 			this.component = component;
 			this.controlBuilder = controlBuilder;
@@ -285,7 +269,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			return controlBuilder;
 		}
 
-		public InputComponent<?, Object> getComponent() {
+		public InputComponent<?, ?> getComponent() {
 			return component;
 		}
 
@@ -301,20 +285,5 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 				setChanged(true);
 			}
 		}
-	}
-
-	public void setChanged(boolean changed) {
-		this.changed = changed;
-	}
-
-	public boolean isChanged() {
-		return changed;
-	}
-
-	/**
-	 * @return the subflowHead
-	 */
-	boolean isSubflowHead() {
-		return subflowHead;
 	}
 }

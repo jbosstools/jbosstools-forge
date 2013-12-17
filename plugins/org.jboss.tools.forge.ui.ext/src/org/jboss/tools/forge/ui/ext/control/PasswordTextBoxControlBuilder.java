@@ -17,7 +17,7 @@ public class PasswordTextBoxControlBuilder extends TextBoxControlBuilder {
 
 	@Override
 	public Text build(ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite container) {
+			final InputComponent<?, ?> input, final Composite container) {
 		Text txt = super.build(page, input, container);
 		txt.setEchoChar('*');
 		return txt;

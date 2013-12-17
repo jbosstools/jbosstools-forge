@@ -25,7 +25,7 @@ public class FileChooserMultipleControlBuilder extends
 
 	@Override
 	protected void addButtonPressed(ForgeWizardPage page,
-			InputComponent<?, Object> input, List containerList) {
+			InputComponent<?, ?> input, List containerList) {
 		String selectedPath;
 		FileDialog dialog = new FileDialog(page.getShell(), SWT.OPEN);
 		dialog.setText("Select a file");

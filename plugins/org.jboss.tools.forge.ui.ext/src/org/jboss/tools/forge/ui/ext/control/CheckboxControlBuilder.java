@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.jboss.forge.addon.convert.Converter;
 import org.jboss.forge.addon.convert.ConverterFactory;
+import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UIInput;
@@ -23,16 +24,17 @@ import org.jboss.forge.addon.ui.util.InputComponents;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
+@SuppressWarnings("unchecked")
 public class CheckboxControlBuilder extends ControlBuilder<Button> {
 
 	@Override
-	public Button build(ForgeWizardPage page,
-			final InputComponent<?, Object> input, final Composite container) {
+	public Button build(final ForgeWizardPage page,
+			final InputComponent<?, ?> input, final Composite container) {
 
-	   // Checkbox should be placed in second column
+		// Checkbox should be placed in second column
 		Label dummy1 = new Label(container, SWT.NONE);
 		dummy1.setText("");
-		
+
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 1;
 		Button cmb = new Button(container, SWT.CHECK);
@@ -43,7 +45,7 @@ public class CheckboxControlBuilder extends ControlBuilder<Button> {
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		if (converterFactory != null) {
-			Converter<Object, Boolean> converter = converterFactory
+			Converter<Object, Boolean> converter = (Converter<Object, Boolean>) converterFactory
 					.getConverter(input.getValueType(), Boolean.class);
 			Boolean value = converter.convert(InputComponents
 					.getValueFor(input));
@@ -54,14 +56,15 @@ public class CheckboxControlBuilder extends ControlBuilder<Button> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				boolean selection = ((Button) e.widget).getSelection();
-				InputComponents.setValueFor(converterFactory, input, selection);
+				CommandController controller = page.getController();
+				controller.setValueFor(input.getName(), selection);
 			}
 		});
-		
+
 		// skip third column
 		Label dummy2 = new Label(container, SWT.NONE);
 		dummy2.setText("");
-		
+
 		return cmb;
 	}
 
