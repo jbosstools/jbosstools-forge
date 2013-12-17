@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.ansi.ControlSequence;
 import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
+import org.jboss.tools.aesh.core.document.DocumentProxy;
 import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
 import org.jboss.tools.aesh.ui.AeshUIPlugin;
 
@@ -67,114 +68,95 @@ public class AeshDocument extends Document {
 		};
 	}
 	
+	private DocumentProxy  proxy = new DocumentProxy() {
+
+		@Override
+		public int getCursorOffset() {
+			return AeshDocument.this.getCursorOffset();
+		}
+		
+		@Override
+		public int getLineOfOffset(int offset) {
+			int result = -1;
+			try {
+				result = AeshDocument.this.getLineOfOffset(offset);
+			} catch (BadLocationException e) {
+				AeshUIPlugin.log(e);
+			}
+			return result;
+		}
+		
+		@Override
+		public int getLineOffset(int line) {
+			int result = -1;
+			try {
+				result = AeshDocument.this.getLineOffset(line);
+			} catch (BadLocationException e) {
+				AeshUIPlugin.log(e);
+			}
+			return result;
+		}
+		
+		@Override 
+		public int getLineLength(int line) {
+			int result = -1;
+			try {
+				result = AeshDocument.this.getLineLength(line);
+			} catch (BadLocationException e) {
+				AeshUIPlugin.log(e);
+			}
+			return result;
+		}
+
+		@Override
+		public void moveCursorTo(int offset) {
+			AeshDocument.this.moveCursorTo(offset);
+		}
+		
+		@Override
+		public void reset() {
+			AeshDocument.this.reset();
+		}
+
+		@Override
+		public int getLength() {
+			return AeshDocument.this.getLength();
+		}
+
+		@Override
+		public void replace(int pos, int length, String text) {
+	    	try {
+	        	AeshDocument.this.replace(pos, length, text);
+	        } catch (BadLocationException e) {
+	        	AeshUIPlugin.log(e);
+	        }
+		}
+
+		@Override
+		public void restoreCursor() {
+			AeshDocument.this.restoreCursor();
+		}
+
+		@Override
+		public void saveCursor() {
+			AeshDocument.this.saveCursor();
+		}
+		
+	};
+	
 	private void handleControlSequence(ControlSequence controlSequence) {
 		System.out.println("handleControlSequence(" + controlSequence.getControlSequenceString() + ")");
-    	switch (controlSequence.getType()) {
-    		case CURSOR_UP: break;
-    		case CURSOR_DOWN: break;
-    		case CURSOR_FORWARD: handleCursorForward(controlSequence); break;
-    		case CURSOR_BACK: handleCursorBack(controlSequence); break;
-    		case CURSOR_NEXT_LINE: break;
-    		case CURSOR_PREVIOUS_LINE: break;
-    		case CURSOR_HORIZONTAL_ABSOLUTE: handleCursorHorizontalAbsolute(controlSequence); break;
-    		case CURSOR_POSITION: handleCursorPosition(controlSequence); break;
-    		case ERASE_DATA: handleEraseData(controlSequence); break;
-    		case ERASE_IN_LINE: handleEraseInLine(controlSequence); break;
-    		case SCROLL_UP: break;
-    		case SCROLL_DOWN: break;
-    		case HORIZONTAL_AND_VERTICAL_POSITION: break;
-    		case SELECT_GRAPHIC_RENDITION: handleSelectGraphicRendition(controlSequence); break;
-    		case DEVICE_STATUS_REPORT: break;
-    		case SAVE_CURSOR_POSITION: handleSaveCursorPosition(controlSequence); break;
-    		case RESTORE_CURSOR_POSITION: handleRestoreCursorPosition(controlSequence); break;
-    		case HIDE_CURSOR: break;
-    		case SHOW_CURSOR: break;
-    		default : 
-    			AeshUIPlugin.log(new RuntimeException(
-    				"Unhandled Ansi control sequence in ForgeTextViewer: " + 
-    		        controlSequence.getControlSequenceString()));
-    	}
+		controlSequence.handle(proxy);
 	}
 	
-	private void handleSaveCursorPosition(ControlSequence controlSequence) {
+	private void saveCursor() {
 		savedCursor = getCursorOffset();
 	}
 	
-	private void handleRestoreCursorPosition(ControlSequence controlSequence) {
+	private void restoreCursor() {
 		moveCursorTo(savedCursor);
 	}
 	
-	private void handleCursorBack(ControlSequence controlSequence) {
-		String command = controlSequence.getControlSequenceString();
-		int amount = Integer.valueOf(command.substring(2, command.length() - 1));
-		int current = getCursorOffset();
-		moveCursorTo(current - amount);
-	}
-	
-	private void handleCursorForward(ControlSequence controlSequence) {
-		String command = controlSequence.getControlSequenceString();
-		int amount = Integer.valueOf(command.substring(2, command.length() - 1));
-		int current = getCursorOffset();
-		moveCursorTo(current + amount);
-	}
-	
-    private void handleCursorHorizontalAbsolute(ControlSequence controlSequence) {
-    	try {
-    		String command = controlSequence.getControlSequenceString();
-    		int column = Integer.valueOf(command.substring(2, command.length() - 1));
-    		int lineStart = getLineOffset(getLineOfOffset(getCursorOffset()));
-    		moveCursorTo(lineStart + column); 
-    	} catch (BadLocationException e) {
-    		AeshUIPlugin.log(e);
-    	}				
-    }
-    
-    private void handleEraseInLine(ControlSequence controlSequence) {
-    	try {
-        	replace(getCursorOffset(), getLength() - getCursorOffset(), "");
-        } catch (BadLocationException e) {
-        	AeshUIPlugin.log(e);
-        }
-    }
-    
-    private void handleSelectGraphicRendition(ControlSequence controlSequence) {
-    	System.out.println(controlSequence.getControlSequenceString());
-//    	String[] args = command.substring(0, command.length() - 1).split(";");
-//    	Color foreground = AeshColor.fromCode(Integer.valueOf(args[1])).getColor();
-//    	Color background = AeshColor.fromCode(Integer.valueOf(args[2])).getColor();
-//		currentStyleRange = new StyleRange(getLength(), 0, foreground, background);
-//		styleRanges.add(currentStyleRange);
-     }
-    
-    private void handleCursorPosition(ControlSequence controlSequence) {
-    	String command = controlSequence.getControlSequenceString();
-    	String str = command.substring(2, command.length() - 1);
-    	int i = str.indexOf(';');
-    	int line = 0, column = 0;
-    	if (i != -1) {
-    		line = Integer.valueOf(str.substring(0, i));
-    		column = Integer.valueOf(str.substring(i + 1));
-    	} else if (str.length() > 0) {
-    		line = Integer.valueOf(str);
-    	}
-    	try {
-    		int offset = getLineOffset(line);
-    		int maxColumn = getLineLength(line);
-    		offset += Math.min(maxColumn, column);
-    		moveCursorTo(offset);
-    	} catch (BadLocationException e) {
-    		AeshUIPlugin.log(e);
-    	}
-    }
-    
-    private void handleEraseData(ControlSequence controlSequence) {
-    	String command = controlSequence.getControlSequenceString();
-    	String str = command.substring(2, command.length() - 1);
-    	if ("2".equals(str)) {
-    		reset();
-    	}
-    }
-    
     private void reset() {
 		set("");
 		moveCursorTo(0);

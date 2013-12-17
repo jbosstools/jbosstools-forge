@@ -11,4 +11,5 @@ Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Export-Package: org.jboss.tools.aesh.core.ansi,
  org.jboss.tools.aesh.core.console,
+ org.jboss.tools.aesh.core.document,
  org.jboss.tools.aesh.core.io
