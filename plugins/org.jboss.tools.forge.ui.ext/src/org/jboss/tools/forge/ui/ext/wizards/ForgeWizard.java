@@ -21,7 +21,6 @@ import org.jboss.forge.addon.ui.wizard.UIWizard;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.context.UIExecutionContextImpl;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
@@ -169,8 +168,8 @@ public class ForgeWizard extends MutableWizard {
 								break;
 							currentCommand = ((ForgeWizardPage) wizardPage)
 									.getUICommand();
-							ForgeUIProvider.INSTANCE.firePreCommandExecuted(
-									currentCommand, executionContextImpl);
+							uiContext.firePreCommandExecuted(currentCommand,
+									executionContextImpl);
 							CommandExecutor executor = new CommandExecutor(
 									currentCommand, executionContextImpl);
 							Thread executorThread = new Thread(executor);
@@ -183,9 +182,8 @@ public class ForgeWizard extends MutableWizard {
 									Thread.sleep(100);
 								}
 							}
-							ForgeUIProvider.INSTANCE.firePostCommandExecuted(
-									currentCommand, executionContextImpl,
-									executor.result);
+							uiContext.firePostCommandExecuted(currentCommand,
+									executionContextImpl, executor.result);
 							if (executor.exception != null) {
 								throw executor.exception;
 							}
@@ -213,8 +211,8 @@ public class ForgeWizard extends MutableWizard {
 						}
 						EventBus.INSTANCE.fireWizardFinished(uiContext);
 					} catch (Exception ex) {
-						ForgeUIProvider.INSTANCE.firePostCommandFailure(
-								currentCommand, executionContextImpl, ex);
+						uiContext.firePostCommandFailure(currentCommand,
+								executionContextImpl, ex);
 						ForgeUIPlugin.log(ex);
 						ForgeUIPlugin.displayMessage("Forge Command",
 								String.valueOf(ex.getMessage()),

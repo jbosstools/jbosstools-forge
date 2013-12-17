@@ -8,20 +8,9 @@
 package org.jboss.tools.forge.ui.ext;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.jboss.forge.addon.ui.CommandExecutionListener;
-import org.jboss.forge.addon.ui.UICommand;
 import org.jboss.forge.addon.ui.UIProvider;
-import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.context.UIContextListener;
-import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.output.UIOutput;
-import org.jboss.forge.addon.ui.result.Result;
-import org.jboss.forge.furnace.services.Imported;
-import org.jboss.forge.furnace.spi.ListenerRegistration;
-import org.jboss.tools.forge.ext.core.FurnaceService;
 
 /**
  * Eclipse implementation of {@link UIProvider}
@@ -30,82 +19,6 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
  */
 public enum ForgeUIProvider implements UIProvider, UIOutput {
 	INSTANCE;
-
-	private List<CommandExecutionListener> commandListeners = new ArrayList<CommandExecutionListener>();
-
-	public void firePreCommandExecuted(UICommand command, UIExecutionContext context) {
-		for (CommandExecutionListener listener : commandListeners) {
-			try {
-				listener.preCommandExecuted(command, context);
-			} catch (Exception e) {
-				ForgeUIPlugin.log(e);
-			}
-		}
-		Imported<CommandExecutionListener> services = FurnaceService.INSTANCE
-				.lookupImported(CommandExecutionListener.class);
-		if (services != null)
-			for (CommandExecutionListener listener : services) {
-				try {
-					listener.preCommandExecuted(command, context);
-				} catch (Exception e) {
-					ForgeUIPlugin.log(e);
-				}
-			}
-	}
-
-	public void firePostCommandExecuted(UICommand command, UIExecutionContext context,
-			Result result) {
-		for (CommandExecutionListener listener : commandListeners) {
-			try {
-				listener.postCommandExecuted(command, context, result);
-			} catch (Exception e) {
-				ForgeUIPlugin.log(e);
-			}
-		}
-		Imported<CommandExecutionListener> services = FurnaceService.INSTANCE
-				.lookupImported(CommandExecutionListener.class);
-		if (services != null)
-			for (CommandExecutionListener listener : services) {
-				try {
-					listener.postCommandExecuted(command, context, result);
-				} catch (Exception e) {
-					ForgeUIPlugin.log(e);
-				}
-			}
-	}
-
-	public void firePostCommandFailure(UICommand command, UIExecutionContext context,
-			Throwable failure) {
-		for (CommandExecutionListener listener : commandListeners) {
-			try {
-				listener.postCommandFailure(command, context, failure);
-			} catch (Exception e) {
-				ForgeUIPlugin.log(e);
-			}
-		}
-		Imported<CommandExecutionListener> services = FurnaceService.INSTANCE
-				.lookupImported(CommandExecutionListener.class);
-		if (services != null)
-			for (CommandExecutionListener listener : services) {
-				try {
-					listener.postCommandFailure(command, context, failure);
-				} catch (Exception e) {
-					ForgeUIPlugin.log(e);
-				}
-			}
-	}
-
-	@Override
-	public ListenerRegistration<CommandExecutionListener> addCommandExecutionListener(
-			final CommandExecutionListener listener) {
-		commandListeners.add(listener);
-		return new ListenerRegistration<CommandExecutionListener>() {
-			public CommandExecutionListener removeListener() {
-				commandListeners.remove(listener);
-				return listener;
-			}
-		};
-	}
 
 	@Override
 	public boolean isGUI() {
