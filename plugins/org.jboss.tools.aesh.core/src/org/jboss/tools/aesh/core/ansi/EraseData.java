@@ -4,9 +4,11 @@ import org.jboss.tools.aesh.core.document.DocumentProxy;
 
 
 public class EraseData extends ControlSequence {
+	
+	private String arguments;
 
-	public EraseData(String controlSequenceString) {
-		super(controlSequenceString);
+	public EraseData(String arguments) {
+		this.arguments = arguments;
 	}
 
 	@Override
@@ -16,9 +18,7 @@ public class EraseData extends ControlSequence {
 	
 	@Override
 	public void handle(DocumentProxy document) {
-    	String command = getControlSequenceString();
-    	String str = command.substring(2, command.length() - 1);
-    	if ("2".equals(str)) {
+    	if ("2".equals(arguments)) {
     		document.reset();
     	}		
 	}

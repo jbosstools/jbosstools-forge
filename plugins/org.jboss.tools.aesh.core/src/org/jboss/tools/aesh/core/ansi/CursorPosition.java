@@ -4,9 +4,17 @@ import org.jboss.tools.aesh.core.document.DocumentProxy;
 
 
 public class CursorPosition extends ControlSequence {
+	
+	private int line, column = 0;
 
-	public CursorPosition(String controlSequenceString) {
-		super(controlSequenceString);
+	public CursorPosition(String arguments) {
+    	int i = arguments.indexOf(';');
+    	if (i != -1) {
+    		line = Integer.valueOf(arguments.substring(0, i));
+    		column = Integer.valueOf(arguments.substring(i + 1));
+    	} else if (arguments.length() > 0) {
+    		line = Integer.valueOf(arguments);
+    	}
 	}
 
 	@Override
@@ -16,16 +24,6 @@ public class CursorPosition extends ControlSequence {
 	
 	@Override
 	public void handle(DocumentProxy document) {
-    	String command = getControlSequenceString();
-    	String str = command.substring(2, command.length() - 1);
-    	int i = str.indexOf(';');
-    	int line = 0, column = 0;
-    	if (i != -1) {
-    		line = Integer.valueOf(str.substring(0, i));
-    		column = Integer.valueOf(str.substring(i + 1));
-    	} else if (str.length() > 0) {
-    		line = Integer.valueOf(str);
-    	}
     	int offset = document.getLineOffset(line);
     	int maxColumn = document.getLineLength(line);
     	offset += Math.min(maxColumn, column);

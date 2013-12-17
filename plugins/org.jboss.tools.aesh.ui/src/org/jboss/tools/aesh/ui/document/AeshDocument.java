@@ -102,11 +102,12 @@ public class AeshDocument extends Document {
 	}
 
 	private void handleOutputAvailable(String output) {
+		System.out.println("handleOutputAvailable(" + output + ")");
 		try {
 			output.replaceAll("\r", "");
-			if (currentStyleRange != null) {
-				currentStyleRange.length += output.length();
-			}
+//			if (currentStyleRange != null) {
+//				currentStyleRange.length += output.length();
+//			}
 			replace(getCursorOffset(), getLength() - getCursorOffset(), output);
 			moveCursorTo(getCursorOffset() + output.length());
 		} catch (BadLocationException e) {

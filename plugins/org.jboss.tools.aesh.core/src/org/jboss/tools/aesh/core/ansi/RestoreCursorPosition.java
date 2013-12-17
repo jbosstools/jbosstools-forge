@@ -5,9 +5,7 @@ import org.jboss.tools.aesh.core.document.DocumentProxy;
 
 public class RestoreCursorPosition extends ControlSequence {
 
-	public RestoreCursorPosition(String controlSequenceString) {
-		super(controlSequenceString);
-	}
+	public RestoreCursorPosition(String arguments) {}
 
 	@Override
 	public ControlSequenceType getType() {

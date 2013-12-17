@@ -3,9 +3,7 @@ package org.jboss.tools.aesh.core.ansi;
 
 public class ScrollUp extends ControlSequence {
 
-	public ScrollUp(String controlSequenceString) {
-		super(controlSequenceString);
-	}
+	public ScrollUp(String arguments) {}
 
 	@Override
 	public ControlSequenceType getType() {

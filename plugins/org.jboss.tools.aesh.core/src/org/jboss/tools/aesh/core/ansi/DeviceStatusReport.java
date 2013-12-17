@@ -3,9 +3,7 @@ package org.jboss.tools.aesh.core.ansi;
 
 public class DeviceStatusReport extends ControlSequence {
 
-	public DeviceStatusReport(String controlSequenceString) {
-		super(controlSequenceString);
-	}
+	public DeviceStatusReport(String arguments) {}
 
 	@Override
 	public ControlSequenceType getType() {

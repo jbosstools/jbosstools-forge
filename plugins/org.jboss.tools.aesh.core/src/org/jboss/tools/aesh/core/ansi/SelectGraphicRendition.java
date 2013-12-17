@@ -4,9 +4,11 @@ import org.jboss.tools.aesh.core.document.DocumentProxy;
 
 
 public class SelectGraphicRendition extends ControlSequence {
+	
+	private String arguments;
 
-	public SelectGraphicRendition(String controlSequenceString) {
-		super(controlSequenceString);
+	public SelectGraphicRendition(String arguments) {
+		this.arguments = arguments;
 	}
 
 	@Override
@@ -16,7 +18,7 @@ public class SelectGraphicRendition extends ControlSequence {
 	
 	@Override
 	public void handle(DocumentProxy document) {
-    	System.out.println(getControlSequenceString());
+    	System.out.println(arguments);
 	}
 
 }

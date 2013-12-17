@@ -5,9 +5,7 @@ import org.jboss.tools.aesh.core.document.DocumentProxy;
 
 public class EraseInLine extends ControlSequence {
 
-	public EraseInLine(String controlSequenceString) {
-		super(controlSequenceString);
-	}
+	public EraseInLine(String arguments) {}
 
 	@Override
 	public ControlSequenceType getType() {

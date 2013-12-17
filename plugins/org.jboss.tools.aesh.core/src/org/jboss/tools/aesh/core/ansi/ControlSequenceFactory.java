@@ -4,12 +4,14 @@ package org.jboss.tools.aesh.core.ansi;
 public class ControlSequenceFactory {
 	
 	public static ControlSequence create(String controlSequence) {
-		char c = controlSequence.charAt(controlSequence.length() - 1);
+		int last = controlSequence.length() - 1;
+		char c = controlSequence.charAt(last);
 		ControlSequenceType type = ControlSequenceType.fromCharacter(c);
 		if (type == null) {
 			return null;
 		} else {
-			return create(type, controlSequence);
+			String arguments = controlSequence.substring(2, last);
+			return create(type, arguments);
 		}
 	}
 	

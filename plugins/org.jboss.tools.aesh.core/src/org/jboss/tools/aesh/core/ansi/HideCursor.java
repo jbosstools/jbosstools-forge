@@ -3,9 +3,7 @@ package org.jboss.tools.aesh.core.ansi;
 
 public class HideCursor extends ControlSequence {
 
-	public HideCursor(String controlSequenceString) {
-		super(controlSequenceString);
-	}
+	public HideCursor(String arguments) {}
 
 	@Override
 	public ControlSequenceType getType() {

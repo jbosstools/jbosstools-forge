@@ -4,9 +4,11 @@ import org.jboss.tools.aesh.core.document.DocumentProxy;
 
 
 public class CursorBack extends ControlSequence {
+	
+	private int amount;
 
-	public CursorBack(String controlSequenceString) {
-		super(controlSequenceString);
+	public CursorBack(String arguments) {
+		amount = Integer.valueOf(arguments);
 	}
 
 	@Override
@@ -16,10 +18,7 @@ public class CursorBack extends ControlSequence {
 	
 	@Override
 	public void handle(DocumentProxy document) {
-		String command = getControlSequenceString();
-		int amount = Integer.valueOf(command.substring(2, command.length() - 1));
-		int current = document.getCursorOffset();
-		document.moveCursorTo(current - amount);
+		document.moveCursorTo(document.getCursorOffset() - amount);
 	}
 
 }
