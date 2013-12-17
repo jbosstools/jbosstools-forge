@@ -14,7 +14,6 @@ import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.document.DocumentProxy;
 import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
-import org.jboss.tools.aesh.ui.AeshUIPlugin;
 
 public class AeshDocument extends Document {
 	
@@ -29,10 +28,12 @@ public class AeshDocument extends Document {
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
 	private List<StyleRange> styleRanges = new ArrayList<StyleRange>();
 	private StyleRange currentStyleRange;
+	private DocumentProxy proxy;
 	
 	private int savedCursor = 0;
 	
 	public AeshDocument() {
+		proxy = new AeshDocumentProxy(this);
 		stdOutListener = new StreamListener() {			
 			@Override
 			public void outputAvailable(final String output) {
@@ -68,103 +69,27 @@ public class AeshDocument extends Document {
 		};
 	}
 	
-	private DocumentProxy  proxy = new DocumentProxy() {
-
-		@Override
-		public int getCursorOffset() {
-			return AeshDocument.this.getCursorOffset();
-		}
-		
-		@Override
-		public int getLineOfOffset(int offset) {
-			int result = -1;
-			try {
-				result = AeshDocument.this.getLineOfOffset(offset);
-			} catch (BadLocationException e) {
-				AeshUIPlugin.log(e);
-			}
-			return result;
-		}
-		
-		@Override
-		public int getLineOffset(int line) {
-			int result = -1;
-			try {
-				result = AeshDocument.this.getLineOffset(line);
-			} catch (BadLocationException e) {
-				AeshUIPlugin.log(e);
-			}
-			return result;
-		}
-		
-		@Override 
-		public int getLineLength(int line) {
-			int result = -1;
-			try {
-				result = AeshDocument.this.getLineLength(line);
-			} catch (BadLocationException e) {
-				AeshUIPlugin.log(e);
-			}
-			return result;
-		}
-
-		@Override
-		public void moveCursorTo(int offset) {
-			AeshDocument.this.moveCursorTo(offset);
-		}
-		
-		@Override
-		public void reset() {
-			AeshDocument.this.reset();
-		}
-
-		@Override
-		public int getLength() {
-			return AeshDocument.this.getLength();
-		}
-
-		@Override
-		public void replace(int pos, int length, String text) {
-	    	try {
-	        	AeshDocument.this.replace(pos, length, text);
-	        } catch (BadLocationException e) {
-	        	AeshUIPlugin.log(e);
-	        }
-		}
-
-		@Override
-		public void restoreCursor() {
-			AeshDocument.this.restoreCursor();
-		}
-
-		@Override
-		public void saveCursor() {
-			AeshDocument.this.saveCursor();
-		}
-		
-	};
-	
 	private void handleControlSequence(ControlSequence controlSequence) {
 		System.out.println("handleControlSequence(" + controlSequence.getControlSequenceString() + ")");
 		controlSequence.handle(proxy);
 	}
 	
-	private void saveCursor() {
+	void saveCursor() {
 		savedCursor = getCursorOffset();
 	}
 	
-	private void restoreCursor() {
+	void restoreCursor() {
 		moveCursorTo(savedCursor);
 	}
 	
-    private void reset() {
+    void reset() {
 		set("");
 		moveCursorTo(0);
 		styleRanges.clear();
 		currentStyleRange = null;
     }
     
-	private void moveCursorTo(int newOffset) {
+	void moveCursorTo(int newOffset) {
 		cursorOffset = newOffset;
 		for (CursorListener listener : cursorListeners) {
 			listener.cursorMoved();
