@@ -5,15 +5,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.custom.StyleRange;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.ansi.ControlSequence;
 import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.document.DocumentProxy;
 import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
+import org.jboss.tools.aesh.ui.AeshUIConstants;
 
 public class AeshDocument extends Document {
 	
@@ -34,6 +39,7 @@ public class AeshDocument extends Document {
 	
 	public AeshDocument() {
 		proxy = new AeshDocumentProxy(this);
+		currentStyleRange = getDefaultStyleRange();
 		stdOutListener = new StreamListener() {			
 			@Override
 			public void outputAvailable(final String output) {
@@ -70,7 +76,6 @@ public class AeshDocument extends Document {
 	}
 	
 	private void handleControlSequence(ControlSequence controlSequence) {
-		System.out.println("handleControlSequence(" + controlSequence.getControlSequenceString() + ")");
 		controlSequence.handle(proxy);
 	}
 	
@@ -86,7 +91,7 @@ public class AeshDocument extends Document {
 		set("");
 		moveCursorTo(0);
 		styleRanges.clear();
-		currentStyleRange = null;
+		currentStyleRange = getDefaultStyleRange();
     }
     
 	void moveCursorTo(int newOffset) {
@@ -97,7 +102,6 @@ public class AeshDocument extends Document {
 	}
 
 	private void handleOutputAvailable(String output) {
-		System.out.println("handleOutputAvailable(" + output + ")");
 		try {
 			output.replaceAll("\r", "");
 			if (currentStyleRange != null) {
@@ -140,6 +144,13 @@ public class AeshDocument extends Document {
 	
 	public StyleRange getCurrentStyleRange() {
 		return currentStyleRange;
+	}
+	
+	private StyleRange getDefaultStyleRange() {
+		Font font = JFaceResources.getFont(AeshUIConstants.AESH_CONSOLE_FONT);
+		Color foreground = AeshColor.BLACK_TEXT.getColor();
+		Color background = AeshColor.WHITE_BG.getColor();		
+		return new StyleRange(new TextStyle(font, foreground, background));
 	}
 	
 }

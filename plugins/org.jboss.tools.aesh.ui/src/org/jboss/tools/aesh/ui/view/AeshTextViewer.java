@@ -12,6 +12,7 @@ import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.aesh.core.console.AeshConsole;
+import org.jboss.tools.aesh.ui.AeshUIConstants;
 import org.jboss.tools.aesh.ui.document.AeshDocument;
 import org.jboss.tools.aesh.ui.document.AeshDocument.CursorListener;;
 
@@ -27,8 +28,6 @@ public class AeshTextViewer extends TextViewer {
 	private static String PREV_HISTORY = new Character((char)16).toString();
 	private static String NEXT_HISTORY = new Character((char)14).toString();
 	private static String DELETE_NEXT_CHAR = new Character((char)127).toString();
-
-	private static final String AESH_CONSOLE_FONT = "org.jboss.tools.aesh.ui.font";
 
 	protected AeshConsole aeshConsole;
 	protected AeshDocument aeshDocument;
@@ -79,7 +78,7 @@ public class AeshTextViewer extends TextViewer {
     }
     
     protected void initializeTextWidget() {
-    	getTextWidget().setFont(JFaceResources.getFont(AESH_CONSOLE_FONT));
+    	getTextWidget().setFont(JFaceResources.getFont(AeshUIConstants.AESH_CONSOLE_FONT));
     	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
 			@Override
 			public void verifyKey(VerifyEvent event) {
