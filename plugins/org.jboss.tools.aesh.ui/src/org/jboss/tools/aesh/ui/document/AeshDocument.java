@@ -144,6 +144,10 @@ public class AeshDocument extends Document {
 		return currentStyleRange;
 	}
 	
+	public void setCurrentStyleRange(StyleRange styleRange) {
+		currentStyleRange = styleRange;
+	}
+	
 	private StyleRange getDefaultStyleRange() {
 		Font font = JFaceResources.getFont(AeshUIConstants.AESH_CONSOLE_FONT);
 		Color foreground = AeshColor.BLACK_TEXT.getColor();

@@ -1,6 +1,7 @@
 package org.jboss.tools.aesh.core.ansi;
 
 import org.jboss.tools.aesh.core.document.DocumentProxy;
+import org.jboss.tools.aesh.core.document.StyleRangeProxy;
 
 
 public class SelectGraphicRendition extends ControlSequence {
@@ -18,7 +19,10 @@ public class SelectGraphicRendition extends ControlSequence {
 	
 	@Override
 	public void handle(DocumentProxy document) {
-    	System.out.println(arguments);
+		StyleRangeProxy styleRange = document.newStyleRangeFromCurrent();
+		// do stuff with styleRange based on arguments
+		System.out.println(arguments);
+    	document.setCurrentStyleRange(styleRange);
 	}
 
 }

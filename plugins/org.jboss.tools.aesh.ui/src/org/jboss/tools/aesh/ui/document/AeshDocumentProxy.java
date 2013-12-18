@@ -1,7 +1,9 @@
 package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.swt.custom.StyleRange;
 import org.jboss.tools.aesh.core.document.DocumentProxy;
+import org.jboss.tools.aesh.core.document.StyleRangeProxy;
 import org.jboss.tools.aesh.ui.AeshUIPlugin;
 
 public class AeshDocumentProxy implements DocumentProxy {
@@ -83,6 +85,21 @@ public class AeshDocumentProxy implements DocumentProxy {
 	public void saveCursor() {
 		document.saveCursor();
 	}
-	
+
+	@Override
+	public StyleRangeProxy newStyleRangeFromCurrent() {
+		StyleRange oldStyleRange = document.getCurrentStyleRange();
+		StyleRange newStyleRange = new StyleRange(oldStyleRange);
+		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
+		return new AeshStyleRangeProxy(newStyleRange);
+	}
+
+	@Override
+	public void setCurrentStyleRange(StyleRangeProxy styleRangeProxy) {
+		if (styleRangeProxy instanceof AeshStyleRangeProxy) {
+			StyleRange styleRange = ((AeshStyleRangeProxy)styleRangeProxy).getStyleRange();
+			document.setCurrentStyleRange(styleRange);
+		}
+	}
 
 }

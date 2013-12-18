@@ -13,5 +13,8 @@ public interface DocumentProxy {
 	void saveCursor();
 	void reset();
 	void replace(int cursorOffset, int length, String str);
+	
+	StyleRangeProxy newStyleRangeFromCurrent();
+	void setCurrentStyleRange(StyleRangeProxy styleRange);
 
 }

@@ -11,7 +11,7 @@ public enum AeshColor {
 	
 	DEFAULT_TEXT(
 			org.jboss.aesh.terminal.Color.DEFAULT,
-			Display.getDefault().getSystemColor(SWT.COLOR_INFO_FOREGROUND)),
+			Display.getDefault().getSystemColor(SWT.COLOR_BLACK)),
 	BLACK_TEXT(
 			org.jboss.aesh.terminal.Color.BLACK,
 			Display.getDefault().getSystemColor(SWT.COLOR_BLACK)),
@@ -38,7 +38,7 @@ public enum AeshColor {
 			Display.getDefault().getSystemColor(SWT.COLOR_WHITE)),
 	DEFAULT_BG(
 			org.jboss.aesh.terminal.Color.DEFAULT,
-			Display.getDefault().getSystemColor(SWT.COLOR_INFO_BACKGROUND)),
+			Display.getDefault().getSystemColor(SWT.COLOR_WHITE)),
 	BLACK_BG(
 			org.jboss.aesh.terminal.Color.BLACK,
 			Display.getDefault().getSystemColor(SWT.COLOR_BLACK)),
