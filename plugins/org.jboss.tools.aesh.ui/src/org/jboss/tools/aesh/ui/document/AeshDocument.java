@@ -1,8 +1,6 @@
 package org.jboss.tools.aesh.ui.document;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.resource.JFaceResources;
@@ -31,7 +29,6 @@ public class AeshDocument extends Document {
 	private int cursorOffset = 0;
 	private AeshConsole console;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
-	private List<StyleRange> styleRanges = new ArrayList<StyleRange>();
 	private StyleRange currentStyleRange;
 	private DocumentProxy proxy;
 	
@@ -57,7 +54,7 @@ public class AeshDocument extends Document {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
-						handleControlSequence(controlSequence);
+						controlSequence.handle(proxy);
 					}					
 				});
 			}
@@ -75,10 +72,6 @@ public class AeshDocument extends Document {
 		};
 	}
 	
-	private void handleControlSequence(ControlSequence controlSequence) {
-		controlSequence.handle(proxy);
-	}
-	
 	void saveCursor() {
 		savedCursor = getCursorOffset();
 	}
@@ -90,7 +83,6 @@ public class AeshDocument extends Document {
     void reset() {
 		set("");
 		moveCursorTo(0);
-		styleRanges.clear();
 		currentStyleRange = getDefaultStyleRange();
     }
     
@@ -102,19 +94,24 @@ public class AeshDocument extends Document {
 	}
 
 	private void handleOutputAvailable(String output) {
-		System.out.println("handleOutputAvailable(" + output + ")");
 		try {
 			output.replaceAll("\r", "");
-//			if (currentStyleRange != null) {
-//				currentStyleRange.length += output.length();
-//			}
 			replace(getCursorOffset(), getLength() - getCursorOffset(), output);
 			moveCursorTo(getCursorOffset() + output.length());
 		} catch (BadLocationException e) {
         	e.printStackTrace();							
 		}
 	}
-
+	
+	@Override
+	public void replace(int pos, int length, String text) throws BadLocationException {
+		if (currentStyleRange != null) {
+			int increase = getCursorOffset() -getLength() + text.length();
+			currentStyleRange.length += increase;
+		}
+		super.replace(pos, length, text);
+	}
+	
 	public void connect(AeshConsole aeshConsole) {
 		if (console == null) {
 			console = aeshConsole;
