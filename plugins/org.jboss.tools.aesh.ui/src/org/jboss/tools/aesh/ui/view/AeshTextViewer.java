@@ -27,7 +27,7 @@ public class AeshTextViewer extends TextViewer {
 	private static String DELETE_PREV_CHAR = new Character((char)8).toString();
 	private static String PREV_HISTORY = new Character((char)16).toString();
 	private static String NEXT_HISTORY = new Character((char)14).toString();
-	private static String DELETE_NEXT_CHAR = new Character((char)127).toString();
+	private static String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
 
 	protected AeshConsole aeshConsole;
 	protected AeshDocument aeshDocument;
