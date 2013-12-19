@@ -3,7 +3,6 @@ package org.jboss.tools.aesh.ui.document;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.custom.StyleRange;
@@ -16,7 +15,7 @@ import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.document.DocumentProxy;
 import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
-import org.jboss.tools.aesh.ui.AeshUIConstants;
+import org.jboss.tools.aesh.ui.fonts.FontManager;
 
 public class AeshDocument extends Document {
 	
@@ -144,7 +143,7 @@ public class AeshDocument extends Document {
 	}
 	
 	StyleRange getDefaultStyleRange() {
-		Font font = JFaceResources.getFont(AeshUIConstants.AESH_CONSOLE_FONT);
+		Font font = FontManager.INSTANCE.getDefault();
 		Color foreground = AeshColor.BLACK_TEXT.getColor();
 		Color background = AeshColor.WHITE_BG.getColor();		
 		return new StyleRange(new TextStyle(font, foreground, background));

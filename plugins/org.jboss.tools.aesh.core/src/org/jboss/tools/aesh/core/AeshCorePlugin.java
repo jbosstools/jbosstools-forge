@@ -1,15 +1,15 @@
-package org.jboss.tools.aesh.ui;
+package org.jboss.tools.aesh.core;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class AeshUIPlugin extends AbstractUIPlugin {
+public class AeshCorePlugin extends Plugin {
 
-	public static final String PLUGIN_ID = "org.jboss.tools.forge.aesh.ui"; 
+	public static final String PLUGIN_ID = "org.jboss.tools.forge.aesh.core"; 
 
-	private static AeshUIPlugin plugin;
+	private static AeshCorePlugin plugin;
 	
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -21,12 +21,12 @@ public class AeshUIPlugin extends AbstractUIPlugin {
 		super.stop(context);
 	}
 
-	public static AeshUIPlugin getDefault() {
+	public static AeshCorePlugin getDefault() {
 		return plugin;
 	}
 
 	public static void log(Throwable t) {
-		getDefault().getLog().log(newErrorStatus("Error logged from Aesh UI Plugin: ", t)); 
+		getDefault().getLog().log(newErrorStatus("Error logged from Aesh Core Plugin: ", t)); 
 	}
 	
 	private static IStatus newErrorStatus(String message, Throwable exception) {
