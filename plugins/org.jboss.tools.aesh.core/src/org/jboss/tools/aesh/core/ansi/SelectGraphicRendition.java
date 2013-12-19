@@ -20,9 +20,14 @@ public class SelectGraphicRendition extends ControlSequence {
 	@Override
 	public void handle(DocumentProxy document) {
 		StyleRangeProxy styleRange = document.newStyleRangeFromCurrent();
-		// do stuff with styleRange based on arguments
-		System.out.println(arguments);
+		for (String str : arguments.split(";")) {
+			System.out.println("arg: '" + str + "'");
+		}
     	document.setCurrentStyleRange(styleRange);
+	}
+	
+	private void handleSgrCode(int code, StyleRangeProxy styleRange) {
+		
 	}
 
 }

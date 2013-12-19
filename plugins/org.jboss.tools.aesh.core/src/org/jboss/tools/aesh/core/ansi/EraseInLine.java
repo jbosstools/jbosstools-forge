@@ -18,6 +18,7 @@ public class EraseInLine extends ControlSequence {
 				document.getCursorOffset(), 
 				document.getLength() - document.getCursorOffset(), 
 				"");
+		document.setDefaultStyleRange();
 	}
 
 }

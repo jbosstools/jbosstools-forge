@@ -96,20 +96,15 @@ public class AeshDocument extends Document {
 	private void handleOutputAvailable(String output) {
 		try {
 			output.replaceAll("\r", "");
+			if (currentStyleRange != null) {
+				int increase = getCursorOffset() -getLength() + output.length();
+				currentStyleRange.length += increase;
+			}
 			replace(getCursorOffset(), getLength() - getCursorOffset(), output);
 			moveCursorTo(getCursorOffset() + output.length());
 		} catch (BadLocationException e) {
         	e.printStackTrace();							
 		}
-	}
-	
-	@Override
-	public void replace(int pos, int length, String text) throws BadLocationException {
-		if (currentStyleRange != null) {
-			int increase = getCursorOffset() -getLength() + text.length();
-			currentStyleRange.length += increase;
-		}
-		super.replace(pos, length, text);
 	}
 	
 	public void connect(AeshConsole aeshConsole) {
@@ -148,7 +143,7 @@ public class AeshDocument extends Document {
 		currentStyleRange = styleRange;
 	}
 	
-	private StyleRange getDefaultStyleRange() {
+	StyleRange getDefaultStyleRange() {
 		Font font = JFaceResources.getFont(AeshUIConstants.AESH_CONSOLE_FONT);
 		Color foreground = AeshColor.BLACK_TEXT.getColor();
 		Color background = AeshColor.WHITE_BG.getColor();		

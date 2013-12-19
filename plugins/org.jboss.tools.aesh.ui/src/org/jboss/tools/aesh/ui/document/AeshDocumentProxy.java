@@ -91,6 +91,7 @@ public class AeshDocumentProxy implements DocumentProxy {
 		StyleRange oldStyleRange = document.getCurrentStyleRange();
 		StyleRange newStyleRange = new StyleRange(oldStyleRange);
 		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
+		newStyleRange.length = 0;
 		return new AeshStyleRangeProxy(newStyleRange);
 	}
 
@@ -100,6 +101,14 @@ public class AeshDocumentProxy implements DocumentProxy {
 			StyleRange styleRange = ((AeshStyleRangeProxy)styleRangeProxy).getStyleRange();
 			document.setCurrentStyleRange(styleRange);
 		}
+	}
+	
+	@Override
+	public void setDefaultStyleRange() {
+		StyleRange styleRange = document.getDefaultStyleRange();
+		styleRange.start = document.getLength();
+		styleRange.length = 0;
+		document.setCurrentStyleRange(styleRange);
 	}
 
 }

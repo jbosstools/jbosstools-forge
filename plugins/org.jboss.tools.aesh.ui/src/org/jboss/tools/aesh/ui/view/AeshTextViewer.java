@@ -135,6 +135,19 @@ public class AeshTextViewer extends TextViewer {
 					default: super.invokeAction(action);
 				}
 			}
+			@Override
+			public void setStyleRange(StyleRange styleRange) {
+				System.out.println("setting stylerange (start: " + styleRange.start + "; length: " + styleRange.length + ")");
+				super.setStyleRange(styleRange);
+			}
+			@Override
+			public void setStyleRanges(StyleRange[] styleRanges) {
+				System.out.println("setting styleranges");
+				for (StyleRange style : styleRanges) {
+					System.out.println("  start: " + style.start + "; length: " + style.length);
+				}
+				super.setStyleRanges(styleRanges);
+			}
 		};
 		styledText.setLeftMargin(Math.max(styledText.getLeftMargin(), 2));
 		return styledText;

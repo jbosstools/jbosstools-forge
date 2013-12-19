@@ -16,5 +16,6 @@ public interface DocumentProxy {
 	
 	StyleRangeProxy newStyleRangeFromCurrent();
 	void setCurrentStyleRange(StyleRangeProxy styleRange);
+	void setDefaultStyleRange();
 
 }
