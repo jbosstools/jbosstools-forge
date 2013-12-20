@@ -64,7 +64,6 @@ Export-Package: bootpath,
    org.jboss.forge.addon.convert,
    org.jboss.forge.addon.ui.hints,
    org.jboss.forge.addon.ui.context",
- org.jboss.forge.addon.ui.validation,
  org.jboss.forge.addon.ui.wizard;uses:="org.jboss.forge.addon.ui.context,org.jboss.forge.addon.ui.result,org.jboss.forge.addon.ui",
  org.jboss.forge.furnace;
   uses:="org.jboss.forge.furnace.versions,

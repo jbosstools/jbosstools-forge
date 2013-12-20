@@ -25,8 +25,8 @@ import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
+import org.jboss.forge.addon.ui.output.UIMessage;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.addon.ui.validation.UIValidationMessage;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.control.ControlBuilder;
 import org.jboss.tools.forge.ui.ext.control.ControlBuilderRegistry;
@@ -190,7 +190,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		clearMessages();
 
 		updatePageState();
-		for (UIValidationMessage message : controller.validate()) {
+		for (UIMessage message : controller.validate()) {
 			switch (message.getSeverity()) {
 			case ERROR:
 				setErrorMessage(message.getDescription());
