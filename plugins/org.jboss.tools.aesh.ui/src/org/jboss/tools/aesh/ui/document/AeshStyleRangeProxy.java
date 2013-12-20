@@ -66,6 +66,7 @@ public class AeshStyleRangeProxy implements StyleRangeProxy {
 		styleRange.strikeout = true;
 	}
 	
+	// 22
 	public void setBoldOrFaintOff() {
 		if (FontManager.INSTANCE.getBold() == styleRange.font) {
 			styleRange.font = FontManager.INSTANCE.getDefault();
@@ -99,9 +100,54 @@ public class AeshStyleRangeProxy implements StyleRangeProxy {
 		styleRange.strikeout = false;
 	}
 	
+	// 30
+	public void setForegroundBlack() {
+		styleRange.foreground = AeshColor.BLACK_TEXT.getColor();
+	}
+	
+	// 31
+	public void setForegroundRed() {
+		styleRange.foreground = AeshColor.RED_TEXT.getColor();
+	}
+	
+	// 32
+	public void setForegroundGreen() {
+		styleRange.foreground = AeshColor.GREEN_TEXT.getColor();
+	}
+	
+	// 33
+	public void setForegroundYellow() {
+		styleRange.foreground = AeshColor.YELLOW_TEXT.getColor();
+	}
+	
+	// 34
+	public void setForegroundBlue() {
+		styleRange.foreground = AeshColor.BLUE_TEXT.getColor();
+	}
+	
+	// 35
+	public void setForegroundMagenta() {
+		styleRange.foreground = AeshColor.MAGENTA_TEXT.getColor();
+	}
+	
+	// 36
+	public void setForegroundCyan() {
+		styleRange.foreground = AeshColor.CYAN_TEXT.getColor();
+	}
+	
+	// 37
+	public void setForegroundWhite() {
+		styleRange.foreground = AeshColor.WHITE_TEXT.getColor();
+	}
+	
 	// 39
 	public void setForegroundDefault() {
 		styleRange.foreground = AeshColor.DEFAULT_TEXT.getColor();
+	}
+	
+	// 40
+	public void setBackgroundBlack() {
+		styleRange.background = AeshColor.BLACK_BG.getColor();
 	}
 	
 	// 41
@@ -109,9 +155,29 @@ public class AeshStyleRangeProxy implements StyleRangeProxy {
 		styleRange.background = AeshColor.RED_BG.getColor();
 	}
 	
+	// 42
+	public void setBackgroundGreen() {
+		styleRange.background = AeshColor.GREEN_BG.getColor();
+	}
+	
+	// 43
+	public void setBackgroundYellow() {
+		styleRange.background = AeshColor.YELLOW_BG.getColor();
+	}
+	
 	// 44
 	public void setBackgroundBlue() {
 		styleRange.background = AeshColor.BLUE_BG.getColor();
+	}
+	
+	// 45
+	public void setBackgroundMagenta() {
+		styleRange.background = AeshColor.MAGENTA_BG.getColor();
+	}
+	
+	// 46
+	public void setBackgroundCyan() {
+		styleRange.background = AeshColor.CYAN_BG.getColor();
 	}
 	
 	// 47
