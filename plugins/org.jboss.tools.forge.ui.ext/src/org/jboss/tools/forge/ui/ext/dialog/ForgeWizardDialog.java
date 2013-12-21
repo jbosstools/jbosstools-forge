@@ -12,8 +12,10 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
+ * Used when the controller is a Wizard
  * 
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
@@ -31,20 +33,30 @@ public class ForgeWizardDialog extends WizardDialog {
 	protected void backPressed() {
 		try {
 			controller.previous();
+			super.backPressed();
 		} catch (Exception e) {
+			ForgeUIPlugin
+					.displayMessage(
+							"Error",
+							"Error while navigating to the previous page, check Error Log view",
+							NotificationType.ERROR);
 			ForgeUIPlugin.log(e);
 		}
-		super.backPressed();
 	}
 
 	@Override
 	protected void nextPressed() {
 		try {
 			controller.next();
+			super.nextPressed();
 		} catch (Exception e) {
+			ForgeUIPlugin
+					.displayMessage(
+							"Error",
+							"Error while navigating to the previous page, check Error Log view",
+							NotificationType.ERROR);
 			ForgeUIPlugin.log(e);
 		}
-		super.nextPressed();
 	}
 
 }
