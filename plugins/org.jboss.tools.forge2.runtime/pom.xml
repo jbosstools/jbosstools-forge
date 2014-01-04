@@ -158,8 +158,8 @@
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>hibernate-tools-api</artifactId>
-                           <version>${version.forge.addons}</version>
-                           <destFileName>hibernate-tools-api-${version.forge.addons}.jar</destFileName>
+                           <version>2.0.0-SNAPSHOT</version>
+                           <destFileName>hibernate-tools-api-2.0.0-SNAPSHOT.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>
