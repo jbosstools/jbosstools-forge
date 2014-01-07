@@ -10,6 +10,7 @@ import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.ProfileManager;
 import org.hibernate.forge.addon.connections.ConnectionProfile;
 import org.hibernate.forge.addon.connections.ConnectionProfileManager;
+import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 
 public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
@@ -43,7 +44,8 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 	@Override
 	public void saveConnectionProfiles(Collection<ConnectionProfile> connectionProfiles) {
 		try {
-			for (ConnectionProfile profile : connectionProfiles) {
+			Collection<ConnectionProfile> unwrapped = Proxies.unwrap(connectionProfiles);
+			for (ConnectionProfile profile : unwrapped) {
 				IConnectionProfile connectionProfile = 
 						ProfileManager.getInstance().getProfileByName(profile.name);
 				Properties baseProps = new Properties();
@@ -51,7 +53,9 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 				baseProps.setProperty(DRIVER_LOCATION, profile.path);
 				baseProps.setProperty(URL, profile.url);
 				baseProps.setProperty(USER_NAME, profile.user);
-				baseProps.setProperty(HIBERNATE_DIALECT, profile.dialect);
+				if (profile.dialect != null) {
+					baseProps.setProperty(HIBERNATE_DIALECT, profile.dialect);
+				}
 				if (connectionProfile == null) {
 						connectionProfile = 
 								ProfileManager.getInstance().createProfile(
