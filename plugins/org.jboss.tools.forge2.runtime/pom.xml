@@ -32,6 +32,8 @@
                      <addonRepository>${basedir}/addon-repository</addonRepository>
                      <addonIds>
                         <addonId>org.jboss.forge.addon:core,${version.forge.addons}</addonId>
+                        <!-- Remove the addon below when database tools is added to core -->
+                        <addonId>org.jboss.forge.addon:hibernate-tools,2.0.0-SNAPSHOT</addonId>
                      </addonIds>
                   </configuration>
                </execution>
