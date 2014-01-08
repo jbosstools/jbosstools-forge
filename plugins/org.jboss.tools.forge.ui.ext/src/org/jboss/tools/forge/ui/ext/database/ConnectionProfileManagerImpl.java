@@ -8,8 +8,8 @@ import java.util.Properties;
 import org.eclipse.datatools.connectivity.ConnectionProfileException;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.ProfileManager;
-import org.hibernate.forge.addon.connections.ConnectionProfile;
-import org.hibernate.forge.addon.connections.ConnectionProfileManager;
+import org.jboss.forge.addon.database.tools.connections.ConnectionProfile;
+import org.jboss.forge.addon.database.tools.connections.ConnectionProfileManager;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 

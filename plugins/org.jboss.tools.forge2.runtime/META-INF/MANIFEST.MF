@@ -23,7 +23,7 @@ Bundle-ClassPath: lib/furnace-proxy-2.0.0-SNAPSHOT.jar,
  lib/database-tools-api-2.0.0-SNAPSHOT.jar,
  .
 Export-Package: bootpath,
- org.hibernate.forge.addon.connections,
+ org.jboss.forge.addon.database.tools.connections,
  org.jboss.forge.addon.convert,
  org.jboss.forge.addon.convert.exception,
  org.jboss.forge.addon.dependencies;uses:="org.jboss.forge.furnace.util,org.jboss.forge.addon.resource",

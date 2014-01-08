@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.hibernate.forge.addon.connections.ConnectionProfileManagerProvider;
+import org.jboss.forge.addon.database.tools.connections.ConnectionProfileManagerProvider;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.ProjectListener;
 import org.jboss.forge.furnace.services.Imported;

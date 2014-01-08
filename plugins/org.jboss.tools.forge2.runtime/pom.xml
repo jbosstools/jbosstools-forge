@@ -32,8 +32,8 @@
                      <addonRepository>${basedir}/addon-repository</addonRepository>
                      <addonIds>
                         <addonId>org.jboss.forge.addon:core,${version.forge.addons}</addonId>
-                        <!-- Remove the addon below when database tools is added to core -->
-                        <addonId>org.jboss.forge.addon:hibernate-tools,2.0.0-SNAPSHOT</addonId>
+                        <!-- Remove the addon below when database-tools is added to core -->
+                        <addonId>org.jboss.forge.addon:database-tools,${version.forge.addons}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
@@ -159,9 +159,9 @@
                         </artifactItem>
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
-                           <artifactId>hibernate-tools-api</artifactId>
-                           <version>2.0.0-SNAPSHOT</version>
-                           <destFileName>hibernate-tools-api-2.0.0-SNAPSHOT.jar</destFileName>
+                           <artifactId>database-tools-api</artifactId>
+                           <version>${version.forge.addons}</version>
+                           <destFileName>database-tools-api-${version.forge.addons}.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>

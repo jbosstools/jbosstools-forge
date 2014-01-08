@@ -205,4 +205,5 @@ public class UICommandListDialog extends PopupDialog {
 		}
 		return category.toString();
 	}
+	
 }
