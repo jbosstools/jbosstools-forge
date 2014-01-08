@@ -201,9 +201,8 @@ public class UICommandListDialog extends PopupDialog {
 	private String getCategoryName(UIContext context, UICommand command) {
 		UICategory category = command.getMetadata(context).getCategory();
 		if (category != null) {
-			return category.toString();
-		} else {
-			return Categories.DEFAULT;
+			category = Categories.createDefault();
 		}
+		return category.toString();
 	}
 }
