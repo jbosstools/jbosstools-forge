@@ -32,8 +32,6 @@
                      <addonRepository>${basedir}/addon-repository</addonRepository>
                      <addonIds>
                         <addonId>org.jboss.forge.addon:core,${version.forge.addons}</addonId>
-                        <!-- Remove the addon below when scaffold is added to core -->
-                        <addonId>org.jboss.forge.addon:scaffold,${version.forge.addons}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
