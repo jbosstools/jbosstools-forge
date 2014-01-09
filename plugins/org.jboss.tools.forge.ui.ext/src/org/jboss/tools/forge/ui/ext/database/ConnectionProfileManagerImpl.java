@@ -10,7 +10,6 @@ import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.ProfileManager;
 import org.jboss.forge.addon.database.tools.connections.ConnectionProfile;
 import org.jboss.forge.addon.database.tools.connections.ConnectionProfileManager;
-import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 
 public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
@@ -29,14 +28,14 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 		Map<String, ConnectionProfile> result = new HashMap<String, ConnectionProfile>();
 		for (IConnectionProfile currentProfile : connectionProfiles) {
 			ConnectionProfile profile = new ConnectionProfile();
-			profile.name = currentProfile.getName();
+			profile.setName(currentProfile.getName());
 			Properties props = currentProfile.getBaseProperties();
-			profile.driver = props.getProperty(DRIVER_CLASS);
-			profile.path = props.getProperty(DRIVER_LOCATION);
-			profile.user = props.getProperty(USER_NAME);
-			profile.url = props.getProperty(URL);
-			profile.dialect = props.getProperty(HIBERNATE_DIALECT);
-			result.put(profile.name, profile);
+			profile.setDriver(props.getProperty(DRIVER_CLASS));
+			profile.setPath(props.getProperty(DRIVER_LOCATION));
+			profile.setUser(props.getProperty(USER_NAME));
+			profile.setUrl(props.getProperty(URL));
+			profile.setDialect(props.getProperty(HIBERNATE_DIALECT));
+			result.put(profile.getName(), profile);
 		}
 		return result;		
 	}
@@ -44,22 +43,21 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 	@Override
 	public void saveConnectionProfiles(Collection<ConnectionProfile> connectionProfiles) {
 		try {
-			Collection<ConnectionProfile> unwrapped = Proxies.unwrap(connectionProfiles);
-			for (ConnectionProfile profile : unwrapped) {
+			for (ConnectionProfile profile : connectionProfiles) {
 				IConnectionProfile connectionProfile = 
-						ProfileManager.getInstance().getProfileByName(profile.name);
+						ProfileManager.getInstance().getProfileByName(profile.getName());
 				Properties baseProps = new Properties();
-				baseProps.setProperty(DRIVER_CLASS, profile.driver);
-				baseProps.setProperty(DRIVER_LOCATION, profile.path);
-				baseProps.setProperty(URL, profile.url);
-				baseProps.setProperty(USER_NAME, profile.user);
-				if (profile.dialect != null) {
-					baseProps.setProperty(HIBERNATE_DIALECT, profile.dialect);
+				baseProps.setProperty(DRIVER_CLASS, profile.getDriver());
+				baseProps.setProperty(DRIVER_LOCATION, profile.getPath());
+				baseProps.setProperty(URL, profile.getUrl());
+				baseProps.setProperty(USER_NAME, profile.getUser());
+				if (profile.getDialect() != null) {
+					baseProps.setProperty(HIBERNATE_DIALECT, profile.getDialect());
 				}
 				if (connectionProfile == null) {
 						connectionProfile = 
 								ProfileManager.getInstance().createProfile(
-										profile.name, 
+										profile.getName(), 
 										"", 
 										"org.eclipse.datatools.connectivity.db.generic.connectionProfile", 
 										baseProps, 
