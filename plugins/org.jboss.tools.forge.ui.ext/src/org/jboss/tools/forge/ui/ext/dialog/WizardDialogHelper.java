@@ -29,6 +29,7 @@ import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
 import org.jboss.tools.forge.ui.ext.ForgeUIRuntime;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
@@ -43,12 +44,8 @@ public final class WizardDialogHelper {
 
 	public WizardDialogHelper(Shell parentShell, IStructuredSelection selection) {
 		this.parentShell = parentShell;
-		context = new UIContextImpl(selection);
-	}
-
-	public WizardDialogHelper(Shell parentShell, UIContextImpl context) {
-		this.parentShell = parentShell;
-		this.context = context;
+		ForgeUIProvider provider = new ForgeUIProvider();
+		this.context = new UIContextImpl(provider, selection);
 	}
 
 	public UIContextImpl getContext() {
@@ -102,7 +99,7 @@ public final class WizardDialogHelper {
 		ForgeUIRuntime runtime = new ForgeUIRuntime();
 		CommandController controller = controllerFactory.createController(
 				context, selectedCommand, runtime);
-		ForgeWizard wizard = new ForgeWizard(controller, context, runtime);
+		ForgeWizard wizard = new ForgeWizard(controller, context);
 		wizard.setWindowTitle(windowTitle);
 		final WizardDialog wizardDialog;
 		// TODO: Review this

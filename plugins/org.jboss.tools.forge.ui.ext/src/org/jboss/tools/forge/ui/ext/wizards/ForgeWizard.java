@@ -9,16 +9,18 @@ package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.swt.widgets.Shell;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.ext.ForgeUIRuntime;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
@@ -30,14 +32,11 @@ import org.jboss.tools.forge.ui.notifications.NotificationType;
 public class ForgeWizard extends MutableWizard {
 
 	private final CommandController controller;
-	private final ForgeUIRuntime forgeUIRuntime;
 	private final UIContextImpl uiContext;
 
-	public ForgeWizard(CommandController controller, UIContextImpl contextImpl,
-			ForgeUIRuntime forgeUIRuntime) {
+	public ForgeWizard(CommandController controller, UIContextImpl contextImpl) {
 		this.controller = controller;
 		this.uiContext = contextImpl;
-		this.forgeUIRuntime = forgeUIRuntime;
 		setNeedsProgressMonitor(true);
 		setForcePreviousAndNextButtons(isWizard());
 	}
@@ -63,12 +62,20 @@ public class ForgeWizard extends MutableWizard {
 	@Override
 	public boolean performFinish() {
 		try {
-			getContainer().run(true, true, new IRunnableWithProgress() {
+			final IWizardContainer container = getContainer();
+			// Cannot fork, otherwise Eclipse Shell in UIPrompt will throw an
+			// exception
+			boolean fork = false;
+			container.run(fork, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
 					try {
-						forgeUIRuntime.setProgressMonitor(monitor);
+						Map<Object, Object> attributeMap = uiContext
+								.getAttributeMap();
+						attributeMap.put(IProgressMonitor.class, monitor);
+						attributeMap.put(Shell.class, container.getShell());
+
 						Result result = controller.execute();
 						if (result != null) {
 							String message = result.getMessage();

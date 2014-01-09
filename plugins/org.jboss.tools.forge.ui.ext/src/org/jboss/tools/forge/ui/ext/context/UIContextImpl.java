@@ -39,13 +39,15 @@ import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UIContextImpl extends AbstractUIContext {
 	private UISelectionImpl<?> currentSelection;
 
-	public UIContextImpl(IStructuredSelection selection) {
+	private final UIProvider provider;
+
+	public UIContextImpl(UIProvider provider, IStructuredSelection selection) {
+		this.provider = provider;
 		List<Object> selectedElements = selection == null ? Collections.EMPTY_LIST
 				: selection.toList();
 		List<Object> result = new LinkedList<Object>();
@@ -223,7 +225,7 @@ public class UIContextImpl extends AbstractUIContext {
 
 	@Override
 	public UIProvider getProvider() {
-		return ForgeUIProvider.INSTANCE;
+		return provider;
 	}
 
 }

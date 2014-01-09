@@ -17,8 +17,7 @@ import org.jboss.forge.addon.ui.output.UIOutput;
  * 
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
-public enum ForgeUIProvider implements UIProvider, UIOutput {
-	INSTANCE;
+public class ForgeUIProvider implements UIProvider, UIOutput {
 
 	@Override
 	public boolean isGUI() {
@@ -41,5 +40,4 @@ public enum ForgeUIProvider implements UIProvider, UIOutput {
 		// TODO: Change this
 		return System.err;
 	}
-
 }

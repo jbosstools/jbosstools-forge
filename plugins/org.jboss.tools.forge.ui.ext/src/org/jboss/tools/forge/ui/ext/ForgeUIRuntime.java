@@ -8,8 +8,10 @@
 package org.jboss.tools.forge.ui.ext;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.swt.widgets.Shell;
 import org.jboss.forge.addon.ui.UIProgressMonitor;
 import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.input.UIPrompt;
 import org.jboss.forge.addon.ui.spi.UIRuntime;
 import org.jboss.tools.forge.ui.ext.context.UIProgressMonitorAdapter;
 
@@ -19,22 +21,19 @@ import org.jboss.tools.forge.ui.ext.context.UIProgressMonitorAdapter;
  */
 public class ForgeUIRuntime implements UIRuntime {
 
-	private IProgressMonitor progressMonitor;
-
 	@Override
 	public UIProgressMonitor createProgressMonitor(UIContext context) {
+		IProgressMonitor progressMonitor = (IProgressMonitor) context
+				.getAttributeMap().get(IProgressMonitor.class);
 		UIProgressMonitorAdapter monitor = new UIProgressMonitorAdapter(
 				progressMonitor);
-		progressMonitor = null;
 		return monitor;
 	}
 
-	/**
-	 * @param progressMonitor
-	 *            the progressMonitor to set
-	 */
-	public void setProgressMonitor(IProgressMonitor progressMonitor) {
-		this.progressMonitor = progressMonitor;
+	@Override
+	public UIPrompt createPrompt(UIContext context) {
+		Shell shell = (Shell) context.getAttributeMap().get(Shell.class);
+		return new ForgeUIPrompt(shell);
 	}
 
 }
