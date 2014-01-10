@@ -39,8 +39,8 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
  */
 public final class WizardDialogHelper {
 
-	private UIContextImpl context;
-	private Shell parentShell;
+	private final UIContextImpl context;
+	private final Shell parentShell;
 
 	public WizardDialogHelper(Shell parentShell, IStructuredSelection selection) {
 		this.parentShell = parentShell;
@@ -98,7 +98,7 @@ public final class WizardDialogHelper {
 				.lookup(CommandControllerFactory.class);
 		ForgeUIRuntime runtime = new ForgeUIRuntime();
 		CommandController controller = controllerFactory.createController(
-				context, selectedCommand, runtime);
+				context, runtime, selectedCommand);
 		ForgeWizard wizard = new ForgeWizard(controller, context);
 		wizard.setWindowTitle(windowTitle);
 		final WizardDialog wizardDialog;
