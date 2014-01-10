@@ -14,10 +14,18 @@ import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 
 public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 
-	private static final String DRIVER_CLASS = "org.eclipse.datatools.connectivity.db.driverClass";
+	private static final String CONNECTION_PROPERTIES = "org.eclipse.datatools.connectivity.db.connectionProperties";
+	private static final String SAVE_PWD = "org.eclipse.datatools.connectivity.db.savePWD";
+	private static final String DRIVER_DEFINITION_TYPE = "org.eclipse.datatools.connectivity.drivers.defnType";
 	private static final String DRIVER_LOCATION = "jarList";
 	private static final String USER_NAME = "org.eclipse.datatools.connectivity.db.username";
+	private static final String DRIVER_CLASS = "org.eclipse.datatools.connectivity.db.driverClass";
+	private static final String DRIVER_DEFINITION_ID = "org.eclipse.datatools.connectivity.driverDefinitionID";
+	private static final String DATABASE_NAME = "org.eclipse.datatools.connectivity.db.databaseName";
+	private static final String PASSWORD = "org.eclipse.datatools.connectivity.db.password";
 	private static final String URL = "org.eclipse.datatools.connectivity.db.URL";
+	private static final String VERSION = "org.eclipse.datatools.connectivity.db.version";
+	private static final String VENDOR = "org.eclipse.datatools.connectivity.db.vendor";
 	private static final String HIBERNATE_DIALECT = "org.jboss.tools.forge.hibernate.dialect";
 	
 	@Override
@@ -47,10 +55,22 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 				IConnectionProfile connectionProfile = 
 						ProfileManager.getInstance().getProfileByName(profile.getName());
 				Properties baseProps = new Properties();
-				baseProps.setProperty(DRIVER_CLASS, profile.getDriver());
+				baseProps.setProperty(CONNECTION_PROPERTIES, "");
+				baseProps.setProperty(SAVE_PWD, "false");
+				baseProps.setProperty(
+						DRIVER_DEFINITION_TYPE, 
+						"org.eclipse.datatools.connectivity.db.generic.genericDriverTemplate");
 				baseProps.setProperty(DRIVER_LOCATION, profile.getPath());
-				baseProps.setProperty(URL, profile.getUrl());
 				baseProps.setProperty(USER_NAME, profile.getUser());
+				baseProps.setProperty(DRIVER_CLASS, profile.getDriver());
+				baseProps.setProperty(
+						DRIVER_DEFINITION_ID, 
+						"DriverDefn.org.eclipse.datatools.connectivity.db.generic.genericDriverTemplate.Generic JDBC Driver");
+				baseProps.setProperty(DATABASE_NAME, "SAMPLE");
+				baseProps.setProperty(PASSWORD, "");
+				baseProps.setProperty(URL, profile.getUrl());
+				baseProps.setProperty(VERSION, "1.0");
+				baseProps.setProperty(VENDOR, "Generic JDBC");
 				if (profile.getDialect() != null) {
 					baseProps.setProperty(HIBERNATE_DIALECT, profile.getDialect());
 				}
