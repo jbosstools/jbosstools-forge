@@ -25,14 +25,21 @@ public class ForgeUIPrompt implements UIPrompt {
 	}
 
 	@Override
-	public String prompt() {
-		InputDialog dlg = new InputDialog(shell, "", "Enter a value", "", null);
+	public String prompt(String message) {
+		InputDialog dlg = new InputDialog(shell, "", message, "", null);
 		return (dlg.open() == Window.OK) ? dlg.getValue() : null;
 	}
 
 	@Override
 	public boolean promptBoolean(String message) {
 		return MessageDialog.openQuestion(shell, "Question", message);
+	}
+
+	@Override
+	public String promptSecret(String message) {
+		// FIXME: Should mask the input
+		InputDialog dlg = new InputDialog(shell, "", message, "", null);
+		return (dlg.open() == Window.OK) ? dlg.getValue() : null;
 	}
 
 }
