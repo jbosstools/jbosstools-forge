@@ -32,8 +32,6 @@
                      <addonRepository>${basedir}/addon-repository</addonRepository>
                      <addonIds>
                         <addonId>org.jboss.forge.addon:core,${version.forge.addons}</addonId>
-                        <!-- Remove the addon below when database-tools is added to core -->
-                        <addonId>org.jboss.forge.addon:database-tools,${version.forge.addons}</addonId>
                      </addonIds>
                   </configuration>
                </execution>
