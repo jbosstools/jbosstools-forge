@@ -1,7 +1,7 @@
 package org.jboss.tools.forge.ui.ext.database;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -38,7 +38,7 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 		IConnectionProfile[] connectionProfiles = ProfileManager
 				.getInstance()
 				.getProfiles();	
-		Map<String, ConnectionProfile> result = new HashMap<String, ConnectionProfile>();
+		Map<String, ConnectionProfile> result = new LinkedHashMap<String, ConnectionProfile>();
 		for (IConnectionProfile currentProfile : connectionProfiles) {
 			ConnectionProfile profile = new ConnectionProfile();
 			profile.setName(currentProfile.getName());
