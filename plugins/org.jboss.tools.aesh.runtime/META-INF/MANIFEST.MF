@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Aesh Runtime Plugin
 Bundle-SymbolicName: org.jboss.tools.aesh.runtime;singleton:=true
-Bundle-Version: 0.45.0.qualifier
+Bundle-Version: 0.46.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: lib/aesh-0.45.jar
+Bundle-ClassPath: lib/aesh-0.46-SNAPSHOT.jar
 Export-Package: org.jboss.aesh.cl,
  org.jboss.aesh.cl.activation,
  org.jboss.aesh.cl.builder,
