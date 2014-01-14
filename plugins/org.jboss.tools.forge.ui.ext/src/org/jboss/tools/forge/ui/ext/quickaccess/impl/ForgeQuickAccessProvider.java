@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessElement;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessProvider;

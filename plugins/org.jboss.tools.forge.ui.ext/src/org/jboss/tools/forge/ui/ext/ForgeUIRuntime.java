@@ -9,10 +9,10 @@ package org.jboss.tools.forge.ui.ext;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Shell;
-import org.jboss.forge.addon.ui.UIProgressMonitor;
+import org.jboss.forge.addon.ui.UIRuntime;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.input.UIPrompt;
-import org.jboss.forge.addon.ui.spi.UIRuntime;
+import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 import org.jboss.tools.forge.ui.ext.context.UIProgressMonitorAdapter;
 
 /**

@@ -8,7 +8,7 @@
 package org.jboss.tools.forge.ui.ext.context;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.jboss.forge.addon.ui.UIProgressMonitor;
+import org.jboss.forge.addon.ui.progress.UIProgressMonitor;
 
 /**
  * Adapter for {@link UIProgressMonitor} to {@link IProgressMonitor}

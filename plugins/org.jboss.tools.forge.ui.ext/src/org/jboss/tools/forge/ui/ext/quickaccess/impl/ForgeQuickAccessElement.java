@@ -8,7 +8,7 @@
 package org.jboss.tools.forge.ui.ext.quickaccess.impl;
 
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.jboss.forge.addon.ui.UICommand;
+import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
