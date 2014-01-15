@@ -8,6 +8,7 @@
 package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
+import org.jboss.forge.addon.ui.result.CompositeResult;
 import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
@@ -76,23 +78,34 @@ public class ForgeWizard extends MutableWizard {
 						attributeMap.put(IProgressMonitor.class, monitor);
 						attributeMap.put(Shell.class, container.getShell());
 
-						Result result = controller.execute();
-						if (result != null) {
-							String message = result.getMessage();
-							if (message != null) {
-								ForgeUIPlugin.displayMessage("Forge Command",
-										message, NotificationType.INFO);
-							}
-							if (result instanceof Failed) {
-								Throwable exception = ((Failed) result)
-										.getException();
-								if (exception != null) {
-									ForgeUIPlugin.log(exception);
+						Result commandResult = controller.execute();
+
+						List<Result> results;
+						if (commandResult instanceof CompositeResult) {
+							results = ((CompositeResult) commandResult)
+									.getResults();
+						} else {
+							results = Arrays.asList(commandResult);
+						}
+						for (Result result : results) {
+							if (result != null) {
+								String message = result.getMessage();
+								if (message != null) {
 									ForgeUIPlugin.displayMessage(
-											"Forge Command", String
-													.valueOf(exception
-															.getMessage()),
-											NotificationType.ERROR);
+											"Forge Command", message,
+											NotificationType.INFO);
+								}
+								if (result instanceof Failed) {
+									Throwable exception = ((Failed) result)
+											.getException();
+									if (exception != null) {
+										ForgeUIPlugin.log(exception);
+										ForgeUIPlugin.displayMessage(
+												"Forge Command", String
+														.valueOf(exception
+																.getMessage()),
+												NotificationType.ERROR);
+									}
 								}
 							}
 							EventBus.INSTANCE.fireWizardFinished(uiContext);
