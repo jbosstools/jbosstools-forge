@@ -86,4 +86,3 @@ Export-Package: bootpath,
  org.jboss.forge.furnace.spi;uses:="org.jboss.forge.furnace",
  org.jboss.forge.furnace.util;uses:="org.jboss.forge.furnace.addons",
  org.jboss.forge.furnace.versions;uses:="org.jboss.forge.furnace.exception"
-Require-Bundle: org.jboss.tools.aesh.runtime;bundle-version="0.39.0"
