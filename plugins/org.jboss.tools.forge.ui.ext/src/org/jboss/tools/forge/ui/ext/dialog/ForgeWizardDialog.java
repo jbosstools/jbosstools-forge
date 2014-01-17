@@ -53,7 +53,7 @@ public class ForgeWizardDialog extends WizardDialog {
 			ForgeUIPlugin
 					.displayMessage(
 							"Error",
-							"Error while navigating to the previous page, check Error Log view",
+							"Error while navigating to the next page, check Error Log view",
 							NotificationType.ERROR);
 			ForgeUIPlugin.log(e);
 		}
