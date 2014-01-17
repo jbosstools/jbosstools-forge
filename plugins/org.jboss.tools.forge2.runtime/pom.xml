@@ -12,7 +12,7 @@
    <packaging>eclipse-plugin</packaging>
    <properties>
       <version.furnace>2.0.0.CR1</version.furnace>
-      <version.forge.addons>2.0.0.CR1</version.forge.addons>
+      <version.forge.addons>2.0.0-SNAPSHOT</version.forge.addons>
    </properties>
    <build>
       <plugins>
