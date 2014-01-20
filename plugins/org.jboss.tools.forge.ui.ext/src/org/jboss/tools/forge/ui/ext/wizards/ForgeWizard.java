@@ -140,7 +140,7 @@ public class ForgeWizard extends MutableWizard {
 	@Override
 	public IWizardPage getNextPage(IWizardPage page) {
 		IWizardPage nextPage = super.getNextPage(page);
-		if (nextPage != null && !controller.isInitialized()) {
+		if (nextPage != null) {
 			// Subsequent pages are stale. Remove all subsequent pages
 			removeSubsequentPages(nextPage);
 			nextPage = null;
