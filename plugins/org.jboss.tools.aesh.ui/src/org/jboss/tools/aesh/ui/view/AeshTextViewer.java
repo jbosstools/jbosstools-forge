@@ -53,8 +53,8 @@ public class AeshTextViewer extends TextViewer {
                 int lineCount = textWidget.getLineCount();
                 textWidget.setTopIndex(lineCount - 1);
     			StyleRange styleRange = getDocument().getCurrentStyleRange();
-    			if (styleRange != null) {
-    				textWidget.setStyleRange(styleRange);
+    			if (styleRange != null && event.getLength() == 0) {
+     				textWidget.setStyleRange(styleRange);
     			}
             }
         }
