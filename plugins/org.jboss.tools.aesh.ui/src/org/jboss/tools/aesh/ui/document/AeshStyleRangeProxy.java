@@ -140,6 +140,10 @@ public class AeshStyleRangeProxy implements StyleRangeProxy {
 		styleRange.foreground = AeshColor.WHITE_TEXT.getColor();
 	}
 	
+	// 38
+	public void setForegroundXTerm(int colour) {
+	}
+	
 	// 39
 	public void setForegroundDefault() {
 		styleRange.foreground = AeshColor.DEFAULT_TEXT.getColor();
@@ -183,6 +187,10 @@ public class AeshStyleRangeProxy implements StyleRangeProxy {
 	// 47
 	public void setBackgroundWhite() {
 		styleRange.background = AeshColor.WHITE_BG.getColor();
+	}
+	
+	// 48
+	public void setBackgroundXTerm(int colour) {
 	}
 	
 	// 49

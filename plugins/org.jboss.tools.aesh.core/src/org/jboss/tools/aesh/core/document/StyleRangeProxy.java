@@ -22,6 +22,7 @@ public interface StyleRangeProxy {
 	void setForegroundMagenta();			//  35
 	void setForegroundCyan();				//  36
 	void setForegroundWhite();				//  37
+	void setForegroundXTerm(int colour);    //  38
 	void setForegroundDefault(); 			//  39
 	void setBackgroundBlack();				//  40
 	void setBackgroundRed();				//  41
@@ -31,6 +32,7 @@ public interface StyleRangeProxy {
 	void setBackgroundMagenta();			//  45
 	void setBackgroundCyan();				//  46
 	void setBackgroundWhite();				//  47
+	void setBackgroundXTerm(int colour);	//  48
 	void setBackgroundDefault();			//  49
 	
 }

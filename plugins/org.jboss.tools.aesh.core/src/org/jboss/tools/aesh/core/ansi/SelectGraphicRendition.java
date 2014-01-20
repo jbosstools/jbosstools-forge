@@ -1,5 +1,7 @@
 package org.jboss.tools.aesh.core.ansi;
 
+import java.util.StringTokenizer;
+
 import org.jboss.tools.aesh.core.AeshCorePlugin;
 import org.jboss.tools.aesh.core.document.DocumentProxy;
 import org.jboss.tools.aesh.core.document.StyleRangeProxy;
@@ -21,19 +23,55 @@ public class SelectGraphicRendition extends ControlSequence {
 	@Override
 	public void handle(DocumentProxy document) {
 		StyleRangeProxy styleRange = document.newStyleRangeFromCurrent();
-		for (String str : arguments.split(";")) {
-			if (!"".equals(str)) {
-				try {
-					handleSgrCommand(Integer.valueOf(str), styleRange);
-				} catch (NumberFormatException e) {
-					AeshCorePlugin.log(e);
+		StringTokenizer tokenizer = new StringTokenizer(arguments, ";");
+		while (tokenizer.hasMoreTokens()) {
+			String token = tokenizer.nextToken();
+			if ("".equals(token)) continue;
+			try {
+				int value = Integer.valueOf(token);
+				if (value == 38 || value == 48) {
+					handleXTerm(value, tokenizer, styleRange);
+				} else {
+					handleDefault(value, styleRange);
 				}
+			} catch (NumberFormatException e) {
+				AeshCorePlugin.log(e);
 			}
 		}
     	document.setCurrentStyleRange(styleRange);
 	}
 	
-	private void handleSgrCommand(int sgrCode, StyleRangeProxy styleRange) {
+	private void handleXTerm(
+			int sgrCode,
+			StringTokenizer tokenizer, 
+			StyleRangeProxy styleRange) {
+		if (tokenizer.hasMoreTokens()) {
+			String str = tokenizer.nextToken();
+			try {
+				int value = Integer.valueOf(str);
+				if (value == 5) {
+					if (tokenizer.hasMoreTokens()) {
+						int code = Integer.valueOf(tokenizer.nextToken());
+						if (sgrCode == 38) {
+							styleRange.setForegroundXTerm(code);
+						} else if (sgrCode == 48) {
+							styleRange.setBackgroundXTerm(code);
+						}
+					} else {
+						AeshCorePlugin.log(new RuntimeException("Incorrect SGR instruction: " + arguments));
+					}
+				} else {
+					AeshCorePlugin.log(new RuntimeException("Incorrect SGR instruction: " + arguments));
+				}
+			} catch (NumberFormatException e) {
+				AeshCorePlugin.log(e);
+			}
+		} else {
+			AeshCorePlugin.log(new RuntimeException("Incorrect SGR instruction: " + arguments));
+		}
+	}
+	
+	private void handleDefault(int sgrCode, StyleRangeProxy styleRange) {
 		switch(sgrCode) {
 			case   0 : styleRange.resetToNormal(); break;
 			case   1 : styleRange.setBoldOn(); break;
