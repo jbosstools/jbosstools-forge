@@ -54,11 +54,7 @@ public class ForgeWizard extends MutableWizard {
 
 	@Override
 	public boolean canFinish() {
-		if (isWizard()) {
-			return ((WizardCommandController) controller).canExecute();
-		} else {
-			return controller.isValid();
-		}
+		return controller.canExecute();
 	}
 
 	@Override
