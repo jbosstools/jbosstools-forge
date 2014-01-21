@@ -12,20 +12,20 @@ import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.document.ForgeDocument;
-import org.jboss.tools.forge.ui.part.ForgeView;
+import org.jboss.tools.forge.ui.part.F1View;
 
 public class ForgeHelper {
 	
-	public static ForgeView getForgeView() {
+	public static F1View getForgeView() {
 		IWorkbench workbench = PlatformUI.getWorkbench();
 		if (workbench == null) return null;
 		IWorkbenchWindow workbenchWindow = workbench.getActiveWorkbenchWindow();
 		if (workbenchWindow == null) return null;
 		IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 		if (workbenchPage == null) return null;
-		IViewPart viewPart = workbenchPage.findView(ForgeView.ID);
-		if (viewPart != null && viewPart instanceof ForgeView) {
-			return (ForgeView)viewPart;
+		IViewPart viewPart = workbenchPage.findView(F1View.ID);
+		if (viewPart != null && viewPart instanceof F1View) {
+			return (F1View)viewPart;
 		} else {
 			return null;
 		}

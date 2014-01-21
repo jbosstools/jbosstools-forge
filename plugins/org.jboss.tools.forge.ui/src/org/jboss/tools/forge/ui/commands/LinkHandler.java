@@ -5,7 +5,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.Widget;
-import org.jboss.tools.forge.ui.part.ForgeView;
+import org.jboss.tools.forge.ui.part.F1View;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class LinkHandler extends AbstractHandler {
@@ -16,7 +16,7 @@ public class LinkHandler extends AbstractHandler {
 			Widget widget = ((Event)object).widget;
 			if (widget != null) {
 				if (widget instanceof ToolItem) {
-					ForgeView forgeView = ForgeHelper.getForgeView();
+					F1View forgeView = ForgeHelper.getForgeView();
 					if (forgeView != null) {
 						forgeView.setSynchronized(((ToolItem)widget).getSelection());
 					}

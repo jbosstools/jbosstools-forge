@@ -9,7 +9,7 @@
       </category>
       <view
             category="org.jboss.tools.forge.ui"
-            class="org.jboss.tools.forge.ui.part.ForgeView"
+            class="org.jboss.tools.forge.ui.part.F1View"
             icon="icons/jbossforge_icon_16px.png"
             id="org.jboss.tools.forge.ui.view"
             name="Forge Console"

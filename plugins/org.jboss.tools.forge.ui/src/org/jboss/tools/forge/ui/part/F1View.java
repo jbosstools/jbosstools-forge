@@ -34,7 +34,7 @@ import org.jboss.tools.forge.ui.console.ForgeTextViewer;
 import org.jboss.tools.forge.ui.document.ForgeDocument;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
-public class ForgeView extends ViewPart implements PropertyChangeListener, IShowInTarget {
+public class F1View extends ViewPart implements PropertyChangeListener, IShowInTarget {
 
 	public static final String ID = "org.jboss.tools.forge.ui.view";
 	
@@ -82,9 +82,9 @@ public class ForgeView extends ViewPart implements PropertyChangeListener, IShow
 				if (!newRuntime.getName().equals(currentRuntime.getName())) {
 					ForgeRuntime oldRuntime = currentRuntime;
 					oldRuntime.stop(null);
-					oldRuntime.removePropertyChangeListener(ForgeView.this);
+					oldRuntime.removePropertyChangeListener(F1View.this);
 					currentRuntime = newRuntime;
-					currentRuntime.addPropertyChangeListener(ForgeView.this);
+					currentRuntime.addPropertyChangeListener(F1View.this);
 					ForgeDocument.INSTANCE.connect(currentRuntime);
 					ForgeHelper.startForge();
 				}
