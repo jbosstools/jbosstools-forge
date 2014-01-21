@@ -36,7 +36,7 @@ import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class F1View extends ViewPart implements PropertyChangeListener, IShowInTarget {
 
-	public static final String ID = "org.jboss.tools.forge.ui.view";
+	public static final String ID = "org.jboss.tools.forge.ui.f1";
 	
 	private static final String NOT_RUNNING_MESSAGE = "Forge is not running.";
 	private static final String STARTING_MESSAGE = "Please wait while Forge is starting";
