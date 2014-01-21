@@ -7,6 +7,7 @@
 
 package org.jboss.tools.forge.ui.ext.dialog;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.forge.addon.ui.command.UICommand;
@@ -34,6 +36,7 @@ import org.jboss.tools.forge.ui.ext.ForgeUIRuntime;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizard;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
+import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
  */
@@ -99,8 +102,17 @@ public final class WizardDialogHelper {
 		ForgeUIRuntime runtime = new ForgeUIRuntime();
 		CommandController controller = controllerFactory.createController(
 				context, runtime, selectedCommand);
-		ForgeWizard wizard = new ForgeWizard(controller, context);
-		wizard.setWindowTitle(windowTitle);
+
+		ForgeWizard wizard = new ForgeWizard(windowTitle, controller, context);
+		try {
+			controller.initialize();
+		} catch (Exception e) {
+			ForgeUIPlugin.displayMessage(windowTitle,
+					"Error while initializing controller. Check logs",
+					NotificationType.ERROR);
+			ForgeUIPlugin.log(e);
+			return;
+		}
 		final WizardDialog wizardDialog;
 		// TODO: Review this
 		if (controller instanceof WizardCommandController) {
@@ -138,6 +150,16 @@ public final class WizardDialogHelper {
 				wizardDialog.updateButtons();
 			}
 		});
-		wizardDialog.open();
+
+		if (controller.getInputs().isEmpty() && controller.canExecute()) {
+			try {
+				ApplicationWindow window = new ApplicationWindow(parentShell);
+				wizard.performFinish(window, parentShell);
+			} catch (InvocationTargetException | InterruptedException e) {
+				ForgeUIPlugin.log(e);
+			}
+		} else {
+			wizardDialog.open();
+		}
 	}
 }

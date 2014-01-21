@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -36,9 +37,11 @@ public class ForgeWizard extends MutableWizard {
 	private final CommandController controller;
 	private final UIContextImpl uiContext;
 
-	public ForgeWizard(CommandController controller, UIContextImpl contextImpl) {
+	public ForgeWizard(String windowTitle, CommandController controller,
+			UIContextImpl contextImpl) {
 		this.controller = controller;
 		this.uiContext = contextImpl;
+		setWindowTitle(windowTitle);
 		setNeedsProgressMonitor(true);
 		setForcePreviousAndNextButtons(isWizard());
 	}
@@ -60,67 +63,72 @@ public class ForgeWizard extends MutableWizard {
 	@Override
 	public boolean performFinish() {
 		try {
-			final IWizardContainer container = getContainer();
-			// Cannot fork, otherwise Eclipse Shell in UIPrompt will throw an
-			// exception
-			boolean fork = false;
-			container.run(fork, true, new IRunnableWithProgress() {
-				@Override
-				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException, InterruptedException {
-					try {
-						Map<Object, Object> attributeMap = uiContext
-								.getAttributeMap();
-						attributeMap.put(IProgressMonitor.class, monitor);
-						attributeMap.put(Shell.class, container.getShell());
-
-						Result commandResult = controller.execute();
-
-						List<Result> results;
-						if (commandResult instanceof CompositeResult) {
-							results = ((CompositeResult) commandResult)
-									.getResults();
-						} else {
-							results = Arrays.asList(commandResult);
-						}
-						for (Result result : results) {
-							if (result != null) {
-								String message = result.getMessage();
-								if (message != null) {
-									ForgeUIPlugin.displayMessage(
-											"Forge Command", message,
-											NotificationType.INFO);
-								}
-								if (result instanceof Failed) {
-									Throwable exception = ((Failed) result)
-											.getException();
-									if (exception != null) {
-										ForgeUIPlugin.log(exception);
-										ForgeUIPlugin.displayMessage(
-												"Forge Command", String
-														.valueOf(exception
-																.getMessage()),
-												NotificationType.ERROR);
-									}
-								}
-							}
-							EventBus.INSTANCE.fireWizardFinished(uiContext);
-						}
-					} catch (Exception e) {
-						ForgeUIPlugin.log(e);
-					} finally {
-						try {
-							controller.close();
-						} catch (Exception e) {
-							ForgeUIPlugin.log(e);
-						}
-					}
-				}
-			});
+			IWizardContainer container = getContainer();
+			performFinish(container, container.getShell());
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
 		}
 		return true;
+	}
+
+	public void performFinish(final IRunnableContext container,
+			final Shell shell) throws InvocationTargetException,
+			InterruptedException {
+		// Cannot fork, otherwise Eclipse Shell in UIPrompt will throw an
+		// exception
+		boolean fork = false;
+		container.run(fork, true, new IRunnableWithProgress() {
+			@Override
+			public void run(IProgressMonitor monitor)
+					throws InvocationTargetException, InterruptedException {
+				try {
+					Map<Object, Object> attributeMap = uiContext
+							.getAttributeMap();
+					attributeMap.put(IProgressMonitor.class, monitor);
+					attributeMap.put(Shell.class, shell);
+
+					Result commandResult = controller.execute();
+
+					List<Result> results;
+					if (commandResult instanceof CompositeResult) {
+						results = ((CompositeResult) commandResult)
+								.getResults();
+					} else {
+						results = Arrays.asList(commandResult);
+					}
+					for (Result result : results) {
+						if (result != null) {
+							String message = result.getMessage();
+							if (message != null) {
+								ForgeUIPlugin.displayMessage("Forge Command",
+										message, NotificationType.INFO);
+							}
+							if (result instanceof Failed) {
+								Throwable exception = ((Failed) result)
+										.getException();
+								if (exception != null) {
+									ForgeUIPlugin.log(exception);
+									ForgeUIPlugin.displayMessage(
+											"Forge Command", String
+													.valueOf(exception
+															.getMessage()),
+											NotificationType.ERROR);
+								}
+							}
+						}
+						EventBus.INSTANCE.fireWizardFinished(uiContext);
+					}
+				} catch (Exception e) {
+					ForgeUIPlugin.log(e);
+				} finally {
+					try {
+						controller.close();
+					} catch (Exception e) {
+						ForgeUIPlugin.log(e);
+					}
+				}
+			}
+		});
 	}
 
 	@Override
