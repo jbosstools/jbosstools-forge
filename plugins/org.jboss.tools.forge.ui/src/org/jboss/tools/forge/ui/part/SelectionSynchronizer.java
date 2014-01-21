@@ -16,7 +16,7 @@ import org.jboss.tools.forge.core.process.ForgeRuntime;
 
 public class SelectionSynchronizer implements ISelectionListener {
 
-	private ForgeView forgeView;
+	private F1View forgeView;
 	private IEditorPart selectedPart;
 	private IPartService partService;
 	
@@ -55,7 +55,7 @@ public class SelectionSynchronizer implements ISelectionListener {
 		}
 	};
 	
-	public SelectionSynchronizer(ForgeView forgeView) {
+	public SelectionSynchronizer(F1View forgeView) {
 		this.forgeView = forgeView;
 		IWorkbenchWindow workbenchWindow = forgeView.getSite().getWorkbenchWindow();
 		partService = workbenchWindow.getPartService();

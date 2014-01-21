@@ -13,7 +13,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.part.ForgeView;
+import org.jboss.tools.forge.ui.part.F1View;
 
 
 public class ForgeCommandProcessor {
@@ -92,7 +92,7 @@ public class ForgeCommandProcessor {
 		if (workbenchWindow != null) {
 			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 			if (workbenchPage != null) {
-				IViewPart forgeView = workbenchPage.findView(ForgeView.ID);
+				IViewPart forgeView = workbenchPage.findView(F1View.ID);
 				if (forgeView != null) {
 					forgeView.setFocus();
 				}
