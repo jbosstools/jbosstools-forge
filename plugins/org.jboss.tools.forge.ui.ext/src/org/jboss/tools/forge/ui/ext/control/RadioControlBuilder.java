@@ -83,7 +83,7 @@ public class RadioControlBuilder extends ControlBuilder<Control> {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.RADIO;
 	}
 

@@ -38,7 +38,7 @@ public class DirectoryChooserControlBuilder extends AbstractTextButtonControl {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.DIRECTORY_PICKER;
 	}
 

@@ -88,7 +88,7 @@ public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.DEFAULT;
 	}
 

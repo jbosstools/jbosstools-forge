@@ -42,7 +42,7 @@ public class FileChooserMultipleControlBuilder extends
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.FILE_PICKER;
 	}
 

@@ -77,7 +77,7 @@ public class TextBoxControlBuilder extends ControlBuilder<Text> {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.TEXTBOX;
 	}
 

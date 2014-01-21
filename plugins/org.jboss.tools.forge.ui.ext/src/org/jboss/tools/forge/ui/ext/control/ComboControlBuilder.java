@@ -75,7 +75,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.DROPDOWN;
 	}
 

@@ -63,7 +63,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 	 * 
 	 * @return
 	 */
-	protected abstract InputType getSupportedInputType();
+	protected abstract String getSupportedInputType();
 
 	/**
 	 * Returns the subclasses of {@link InputComponent}
@@ -88,8 +88,8 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		}
 
 		if (handles) {
-			InputType inputTypeHint = InputComponents.getInputType(input);
-			if (inputTypeHint != null && inputTypeHint != InputType.DEFAULT) {
+			String inputTypeHint = InputComponents.getInputType(input);
+			if (inputTypeHint != null && !inputTypeHint.equals(InputType.DEFAULT)) {
 				handles = Proxies.areEquivalent(inputTypeHint,
 						getSupportedInputType());
 			} else {

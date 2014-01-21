@@ -53,7 +53,7 @@ public class JavaClassChooserControlBuilder extends
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.JAVA_CLASS_PICKER;
 	}
 

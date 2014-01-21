@@ -38,7 +38,7 @@ public class TextBoxMultipleControlBuilder extends AbstractListButtonControl {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.TEXTBOX;
 	}
 

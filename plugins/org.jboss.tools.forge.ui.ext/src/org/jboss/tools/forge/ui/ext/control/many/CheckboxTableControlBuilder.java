@@ -154,7 +154,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.CHECKBOX;
 	}
 

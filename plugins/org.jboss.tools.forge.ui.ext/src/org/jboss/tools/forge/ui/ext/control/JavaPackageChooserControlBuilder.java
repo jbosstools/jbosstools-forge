@@ -127,7 +127,7 @@ public class JavaPackageChooserControlBuilder extends AbstractTextButtonControl 
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.JAVA_PACKAGE_PICKER;
 	}
 

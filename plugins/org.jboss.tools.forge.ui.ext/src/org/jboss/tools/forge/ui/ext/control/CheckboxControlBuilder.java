@@ -74,7 +74,7 @@ public class CheckboxControlBuilder extends ControlBuilder<Button> {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.CHECKBOX;
 	}
 

@@ -24,7 +24,7 @@ public class PasswordTextBoxControlBuilder extends TextBoxControlBuilder {
 	}
 
 	@Override
-	protected InputType getSupportedInputType() {
+	protected String getSupportedInputType() {
 		return InputType.SECRET;
 	}
 }
