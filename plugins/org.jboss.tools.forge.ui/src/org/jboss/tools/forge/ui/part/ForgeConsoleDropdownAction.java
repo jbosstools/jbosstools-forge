@@ -30,7 +30,7 @@ public class ForgeConsoleDropdownAction extends Action implements IMenuCreator {
 	}
 	
 	private ImageDescriptor createImageDescriptor() {
-		URL url = ForgeUIPlugin.getDefault().getBundle().getEntry("icons/jbossforge_icon_16px.png");
+		URL url = ForgeUIPlugin.getDefault().getBundle().getEntry("icons/forge.png");
 		return ImageDescriptor.createFromURL(url);
 	}
 
