@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.console;
+package org.jboss.tools.forge.ui.commands;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;

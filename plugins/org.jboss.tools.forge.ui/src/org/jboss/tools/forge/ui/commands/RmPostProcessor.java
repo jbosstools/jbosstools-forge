@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.console;
+package org.jboss.tools.forge.ui.commands;
 
 import java.io.File;
 import java.util.ArrayList;

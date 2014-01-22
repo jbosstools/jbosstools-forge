@@ -16,7 +16,7 @@ import org.jboss.tools.forge.core.io.ForgeAnsiCommandFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.console.ForgeCommandFilter;
+import org.jboss.tools.forge.ui.commands.ForgeCommandFilter;
 
 public class ForgeDocument extends Document {
 	
