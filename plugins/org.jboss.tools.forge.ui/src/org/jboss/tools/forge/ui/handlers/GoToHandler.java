@@ -1,16 +1,16 @@
-package org.jboss.tools.forge.ui.commands;
+package org.jboss.tools.forge.ui.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.jboss.tools.forge.ui.part.F1View;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
-public class StartHandler extends AbstractHandler {
+public class GoToHandler extends AbstractHandler {
 
 	public Object execute(ExecutionEvent executionEvent) {
 		F1View forgeView = ForgeHelper.getForgeView();
 		if (forgeView != null) {
-			ForgeHelper.startForge();
+			forgeView.goToSelection(forgeView.getSelection());
 		}
 		return null;		
 	}

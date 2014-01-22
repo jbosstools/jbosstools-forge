@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.commands;
+package org.jboss.tools.forge.ui.handlers;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
