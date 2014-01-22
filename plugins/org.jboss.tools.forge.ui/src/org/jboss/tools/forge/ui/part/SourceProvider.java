@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.commands;
+package org.jboss.tools.forge.ui.part;
 
 import java.util.HashMap;
 import java.util.Map;

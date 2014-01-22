@@ -29,7 +29,6 @@ import org.eclipse.ui.services.ISourceProviderService;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.commands.SourceProvider;
 import org.jboss.tools.forge.ui.console.ForgeTextViewer;
 import org.jboss.tools.forge.ui.document.ForgeDocument;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
