@@ -212,4 +212,8 @@
              label="Forge ">
        </themeElementCategory>
     </extension>
+   <extension-point 
+           id="consoles" 
+           name="Console Providers" 
+           schema="schema/consoles.exsd"/>
 </plugin>

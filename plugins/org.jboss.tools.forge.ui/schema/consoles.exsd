@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<schema targetNamespace="org.jboss.tools.forge.ui" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.jboss.tools.forge.ui" id="consoles" name="Console Providers"/>
+      </appinfo>
+      <documentation>
+         A Forge console provider creates or activates a Forge console, and appears as an item in the dropdown menu of the Forge console view.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="console"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  a fully qualified identifier of the target extension point
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="console">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  class implementing &lt;code&gt;org.jboss.tools.forge.ui.console.ForgeConsoleProvider&lt;/code&gt; that will be called when the associated action is invoked
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.jboss.tools.forge.ui.console.ForgeConsoleProvider"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+</schema>
