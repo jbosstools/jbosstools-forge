@@ -37,7 +37,7 @@
                   class implementing &lt;code&gt;org.jboss.tools.forge.ui.console.ForgeConsoleProvider&lt;/code&gt; that will be called when the associated action is invoked
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn="org.jboss.tools.forge.ui.console.ForgeConsoleProvider"/>
+                  <meta.attribute kind="java" basedOn="org.jboss.tools.forge.ui.console.ForgeConsole"/>
                </appinfo>
             </annotation>
          </attribute>

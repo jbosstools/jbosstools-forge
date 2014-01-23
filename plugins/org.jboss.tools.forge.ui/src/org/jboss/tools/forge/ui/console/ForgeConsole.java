@@ -1,5 +1,5 @@
 package org.jboss.tools.forge.ui.console;
 
-public class ForgeConsole {
+public interface ForgeConsole {
 
 }

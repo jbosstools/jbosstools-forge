@@ -3,9 +3,11 @@ package org.jboss.tools.forge.ui.console;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
+import org.jboss.tools.forge.ui.ForgeUIPlugin;
 
 public class ForgeConsoleManager {
 	
@@ -21,7 +23,11 @@ public class ForgeConsoleManager {
         		Platform.getExtensionRegistry().getExtensionPoint(
         				"org.jboss.tools.forge.ui.consoles");
         for (IConfigurationElement element : extensionPoint.getConfigurationElements()) {
-        	System.out.println("found an element: " + element.getName());
+        	try {
+				consoles.add((ForgeConsole)element.createExecutableExtension("class"));
+			} catch (CoreException e) {
+				ForgeUIPlugin.log(e);
+			}
         }
 		
 	}
