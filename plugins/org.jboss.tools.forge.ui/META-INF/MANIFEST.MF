@@ -31,4 +31,5 @@ Bundle-ClassPath: .
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Export-Package: org.jboss.tools.forge.importer,
+ org.jboss.tools.forge.ui.console,
  org.jboss.tools.forge.ui.util
