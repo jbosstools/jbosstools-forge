@@ -13,7 +13,8 @@ public class ForgeConsoleView extends ViewPart {
 
 	private Composite parent = null;
 	private PageBook pageBook = null;
-	private Control messagePage = null;
+	private MessagePage messagePage = null;
+	private Control messagePageControl = null;
 	
 	@Override
 	public void createPartControl(Composite parent) {
@@ -29,24 +30,30 @@ public class ForgeConsoleView extends ViewPart {
 		// nothing to do (yet)
 	}
 	
+	public void setMessage(String message) {
+		if (messagePage != null) {
+			messagePage.setMessage(message);
+		}
+	}
+	
 	private void createPageBook() {
 		pageBook = new PageBook(parent, SWT.NONE);
 	}
 	
 	private void createMessagePage() {
-		MessagePage page = new MessagePage();
-		page.createControl(pageBook);
-		page.init(new PageSite(getViewSite()));
-		page.setMessage("Forge Console View");
-		messagePage = page.getControl();
+		messagePage = new MessagePage();
+		messagePage.createControl(pageBook);
+		messagePage.init(new PageSite(getViewSite()));
+		messagePage.setMessage("Forge Console View");
+		messagePageControl = messagePage.getControl();
 	}
 	
 	private void showMessagePage() {
-		pageBook.showPage(messagePage);
+		pageBook.showPage(messagePageControl);
 	}
 	
 	private void createActions() {
-		ForgeConsoleDropdownAction action = new ForgeConsoleDropdownAction();
+		ForgeConsoleDropdownAction action = new ForgeConsoleDropdownAction(this);
 		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		toolBarManager.add(action);
 		getViewSite().getActionBars().updateActionBars();
