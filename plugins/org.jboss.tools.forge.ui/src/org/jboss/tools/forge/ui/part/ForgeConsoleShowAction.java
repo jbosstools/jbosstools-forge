@@ -1,6 +1,10 @@
 package org.jboss.tools.forge.ui.part;
 
+import java.net.URL;
+
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 
 public class ForgeConsoleShowAction extends Action {
@@ -9,14 +13,20 @@ public class ForgeConsoleShowAction extends Action {
 	private ForgeConsole forgeConsole = null;
 	
 	public ForgeConsoleShowAction(ForgeConsoleView forgeConsoleView, ForgeConsole forgeConsole) {
-		super(forgeConsole.toString(), AS_RADIO_BUTTON);
+		super(forgeConsole.getName(), AS_RADIO_BUTTON);
 		this.forgeConsoleView = forgeConsoleView;
 		this.forgeConsole = forgeConsole;
+		setImageDescriptor(createImageDescriptor());
 	}
 	
 	@Override
 	public void run() {
-		forgeConsoleView.setMessage(forgeConsole.toString());
+		forgeConsoleView.showForgeConsole(forgeConsole);
+	}
+
+	private ImageDescriptor createImageDescriptor() {
+		URL url = ForgeUIPlugin.getDefault().getBundle().getEntry("icons/forge.png");
+		return ImageDescriptor.createFromURL(url);
 	}
 
 }

@@ -63,7 +63,7 @@ public class ForgeConsoleDropdownAction extends Action implements IMenuCreator {
 	
 	private void addAction(Menu menu, ForgeConsole forgeConsole) {
 		Action action = new ForgeConsoleShowAction(forgeConsoleView, forgeConsole);
-		action.setText(forgeConsole.toString());
+		action.setChecked(forgeConsole.equals(forgeConsoleView.getConsole()));
 		ActionContributionItem item= new ActionContributionItem(action);
 		item.fill(menu, -1);
 	}
