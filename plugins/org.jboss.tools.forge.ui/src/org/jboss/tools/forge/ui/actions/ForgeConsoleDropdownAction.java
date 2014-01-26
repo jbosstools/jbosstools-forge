@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.part;
+package org.jboss.tools.forge.ui.actions;
 
 import java.net.URL;
 
@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 import org.jboss.tools.forge.ui.console.ForgeConsoleManager;
+import org.jboss.tools.forge.ui.part.ForgeConsoleView;
 
 public class ForgeConsoleDropdownAction extends Action implements IMenuCreator {
 	

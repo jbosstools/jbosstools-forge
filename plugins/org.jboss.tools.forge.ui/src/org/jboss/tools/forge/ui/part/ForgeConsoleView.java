@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
+import org.jboss.tools.forge.ui.actions.ForgeConsoleDropdownAction;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 import org.jboss.tools.forge.ui.console.ForgeConsoleManager;
 
