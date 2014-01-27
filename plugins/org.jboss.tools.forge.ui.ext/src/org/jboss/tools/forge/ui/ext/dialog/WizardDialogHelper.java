@@ -27,7 +27,6 @@ import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
-import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
@@ -56,11 +55,9 @@ public final class WizardDialogHelper {
 	}
 
 	public List<UICommand> getAllCandidatesAsList() {
-		List<UICommand> result = new ArrayList<UICommand>();
-		AddonRegistry addonRegistry = FurnaceService.INSTANCE
-				.getAddonRegistry();
-		Imported<UICommand> instances = addonRegistry
-				.getServices(UICommand.class);
+		List<UICommand> result = new ArrayList<>();
+		Imported<UICommand> instances = FurnaceService.INSTANCE
+				.lookupImported(UICommand.class);
 		for (UICommand uiCommand : instances) {
 			try {
 				if (!(uiCommand instanceof UIWizardStep)
@@ -75,11 +72,9 @@ public final class WizardDialogHelper {
 	}
 
 	public Map<String, UICommand> getAllCandidatesAsMap() {
-		Map<String, UICommand> result = new TreeMap<String, UICommand>();
-		AddonRegistry addonRegistry = FurnaceService.INSTANCE
-				.getAddonRegistry();
-		Imported<UICommand> instances = addonRegistry
-				.getServices(UICommand.class);
+		Map<String, UICommand> result = new TreeMap<>();
+		Imported<UICommand> instances = FurnaceService.INSTANCE
+				.lookupImported(UICommand.class);
 		for (UICommand uiCommand : instances) {
 			try {
 				if (!(uiCommand instanceof UIWizardStep)

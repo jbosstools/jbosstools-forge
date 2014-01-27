@@ -177,19 +177,19 @@ public class UICommandListDialog extends PopupDialog {
 	 * Returns each provider by a category
 	 */
 	private ForgeQuickAccessProvider[] getProviders() {
-		Map<String, List<UICommand>> categories = new TreeMap<String, List<UICommand>>();
+		Map<String, List<UICommand>> categories = new TreeMap<>();
 		for (UICommand command : wizardHelper.getAllCandidatesAsList()) {
 			String categoryName = getCategoryName(wizardHelper.getContext(),
 					command);
 			List<UICommand> list = categories.get(categoryName);
 			if (list == null) {
-				list = new ArrayList<UICommand>();
+				list = new ArrayList<>();
 				categories.put(categoryName, list);
 			}
 			list.add(command);
 		}
 		// Create Providers for each category
-		Set<ForgeQuickAccessProvider> providers = new TreeSet<ForgeQuickAccessProvider>();
+		Set<ForgeQuickAccessProvider> providers = new TreeSet<>();
 		for (Entry<String, List<UICommand>> entry : categories.entrySet()) {
 			providers.add(new ForgeQuickAccessProvider(entry.getKey(),
 					wizardHelper.getContext(), entry.getValue()));

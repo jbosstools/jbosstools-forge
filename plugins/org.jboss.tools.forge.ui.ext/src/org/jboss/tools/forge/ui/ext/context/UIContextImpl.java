@@ -42,7 +42,7 @@ import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class UIContextImpl extends AbstractUIContext {
-	private UISelectionImpl<?> currentSelection;
+	private final UISelectionImpl<?> currentSelection;
 
 	private final UIProvider provider;
 
@@ -50,7 +50,7 @@ public class UIContextImpl extends AbstractUIContext {
 		this.provider = provider;
 		List<Object> selectedElements = selection == null ? Collections.EMPTY_LIST
 				: selection.toList();
-		List<Object> result = new LinkedList<Object>();
+		List<Object> result = new LinkedList<>();
 		ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		Converter<File, Resource> converter = converterFactory.getConverter(

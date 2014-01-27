@@ -74,7 +74,7 @@ public enum FurnaceService {
 	public <S> Imported<S> lookupImported(Class<S> service) {
 		Imported<S> instance = null;
 		if (forge != null) {
-			instance = forge.getAddonRegistry().getServices(service);
+			instance = forge.getAddonRegistry().getServices(service.getName());
 		}
 		return instance;
 	}
@@ -82,7 +82,7 @@ public enum FurnaceService {
 	public <S> S lookup(Class<S> service) {
 		Imported<S> instance = null;
 		if (forge != null) {
-			instance = forge.getAddonRegistry().getServices(service);
+			instance = forge.getAddonRegistry().getServices(service.getName());
 		}
 		return (instance == null) ? null : instance.get();
 	}
