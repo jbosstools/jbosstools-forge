@@ -2,10 +2,11 @@ package org.jboss.tools.forge.ui.part;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.part.Page;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.part.IPage;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 
-public class ForgeConsolePage extends Page {
+public class ForgeConsolePage implements IPage {
 	
 	private ForgeConsole forgeConsole = null;
 	private Control control = null;
@@ -13,7 +14,7 @@ public class ForgeConsolePage extends Page {
 	public ForgeConsolePage(ForgeConsole forgeConsole) {
 		this.forgeConsole = forgeConsole;
 	}
-
+	
 	@Override
 	public void createControl(Composite parent) {
 		control = forgeConsole.createControl(parent);
@@ -31,4 +32,16 @@ public class ForgeConsolePage extends Page {
 		}
 	}
 	
+	@Override
+	public void dispose() {
+        Control control = getControl();
+        if (control != null && !control.isDisposed()) {
+			control.dispose();
+		}
+	}
+
+	@Override
+	public void setActionBars(IActionBars actionBars) {
+		System.out.println(actionBars);
+	}
 }

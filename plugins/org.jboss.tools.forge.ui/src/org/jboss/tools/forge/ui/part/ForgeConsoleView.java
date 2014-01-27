@@ -8,7 +8,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.PageBook;
-import org.eclipse.ui.part.PageSite;
 import org.eclipse.ui.part.ViewPart;
 import org.jboss.tools.forge.ui.actions.ForgeConsoleDropdownAction;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
@@ -53,7 +52,6 @@ public class ForgeConsoleView extends ViewPart {
 			ForgeConsolePage forgeConsolePage = new ForgeConsolePage(forgeConsole);
 			forgeConsolePage.createControl(pageBook);
 			consoleToControl.put(forgeConsole, forgeConsolePage.getControl());
-			forgeConsolePage.init(new PageSite(getViewSite()));
 		}
 	}
 	
