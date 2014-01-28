@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.dialog.UICommandListDialog;
@@ -39,6 +40,7 @@ public class ForgeCommandHandler extends AbstractHandler {
 						String taskName = "Please wait while Forge 2 is started.";
 						try {
 							monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
+							ForgeCorePlugin.getDefault().startFurnace();
 							FurnaceService.INSTANCE.waitUntilContainerIsStarted();
 							// hack to make progress monitor stick until all commands are loaded
 							if (selection instanceof IStructuredSelection) {

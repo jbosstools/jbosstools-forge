@@ -36,14 +36,30 @@ public class ForgeCorePlugin extends Plugin {
 	private static ForgeCorePlugin plugin;
 
 	private URLClassLoader loader;
+	private Furnace furnace;
 
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
-		Furnace furnace = getFurnace(context);
+		furnace = getFurnace(context);
 		FurnaceService.INSTANCE.setFurnace(furnace);
-		FurnaceService.INSTANCE.start(loader);
 		plugin = this;
+	}
+	
+	public void startFurnace() {
+		if (!isFurnaceStarted()) {
+			FurnaceService.INSTANCE.start(loader);
+		}
+	}
+	
+	public boolean isFurnaceStarted() {
+		return FurnaceService.INSTANCE.getContainerStatus().isStarted();
+	}
+	
+	public void stopFurnace() {
+		if (isFurnaceStarted()) {
+			FurnaceService.INSTANCE.stop();
+		}
 	}
 
 	private Furnace getFurnace(final BundleContext context) throws Exception {
@@ -137,7 +153,7 @@ public class ForgeCorePlugin extends Plugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
-		FurnaceService.INSTANCE.stop();
+		stopFurnace();
 	}
 
 	public static ForgeCorePlugin getDefault() {
