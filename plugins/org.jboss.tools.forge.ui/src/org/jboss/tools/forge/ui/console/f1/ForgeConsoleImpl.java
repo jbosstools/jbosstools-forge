@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.console;
+package org.jboss.tools.forge.ui.console.f1;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
@@ -7,9 +7,10 @@ import org.jboss.tools.forge.ui.actions.f1.GoToAction;
 import org.jboss.tools.forge.ui.actions.f1.LinkAction;
 import org.jboss.tools.forge.ui.actions.f1.StartF1Action;
 import org.jboss.tools.forge.ui.actions.f1.StopF1Action;
+import org.jboss.tools.forge.ui.console.ForgeConsole;
 import org.jboss.tools.forge.ui.part.ForgeTextViewer;
 
-public class ForgeOneConsole implements ForgeConsole {
+public class ForgeConsoleImpl implements ForgeConsole {
 
 	@Override
 	public String getName() {

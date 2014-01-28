@@ -219,7 +219,7 @@
    <extension
          point="org.jboss.tools.forge.ui.consoles">
       <console
-            class="org.jboss.tools.forge.ui.console.ForgeOneConsole">
+            class="org.jboss.tools.forge.ui.console.f1.ForgeConsoleImpl">
       </console>
    </extension>
 </plugin>
