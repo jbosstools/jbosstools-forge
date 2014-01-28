@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.aesh.ui.view.AeshTextViewer;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 
-public class ForgeTwoConsole implements ForgeConsole {
+public class ForgeConsoleImpl implements ForgeConsole {
 
 	@Override
 	public String getName() {
