@@ -21,13 +21,13 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.jboss.forge.addon.ui.command.CommandFactory;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
-import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.ForgeUIProvider;
@@ -56,9 +56,9 @@ public final class WizardDialogHelper {
 
 	public List<UICommand> getAllCandidatesAsList() {
 		List<UICommand> result = new ArrayList<>();
-		Imported<UICommand> instances = FurnaceService.INSTANCE
-				.lookupImported(UICommand.class);
-		for (UICommand uiCommand : instances) {
+		CommandFactory commandFactory = FurnaceService.INSTANCE
+				.lookup(CommandFactory.class);
+		for (UICommand uiCommand : commandFactory.getCommands()) {
 			try {
 				if (!(uiCommand instanceof UIWizardStep)
 						&& uiCommand.isEnabled(context)) {
@@ -73,9 +73,9 @@ public final class WizardDialogHelper {
 
 	public Map<String, UICommand> getAllCandidatesAsMap() {
 		Map<String, UICommand> result = new TreeMap<>();
-		Imported<UICommand> instances = FurnaceService.INSTANCE
-				.lookupImported(UICommand.class);
-		for (UICommand uiCommand : instances) {
+		CommandFactory commandFactory = FurnaceService.INSTANCE
+				.lookup(CommandFactory.class);
+		for (UICommand uiCommand : commandFactory.getCommands()) {
 			try {
 				if (!(uiCommand instanceof UIWizardStep)
 						&& uiCommand.isEnabled(context)) {
