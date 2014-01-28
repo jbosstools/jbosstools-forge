@@ -5,6 +5,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.aesh.ui.view.AeshTextViewer;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
+import org.jboss.tools.forge.ui.ext.actions.StartF2Action;
+import org.jboss.tools.forge.ui.ext.actions.StopF2Action;
 
 public class ForgeConsoleImpl implements ForgeConsole {
 
@@ -20,7 +22,10 @@ public class ForgeConsoleImpl implements ForgeConsole {
 	
 	@Override
 	public IAction[] createActions() {
-		return new IAction[0];
+		return new IAction[] {
+				new StartF2Action(),
+				new StopF2Action()
+		};
 	}
 	
 }
