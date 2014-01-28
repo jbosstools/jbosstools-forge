@@ -100,7 +100,7 @@ public class ForgeWizard extends MutableWizard {
 						if (result != null) {
 							String message = result.getMessage();
 							if (message != null) {
-								ForgeUIPlugin.displayMessage("Forge Command",
+								ForgeUIPlugin.displayMessage(getWindowTitle(),
 										message, NotificationType.INFO);
 							}
 							if (result instanceof Failed) {
@@ -109,7 +109,7 @@ public class ForgeWizard extends MutableWizard {
 								if (exception != null) {
 									ForgeUIPlugin.log(exception);
 									ForgeUIPlugin.displayMessage(
-											"Forge Command", String
+											getWindowTitle(), String
 													.valueOf(exception
 															.getMessage()),
 											NotificationType.ERROR);
