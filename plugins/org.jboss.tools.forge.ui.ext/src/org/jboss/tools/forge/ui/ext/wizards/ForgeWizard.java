@@ -74,10 +74,7 @@ public class ForgeWizard extends MutableWizard {
 	public void performFinish(final IRunnableContext container,
 			final Shell shell) throws InvocationTargetException,
 			InterruptedException {
-		// Cannot fork, otherwise Eclipse Shell in UIPrompt will throw an
-		// exception
-		boolean fork = false;
-		container.run(fork, true, new IRunnableWithProgress() {
+		container.run(true, true, new IRunnableWithProgress() {
 			@Override
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException, InterruptedException {
