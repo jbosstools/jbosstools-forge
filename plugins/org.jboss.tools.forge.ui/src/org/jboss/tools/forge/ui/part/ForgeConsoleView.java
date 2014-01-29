@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
@@ -18,7 +17,7 @@ public class ForgeConsoleView extends ViewPart {
 	public static final String FORGE_CONSOLE_ACTION_GROUP = "org.jboss.tools.forge.ui.console.actions";
 
 	private Composite parent = null;
-	private PageBook pageBook = null;
+	private ForgeConsolePageBook pageBook = null;
 	private Map<ForgeConsole, ForgeConsolePage> consoleToPage = new HashMap<ForgeConsole, ForgeConsolePage>();
 	private ForgeConsole current = null;
 	
@@ -56,10 +55,14 @@ public class ForgeConsoleView extends ViewPart {
 		return current;
 	}
 	
+	PageBook getPageBook() {
+		return pageBook;
+	}
+	
 	private void createPageBook() {
-		pageBook = new PageBook(parent, SWT.NONE);
+		pageBook = new ForgeConsolePageBook(this, parent);
 		for (ForgeConsole forgeConsole : ForgeConsoleManager.INSTANCE.getConsoles()) {
-			ForgeConsolePage forgeConsolePage = new ForgeConsolePage(forgeConsole);
+			ForgeConsolePage forgeConsolePage = new ForgeConsolePage(this, forgeConsole);
 			forgeConsolePage.initialize(getViewSite());
 			forgeConsolePage.createControl(pageBook);
 			consoleToPage.put(forgeConsole, forgeConsolePage);

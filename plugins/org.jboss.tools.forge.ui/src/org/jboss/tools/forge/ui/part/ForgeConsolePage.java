@@ -8,21 +8,30 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.SubActionBars;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.IPageSite;
+import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.PageSite;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 
 public class ForgeConsolePage implements IPage {
 	
+	private ForgeConsoleView forgeConsoleView = null;
 	private ForgeConsole forgeConsole = null;
+	private PageBook pageBook = null;
 	private Control control = null;
 	private IPageSite pageSite = null;
 	private SubActionBars actionBars = null;
 	
-	public ForgeConsolePage(ForgeConsole forgeConsole) {
+	public ForgeConsolePage(ForgeConsoleView forgeConsoleView, ForgeConsole forgeConsole) {
+		this.forgeConsoleView = forgeConsoleView;
 		this.forgeConsole = forgeConsole;
 	}
 	
-	@Override
+	public void createControl(PageBook pageBook) {
+		this.pageBook = pageBook;
+		createControl((Composite)pageBook);
+	}
+	
+	@Override 
 	public void createControl(Composite parent) {
 		control = forgeConsole.createControl(parent);
 	}
