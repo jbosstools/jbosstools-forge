@@ -37,7 +37,7 @@ public enum ImportEclipseProjectListener implements ProjectListener,
 
 	public void doImport() {
 		for (Project project : projects) {
-			DirectoryResource projectRoot = project.getProjectRoot();
+			DirectoryResource projectRoot = project.getRootDirectory();
 			String baseDirPath = projectRoot.getParent()
 					.getFullyQualifiedName();
 			String moduleLocation = projectRoot.getName();
