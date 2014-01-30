@@ -17,6 +17,10 @@ import org.jboss.tools.forge.ui.util.ForgeHelper;
 public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
 	
 	private String makePlatformIndependent(String path) {
+		if (File.separatorChar == '\\') {
+			// we are on Windows
+			path = path.replace('\\', '/');
+		}
 		int index = path.indexOf('/');
 		return (index != -1) ? path.substring(index) : path;
 	}
