@@ -1,12 +1,8 @@
 package org.jboss.tools.forge.ui.part;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
 import org.jboss.tools.forge.ui.actions.ForgeConsoleDropdownAction;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
@@ -17,8 +13,7 @@ public class ForgeConsoleView extends ViewPart {
 	public static final String FORGE_CONSOLE_ACTION_GROUP = "org.jboss.tools.forge.ui.console.actions";
 
 	private Composite parent = null;
-	private ForgeConsolePageBook pageBook = null;
-	private Map<ForgeConsole, ForgeConsolePage> consoleToPage = new HashMap<ForgeConsole, ForgeConsolePage>();
+	private ForgeConsolePageBook forgeConsolePageBook = null;
 	private ForgeConsole current = null;
 	
 	@Override
@@ -35,38 +30,15 @@ public class ForgeConsoleView extends ViewPart {
 	}
 	
 	public void showForgeConsole(ForgeConsole forgeConsole) {
-		if (current != null) {
-			ForgeConsolePage currentPage = consoleToPage.get(current);
-			if (currentPage != null) {
-				currentPage.deactivateActionBars();
-			}
-		}
-		ForgeConsolePage page = consoleToPage.get(forgeConsole);
-		if (page != null) {
-			setContentDescription(forgeConsole.getName());
-			pageBook.showPage(page.getControl());
-			page.activateActionBars();
-			current = forgeConsole;
-		}
-		getViewSite().getActionBars().updateActionBars();
+		forgeConsolePageBook.showForgeConsole(forgeConsole);
 	}
 	
 	public ForgeConsole getConsole() {
 		return current;
 	}
 	
-	PageBook getPageBook() {
-		return pageBook;
-	}
-	
 	private void createPageBook() {
-		pageBook = new ForgeConsolePageBook(this, parent);
-		for (ForgeConsole forgeConsole : ForgeConsoleManager.INSTANCE.getConsoles()) {
-			ForgeConsolePage forgeConsolePage = new ForgeConsolePage(this, forgeConsole);
-			forgeConsolePage.initialize(getViewSite());
-			forgeConsolePage.createControl(pageBook);
-			consoleToPage.put(forgeConsole, forgeConsolePage);
-		}
+		forgeConsolePageBook = new ForgeConsolePageBook(this, parent);
 	}
 	
 	private void createActions() {
@@ -77,6 +49,10 @@ public class ForgeConsoleView extends ViewPart {
 		// appear after the dropdown instead of before (Eclipse bug?)
 		toolBarManager.add(new Separator("dummy")); 
 		toolBarManager.add(action);
+	}
+	
+	public void setStatusMessage(String message) {
+		setContentDescription(message);
 	}
 	
 }
