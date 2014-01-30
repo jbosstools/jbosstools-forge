@@ -11,8 +11,8 @@
    <version>2.0.1-SNAPSHOT</version>
    <packaging>eclipse-plugin</packaging>
    <properties>
-      <version.furnace>2.0.0.CR2</version.furnace>
-      <version.forge.addons>2.0.0-SNAPSHOT</version.forge.addons>
+      <version.furnace>2.0.0.Final</version.furnace>
+      <version.forge.addons>2.0.0.Final</version.forge.addons>
    </properties>
    <build>
       <plugins>
