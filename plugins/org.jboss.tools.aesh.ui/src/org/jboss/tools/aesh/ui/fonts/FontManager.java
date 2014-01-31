@@ -29,26 +29,26 @@ public class FontManager {
 	private FontData createFontDataFromNormal() {
 		FontData normalData = NORMAL.getFontData()[0];
 		FontData result = new FontData();
-		result.name = normalData.name;
+		result.setName(normalData.getName());
 		result.height = normalData.height;
 		return result;
 	}
 	
 	private void initializeItalic() {
 		FontData italicData = createFontDataFromNormal();
-		italicData.style = SWT.ITALIC;
+		italicData.setStyle(SWT.ITALIC);
 		ITALIC = new Font(NORMAL.getDevice(), italicData);
 	}
 	
 	private void initializeBold() {
 		FontData boldData = createFontDataFromNormal();
-		boldData.style = SWT.BOLD;
+		boldData.setStyle(SWT.BOLD);
 		BOLD = new Font(NORMAL.getDevice(), boldData);
 	}
 	
 	private void initializeItalicBold() {
 		FontData italicBoldData = createFontDataFromNormal();
-		italicBoldData.style = SWT.BOLD | SWT.ITALIC;
+		italicBoldData.setStyle(SWT.BOLD | SWT.ITALIC);
 		ITALIC_BOLD = new Font(NORMAL.getDevice(), italicBoldData);
 	}
 	
