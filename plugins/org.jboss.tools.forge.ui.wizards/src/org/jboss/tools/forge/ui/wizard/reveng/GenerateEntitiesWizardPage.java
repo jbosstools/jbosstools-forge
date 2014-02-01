@@ -488,6 +488,7 @@ public class GenerateEntitiesWizardPage extends AbstractForgeWizardPage {
 					}
 				}
 			}
+			jarFile.close();
 		} catch (Exception e) {
 			// ignore and return an empty list
 		}
