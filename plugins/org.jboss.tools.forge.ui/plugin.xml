@@ -72,7 +72,7 @@
 	<extension
 	      point="org.eclipse.ui.menus">
 	   <menuContribution
-             locationURI="toolbar:org.jboss.tools.forge.ui.view">
+             locationURI="toolbar:org.jboss.tools.forge.ui.f1">
 	       <command
 	             commandId="org.jboss.tools.forge.ui.start"
 	             icon="icons/start.gif"
