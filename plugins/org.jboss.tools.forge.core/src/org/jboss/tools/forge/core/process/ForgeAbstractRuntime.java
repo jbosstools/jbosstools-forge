@@ -40,7 +40,9 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	}
 	
 	public void start(IProgressMonitor progressMonitor) {
+		errorMessage = null;
 		IStreamListener startupListener = null;
+		IStreamListener errorListener = null;
 		if (progressMonitor == null) {
 			progressMonitor = new NullProgressMonitor();
 		}
@@ -49,10 +51,6 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			startupListener = new StartupListener();
 			process = ForgeLaunchHelper.launch(getName(), getLocation());
 			if (process != null) {
-				if (process.isTerminated()) {
-					progressMonitor.done();
-					return;
-				}
 				setNewState(STATE_STARTING);
 				DebugPlugin.getDefault().addDebugEventListener(terminateListener);
 				IStreamsProxy streamsProxy = getStreamsProxy();
@@ -66,6 +64,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 					IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
 					if (errorStreamMonitor != null) {
 						errorStreamMonitor.addListener(masterStreamListener);
+						errorListener = new ErrorListener(errorStreamMonitor);
 					}
 				}
 			}
@@ -98,6 +97,10 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 					if (outputStreamMonitor != null) {
 						outputStreamMonitor.removeListener(startupListener);
 					}
+					IStreamMonitor errorStreamMonitor = streamsProxy.getErrorStreamMonitor();
+					if (errorStreamMonitor != null && errorListener != null) {
+						errorStreamMonitor.removeListener(errorListener);
+					}
 				}
 			}
 			progressMonitor.done();
@@ -107,6 +110,11 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private boolean commandResultAvailable = false;
 	private String commandResult = null;
 	private Object mutex = new Object();
+	private String errorMessage = null;
+	
+	public String getErrorMessage() {
+		return errorMessage;
+	}
 	
 	public String sendCommand(String str) {
 //		System.out.println("sendCommand(" + str + ")");
@@ -223,6 +231,22 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			getStreamsProxy().getOutputStreamMonitor().removeListener(this);
 			setNewState(STATE_RUNNING);
 		}		
+	}
+	
+	private class ErrorListener implements IStreamListener {
+		private IStreamMonitor fMonitor;
+		public ErrorListener(IStreamMonitor monitor) {
+			fMonitor = monitor;
+			monitor.addListener(this);
+			// make sure that output is processed if forge process dies quickly
+			streamAppended(null, fMonitor);
+		}
+		@Override
+		public void streamAppended(String text, IStreamMonitor monitor) {
+			if (text == null) return;
+			errorMessage = monitor.getContents();
+			ForgeCorePlugin.logErrorMessage(errorMessage);
+		}
 	}
 	
 	private class MasterStreamListener implements IStreamListener {

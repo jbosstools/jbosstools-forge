@@ -4,6 +4,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
@@ -39,6 +41,17 @@ public class ForgeHelper {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				runtime.start(monitor);
+				if (runtime.getErrorMessage() != null) {
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							MessageDialog.openError(
+									null, 
+									"Forge Startup Error", 
+									runtime.getErrorMessage());
+						}			
+					});
+				}
 				return Status.OK_STATUS;
 			}
 		};

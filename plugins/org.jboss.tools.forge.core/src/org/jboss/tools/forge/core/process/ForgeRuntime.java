@@ -21,6 +21,8 @@ public interface ForgeRuntime {
 	void start(IProgressMonitor progressMonitor);
 	void stop(IProgressMonitor progressMonitor);
 	
+	String getErrorMessage();
+	
 	void sendInput(String str);
 	String sendCommand(String str);
 	
