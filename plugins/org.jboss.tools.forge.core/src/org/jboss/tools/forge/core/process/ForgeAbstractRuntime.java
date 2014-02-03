@@ -49,6 +49,10 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			startupListener = new StartupListener();
 			process = ForgeLaunchHelper.launch(getName(), getLocation());
 			if (process != null) {
+				if (process.isTerminated()) {
+					progressMonitor.done();
+					return;
+				}
 				setNewState(STATE_STARTING);
 				DebugPlugin.getDefault().addDebugEventListener(terminateListener);
 				IStreamsProxy streamsProxy = getStreamsProxy();
@@ -67,6 +71,11 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			}
 			progressMonitor.worked(1);
 			while (STATE_STARTING.equals(state)) {
+				if (process.isTerminated()) {
+					setNewState(STATE_NOT_RUNNING);
+					progressMonitor.done();
+					return;
+				}
 				if (progressMonitor.isCanceled()) {
 					terminate();
 				} else {
@@ -80,7 +89,9 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			}
 		} finally {
 			if (process != null) {
-				ForgeCorePlugin.addForgeProcess(process);
+				if (!process.isTerminated()) {
+					ForgeCorePlugin.addForgeProcess(process);
+				}
 				IStreamsProxy streamsProxy = getStreamsProxy();
 				if (streamsProxy != null) {
 					IStreamMonitor outputStreamMonitor = streamsProxy.getOutputStreamMonitor();

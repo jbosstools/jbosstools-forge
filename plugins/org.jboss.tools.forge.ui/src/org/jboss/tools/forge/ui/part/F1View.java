@@ -173,13 +173,15 @@ public class F1View extends ViewPart implements PropertyChangeListener, IShowInT
 				Thread waitThread = new Thread(new Runnable() {
 					@Override
 					public void run() {
-						while (!ForgeHelper.isForgeRunning()) {
-							try {
+						try {
+							Thread.sleep(1000);
+							while (ForgeRuntime.STATE_STARTING.equals(
+									ForgeHelper.getDefaultRuntime().getState())) {
 								Thread.sleep(1000);
 								updateNonRunningPage();
-							} catch (InterruptedException e) {
-								ForgeUIPlugin.log(e);
 							}
+						} catch (InterruptedException e) {
+							ForgeUIPlugin.log(e);
 						}
 					}			
 				});
