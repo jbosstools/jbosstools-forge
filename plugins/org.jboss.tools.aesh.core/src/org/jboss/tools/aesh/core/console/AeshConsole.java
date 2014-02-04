@@ -55,7 +55,7 @@ public class AeshConsole {
 									.addDefaultValue("en 1 0")
 									.addDefaultValue("to 2 0").fieldName("bar")
 									.type(String.class).create())
-					.generateParameter();
+					.generateCommand();
 			CommandRegistry registry = new AeshCommandRegistryBuilder()
 					.command(fooCommand, FooCommand.class).create();
 			console = new AeshConsoleBuilder().commandRegistry(registry)
