@@ -3,6 +3,8 @@ package org.jboss.tools.forge.ui.console.f1;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.actions.f1.GoToAction;
 import org.jboss.tools.forge.ui.actions.f1.LinkAction;
 import org.jboss.tools.forge.ui.actions.f1.StartF1Action;
@@ -30,6 +32,11 @@ public class ForgeConsoleImpl implements ForgeConsole {
 				new GoToAction(),
 				new LinkAction()
 		};
+	}
+	
+	@Override
+	public ForgeRuntime getRuntime() {
+		return ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 	}
 	
 }
