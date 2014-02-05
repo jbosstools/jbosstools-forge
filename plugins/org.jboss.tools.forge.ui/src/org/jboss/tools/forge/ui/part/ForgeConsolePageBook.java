@@ -42,8 +42,6 @@ public class ForgeConsolePageBook extends PageBook {
 		}
 		ForgeConsolePage page = forgeConsoleToPage.get(forgeConsole);
 		if (page != null) {
-//			forgeConsoleView.setStatusMessage(forgeConsole.getName());
-//			showPage(page.getControl());
 			page.show();
 			page.activateActionBars();
 			currentPage = page;
