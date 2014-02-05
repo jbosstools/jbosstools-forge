@@ -166,7 +166,7 @@ public class ForgeDocument extends Document {
     	}
     }
     
-    private void reset() {
+    public void reset() {
 		set("");
 		moveCursorTo(0);
 		styleRanges.clear();
