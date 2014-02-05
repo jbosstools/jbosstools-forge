@@ -9,6 +9,7 @@ import org.eclipse.ui.SubActionBars;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageSite;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 
 public class ForgeConsolePage implements IPage {
@@ -75,6 +76,16 @@ public class ForgeConsolePage implements IPage {
 	
 	void deactivateActionBars() {
 		actionBars.deactivate();
+	}
+	
+	void show() {
+		forgeConsolePageBook.showPage(getControl());
+		forgeConsolePageBook.updateStatusMessage(getStatusMessage());
+	}
+	
+	String getStatusMessage() {
+		ForgeRuntime runtime = forgeConsole.getRuntime();
+		return "Forge " + runtime.getName() + " @ " + runtime.getLocation();
 	}
 	
 }
