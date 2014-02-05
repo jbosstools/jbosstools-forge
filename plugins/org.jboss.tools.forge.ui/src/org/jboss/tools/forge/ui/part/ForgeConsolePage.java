@@ -1,8 +1,12 @@
 package org.jboss.tools.forge.ui.part;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.SubActionBars;
@@ -12,7 +16,7 @@ import org.eclipse.ui.part.PageSite;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 
-public class ForgeConsolePage implements IPage {
+public class ForgeConsolePage implements IPage, PropertyChangeListener {
 	
 	private ForgeConsolePageBook forgeConsolePageBook = null;
 	private ForgeConsole forgeConsole = null;
@@ -23,6 +27,7 @@ public class ForgeConsolePage implements IPage {
 	public ForgeConsolePage(ForgeConsolePageBook forgeConsolePageBook, ForgeConsole forgeConsole) {
 		this.forgeConsolePageBook = forgeConsolePageBook;
 		this.forgeConsole = forgeConsole;
+		forgeConsole.getRuntime().addPropertyChangeListener(this);
 	}
 	
 	public void createControl() {
@@ -59,6 +64,12 @@ public class ForgeConsolePage implements IPage {
 	public void setActionBars(IActionBars actionBars) {
 	}
 	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
+		updateActionBars();
+	}
+	
 	void initialize(IViewSite viewSite) {
 		pageSite = new PageSite(viewSite);
 		actionBars = (SubActionBars)pageSite.getActionBars();
@@ -88,4 +99,19 @@ public class ForgeConsolePage implements IPage {
 		return "Forge " + runtime.getName() + " @ " + runtime.getLocation();
 	}
 	
+	private void updateActionBars() {
+		// run in UI thread
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				// without calls to deactivate and activate the actionBars
+				// do not update properly
+				actionBars.deactivate();;
+				actionBars.updateActionBars();
+				actionBars.activate();
+				actionBars.updateActionBars();
+			}			
+		});
+	}
+
 }
