@@ -23,7 +23,6 @@ public class ForgeConsolePage implements IPage, PropertyChangeListener {
 	private Control control = null;
 	private IPageSite pageSite = null;
 	private SubActionBars actionBars = null;
-	private String baseStatusMessage = null;
 	
 	public ForgeConsolePage(ForgeConsolePageBook forgeConsolePageBook, ForgeConsole forgeConsole) {
 		this.forgeConsolePageBook = forgeConsolePageBook;
@@ -95,16 +94,8 @@ public class ForgeConsolePage implements IPage, PropertyChangeListener {
 		forgeConsolePageBook.updateStatusMessage(getStatusMessage());
 	}
 	
-	private void initBaseStatusMessage() {
-		ForgeRuntime runtime = forgeConsole.getRuntime();
-		baseStatusMessage = "Forge " + runtime.getVersion() + " - " + runtime.getType();
-	}
-	
 	String getStatusMessage() {
-		if (baseStatusMessage == null) {
-			initBaseStatusMessage();
-		}
-		return baseStatusMessage;
+		return forgeConsole.getLabel();
 	}
 	
 	private void updateActionBars() {

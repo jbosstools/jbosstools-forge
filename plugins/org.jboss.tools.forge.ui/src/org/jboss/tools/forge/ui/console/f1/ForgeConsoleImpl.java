@@ -21,9 +21,11 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	
 	private ForgeTextViewer forgeTextViewer = null;
 	private ForgeRuntime forgeRuntime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
-
+	private String label = null;
+	
 	public ForgeConsoleImpl() {
 		getRuntime().addPropertyChangeListener(this);
+		label = "Forge " + getRuntime().getVersion() + " - " + getRuntime().getType();
 	}
 	
 	@Override
@@ -64,6 +66,11 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 				ForgeDocument.INSTANCE.reset();
 			}			
 		});
+	}
+	
+	@Override
+	public String getLabel() {
+		return label;
 	}
 	
 }

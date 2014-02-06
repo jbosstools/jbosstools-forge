@@ -11,6 +11,12 @@ import org.jboss.tools.forge.ui.ext.actions.StartF2Action;
 import org.jboss.tools.forge.ui.ext.actions.StopF2Action;
 
 public class ForgeConsoleImpl implements ForgeConsole {
+	
+	private String label = null;
+	
+	public ForgeConsoleImpl() {
+		label = "Forge " + getRuntime().getVersion() + " - " + getRuntime().getType();		
+	}
 
 	@Override
 	public Control createControl(Composite parent) {
@@ -28,6 +34,11 @@ public class ForgeConsoleImpl implements ForgeConsole {
 	@Override
 	public ForgeRuntime getRuntime() {
 		return FurnaceRuntime.INSTANCE;
+	}
+	
+	@Override
+	public String getLabel() {
+		return label;
 	}
 	
 }
