@@ -2,6 +2,7 @@ package org.jboss.tools.forge.core.process;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,8 @@ import org.jboss.tools.forge.core.io.ForgeOutputListener;
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	private IProcess process = null;
-	private String state = STATE_NOT_RUNNING;	
+	private String state = STATE_NOT_RUNNING;
+	private String version = null;
 	private final TerminateListener terminateListener = new TerminateListener();	
 	private MasterStreamListener masterStreamListener = new MasterStreamListener();
 	private CommandResultListener commandResultListener = new CommandResultListener();
@@ -37,6 +39,32 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	public String getState() {
 		return state;
+	}
+	
+	public String getVersion() {
+		if (version == null) {
+			version = initializeVersion();
+		}
+		return version;
+	}
+	
+	private String initializeVersion() {
+		String result = "unknown version";
+		String location = getLocation();
+		if (location == null) return result;
+		location += "/modules/org/jboss/forge/shell/api/main";
+		File file = new File(location);
+		if (!file.exists()) return result;
+		String[] candidates = file.list();
+		for (String candidate : candidates) {
+			if (candidate.startsWith("forge-shell-api-")) {
+				int end = candidate.indexOf(".jar");
+				if (end != -1) {
+					result = candidate.substring("forge-shell-api-".length(), end);
+				}
+			}
+		}
+		return result;
 	}
 	
 	public void start(IProgressMonitor progressMonitor) {

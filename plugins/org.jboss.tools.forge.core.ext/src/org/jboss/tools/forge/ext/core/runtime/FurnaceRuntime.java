@@ -26,14 +26,18 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	@Override
 	public String getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return "embedded";
 	}
 
 	@Override
 	public String getState() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public String getVersion() {
+		return "2.0.0.Final";
 	}
 
 	@Override

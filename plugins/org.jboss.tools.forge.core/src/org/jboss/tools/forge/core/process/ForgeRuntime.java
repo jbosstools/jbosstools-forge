@@ -17,6 +17,7 @@ public interface ForgeRuntime {
 	String getLocation();
 	String getType();
 	String getState();
+	String getVersion();
 	
 	void start(IProgressMonitor progressMonitor);
 	void stop(IProgressMonitor progressMonitor);
