@@ -27,11 +27,6 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	}
 	
 	@Override
-	public String getName() {
-		return "Forge One";
-	}
-
-	@Override
 	public Control createControl(Composite parent) {
 		if (forgeTextViewer == null) {
 			forgeTextViewer = new ForgeTextViewer(parent);

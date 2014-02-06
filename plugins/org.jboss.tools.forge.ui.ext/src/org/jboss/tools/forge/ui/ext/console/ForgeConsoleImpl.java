@@ -13,11 +13,6 @@ import org.jboss.tools.forge.ui.ext.actions.StopF2Action;
 public class ForgeConsoleImpl implements ForgeConsole {
 
 	@Override
-	public String getName() {
-		return "Forge Two";
-	}
-
-	@Override
 	public Control createControl(Composite parent) {
 		return new AeshTextViewer(parent).getControl();
 	}

@@ -7,7 +7,6 @@ import org.jboss.tools.forge.core.process.ForgeRuntime;
 
 public interface ForgeConsole {
 	
-	String getName();
 	Control createControl(Composite parent);
 	IAction[] createActions();
 	ForgeRuntime getRuntime();
