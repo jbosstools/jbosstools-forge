@@ -33,7 +33,7 @@ public class ForgeEmbeddedRuntime extends ForgeAbstractRuntime {
 			File  file = FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime"));
 			for (String str : file.list()) {
 				if (str.startsWith("forge-distribution-")) {
-					location = file.getAbsolutePath() + File.separator + str;
+					location = file.getCanonicalPath() + File.separator + str;
 				}
 			}
 		} catch (IOException e) {
