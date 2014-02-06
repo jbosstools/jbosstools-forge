@@ -81,8 +81,8 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	@Override
 	public void stop(IProgressMonitor progressMonitor) {
-		ForgeCorePlugin.getDefault().stopFurnace();
 		setNewState(STATE_NOT_RUNNING);
+		ForgeCorePlugin.getDefault().stopFurnace();
 	}
 
 	@Override

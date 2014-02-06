@@ -33,7 +33,7 @@ public class AeshConsole {
 
 	private AeshInputStream inputStream;
 	private AeshOutputStream stdOut, stdErr;
-	private org.jboss.aesh.console.AeshConsole console;
+	protected org.jboss.aesh.console.AeshConsole console;
 
 	public AeshConsole() {
 		initialize();

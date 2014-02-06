@@ -30,6 +30,10 @@ public class F2Console extends AeshConsole {
 		handle.initialize(currentDir, getInputStream(), out, err);
 	}
 
+	public void start() {
+		createConsole();
+	}
+
 	@Override
 	public void stop() {
 		handle.destroy();

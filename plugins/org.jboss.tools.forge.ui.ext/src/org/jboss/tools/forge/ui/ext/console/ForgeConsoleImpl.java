@@ -16,6 +16,7 @@ import org.jboss.tools.forge.ui.ext.cli.F2TextViewer;
 public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	
 	private String label = null;
+	private F2TextViewer textViewer = null;
 	
 	public ForgeConsoleImpl() {
 		getRuntime().addPropertyChangeListener(this);
@@ -24,7 +25,8 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 
 	@Override
 	public Control createControl(Composite parent) {
-		return new F2TextViewer(parent).getControl();
+		textViewer = new F2TextViewer(parent);
+		return textViewer.getControl();
 	}
 	
 	@Override
@@ -47,7 +49,14 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		System.out.println("property " + evt.getPropertyName() + " changed from " + evt.getOldValue() + " into " + evt.getNewValue());
+		if (ForgeRuntime.STATE_STARTING.equals(evt.getOldValue()) 
+				&& ForgeRuntime.STATE_RUNNING.equals(evt.getNewValue())) {
+			textViewer.startConsole();
+		}
+		if (ForgeRuntime.STATE_RUNNING.equals(evt.getOldValue())
+				&& ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getNewValue())) {
+			textViewer.stopConsole();
+		}
 	}
 	
 }
