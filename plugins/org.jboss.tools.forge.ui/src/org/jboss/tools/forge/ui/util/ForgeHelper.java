@@ -37,7 +37,7 @@ public class ForgeHelper {
 		final ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 		if (runtime == null || ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) return;
  		ForgeDocument.INSTANCE.connect(runtime);
-		Job job = new Job("Starting Forge") {
+		Job job = new Job("Starting Forge " + runtime.getVersion()) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				runtime.start(monitor);
@@ -61,7 +61,7 @@ public class ForgeHelper {
 	public static void stopForge() {
 		final ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 		if (runtime == null || ForgeRuntime.STATE_NOT_RUNNING.equals(runtime.getState())) return;
-		Job job = new Job("Stopping Forge") {
+		Job job = new Job("Stopping Forge " + runtime.getVersion()) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				runtime.stop(monitor);

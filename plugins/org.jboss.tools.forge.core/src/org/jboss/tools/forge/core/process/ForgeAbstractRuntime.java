@@ -75,7 +75,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			progressMonitor = new NullProgressMonitor();
 		}
 		try {
-			progressMonitor.beginTask("Starting Forge", IProgressMonitor.UNKNOWN);
+			progressMonitor.beginTask("Starting Forge " + getVersion(), IProgressMonitor.UNKNOWN);
 			startupListener = new StartupListener();
 			process = ForgeLaunchHelper.launch(getName(), getLocation());
 			if (process != null) {
