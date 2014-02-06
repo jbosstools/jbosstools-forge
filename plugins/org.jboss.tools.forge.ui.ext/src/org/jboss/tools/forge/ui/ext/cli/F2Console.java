@@ -10,7 +10,12 @@ import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 
 public class F2Console extends AeshConsole {
+	
 	private ShellHandle handle;
+
+	protected void initialize() {
+		createStreams();
+	}
 
 	protected void createConsole() {
 		// super.createConsole();
@@ -23,10 +28,6 @@ public class F2Console extends AeshConsole {
 		PrintStream err = new PrintStream(stdErr, true);
 
 		handle.initialize(currentDir, getInputStream(), out, err);
-	}
-
-	public void start() {
-		// super.start();
 	}
 
 	@Override

@@ -122,6 +122,9 @@ public class AeshConsole {
 	}
 
 	public void start() {
+		if (console == null) {
+			createConsole();
+		}
 		console.start();
 	}
 
