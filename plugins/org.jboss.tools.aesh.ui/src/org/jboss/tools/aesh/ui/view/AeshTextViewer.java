@@ -74,7 +74,6 @@ public class AeshTextViewer extends TextViewer {
     	aeshDocument.connect(aeshConsole);
     	aeshDocument.addCursorListener(cursorListener);
     	aeshDocument.addDocumentListener(documentListener);
-    	setDocument(aeshDocument);
     }
     
     protected void initializeTextWidget() {
@@ -101,7 +100,6 @@ public class AeshTextViewer extends TextViewer {
     	initializeConsole();
     	initializeDocument();
     	initializeTextWidget();
-    	startConsole();
     }
     
 	protected StyledText createTextWidget(Composite parent, int styles) {
