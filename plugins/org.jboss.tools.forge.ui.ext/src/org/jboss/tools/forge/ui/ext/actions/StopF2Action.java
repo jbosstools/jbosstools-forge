@@ -4,7 +4,7 @@ import java.net.URL;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
+import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.util.FurnaceHelper;
 
@@ -22,7 +22,7 @@ public class StopF2Action extends Action {
 	
 	@Override
 	public boolean isEnabled() {
-		return ForgeCorePlugin.getDefault().isFurnaceStarted();
+		return FurnaceService.INSTANCE.getContainerStatus().isStarted();
 	}
 
 	private ImageDescriptor createImageDescriptor() {

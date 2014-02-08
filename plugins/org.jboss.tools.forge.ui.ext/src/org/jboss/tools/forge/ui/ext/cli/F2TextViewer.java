@@ -29,7 +29,7 @@ public class F2TextViewer extends AeshTextViewer {
 			@Override
 			public void run() {
 		    	aeshConsole.stop();
-		    	aeshDocument.set("");
+		    	aeshDocument.reset();
 		    	setDocument(null);
 			}    		
     	});

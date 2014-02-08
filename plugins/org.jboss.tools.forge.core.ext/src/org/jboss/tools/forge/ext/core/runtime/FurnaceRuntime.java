@@ -11,7 +11,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
-import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
+import org.jboss.tools.forge.ext.core.FurnaceProvider;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 
 public class FurnaceRuntime implements ForgeRuntime {
@@ -57,11 +57,11 @@ public class FurnaceRuntime implements ForgeRuntime {
 		try {
 			progressMonitor.beginTask("Starting Forge " + getVersion(), IProgressMonitor.UNKNOWN);
 			setNewState(STATE_STARTING);
-			ForgeCorePlugin.getDefault().startFurnace();
+			FurnaceProvider.INSTANCE.startFurnace();
 			progressMonitor.worked(1);
 			while (FurnaceService.INSTANCE.getContainerStatus().isStarting()) {
 				if (progressMonitor.isCanceled()) {
-					ForgeCorePlugin.getDefault().stopFurnace();
+					FurnaceService.INSTANCE.stop();
 					setNewState(STATE_NOT_RUNNING);
 				} else {
 					Thread.sleep(1000);
@@ -73,7 +73,7 @@ public class FurnaceRuntime implements ForgeRuntime {
 			setNewState(STATE_RUNNING);
 		} catch (InterruptedException e) {
 			if (progressMonitor.isCanceled()) {
-				ForgeCorePlugin.getDefault().stopFurnace();
+				FurnaceService.INSTANCE.stop();
 				setNewState(STATE_NOT_RUNNING);
 			}
 		}
@@ -82,7 +82,7 @@ public class FurnaceRuntime implements ForgeRuntime {
 	@Override
 	public void stop(IProgressMonitor progressMonitor) {
 		setNewState(STATE_NOT_RUNNING);
-		ForgeCorePlugin.getDefault().stopFurnace();
+		FurnaceService.INSTANCE.stop();
 	}
 
 	@Override
