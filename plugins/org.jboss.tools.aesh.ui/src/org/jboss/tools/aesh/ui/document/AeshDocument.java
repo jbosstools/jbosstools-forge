@@ -79,7 +79,7 @@ public class AeshDocument extends Document {
 		moveCursorTo(savedCursor);
 	}
 	
-    void reset() {
+    public void reset() {
 		set("");
 		moveCursorTo(0);
 		currentStyleRange = getDefaultStyleRange();

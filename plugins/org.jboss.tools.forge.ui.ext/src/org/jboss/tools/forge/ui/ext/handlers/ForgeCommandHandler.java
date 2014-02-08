@@ -15,8 +15,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
 import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.ext.core.runtime.FurnaceRuntime;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.dialog.UICommandListDialog;
 import org.jboss.tools.forge.ui.ext.dialog.WizardDialogHelper;
@@ -33,14 +33,14 @@ public class ForgeCommandHandler extends AbstractHandler {
 					.getActiveWorkbenchWindowChecked(event);
 			final ISelection selection = window.getSelectionService().getSelection();
 			if (!FurnaceService.INSTANCE.getContainerStatus().isStarted()) {
-				WorkspaceJob job = new WorkspaceJob("Starting Forge 2") {					
+				WorkspaceJob job = new WorkspaceJob("Starting Forge" + FurnaceRuntime.INSTANCE.getVersion()) {					
 					@Override
 					public IStatus runInWorkspace(IProgressMonitor monitor)
 							throws CoreException {
 						String taskName = "Please wait while Forge 2 is started.";
 						try {
 							monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
-							ForgeCorePlugin.getDefault().startFurnace();
+							FurnaceRuntime.INSTANCE.start(monitor);
 							FurnaceService.INSTANCE.waitUntilContainerIsStarted();
 							// hack to make progress monitor stick until all commands are loaded
 							if (selection instanceof IStructuredSelection) {
