@@ -55,7 +55,8 @@ public class FurnaceRuntime implements ForgeRuntime {
 			progressMonitor = new NullProgressMonitor();
 		}
 		try {
-			progressMonitor.beginTask("Starting Forge " + getVersion(), IProgressMonitor.UNKNOWN);
+			String taskName = "Please wait while Forge " + getVersion() + " is started.";
+			progressMonitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
 			setNewState(STATE_STARTING);
 			FurnaceProvider.INSTANCE.startFurnace();
 			progressMonitor.worked(1);

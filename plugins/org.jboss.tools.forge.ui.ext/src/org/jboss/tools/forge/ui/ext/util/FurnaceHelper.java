@@ -1,5 +1,7 @@
 package org.jboss.tools.forge.ui.ext.util;
 
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -14,9 +16,31 @@ public class FurnaceHelper {
 	public static void startFurnace() {
 		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
 		if (runtime == null || ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) return;
-		Job job = new Job("Starting Forge " + runtime.getVersion()) {
+		createStartFurnaceJob().schedule();
+	}
+	
+	public static void stopFurnace() {
+		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
+		if (runtime == null || ForgeRuntime.STATE_NOT_RUNNING.equals(runtime.getState())) return;
+		Job job = new Job("Stopping Forge " + runtime.getVersion()) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
+				runtime.stop(monitor);
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
+	}
+	
+	public static Job createStartFurnaceJob() {
+		final FurnaceRuntime runtime = FurnaceRuntime.INSTANCE;
+		final String version = runtime.getVersion();
+		WorkspaceJob job = new WorkspaceJob("Starting Forge" + version) {					
+			@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor)
+					throws CoreException {
+				String taskName = "Please wait while Forge " + version + " is started.";
+				monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
 				runtime.start(monitor);
 				if (runtime.getErrorMessage() != null) {
 					Display.getDefault().asyncExec(new Runnable() {
@@ -32,20 +56,8 @@ public class FurnaceHelper {
 				return Status.OK_STATUS;
 			}
 		};
-		job.schedule();
-	}
-	
-	public static void stopFurnace() {
-		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
-		if (runtime == null || ForgeRuntime.STATE_NOT_RUNNING.equals(runtime.getState())) return;
-		Job job = new Job("Stopping Forge " + runtime.getVersion()) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				runtime.stop(monitor);
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
+		job.setUser(true);	
+		return job;
 	}
 	
 }
