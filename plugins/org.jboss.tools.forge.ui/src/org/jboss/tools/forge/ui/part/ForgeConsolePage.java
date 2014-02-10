@@ -66,8 +66,10 @@ public class ForgeConsolePage implements IPage, PropertyChangeListener {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
-		updateActionBars();
+		if ((forgeConsolePageBook.getCurrentPage() == this) 
+				&& ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) {
+			updateActionBars();
+		}
 	}
 	
 	void initialize(IViewSite viewSite) {

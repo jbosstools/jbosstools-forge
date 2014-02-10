@@ -53,4 +53,8 @@ public class ForgeConsolePageBook extends PageBook {
 		forgeConsoleView.setStatusMessage(message);
 	}
 	
+	ForgeConsolePage getCurrentPage() {
+		return currentPage;
+	}
+	
 }
