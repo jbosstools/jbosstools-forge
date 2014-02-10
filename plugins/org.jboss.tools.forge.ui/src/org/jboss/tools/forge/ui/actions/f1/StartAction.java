@@ -7,9 +7,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
-public class StartF1Action extends Action {
+public class StartAction extends Action {
 
-	public StartF1Action() {
+	public StartAction() {
 		super();
 		setImageDescriptor(createImageDescriptor());
 	}
