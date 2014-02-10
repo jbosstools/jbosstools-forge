@@ -8,9 +8,9 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.util.FurnaceHelper;
 
-public class StartF2Action extends Action {
+public class StartAction extends Action {
 
-	public StartF2Action() {
+	public StartAction() {
 		super();
 		setImageDescriptor(createImageDescriptor());
 	}

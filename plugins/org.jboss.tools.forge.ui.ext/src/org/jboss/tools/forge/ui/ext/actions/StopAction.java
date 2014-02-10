@@ -8,9 +8,9 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.util.FurnaceHelper;
 
-public class StopF2Action extends Action {
+public class StopAction extends Action {
 
-	public StopF2Action() {
+	public StopAction() {
 		super();
 		setImageDescriptor(createImageDescriptor());
 	}

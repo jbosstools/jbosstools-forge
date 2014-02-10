@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ext.core.runtime.FurnaceRuntime;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
-import org.jboss.tools.forge.ui.ext.actions.StartF2Action;
-import org.jboss.tools.forge.ui.ext.actions.StopF2Action;
+import org.jboss.tools.forge.ui.ext.actions.StartAction;
+import org.jboss.tools.forge.ui.ext.actions.StopAction;
 import org.jboss.tools.forge.ui.ext.cli.F2TextViewer;
 
 public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
@@ -32,8 +32,8 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	@Override
 	public IAction[] createActions() {
 		return new IAction[] {
-				new StartF2Action(),
-				new StopF2Action()
+				new StartAction(),
+				new StopAction()
 		};
 	}
 	
