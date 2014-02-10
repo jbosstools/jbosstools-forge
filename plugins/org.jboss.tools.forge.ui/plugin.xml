@@ -9,14 +9,6 @@
       </category>
       <view
             category="org.jboss.tools.forge.ui"
-            class="org.jboss.tools.forge.ui.part.F1View"
-            icon="icons/forge.png"
-            id="org.jboss.tools.forge.ui.f1"
-            name="Forge 1 Console"
-            restorable="true">
-      </view>
-      <view
-            category="org.jboss.tools.forge.ui"
             class="org.jboss.tools.forge.ui.part.ForgeConsoleView"
             icon="icons/forge.png"
             id="org.jboss.tools.forge.ui.console"
