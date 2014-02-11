@@ -92,7 +92,7 @@ public class F1View extends ViewPart implements PropertyChangeListener, IShowInT
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		synchronizer = new SelectionSynchronizer(this);
+		synchronizer = new SelectionSynchronizer();
 		pageBook = new PageBook(parent, SWT.NONE);
 		createRunningPage();
 		createNotRunningPage();

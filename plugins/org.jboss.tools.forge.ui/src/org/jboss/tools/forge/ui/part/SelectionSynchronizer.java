@@ -10,15 +10,14 @@ import org.eclipse.ui.IPartService;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 
 
 public class SelectionSynchronizer implements ISelectionListener {
 
-	private F1View forgeView;
 	private IEditorPart selectedPart;
-	private IPartService partService;
 	
 	private IPartListener partListener = new IPartListener() {
 		
@@ -55,17 +54,11 @@ public class SelectionSynchronizer implements ISelectionListener {
 		}
 	};
 	
-	public SelectionSynchronizer(F1View forgeView) {
-		this.forgeView = forgeView;
-		IWorkbenchWindow workbenchWindow = forgeView.getSite().getWorkbenchWindow();
-		partService = workbenchWindow.getPartService();
-	}
-	
 	public void setEnabled(boolean enabled) {
 		if (enabled) {
-			partService.addPartListener(partListener);
+			getPartService().addPartListener(partListener);
 		} else  {
-			partService.removePartListener(partListener);
+			getPartService().removePartListener(partListener);
 		}
 	}
 	
@@ -73,8 +66,7 @@ public class SelectionSynchronizer implements ISelectionListener {
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (!(part instanceof IEditorPart) || part == selectedPart) return;
 		selectedPart = (IEditorPart)part;
-		IWorkbenchWindow workbenchWindow = forgeView.getSite().getWorkbenchWindow();
-		if (workbenchWindow.getPartService().getActivePart() == part) return;
+		if (getPartService().getActivePart() == part) return;
 		IEditorInput editorInput = selectedPart.getEditorInput();
 		if (!(editorInput instanceof IFileEditorInput)) return;
 		IFile file = ((IFileEditorInput)editorInput).getFile();
@@ -87,6 +79,14 @@ public class SelectionSynchronizer implements ISelectionListener {
 		if (forgeRuntime != null && ForgeRuntime.STATE_RUNNING.equals(forgeRuntime.getState())) {
 			forgeRuntime.sendInput("pick-up " + path + "\n");
 		}
+	}
+	
+	private IWorkbenchWindow getWorkbenchWidow() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+	}
+	
+	private IPartService getPartService() {
+		return getWorkbenchWidow().getPartService();
 	}
 	
 }
