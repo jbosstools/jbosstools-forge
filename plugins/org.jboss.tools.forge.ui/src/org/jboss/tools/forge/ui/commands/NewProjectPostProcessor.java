@@ -10,8 +10,6 @@ import org.eclipse.swt.SWT;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.importer.ProjectImporter;
-import org.jboss.tools.forge.ui.part.F1View;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 
 public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
@@ -73,12 +71,9 @@ public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
 	}
 	
 	private void resetRuntime() {
-		F1View forgeView = ForgeHelper.getForgeView();
-		if (forgeView != null) {
-			ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
-			if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
-				runtime.sendInput("reset\n");
-			}
+		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
+			runtime.sendInput("reset\n");
 		}
 	}
 
