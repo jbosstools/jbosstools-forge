@@ -4,19 +4,23 @@ import java.net.URL;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.SWT;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.part.SelectionSynchronizer;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class LinkAction extends Action {
+	
+	private SelectionSynchronizer selectionSynchronizer = new SelectionSynchronizer();
 
 	public LinkAction() {
-		super();
+		super("", SWT.TOGGLE);
 		setImageDescriptor(createImageDescriptor());
 	}
 
 	@Override
 	public void run() {
-		System.out.println("clicked link");
+		selectionSynchronizer.setEnabled(isChecked());
 	}
 	
 	@Override
