@@ -10,6 +10,7 @@ import org.jboss.tools.forge.ui.console.ForgeConsoleManager;
 
 public class ForgeConsoleView extends ViewPart {
 	
+	public static final String ID = "org.jboss.tools.forge.ui.console";	
 	public static final String FORGE_CONSOLE_ACTION_GROUP = "org.jboss.tools.forge.ui.console.actions";
 
 	private Composite parent = null;

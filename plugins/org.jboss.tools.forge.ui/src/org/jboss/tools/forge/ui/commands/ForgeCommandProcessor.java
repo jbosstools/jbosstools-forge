@@ -12,8 +12,12 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.part.F1View;
+import org.jboss.tools.forge.ui.console.ForgeConsole;
+import org.jboss.tools.forge.ui.console.ForgeConsoleManager;
+import org.jboss.tools.forge.ui.part.ForgeConsoleView;
 
 
 public class ForgeCommandProcessor {
@@ -92,8 +96,15 @@ public class ForgeCommandProcessor {
 		if (workbenchWindow != null) {
 			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 			if (workbenchPage != null) {
-				IViewPart forgeView = workbenchPage.findView(F1View.ID);
+				IViewPart forgeView = workbenchPage.findView(ForgeConsoleView.ID);
 				if (forgeView != null) {
+					ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+					for (ForgeConsole forgeConsole : ForgeConsoleManager.INSTANCE.getConsoles()) {
+						if (runtime == forgeConsole.getRuntime()) {
+							((ForgeConsoleView)forgeView).showForgeConsole(forgeConsole);
+							break;
+						}
+					}
 					forgeView.setFocus();
 				}
 			}

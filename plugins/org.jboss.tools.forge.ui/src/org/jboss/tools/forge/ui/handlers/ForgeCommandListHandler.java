@@ -12,14 +12,17 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.console.ForgeConsole;
+import org.jboss.tools.forge.ui.console.ForgeConsoleManager;
 import org.jboss.tools.forge.ui.dialog.ForgeCommandListDialog;
-import org.jboss.tools.forge.ui.part.F1View;
+import org.jboss.tools.forge.ui.part.ForgeConsoleView;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ForgeCommandListHandler extends AbstractHandler {
@@ -91,7 +94,15 @@ public class ForgeCommandListHandler extends AbstractHandler {
 	
 	private void showForgeView(IWorkbenchWindow window) {
 		try {
-			window.getActivePage().showView(F1View.ID);
+			IViewPart viewPart = window.getActivePage().showView(ForgeConsoleView.ID);
+			ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+			for (ForgeConsole forgeConsole : ForgeConsoleManager.INSTANCE.getConsoles()) {
+				if (runtime == forgeConsole.getRuntime()) {
+					((ForgeConsoleView)viewPart).showForgeConsole(forgeConsole);
+					break;
+				}
+			}
+			
 		} catch (PartInitException e) {
 			ForgeUIPlugin.log(e);
 		}								
