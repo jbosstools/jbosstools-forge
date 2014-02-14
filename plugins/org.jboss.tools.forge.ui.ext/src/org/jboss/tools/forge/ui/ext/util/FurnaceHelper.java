@@ -35,7 +35,7 @@ public class FurnaceHelper {
 	public static Job createStartFurnaceJob() {
 		final FurnaceRuntime runtime = FurnaceRuntime.INSTANCE;
 		final String version = runtime.getVersion();
-		WorkspaceJob job = new WorkspaceJob("Starting Forge" + version) {					
+		WorkspaceJob job = new WorkspaceJob("Starting Forge " + version) {					
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor)
 					throws CoreException {
