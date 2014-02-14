@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.resources.IResource;
@@ -31,7 +32,6 @@ import org.jboss.forge.addon.ui.context.UIContextListener;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.furnace.addons.Addon;
-import org.jboss.forge.furnace.addons.AddonFilter;
 import org.jboss.forge.furnace.addons.AddonRegistry;
 import org.jboss.forge.furnace.lock.LockManager;
 import org.jboss.forge.furnace.lock.LockMode;
@@ -110,20 +110,17 @@ public class UIContextImpl extends AbstractUIContext {
 						AddonRegistry registry = FurnaceService.INSTANCE
 								.getAddonRegistry();
 						Class<T> result = type;
-						for (Addon addon : registry
-								.getAddons(new AddonFilter() {
-									@Override
-									public boolean accept(Addon addon) {
-										return addon.getStatus().isStarted();
-									}
-								})) {
-							try {
-								ClassLoader classLoader = addon
-										.getClassLoader();
-								result = (Class<T>) classLoader.loadClass(type
-										.getName());
-								break;
-							} catch (ClassNotFoundException e) {
+						Set<Addon> addons = registry.getAddons();
+						for (Addon addon : addons) {
+							if (addon.getStatus().isStarted()) {
+								try {
+									ClassLoader classLoader = addon
+											.getClassLoader();
+									result = (Class<T>) classLoader
+											.loadClass(type.getName());
+									break;
+								} catch (ClassNotFoundException e) {
+								}
 							}
 						}
 						return result;
