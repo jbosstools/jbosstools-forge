@@ -116,6 +116,9 @@ public class ForgeWizard extends MutableWizard {
 						EventBus.INSTANCE.fireWizardFinished(uiContext);
 					}
 				} catch (Exception e) {
+					ForgeUIPlugin.displayMessage(getWindowTitle(),
+							"Error while executing task, check Error log view",
+							NotificationType.ERROR);
 					ForgeUIPlugin.log(e);
 				} finally {
 					try {
