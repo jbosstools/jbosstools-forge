@@ -8,7 +8,8 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.ext.core.runtime.FurnaceRuntime;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.dialog.UICommandListDialog;
 import org.jboss.tools.forge.ui.ext.util.FurnaceHelper;
@@ -20,7 +21,7 @@ public class ForgeCommandHandler extends AbstractHandler {
 		try {
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);
-			if (!FurnaceService.INSTANCE.getContainerStatus().isStarted()) {
+			if (!ForgeRuntime.STATE_RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
 				Job job = FurnaceHelper.createStartFurnaceJob();
 				job.addJobChangeListener(new JobChangeAdapter() {
 					@Override
