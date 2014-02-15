@@ -40,7 +40,13 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	@Override
 	public String getState() {
-		// TODO Auto-generated method stub
+		if (FurnaceService.INSTANCE.getContainerStatus().isStarted()) {
+			return ForgeRuntime.STATE_RUNNING;
+		} else if (FurnaceService.INSTANCE.getContainerStatus().isStarting()) {
+			return ForgeRuntime.STATE_STARTING;
+		} else if (FurnaceService.INSTANCE.getContainerStatus().isStopped()) {
+			return ForgeRuntime.STATE_NOT_RUNNING;
+		}
 		return null;
 	}
 	
