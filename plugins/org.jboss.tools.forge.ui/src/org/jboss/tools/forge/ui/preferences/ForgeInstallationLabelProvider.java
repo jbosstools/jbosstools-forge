@@ -3,7 +3,7 @@ package org.jboss.tools.forge.ui.preferences;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 
 public class ForgeInstallationLabelProvider extends LabelProvider implements ITableLabelProvider {
 

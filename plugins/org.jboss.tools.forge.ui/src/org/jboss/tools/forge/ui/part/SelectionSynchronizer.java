@@ -12,7 +12,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 
 
 public class SelectionSynchronizer implements ISelectionListener {

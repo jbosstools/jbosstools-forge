@@ -8,7 +8,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.importer.ProjectImporter;
 
 

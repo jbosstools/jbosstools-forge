@@ -17,6 +17,8 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
+import org.jboss.tools.forge.core.runtime.ForgeAbstractRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

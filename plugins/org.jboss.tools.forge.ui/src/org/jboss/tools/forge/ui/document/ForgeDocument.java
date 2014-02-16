@@ -14,7 +14,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.io.ForgeAnsiCommandFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.commands.ForgeCommandFilter;
 

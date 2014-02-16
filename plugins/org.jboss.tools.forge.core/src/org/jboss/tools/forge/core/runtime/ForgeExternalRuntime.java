@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.core.process;
+package org.jboss.tools.forge.core.runtime;
 
 public class ForgeExternalRuntime extends ForgeAbstractRuntime {
 	

@@ -28,9 +28,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
-import org.jboss.tools.forge.core.process.ForgeEmbeddedRuntime;
-import org.jboss.tools.forge.core.process.ForgeExternalRuntime;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeEmbeddedRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeExternalRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 
 public class ForgeInstallationsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 				

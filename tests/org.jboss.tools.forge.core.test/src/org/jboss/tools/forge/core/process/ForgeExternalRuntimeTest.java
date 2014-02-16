@@ -2,6 +2,7 @@ package org.jboss.tools.forge.core.process;
 
 import static org.junit.Assert.assertEquals;
 
+import org.jboss.tools.forge.core.runtime.ForgeExternalRuntime;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -3,7 +3,7 @@ package org.jboss.tools.forge.ui.wizard.util;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jpt.jpa.core.JpaProject;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
-import org.jboss.tools.forge.core.process.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
 public class WizardsHelper {

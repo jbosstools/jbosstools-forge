@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.core.process;
+package org.jboss.tools.forge.core.runtime;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -20,6 +20,8 @@ import org.eclipse.debug.core.model.IStreamsProxy;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
+import org.jboss.tools.forge.core.process.ForgeLaunchHelper;
+import org.jboss.tools.forge.core.process.ForgeRuntimeProcess;
 
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
