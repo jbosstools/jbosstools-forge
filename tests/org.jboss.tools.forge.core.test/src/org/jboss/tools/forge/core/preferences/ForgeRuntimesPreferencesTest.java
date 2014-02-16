@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
@@ -17,6 +16,7 @@ import org.junit.Test;
 
 public class ForgeRuntimesPreferencesTest {
 	
+	private static final String FORGE_CORE_PLUGIN_ID = "org.jboss.tools.forge.core";
 	private static final String ALTERNATIVE_FORGE_RUNTIMES = 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
 			"<forgeRuntimes default=\"foo\">" +
@@ -63,7 +63,7 @@ public class ForgeRuntimesPreferencesTest {
 	
 	private void verifyForgeRuntimesPreferencesString() {
 		String forgeRuntimesPrefs = 
-				InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID).get(
+				InstanceScope.INSTANCE.getNode(FORGE_CORE_PLUGIN_ID).get(
 						ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null);
 		verifyDefaultRuntime(forgeRuntimesPrefs);
 		verifyRuntimes(forgeRuntimesPrefs);
@@ -141,7 +141,7 @@ public class ForgeRuntimesPreferencesTest {
 	public void testGetDefaultAndGetInstallationsAlternativeCase() {
 		// trick the preferences into initializing from the alternative preference string
 		ForgeRuntimesPreferences.INSTANCE.setRuntimes(new ForgeRuntime[0], null);
-		InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID).put(
+		InstanceScope.INSTANCE.getNode(FORGE_CORE_PLUGIN_ID).put(
 				ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, 
 				ALTERNATIVE_FORGE_RUNTIMES);
 		// getDefault() will now trigger the initialization

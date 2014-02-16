@@ -3,7 +3,7 @@ package org.jboss.tools.forge.core.preferences;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.jboss.tools.forge.core.ForgeCorePlugin;
+import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 
 public class ForgePreferencesInitializer extends AbstractPreferenceInitializer {
 

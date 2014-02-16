@@ -16,7 +16,7 @@ import org.eclipse.debug.core.ILaunchListener;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
-import org.jboss.tools.forge.core.ForgeCorePlugin;
+import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 
 

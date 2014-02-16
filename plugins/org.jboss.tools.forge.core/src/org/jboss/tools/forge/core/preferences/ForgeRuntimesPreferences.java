@@ -22,7 +22,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.jboss.tools.forge.core.ForgeCorePlugin;
+import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 import org.jboss.tools.forge.core.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
