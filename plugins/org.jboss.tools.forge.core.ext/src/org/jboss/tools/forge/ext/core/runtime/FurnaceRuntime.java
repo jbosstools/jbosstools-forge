@@ -2,13 +2,18 @@ package org.jboss.tools.forge.ext.core.runtime;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.furnace.services.Imported;
+import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.process.ForgeRuntime;
 import org.jboss.tools.forge.ext.core.FurnaceProvider;
@@ -18,6 +23,8 @@ public class FurnaceRuntime implements ForgeRuntime {
 	
 	public static final FurnaceRuntime INSTANCE = new FurnaceRuntime();
 	private String state = STATE_NOT_RUNNING;
+	private String location = null;
+	private String version = null;
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	
 	private FurnaceRuntime() {}
@@ -29,8 +36,10 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	@Override
 	public String getLocation() {
-		// TODO Auto-generated method stub
-		return null;
+		if (location == null) {
+			initLocation();
+		}
+		return location;
 	}
 
 	@Override
@@ -52,7 +61,10 @@ public class FurnaceRuntime implements ForgeRuntime {
 	
 	@Override
 	public String getVersion() {
-		return "2.0.0.Final";
+		if (version == null) {
+			version = initializeVersion();
+		}
+		return version;
 	}
 
 	@Override
@@ -146,4 +158,34 @@ public class FurnaceRuntime implements ForgeRuntime {
 		return result;
 	}
 
+	private String initializeVersion() {
+		String result = "unknown version";
+		String location = getLocation();
+		if (location == null) return result;
+		location += "/lib";
+		File file = new File(location);
+		if (!file.exists()) return result;
+		String[] candidates = file.list();
+		for (String candidate : candidates) {
+			if (candidate.startsWith("shell-api-")) {
+				int end = candidate.indexOf(".jar");
+				if (end != -1) {
+					result = candidate.substring("shell-api-".length(), end);
+				}
+			}
+		}
+		return result;
+	}
+	
+	private void initLocation() {
+		try {
+			location = FileLocator.getBundleFile(
+					Platform.getBundle("org.jboss.tools.forge2.runtime"))
+					.getCanonicalPath();
+		} catch (IOException e) {
+			ForgeCorePlugin.log(e);
+		}
+	}
+
+	
 }
