@@ -22,6 +22,8 @@ import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
 
 public class ForgeLaunchHelper {
 	
+	private static final String ID_FORGE_PROCESS_FACTORY = "org.jboss.tools.forge.core.process.ForgeProcessFactory";
+
 	private static final ILaunchManager LAUNCH_MANAGER = DebugPlugin.getDefault().getLaunchManager();
 	
 	private static final ILaunchConfigurationType JAVA_LAUNCH_CONFIGURATION_TYPE = 
@@ -85,7 +87,7 @@ public class ForgeLaunchHelper {
 		try {
 			String launchConfigurationName = name + System.currentTimeMillis();
 			result = JAVA_LAUNCH_CONFIGURATION_TYPE.newInstance(null, launchConfigurationName);
-			result.setAttribute(DebugPlugin.ATTR_PROCESS_FACTORY_ID, IForgeLaunchConfiguration.ID_FORGE_PROCESS_FACTORY);
+			result.setAttribute(DebugPlugin.ATTR_PROCESS_FACTORY_ID, ID_FORGE_PROCESS_FACTORY);
 			result.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME, "org.jboss.modules.Main");
 			result.setAttribute(IJavaLaunchConfigurationConstants.ATTR_WORKING_DIRECTORY, WORKING_DIR.getAbsolutePath());
 			result.setAttribute(IJavaLaunchConfigurationConstants.ATTR_VM_ARGUMENTS, createVmArguments(location));
