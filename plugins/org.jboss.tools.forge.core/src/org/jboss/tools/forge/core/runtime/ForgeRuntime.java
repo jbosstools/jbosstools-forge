@@ -15,7 +15,7 @@ public interface ForgeRuntime {
 
 	String getName();
 	String getLocation();
-	String getType();
+	ForgeRuntimeType getType();
 	String getState();
 	String getVersion();
 	

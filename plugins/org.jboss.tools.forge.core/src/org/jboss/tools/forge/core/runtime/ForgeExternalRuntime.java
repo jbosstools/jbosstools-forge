@@ -28,8 +28,8 @@ public class ForgeExternalRuntime extends ForgeAbstractRuntime {
 	}
 	
 	@Override
-	public String getType() {
-		return "external";
+	public ForgeRuntimeType getType() {
+		return ForgeRuntimeType.EXTERNAL;
 	}
 
 }

@@ -42,8 +42,8 @@ public class ForgeEmbeddedRuntime extends ForgeAbstractRuntime {
 	}
 	
 	@Override
-	public String getType() {
-		return "embedded";
+	public ForgeRuntimeType getType() {
+		return ForgeRuntimeType.EMBEDDED;
 	}
 
 }

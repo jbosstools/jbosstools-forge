@@ -26,6 +26,7 @@ import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 import org.jboss.tools.forge.core.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.osgi.service.prefs.BackingStoreException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -102,11 +103,11 @@ public class ForgeRuntimesPreferences {
 			Node node = nodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element element = (Element)node;
-				String type = element.getAttribute("type");
+				String type = element.getAttribute("type").toUpperCase();
 				ForgeRuntime runtime = null;
-				if ("embedded".equals(type)) {
+				if (ForgeRuntimeType.valueOf(type).equals(ForgeRuntimeType.EMBEDDED)) {
 					runtime = ForgeEmbeddedRuntime.INSTANCE;
-				} else if ("external".equals(type)) {
+				} else if (ForgeRuntimeType.valueOf(type).equals(ForgeRuntimeType.EXTERNAL)) {
 					String name = element.getAttribute("name");
 					String location = element.getAttribute("location");
 					runtime = new ForgeExternalRuntime(name, location);
@@ -231,7 +232,7 @@ public class ForgeRuntimesPreferences {
 			if (!(runtime instanceof ForgeEmbeddedRuntime)) {
 				element.setAttribute("location", runtime.getLocation());
 			}
-			element.setAttribute("type", runtime.getType());
+			element.setAttribute("type", runtime.getType().name().toLowerCase());
 			main.appendChild(element);
 		}
 		if (defaultRuntime != null) {

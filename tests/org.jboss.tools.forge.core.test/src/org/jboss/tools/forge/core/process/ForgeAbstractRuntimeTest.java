@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.forge.core.runtime.ForgeAbstractRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -177,8 +178,8 @@ public class ForgeAbstractRuntimeTest {
 			} catch (IOException e) {}
 			return result;
 		}
-		public String getType() {
-			return "test";
+		public ForgeRuntimeType getType() {
+			return ForgeRuntimeType.EMBEDDED;
 		}
 	}
 	

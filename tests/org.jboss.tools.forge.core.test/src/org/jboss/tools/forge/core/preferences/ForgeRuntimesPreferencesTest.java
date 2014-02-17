@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -148,7 +149,7 @@ public class ForgeRuntimesPreferencesTest {
 		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
 		assertEquals("foo", runtime.getName());
 		assertEquals("foofoo", runtime.getLocation());
-		assertEquals("external", runtime.getType());
+		assertEquals(ForgeRuntimeType.EXTERNAL, runtime.getType());
 		// getRuntimes() will return the list of runtimes from the alternative preference string
 		ForgeRuntime[] runtimes = ForgeRuntimesPreferences.INSTANCE.getRuntimes();
 		verifyEmbedded(runtimes);
@@ -175,7 +176,7 @@ public class ForgeRuntimesPreferencesTest {
 		assertNotNull(runtimeToVerify);
 		assertEquals("foo", runtimeToVerify.getName());
 		assertEquals("foofoo", runtimeToVerify.getLocation());
-		assertEquals("external", runtimeToVerify.getType());
+		assertEquals(ForgeRuntimeType.EXTERNAL, runtimeToVerify.getType());
 	}
 	
 	private void verifyBar(ForgeRuntime[] runtimes) {
@@ -183,7 +184,7 @@ public class ForgeRuntimesPreferencesTest {
 		assertNotNull(runtimeToVerify);
 		assertEquals("bar", runtimeToVerify.getName());
 		assertEquals("barbar", runtimeToVerify.getLocation());
-		assertEquals("external", runtimeToVerify.getType());
+		assertEquals(ForgeRuntimeType.EXTERNAL, runtimeToVerify.getType());
 	}
 		
 }

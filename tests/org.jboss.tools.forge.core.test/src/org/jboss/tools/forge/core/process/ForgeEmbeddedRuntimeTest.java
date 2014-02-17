@@ -8,6 +8,7 @@ import java.io.File;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.forge.core.runtime.ForgeEmbeddedRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +38,7 @@ public class ForgeEmbeddedRuntimeTest {
 		assertNotNull(ForgeEmbeddedRuntime.INSTANCE);
 		assertEquals("embedded", ForgeEmbeddedRuntime.INSTANCE.getName());
 		assertEquals(location, ForgeEmbeddedRuntime.INSTANCE.getLocation());
-		assertEquals("embedded", ForgeEmbeddedRuntime.INSTANCE.getType());
+		assertEquals(ForgeRuntimeType.EMBEDDED, ForgeEmbeddedRuntime.INSTANCE.getType());
 	}
 
 }

@@ -15,6 +15,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
 import org.jboss.tools.forge.ext.core.FurnaceProvider;
 import org.jboss.tools.forge.ext.core.FurnaceService;
@@ -43,8 +44,8 @@ public class FurnaceRuntime implements ForgeRuntime {
 	}
 
 	@Override
-	public String getType() {
-		return "embedded";
+	public ForgeRuntimeType getType() {
+		return ForgeRuntimeType.EMBEDDED;
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package org.jboss.tools.forge.core.process;
 import static org.junit.Assert.assertEquals;
 
 import org.jboss.tools.forge.core.runtime.ForgeExternalRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class ForgeExternalRuntimeTest {
 	public void testGetters() {
 		assertEquals("foo", runtime.getName());
 		assertEquals("bar", runtime.getLocation());
-		assertEquals("external", runtime.getType());
+		assertEquals(ForgeRuntimeType.EXTERNAL, runtime.getType());
 	}
 	
 	@Test
