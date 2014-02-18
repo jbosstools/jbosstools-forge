@@ -14,8 +14,8 @@ import java.util.concurrent.Callable;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.forge.furnace.Furnace;
-import org.jboss.forge.furnace.proxy.ClassLoaderAdapterCallback;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
+import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.util.ClassLoaders;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleWiring;
@@ -23,25 +23,26 @@ import org.osgi.framework.wiring.BundleWiring;
 import bootpath.BootpathMarker;
 
 public class FurnaceProvider {
-	
+
 	public static final FurnaceProvider INSTANCE = new FurnaceProvider();
-	
+
 	private static final String RUNTIME_PLUGIN_ID = "org.jboss.tools.forge2.runtime";
 
 	private URLClassLoader loader;
-	
-	private FurnaceProvider() {}
-	
+
+	private FurnaceProvider() {
+	}
+
 	public Furnace createFurnace() throws Exception {
-		
+
 		Furnace forge = ClassLoaders.executeIn(loader, new Callable<Furnace>() {
 			@Override
 			public Furnace call() throws Exception {
-				BundleWiring wiring = ForgeCorePlugin.getDefault().getBundle().adapt(
-						BundleWiring.class);
+				BundleWiring wiring = ForgeCorePlugin.getDefault().getBundle()
+						.adapt(BundleWiring.class);
 				Collection<String> entries = wiring.listResources("bootpath",
 						"*.jar", BundleWiring.LISTRESOURCES_RECURSE);
-				Collection<URL> resources = new HashSet<URL>();
+				Collection<URL> resources = new HashSet<>();
 				File jarDir = File.createTempFile("forge", "jars");
 				if (entries != null)
 					for (String resource : entries) {
@@ -56,13 +57,8 @@ public class FurnaceProvider {
 				loader = new URLClassLoader(resources.toArray(new URL[resources
 						.size()]), null);
 
-				Class<?> bootstrapType = loader
-						.loadClass("org.jboss.forge.furnace.impl.FurnaceImpl");
-
-				Object nativeForge = bootstrapType.newInstance();
-				Furnace furnace = (Furnace) ClassLoaderAdapterCallback.enhance(
-						Furnace.class.getClassLoader(), loader, nativeForge,
-						Furnace.class);
+				Furnace furnace = FurnaceFactory.getInstance(loader);
+				
 				setupRepositories(furnace);
 				return furnace;
 			}
@@ -78,7 +74,7 @@ public class FurnaceProvider {
 		furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
 				ForgeExtPreferences.INSTANCE.getAddonDir()));
 	}
-	
+
 	public void startFurnace() {
 		try {
 			FurnaceService.INSTANCE.setFurnace(createFurnace());
@@ -126,5 +122,3 @@ public class FurnaceProvider {
 	}
 
 }
-
-
