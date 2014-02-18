@@ -8,7 +8,6 @@
 	</parent>
 	<groupId>org.jboss.tools.forge.tests</groupId>
 	<artifactId>org.jboss.tools.forge.ui.ext.test</artifactId> 
-	<version>1.1.0-SNAPSHOT</version>
 
 	<!-- TODO: this is a test plugin. It needs test classes. -->
 	<!-- TODO: change to eclipse-test-pugin when test classes are added -->	
