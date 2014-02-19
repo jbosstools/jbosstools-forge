@@ -83,7 +83,6 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 	private void saveExistingDriver(DriverInstance driverInstance, ConnectionProfile profile) {
 		if (!profile.getPath().equals(driverInstance.getJarList()) || 
 				!profile.getDriver().equals(driverInstance.getProperty(DRIVER_CLASS))) {
-			System.out.println("saving existing driver");
 			DriverManager.getInstance().removeDriverInstance(driverInstance.getId());
 			DriverManager.getInstance().createNewDriverInstance(
 					DRIVER_TEMPLATE, 
@@ -157,19 +156,33 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 		result.setProperty(DRIVER_LOCATION, profile.getPath());
 		result.setProperty(USER_NAME, profile.getUser());
 		result.setProperty(DRIVER_CLASS, profile.getDriver());
-		result.setProperty(DRIVER_DEFINITION_ID, getDriver(profile.getName()).getId());
+		String driverId = getDriverId(profile.getName());
+		if (driverId != null) {
+			result.setProperty(DRIVER_DEFINITION_ID, driverId);
+		}
 		result.setProperty(DATABASE_NAME, profile.getName());
 		result.setProperty(PASSWORD, profile.getPassword());
 		result.setProperty(URL, profile.getUrl());
 		result.setProperty(VERSION, "1.0");
 		result.setProperty(VENDOR, "Generic JDBC");
-		if (profile.getDialect() != null) {
-			result.setProperty(HIBERNATE_DIALECT, profile.getDialect());
+		String dialect = profile.getDialect();
+		if (dialect != null) {
+			result.setProperty(HIBERNATE_DIALECT, dialect);
+		}
+		return result;
+	}
+	
+	private String getDriverId(String driverName) {
+		String result = null;
+		DriverInstance driverInstance = getDriver(driverName);
+		if (driverInstance != null) {
+			result = driverInstance.getId();
 		}
 		return result;
 	}
 	
 	private DriverInstance getDriver(String name) {
+		System.out.println("getDriver(" + name + ")");
 		return DriverManager.getInstance().getDriverInstanceByName(name);
 	}
 
