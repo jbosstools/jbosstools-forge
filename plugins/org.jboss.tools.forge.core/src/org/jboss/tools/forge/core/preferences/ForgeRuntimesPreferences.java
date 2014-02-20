@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
+import org.jboss.tools.forge.core.internal.preferences.ForgePreferencesInitializer;
 import org.jboss.tools.forge.core.internal.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.internal.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;

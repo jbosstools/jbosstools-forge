@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.jboss.tools.forge.core.preferences.ForgePreferencesInitializer">
+            class="org.jboss.tools.forge.core.internal.preferences.ForgePreferencesInitializer">
       </initializer>
    </extension>
    <extension

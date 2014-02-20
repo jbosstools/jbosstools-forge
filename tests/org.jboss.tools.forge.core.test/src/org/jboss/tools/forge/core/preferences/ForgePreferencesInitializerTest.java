@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.jboss.tools.forge.core.internal.preferences.ForgePreferencesInitializer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
