@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
-import org.jboss.tools.forge.core.internal.preferences.ForgePreferencesInitializer;
+import org.jboss.tools.forge.core.internal.preferences.ForgeCorePreferencesInitializer;
 import org.jboss.tools.forge.core.internal.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.internal.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
@@ -83,7 +83,7 @@ public class ForgeRuntimesPreferences {
 	private String getForgeRuntimesPreference() {
 		return getForgeCorePreferences().get(
 				PREF_FORGE_RUNTIMES, 
-				ForgePreferencesInitializer.INITIAL_RUNTIMES_PREFERENCE);
+				ForgeCorePreferencesInitializer.INITIAL_RUNTIMES_PREFERENCE);
 	}
 	
 	private void initializeRuntimes() {

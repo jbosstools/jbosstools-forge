@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNull;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.jboss.tools.forge.core.internal.preferences.ForgePreferencesInitializer;
+import org.jboss.tools.forge.core.internal.preferences.ForgeCorePreferencesInitializer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,9 +36,9 @@ public class ForgePreferencesInitializerTest {
 	@Test
 	public void testInitializeDefaultPreferences() {
 		assertNull(preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null));
-		new ForgePreferencesInitializer().initializeDefaultPreferences();
+		new ForgeCorePreferencesInitializer().initializeDefaultPreferences();
 		assertEquals(
-				ForgePreferencesInitializer.INITIAL_RUNTIMES_PREFERENCE, 
+				ForgeCorePreferencesInitializer.INITIAL_RUNTIMES_PREFERENCE, 
 				preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null));
 	}
 
