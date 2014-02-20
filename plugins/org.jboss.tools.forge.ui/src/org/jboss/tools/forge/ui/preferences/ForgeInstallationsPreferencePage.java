@@ -28,9 +28,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
-import org.jboss.tools.forge.core.runtime.ForgeEmbeddedRuntime;
-import org.jboss.tools.forge.core.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeFactory;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 
 public class ForgeInstallationsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
 				
@@ -102,7 +102,9 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 				ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
 				dialog.initialize("Add Forge Runtime", "", "");
 				if (dialog.open() != Dialog.CANCEL) {
-					runtimes.add(new ForgeExternalRuntime(dialog.getName(), dialog.getLocation()));
+					runtimes.add(ForgeRuntimeFactory.INSTANCE.createForgeRuntime(
+							dialog.getName(), 
+							dialog.getLocation()));
 					refreshForgeInstallations();
 					refreshNeeded = true;
 				}
@@ -119,20 +121,29 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 				ISelection selection = runtimesTableViewer.getSelection();
 				if (selection != null && selection instanceof IStructuredSelection) {
 					Object object = ((IStructuredSelection)selection).getFirstElement();
-					if (object != null && object instanceof ForgeExternalRuntime) {
-						ForgeExternalRuntime installation = (ForgeExternalRuntime)object;
+					if (object != null 
+							&& object instanceof ForgeRuntime 
+							&& ForgeRuntimeType.EXTERNAL.equals(((ForgeRuntime)object).getType())) {
+						ForgeRuntime installation = (ForgeRuntime)object;
+						int index = runtimes.indexOf(installation);
 						ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
 						dialog.initialize("Edit Forge Runtime", installation.getName(), installation.getLocation());
 						if (dialog.open() != Dialog.CANCEL) {
 							if (dialog.getName() != null && !dialog.getName().equals(installation.getName())) {
-								installation.setName(dialog.getName());
 								refreshNeeded = true;
 							}
 							if (dialog.getLocation() != null && !dialog.getLocation().equals(installation.getLocation())) {
-								installation.setLocation(dialog.getLocation());
 								refreshNeeded = true;
 							}
-							refreshForgeInstallations();
+							if (refreshNeeded) {
+								runtimes.remove(index);
+								runtimes.add(
+										index, 
+										ForgeRuntimeFactory.INSTANCE.createForgeRuntime(
+												dialog.getName(), 
+												dialog.getLocation()));
+								refreshForgeInstallations();
+							}
 						}
 					}
 				}
@@ -253,10 +264,10 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		runtimes = new ArrayList<ForgeRuntime>();
 		for (ForgeRuntime runtime : ForgeRuntimesPreferences.INSTANCE.getRuntimes()) {
 			ForgeRuntime copy = null;
-			if (runtime instanceof ForgeEmbeddedRuntime) {
+			if (ForgeRuntimeType.EMBEDDED.equals(runtime.getType())) {
 				copy = runtime;
-			} else if (runtime instanceof ForgeExternalRuntime) {
-				copy = new ForgeExternalRuntime(runtime.getName(), runtime.getLocation());
+			} else if (ForgeRuntimeType.EXTERNAL.equals(runtime.getType())) {
+				copy = ForgeRuntimeFactory.INSTANCE.createForgeRuntime(runtime.getName(), runtime.getLocation());
 			}
 			if (runtime == ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime()) {
 				defaultRuntime = copy;
@@ -279,7 +290,8 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 			selectedObject = selection.getFirstElement();
 		}
 		if (selectedObject == null 
-				|| (selectedObject instanceof ForgeEmbeddedRuntime)) {
+				|| (selectedObject instanceof ForgeRuntime 
+						&& ForgeRuntimeType.EMBEDDED.equals(((ForgeRuntime)selectedObject).getType()))) {
 			removeButton.setEnabled(false);
 			editButton.setEnabled(false);
 		} else {

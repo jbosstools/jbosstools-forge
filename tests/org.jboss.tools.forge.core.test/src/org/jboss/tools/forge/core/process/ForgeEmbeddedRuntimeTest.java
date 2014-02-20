@@ -7,7 +7,7 @@ import java.io.File;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
-import org.jboss.tools.forge.core.runtime.ForgeEmbeddedRuntime;
+import org.jboss.tools.forge.core.internal.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.junit.After;
 import org.junit.Before;

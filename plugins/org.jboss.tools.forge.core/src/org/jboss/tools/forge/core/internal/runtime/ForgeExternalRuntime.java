@@ -1,4 +1,6 @@
-package org.jboss.tools.forge.core.runtime;
+package org.jboss.tools.forge.core.internal.runtime;
+
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 
 public class ForgeExternalRuntime extends ForgeAbstractRuntime {
 	

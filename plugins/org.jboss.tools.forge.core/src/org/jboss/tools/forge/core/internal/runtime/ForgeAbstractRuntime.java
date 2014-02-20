@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.core.runtime;
+package org.jboss.tools.forge.core.internal.runtime;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -22,6 +22,7 @@ import org.jboss.tools.forge.core.internal.process.ForgeLaunchHelper;
 import org.jboss.tools.forge.core.internal.process.ForgeRuntimeProcess;
 import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	

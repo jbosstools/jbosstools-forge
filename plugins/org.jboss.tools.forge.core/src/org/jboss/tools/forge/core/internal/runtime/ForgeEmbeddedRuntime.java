@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.core.runtime;
+package org.jboss.tools.forge.core.internal.runtime;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 
 public class ForgeEmbeddedRuntime extends ForgeAbstractRuntime {
 	
