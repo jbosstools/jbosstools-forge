@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ForgePreferencesInitializerTest {
+public class ForgeCorePreferencesInitializerTest {
 	
 	private static final String FORGE_CORE_PLUGIN_ID = "org.jboss.tools.forge.core";
 	
