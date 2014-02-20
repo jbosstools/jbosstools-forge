@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.core.preferences;
+package org.jboss.tools.forge.core.internal.preferences;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.internal.preferences.ForgeCorePreferencesInitializer;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
