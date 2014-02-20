@@ -53,7 +53,6 @@ public class ForgeLaunchHelper {
 		IProcess result = null;
 		String launchConfigurationName = name + System.currentTimeMillis();
 		ILaunch launch = doLaunch(launchConfigurationName, location);
-//		ILaunch launch = doLaunch2(launchConfigurationName, location);
 		if (launch != null) {
 			IProcess[] processes = launch.getProcesses();
 			if (processes.length == 1) {
