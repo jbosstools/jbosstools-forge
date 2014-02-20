@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.debug.core.model.IProcess;
+import org.jboss.tools.forge.core.internal.process.ForgeLaunchHelper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

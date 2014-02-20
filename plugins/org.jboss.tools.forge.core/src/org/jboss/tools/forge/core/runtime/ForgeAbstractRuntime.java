@@ -18,10 +18,10 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
+import org.jboss.tools.forge.core.internal.process.ForgeLaunchHelper;
+import org.jboss.tools.forge.core.internal.process.ForgeRuntimeProcess;
 import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
-import org.jboss.tools.forge.core.process.ForgeLaunchHelper;
-import org.jboss.tools.forge.core.process.ForgeRuntimeProcess;
 
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
