@@ -20,26 +20,26 @@ public class ForgePreferencesInitializerTest {
 	@Before
 	public void setUp() {
 		preferences = InstanceScope.INSTANCE.getNode(FORGE_CORE_PLUGIN_ID);
-		preferredRuntime = preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null);
-		preferences.remove(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES);
+		preferredRuntime = preferences.get(ForgeCorePreferences.PREF_FORGE_RUNTIMES, null);
+		preferences.remove(ForgeCorePreferences.PREF_FORGE_RUNTIMES);
 	}
 	
 	@After
 	public void tearDown() {
 		if (preferredRuntime != null) {
 			preferences.put(
-					ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, 
+					ForgeCorePreferences.PREF_FORGE_RUNTIMES, 
 					preferredRuntime);
 		}
 	}
 	
 	@Test
 	public void testInitializeDefaultPreferences() {
-		assertNull(preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null));
+		assertNull(preferences.get(ForgeCorePreferences.PREF_FORGE_RUNTIMES, null));
 		new ForgeCorePreferencesInitializer().initializeDefaultPreferences();
 		assertEquals(
 				ForgeCorePreferencesInitializer.INITIAL_RUNTIMES_PREFERENCE, 
-				preferences.get(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null));
+				preferences.get(ForgeCorePreferences.PREF_FORGE_RUNTIMES, null));
 	}
 
 }

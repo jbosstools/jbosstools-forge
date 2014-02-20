@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 
 public class ForgeStartupPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
@@ -35,7 +35,7 @@ public class ForgeStartupPreferencePage extends PreferencePage implements
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		startupButton.setLayoutData(gridData);
-		startupButton.setSelection(ForgeRuntimesPreferences.INSTANCE.getStartup());
+		startupButton.setSelection(ForgeCorePreferences.INSTANCE.getStartup());
 	}
 	
 	private void createStartInDebugButton(Composite parent) {
@@ -44,7 +44,7 @@ public class ForgeStartupPreferencePage extends PreferencePage implements
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
 		startInDebugButton.setLayoutData(gridData);
-		startInDebugButton.setSelection(ForgeRuntimesPreferences.INSTANCE.getStartInDebug());
+		startInDebugButton.setSelection(ForgeCorePreferences.INSTANCE.getStartInDebug());
 	}
 	
 	private void createVmArgsText(Composite parent) {
@@ -52,7 +52,7 @@ public class ForgeStartupPreferencePage extends PreferencePage implements
 		vmArgsLabel.setText("Forge Startup VM Arguments: ");
 		vmArgsText = new Text(parent, SWT.BORDER);
 		vmArgsText.setLayoutData(new GridData(GridData.FILL_BOTH));
-		String vmArgs = ForgeRuntimesPreferences.INSTANCE.getVmArgs();
+		String vmArgs = ForgeCorePreferences.INSTANCE.getVmArgs();
 		vmArgsText.setText(vmArgs == null ? "" : vmArgs);
 	}
 	
@@ -74,9 +74,9 @@ public class ForgeStartupPreferencePage extends PreferencePage implements
 	}
 	
 	public boolean performOk() {
-		ForgeRuntimesPreferences.INSTANCE.setStartup(startupButton.getSelection());
-		ForgeRuntimesPreferences.INSTANCE.setStartInDebug(startInDebugButton.getSelection());
-		ForgeRuntimesPreferences.INSTANCE.setVmArgs(getVmArgsText());
+		ForgeCorePreferences.INSTANCE.setStartup(startupButton.getSelection());
+		ForgeCorePreferences.INSTANCE.setStartInDebug(startInDebugButton.getSelection());
+		ForgeCorePreferences.INSTANCE.setVmArgs(getVmArgsText());
 		return true;
 	}
 }

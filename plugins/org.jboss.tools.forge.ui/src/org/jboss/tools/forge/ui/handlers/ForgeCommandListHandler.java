@@ -16,7 +16,7 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
@@ -58,7 +58,7 @@ public class ForgeCommandListHandler extends AbstractHandler {
 			return null;
 		}				
 		showForgeView(window);
-		runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 		if (ForgeHelper.isForgeStarting()) {
 			showWaitUntilStartedMessage();
 		} else if (!ForgeHelper.isForgeRunning()) {
@@ -95,7 +95,7 @@ public class ForgeCommandListHandler extends AbstractHandler {
 	private void showForgeView(IWorkbenchWindow window) {
 		try {
 			IViewPart viewPart = window.getActivePage().showView(ForgeConsoleView.ID);
-			ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+			ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 			for (ForgeConsole forgeConsole : ForgeConsoleManager.INSTANCE.getConsoles()) {
 				if (runtime == forgeConsole.getRuntime()) {
 					((ForgeConsoleView)viewPart).showForgeConsole(forgeConsole);

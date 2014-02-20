@@ -7,7 +7,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.actions.f1.GoToAction;
 import org.jboss.tools.forge.ui.actions.f1.LinkAction;
@@ -20,7 +20,7 @@ import org.jboss.tools.forge.ui.part.ForgeTextViewer;
 public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	
 	private ForgeTextViewer forgeTextViewer = null;
-	private ForgeRuntime forgeRuntime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+	private ForgeRuntime forgeRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 	private String label = null;
 	
 	public ForgeConsoleImpl() {

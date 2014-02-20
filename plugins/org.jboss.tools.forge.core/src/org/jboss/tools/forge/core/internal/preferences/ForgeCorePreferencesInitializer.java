@@ -4,7 +4,7 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
-import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 
 public class ForgeCorePreferencesInitializer extends AbstractPreferenceInitializer {
 
@@ -17,7 +17,7 @@ public class ForgeCorePreferencesInitializer extends AbstractPreferenceInitializ
 	@Override
 	public void initializeDefaultPreferences() {
 		IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
-		preferences.put(ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, INITIAL_RUNTIMES_PREFERENCE);
+		preferences.put(ForgeCorePreferences.PREF_FORGE_RUNTIMES, INITIAL_RUNTIMES_PREFERENCE);
 	}
 
 }

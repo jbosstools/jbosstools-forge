@@ -14,7 +14,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
@@ -81,7 +81,7 @@ public class GoToAction extends Action implements ISelectionListener {
 		if (str.indexOf(' ') != -1) {
 			str = '\"' + str + '\"';
 		}
-		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 		runtime.sendInput("pick-up " + str + "\n");
 	}
 	

@@ -35,19 +35,19 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class ForgeRuntimesPreferences {
+public class ForgeCorePreferences {
 	
 	public static final String PREF_FORGE_RUNTIMES = "org.jboss.tools.forge.core.runtimes";
 	public static final String PREF_FORGE_STARTUP = "org.jboss.tools.forge.core.startup";
 	public static final String PREF_FORGE_START_IN_DEBUG = "org.jboss.tools.forge.core.startInDebug";
 	public static final String PREF_FORGE_VM_ARGS = "org.jboss.tools.forge.core.vmArgs";
 	
-	public static final ForgeRuntimesPreferences INSTANCE = new ForgeRuntimesPreferences();
+	public static final ForgeCorePreferences INSTANCE = new ForgeCorePreferences();
 	
 	private List<ForgeRuntime> runtimes = null;
 	private ForgeRuntime defaultRuntime = null;
 	
-	private ForgeRuntimesPreferences() {}
+	private ForgeCorePreferences() {}
 	
 	public ForgeRuntime[] getRuntimes() {
 		if (runtimes == null) {

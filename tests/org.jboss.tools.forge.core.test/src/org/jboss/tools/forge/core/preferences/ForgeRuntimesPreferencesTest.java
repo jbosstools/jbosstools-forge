@@ -31,23 +31,23 @@ public class ForgeRuntimesPreferencesTest {
 	
 	@Before
 	public void setUp() {
-		savedRuntimes = ForgeRuntimesPreferences.INSTANCE.getRuntimes();
-		savedDefaultRuntime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		savedRuntimes = ForgeCorePreferences.INSTANCE.getRuntimes();
+		savedDefaultRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 	}
 	
 	@After
 	public void tearDown() {
-		ForgeRuntimesPreferences.INSTANCE.setRuntimes(savedRuntimes, savedDefaultRuntime);
+		ForgeCorePreferences.INSTANCE.setRuntimes(savedRuntimes, savedDefaultRuntime);
 	}
 	
 	@Test
 	public void testGetDefaultInitialCase() {
-		assertEquals(ForgeEmbeddedRuntime.INSTANCE, ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime());
+		assertEquals(ForgeEmbeddedRuntime.INSTANCE, ForgeCorePreferences.INSTANCE.getDefaultRuntime());
 	}
 	
 	@Test
 	public void testGetRuntimesInitialCase() {
-		assertEquals(1, ForgeRuntimesPreferences.INSTANCE.getRuntimes().length);
+		assertEquals(1, ForgeCorePreferences.INSTANCE.getRuntimes().length);
 	}
 	
 	@Test
@@ -56,16 +56,16 @@ public class ForgeRuntimesPreferencesTest {
 		runtimes[0] = ForgeEmbeddedRuntime.INSTANCE;
 		runtimes[1] = new ForgeExternalRuntime("foo", "foofoo");
 		runtimes[2] = new ForgeExternalRuntime("bar", "barbar");
-		ForgeRuntimesPreferences.INSTANCE.setRuntimes(runtimes, runtimes[1]);
-		assertArrayEquals(runtimes, ForgeRuntimesPreferences.INSTANCE.getRuntimes());
-		assertEquals(runtimes[1], ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime());
+		ForgeCorePreferences.INSTANCE.setRuntimes(runtimes, runtimes[1]);
+		assertArrayEquals(runtimes, ForgeCorePreferences.INSTANCE.getRuntimes());
+		assertEquals(runtimes[1], ForgeCorePreferences.INSTANCE.getDefaultRuntime());
 		verifyForgeRuntimesPreferencesString();
 	}
 	
 	private void verifyForgeRuntimesPreferencesString() {
 		String forgeRuntimesPrefs = 
 				InstanceScope.INSTANCE.getNode(FORGE_CORE_PLUGIN_ID).get(
-						ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, null);
+						ForgeCorePreferences.PREF_FORGE_RUNTIMES, null);
 		verifyDefaultRuntime(forgeRuntimesPrefs);
 		verifyRuntimes(forgeRuntimesPrefs);
 	}
@@ -141,17 +141,17 @@ public class ForgeRuntimesPreferencesTest {
 	@Test
 	public void testGetDefaultAndGetInstallationsAlternativeCase() {
 		// trick the preferences into initializing from the alternative preference string
-		ForgeRuntimesPreferences.INSTANCE.setRuntimes(new ForgeRuntime[0], null);
+		ForgeCorePreferences.INSTANCE.setRuntimes(new ForgeRuntime[0], null);
 		InstanceScope.INSTANCE.getNode(FORGE_CORE_PLUGIN_ID).put(
-				ForgeRuntimesPreferences.PREF_FORGE_RUNTIMES, 
+				ForgeCorePreferences.PREF_FORGE_RUNTIMES, 
 				ALTERNATIVE_FORGE_RUNTIMES);
 		// getDefault() will now trigger the initialization
-		ForgeRuntime runtime = ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();
+		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 		assertEquals("foo", runtime.getName());
 		assertEquals("foofoo", runtime.getLocation());
 		assertEquals(ForgeRuntimeType.EXTERNAL, runtime.getType());
 		// getRuntimes() will return the list of runtimes from the alternative preference string
-		ForgeRuntime[] runtimes = ForgeRuntimesPreferences.INSTANCE.getRuntimes();
+		ForgeRuntime[] runtimes = ForgeCorePreferences.INSTANCE.getRuntimes();
 		verifyEmbedded(runtimes);
 		verifyFoo(runtimes);
 		verifyBar(runtimes);

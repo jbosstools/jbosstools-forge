@@ -17,7 +17,7 @@ import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
-import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 
 
 public class ForgeLaunchHelper {
@@ -77,7 +77,7 @@ public class ForgeLaunchHelper {
 	}
 	
 	private static String getLaunchMode() {
-		return ForgeRuntimesPreferences.INSTANCE.getStartInDebug() ? 
+		return ForgeCorePreferences.INSTANCE.getStartInDebug() ? 
 				ILaunchManager.DEBUG_MODE : ILaunchManager.RUN_MODE;
 	}
 	
@@ -139,7 +139,7 @@ public class ForgeLaunchHelper {
 	}
 	
 	private static String getVmArgumentPrefs() {
-		String str = ForgeRuntimesPreferences.INSTANCE.getVmArgs();
+		String str = ForgeCorePreferences.INSTANCE.getVmArgs();
 		if (!"".equals(str)) {
 			str += " ";
 		}

@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeFactory;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
@@ -262,14 +262,14 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	
 	private void initializeForgeInstallations() {
 		runtimes = new ArrayList<ForgeRuntime>();
-		for (ForgeRuntime runtime : ForgeRuntimesPreferences.INSTANCE.getRuntimes()) {
+		for (ForgeRuntime runtime : ForgeCorePreferences.INSTANCE.getRuntimes()) {
 			ForgeRuntime copy = null;
 			if (ForgeRuntimeType.EMBEDDED.equals(runtime.getType())) {
 				copy = runtime;
 			} else if (ForgeRuntimeType.EXTERNAL.equals(runtime.getType())) {
 				copy = ForgeRuntimeFactory.INSTANCE.createForgeRuntime(runtime.getName(), runtime.getLocation());
 			}
-			if (runtime == ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime()) {
+			if (runtime == ForgeCorePreferences.INSTANCE.getDefaultRuntime()) {
 				defaultRuntime = copy;
 			}
 			runtimes.add(copy);
@@ -307,7 +307,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 				public void run() {
 					ForgeRuntime[] runtimes = (ForgeRuntime[])runtimesTableViewer.getInput();
 					ForgeRuntime defaultRuntime = (ForgeRuntime)runtimesTableViewer.getCheckedElements()[0];
-					ForgeRuntimesPreferences.INSTANCE.setRuntimes(runtimes, defaultRuntime);
+					ForgeCorePreferences.INSTANCE.setRuntimes(runtimes, defaultRuntime);
 					refreshNeeded = false;
 				}
 			});	

@@ -13,7 +13,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.forge.core.preferences.ForgeRuntimesPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.document.ForgeDocument;
 
@@ -154,7 +154,7 @@ public class ForgeTextViewer extends TextViewer {
     }
     
     private ForgeRuntime getRuntime() {
-		return ForgeRuntimesPreferences.INSTANCE.getDefaultRuntime();    	
+		return ForgeCorePreferences.INSTANCE.getDefaultRuntime();    	
     }
     
 }
