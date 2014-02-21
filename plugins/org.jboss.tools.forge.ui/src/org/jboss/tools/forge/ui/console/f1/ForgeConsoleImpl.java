@@ -25,7 +25,7 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	
 	public ForgeConsoleImpl() {
 		getRuntime().addPropertyChangeListener(this);
-		label = "Forge " + getRuntime().getVersion() + " - " + getRuntime().getType();
+		label = "Forge " + getRuntime().getVersion() + " - " + getRuntime().getType().name().toLowerCase();
 	}
 	
 	@Override
