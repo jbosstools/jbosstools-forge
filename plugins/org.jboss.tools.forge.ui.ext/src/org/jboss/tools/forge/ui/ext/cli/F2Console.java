@@ -18,7 +18,6 @@ public class F2Console extends AeshConsole {
 	}
 
 	protected void createConsole() {
-		// super.createConsole();
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);
 		File currentDir = OperatingSystemUtils.getUserHomeDir();
 		OutputStream stdOut = getStdOut();
