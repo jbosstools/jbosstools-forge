@@ -11,12 +11,6 @@ public class F2TextViewer extends AeshTextViewer {
 		super(parent);
 	}
 
-    protected void initialize() {
-    	initializeConsole();
-    	initializeDocument();
-    	initializeTextWidget();
-    }
-    
     protected void initializeDocument() {
     	aeshDocument = new AeshDocument();
     	aeshDocument.addCursorListener(cursorListener);
