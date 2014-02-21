@@ -39,7 +39,7 @@ public class AeshConsole {
 		initialize();
 	}
 
-	protected void initialize() {
+	public void initialize() {
 		createStreams();
 		createConsole();
 	}

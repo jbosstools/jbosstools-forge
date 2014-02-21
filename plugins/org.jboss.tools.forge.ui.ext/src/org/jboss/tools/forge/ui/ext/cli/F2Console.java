@@ -13,7 +13,7 @@ public class F2Console extends AeshConsole {
 	
 	private ShellHandle handle;
 
-	protected void initialize() {
+	public void initialize() {
 		createStreams();
 	}
 

@@ -32,7 +32,7 @@ public class AeshTextViewer extends TextViewer {
 	protected AeshConsole aeshConsole;
 	protected AeshDocument aeshDocument;
 	
-	private CursorListener cursorListener = new CursorListener() {		
+	protected CursorListener cursorListener = new CursorListener() {		
 		@Override
 		public void cursorMoved() {
 			StyledText textWidget = getTextWidget();
@@ -42,7 +42,7 @@ public class AeshTextViewer extends TextViewer {
 		}
 	};
 	
-	private IDocumentListener documentListener = new IDocumentListener() {
+	protected IDocumentListener documentListener = new IDocumentListener() {
     	@Override
         public void documentAboutToBeChanged(DocumentEvent event) {
         }
