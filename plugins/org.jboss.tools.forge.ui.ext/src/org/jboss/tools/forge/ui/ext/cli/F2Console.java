@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.forge.addon.shell.ShellHandle;
-import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 
@@ -19,13 +19,11 @@ public class F2Console extends AeshConsole {
 
 	protected void createConsole() {
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);
-		File currentDir = OperatingSystemUtils.getUserHomeDir();
+		File currentDir = ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile();
 		OutputStream stdOut = getStdOut();
 		OutputStream stdErr = getStdErr();
-
 		PrintStream out = new PrintStream(stdOut, true);
 		PrintStream err = new PrintStream(stdErr, true);
-
 		handle.initialize(currentDir, getInputStream(), out, err);
 	}
 
