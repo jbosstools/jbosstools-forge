@@ -7,16 +7,12 @@ import org.jboss.tools.forge.core.io.ForgeOutputListener;
 
 public interface ForgeRuntime {
 	
-	String STATE_NOT_RUNNING = "org.jboss.tools.forge.runtime.notRunning";
-	String STATE_RUNNING = "org.jboss.tools.forge.runtime.running";
-	String STATE_STARTING = "org.jboss.tools.forge.runtime.starting";
-	
 	String PROPERTY_STATE = "org.jboss.tools.forge.runtime.state";
 
 	String getName();
 	String getLocation();
 	ForgeRuntimeType getType();
-	String getState();
+	ForgeRuntimeState getState();
 	String getVersion();
 	
 	void start(IProgressMonitor progressMonitor);

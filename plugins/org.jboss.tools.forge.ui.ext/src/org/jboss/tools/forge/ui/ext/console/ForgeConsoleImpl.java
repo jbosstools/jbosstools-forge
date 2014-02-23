@@ -7,6 +7,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ext.core.runtime.FurnaceRuntime;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 import org.jboss.tools.forge.ui.ext.actions.StartAction;
@@ -49,12 +50,12 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (ForgeRuntime.STATE_STARTING.equals(evt.getOldValue()) 
-				&& ForgeRuntime.STATE_RUNNING.equals(evt.getNewValue())) {
+		if (ForgeRuntimeState.STARTING.equals(evt.getOldValue()) 
+				&& ForgeRuntimeState.RUNNING.equals(evt.getNewValue())) {
 			textViewer.startConsole();
 		}
-		if (ForgeRuntime.STATE_RUNNING.equals(evt.getOldValue())
-				&& ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getNewValue())) {
+		if (ForgeRuntimeState.RUNNING.equals(evt.getOldValue())
+				&& ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
 			textViewer.stopConsole();
 		}
 	}

@@ -18,6 +18,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.console.ForgeConsole;
 import org.jboss.tools.forge.ui.console.ForgeConsoleManager;
@@ -64,7 +65,7 @@ public class ForgeCommandListHandler extends AbstractHandler {
 		} else if (!ForgeHelper.isForgeRunning()) {
 			askUserToStartRuntime(); 
 		}
-		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
+		if (runtime != null && ForgeRuntimeState.RUNNING.equals(runtime.getState())) {
 			getCommandsJob.addJobChangeListener(getCommandsJobListener);
 			getCommandsJob.schedule();
 		}

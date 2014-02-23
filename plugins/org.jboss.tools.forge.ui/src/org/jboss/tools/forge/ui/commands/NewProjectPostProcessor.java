@@ -9,6 +9,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.importer.ProjectImporter;
 
 
@@ -72,7 +73,7 @@ public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
 	
 	private void resetRuntime() {
 		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-		if (runtime != null && ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) {
+		if (runtime != null && ForgeRuntimeState.RUNNING.equals(runtime.getState())) {
 			runtime.sendInput("reset\n");
 		}
 	}

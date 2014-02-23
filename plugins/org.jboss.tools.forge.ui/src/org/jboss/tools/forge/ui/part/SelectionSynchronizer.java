@@ -13,6 +13,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 
 
 public class SelectionSynchronizer implements ISelectionListener {
@@ -43,7 +44,7 @@ public class SelectionSynchronizer implements ISelectionListener {
 				path = '\"' + path + '\"';
 			}
 			ForgeRuntime forgeRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-			if (forgeRuntime != null && ForgeRuntime.STATE_RUNNING.equals(forgeRuntime.getState())) {
+			if (forgeRuntime != null && ForgeRuntimeState.RUNNING.equals(forgeRuntime.getState())) {
 				forgeRuntime.sendInput("pick-up " + path + "\n");
 			}
 		}
@@ -76,7 +77,7 @@ public class SelectionSynchronizer implements ISelectionListener {
 			path = '\"' + path + '\"';
 		}
 		ForgeRuntime forgeRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-		if (forgeRuntime != null && ForgeRuntime.STATE_RUNNING.equals(forgeRuntime.getState())) {
+		if (forgeRuntime != null && ForgeRuntimeState.RUNNING.equals(forgeRuntime.getState())) {
 			forgeRuntime.sendInput("pick-up " + path + "\n");
 		}
 	}

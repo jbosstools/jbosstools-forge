@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.actions.f1.GoToAction;
 import org.jboss.tools.forge.ui.actions.f1.LinkAction;
 import org.jboss.tools.forge.ui.actions.f1.StartAction;
@@ -54,7 +55,7 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
-		if (ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getNewValue())) {
+		if (ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
 			resetForgeDocument();
 		}
 	}

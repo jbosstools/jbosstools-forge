@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.tools.forge.core.internal.runtime.ForgeAbstractRuntime;
-import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.junit.After;
 import org.junit.Before;
@@ -63,14 +63,14 @@ public class ForgeAbstractRuntimeTest {
 	@Test
 	public void testStartComplete() {
 		runtime.start(null);
-		assertEquals(ForgeRuntime.STATE_RUNNING, runtime.getState());
+		assertEquals(ForgeRuntimeState.RUNNING, runtime.getState());
 		assertNotNull(runtime.getProcess());
 		assertEquals(2, propertyChangeEvents.size());
 		for (PropertyChangeEvent evt : propertyChangeEvents) {
-			if (ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getOldValue())) {
-				assertEquals(ForgeRuntime.STATE_STARTING, evt.getNewValue());
-			} else if (ForgeRuntime.STATE_STARTING.equals(evt.getOldValue())) {
-				assertEquals(ForgeRuntime.STATE_RUNNING, evt.getNewValue());
+			if (ForgeRuntimeState.STOPPED.equals(evt.getOldValue())) {
+				assertEquals(ForgeRuntimeState.STARTING, evt.getNewValue());
+			} else if (ForgeRuntimeState.STARTING.equals(evt.getOldValue())) {
+				assertEquals(ForgeRuntimeState.RUNNING, evt.getNewValue());
 			}
 		}
 	}
@@ -79,7 +79,7 @@ public class ForgeAbstractRuntimeTest {
 	@Test
 	public void testStartWithProgressMonitor() {
 		runtime.start(new TestProgressMonitor());
-		assertEquals(ForgeRuntime.STATE_NOT_RUNNING, runtime.getState());
+		assertEquals(ForgeRuntimeState.STOPPED, runtime.getState());
 		assertNull(runtime.getProcess());
 		assertEquals("Starting Forge", taskName);
 		assertEquals(IProgressMonitor.UNKNOWN, totalWork);
@@ -91,10 +91,10 @@ public class ForgeAbstractRuntimeTest {
 		assertEquals(1, amountWorked);
 		assertEquals(2, propertyChangeEvents.size());
 		for (PropertyChangeEvent evt : propertyChangeEvents) {
-			if (ForgeRuntime.STATE_NOT_RUNNING.equals(evt.getOldValue())) {
-				assertEquals(ForgeRuntime.STATE_STARTING, evt.getNewValue());
-			} else if (ForgeRuntime.STATE_STARTING.equals(evt.getOldValue())) {
-				assertEquals(ForgeRuntime.STATE_NOT_RUNNING, evt.getNewValue());
+			if (ForgeRuntimeState.STOPPED.equals(evt.getOldValue())) {
+				assertEquals(ForgeRuntimeState.STARTING, evt.getNewValue());
+			} else if (ForgeRuntimeState.STARTING.equals(evt.getOldValue())) {
+				assertEquals(ForgeRuntimeState.STOPPED, evt.getNewValue());
 			}
 		}
 	}
@@ -103,15 +103,15 @@ public class ForgeAbstractRuntimeTest {
 	@Test
 	public void testStopComplete() {
 		runtime.start(null);
-		assertEquals(ForgeRuntime.STATE_RUNNING, runtime.getState());
+		assertEquals(ForgeRuntimeState.RUNNING, runtime.getState());
 		propertyChangeEvents.clear();
 		runtime.stop(null);
-		assertEquals(ForgeRuntime.STATE_NOT_RUNNING, runtime.getState());
+		assertEquals(ForgeRuntimeState.STOPPED, runtime.getState());
 		assertNull(runtime.getProcess());
 		assertEquals(1, propertyChangeEvents.size());
 		for (PropertyChangeEvent evt : propertyChangeEvents) {
-			assertEquals(ForgeRuntime.STATE_RUNNING, evt.getOldValue());
-			assertEquals(ForgeRuntime.STATE_NOT_RUNNING, evt.getNewValue());
+			assertEquals(ForgeRuntimeState.RUNNING, evt.getOldValue());
+			assertEquals(ForgeRuntimeState.STOPPED, evt.getNewValue());
 		}
 	}
 	
@@ -119,10 +119,10 @@ public class ForgeAbstractRuntimeTest {
 	@Test
 	public void testStopWithProgressMonitor() {
 		runtime.start(null);
-		assertEquals(ForgeRuntime.STATE_RUNNING, runtime.getState());
+		assertEquals(ForgeRuntimeState.RUNNING, runtime.getState());
 		propertyChangeEvents.clear();
 		runtime.stop(new TestProgressMonitor());
-		assertEquals(ForgeRuntime.STATE_NOT_RUNNING, runtime.getState());
+		assertEquals(ForgeRuntimeState.STOPPED, runtime.getState());
 		assertNull(runtime.getProcess());
 		assertEquals("Stopping Forge", taskName);
 		assertEquals(1, totalWork);
@@ -132,15 +132,15 @@ public class ForgeAbstractRuntimeTest {
 		assertEquals(0, amountWorked);
 		assertEquals(1, propertyChangeEvents.size());
 		for (PropertyChangeEvent evt : propertyChangeEvents) {
-			assertEquals(ForgeRuntime.STATE_RUNNING, evt.getOldValue());
-			assertEquals(ForgeRuntime.STATE_NOT_RUNNING, evt.getNewValue());
+			assertEquals(ForgeRuntimeState.RUNNING, evt.getOldValue());
+			assertEquals(ForgeRuntimeState.STOPPED, evt.getNewValue());
 		}
 	}
 	
 	private class TestPropertyChangeListener implements PropertyChangeListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			propertyChangeEvents.add(evt);
-			if (ForgeRuntime.STATE_STARTING.equals(evt.getNewValue())) {
+			if (ForgeRuntimeState.STARTING.equals(evt.getNewValue())) {
 				assertNotNull(runtime.getProcess());
 			}
 		}		

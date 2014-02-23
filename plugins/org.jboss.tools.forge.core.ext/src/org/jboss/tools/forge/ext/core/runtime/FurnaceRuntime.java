@@ -15,6 +15,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
 import org.jboss.tools.forge.ext.core.FurnaceProvider;
@@ -23,7 +24,7 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 public class FurnaceRuntime implements ForgeRuntime {
 	
 	public static final FurnaceRuntime INSTANCE = new FurnaceRuntime();
-	private String state = STATE_NOT_RUNNING;
+	private ForgeRuntimeState state = ForgeRuntimeState.STOPPED;
 	private String location = null;
 	private String version = null;
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
@@ -49,13 +50,13 @@ public class FurnaceRuntime implements ForgeRuntime {
 	}
 
 	@Override
-	public String getState() {
+	public ForgeRuntimeState getState() {
 		if (FurnaceService.INSTANCE.getContainerStatus().isStarted()) {
-			return ForgeRuntime.STATE_RUNNING;
+			return ForgeRuntimeState.RUNNING;
 		} else if (FurnaceService.INSTANCE.getContainerStatus().isStarting()) {
-			return ForgeRuntime.STATE_STARTING;
+			return ForgeRuntimeState.STARTING;
 		} else if (FurnaceService.INSTANCE.getContainerStatus().isStopped()) {
-			return ForgeRuntime.STATE_NOT_RUNNING;
+			return ForgeRuntimeState.STOPPED;
 		}
 		return null;
 	}
@@ -76,13 +77,13 @@ public class FurnaceRuntime implements ForgeRuntime {
 		try {
 			String taskName = "Please wait while Forge " + getVersion() + " is started.";
 			progressMonitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
-			setNewState(STATE_STARTING);
+			setNewState(ForgeRuntimeState.STARTING);
 			FurnaceProvider.INSTANCE.startFurnace();
 			progressMonitor.worked(1);
 			while (FurnaceService.INSTANCE.getContainerStatus().isStarting()) {
 				if (progressMonitor.isCanceled()) {
 					FurnaceService.INSTANCE.stop();
-					setNewState(STATE_NOT_RUNNING);
+					setNewState(ForgeRuntimeState.STOPPED);
 				} else {
 					Thread.sleep(1000);
 					progressMonitor.worked(1);
@@ -90,18 +91,18 @@ public class FurnaceRuntime implements ForgeRuntime {
 			}
 			FurnaceService.INSTANCE.waitUntilContainerIsStarted();
 			getAllCandidatesAsMap();
-			setNewState(STATE_RUNNING);
+			setNewState(ForgeRuntimeState.RUNNING);
 		} catch (InterruptedException e) {
 			if (progressMonitor.isCanceled()) {
 				FurnaceService.INSTANCE.stop();
-				setNewState(STATE_NOT_RUNNING);
+				setNewState(ForgeRuntimeState.STOPPED);
 			}
 		}
 	}
 
 	@Override
 	public void stop(IProgressMonitor progressMonitor) {
-		setNewState(STATE_NOT_RUNNING);
+		setNewState(ForgeRuntimeState.STOPPED);
 		FurnaceService.INSTANCE.stop();
 	}
 
@@ -143,8 +144,8 @@ public class FurnaceRuntime implements ForgeRuntime {
 		propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
 	}
 	
-	private void setNewState(String newState) {
-		String oldState = state;
+	private void setNewState(ForgeRuntimeState newState) {
+		ForgeRuntimeState oldState = state;
 		state = newState;
 		propertyChangeSupport.firePropertyChange(PROPERTY_STATE, oldState, state);
 	}

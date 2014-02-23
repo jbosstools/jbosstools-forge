@@ -23,11 +23,12 @@ import org.jboss.tools.forge.core.internal.process.ForgeRuntimeProcess;
 import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	
 	private IProcess process = null;
-	private String state = STATE_NOT_RUNNING;
+	private ForgeRuntimeState state = ForgeRuntimeState.STOPPED;
 	private String version = null;
 	private final TerminateListener terminateListener = new TerminateListener();	
 	private MasterStreamListener masterStreamListener = new MasterStreamListener();
@@ -40,7 +41,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		return process;
 	}
 	
-	public String getState() {
+	public ForgeRuntimeState getState() {
 		return state;
 	}
 	
@@ -82,7 +83,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			startupListener = new StartupListener();
 			process = ForgeLaunchHelper.launch(getName(), getLocation());
 			if (process != null) {
-				setNewState(STATE_STARTING);
+				setNewState(ForgeRuntimeState.STARTING);
 				DebugPlugin.getDefault().addDebugEventListener(terminateListener);
 				IStreamsProxy streamsProxy = getStreamsProxy();
 				if (streamsProxy != null) {
@@ -100,9 +101,9 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				}
 			}
 			progressMonitor.worked(1);
-			while (STATE_STARTING.equals(state)) {
+			while (ForgeRuntimeState.STARTING.equals(state)) {
 				if (process.isTerminated()) {
-					setNewState(STATE_NOT_RUNNING);
+					setNewState(ForgeRuntimeState.STOPPED);
 					progressMonitor.done();
 					return;
 				}
@@ -227,8 +228,8 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		}
 	}
 	
-	private void setNewState(String newState) {
-		String oldState = state;
+	private void setNewState(ForgeRuntimeState newState) {
+		ForgeRuntimeState oldState = state;
 		state = newState;
 		propertyChangeSupport.firePropertyChange(PROPERTY_STATE, oldState, state);
 	}
@@ -260,7 +261,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
 			getStreamsProxy().getOutputStreamMonitor().removeListener(this);
-			setNewState(STATE_RUNNING);
+			setNewState(ForgeRuntimeState.RUNNING);
 		}		
 	}
 	
@@ -318,7 +319,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	                	DebugPlugin.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-			                	setNewState(STATE_NOT_RUNNING);
+			                	setNewState(ForgeRuntimeState.STOPPED);
 			                	ForgeCorePlugin.removeForgeProcess(process);
 			                	process = null;
 			                	DebugPlugin.getDefault().removeDebugEventListener(terminateListener);

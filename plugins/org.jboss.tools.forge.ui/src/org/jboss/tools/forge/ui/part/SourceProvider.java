@@ -6,10 +6,11 @@ import java.util.Map;
 import org.eclipse.ui.AbstractSourceProvider;
 import org.eclipse.ui.ISources;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 
 public class SourceProvider extends AbstractSourceProvider {
 	
-	private String runtimeState = ForgeRuntime.STATE_NOT_RUNNING;
+	private ForgeRuntimeState runtimeState = ForgeRuntimeState.STOPPED;
 	
 	@Override
 	public void dispose() {
@@ -27,7 +28,7 @@ public class SourceProvider extends AbstractSourceProvider {
 		return new String[] { ForgeRuntime.PROPERTY_STATE };
 	}
 	
-	public void setRuntimeState(String state) {
+	public void setRuntimeState(ForgeRuntimeState state) {
 		runtimeState = state;
 		fireSourceChanged(ISources.WORKBENCH, ForgeRuntime.PROPERTY_STATE, state);
 	}

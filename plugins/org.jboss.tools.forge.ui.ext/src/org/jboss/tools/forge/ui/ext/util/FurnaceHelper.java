@@ -9,19 +9,20 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ext.core.runtime.FurnaceRuntime;
 
 public class FurnaceHelper {
 
 	public static void startFurnace() {
 		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
-		if (runtime == null || ForgeRuntime.STATE_RUNNING.equals(runtime.getState())) return;
+		if (runtime == null || ForgeRuntimeState.RUNNING.equals(runtime.getState())) return;
 		createStartFurnaceJob().schedule();
 	}
 	
 	public static void stopFurnace() {
 		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
-		if (runtime == null || ForgeRuntime.STATE_NOT_RUNNING.equals(runtime.getState())) return;
+		if (runtime == null || ForgeRuntimeState.STOPPED.equals(runtime.getState())) return;
 		Job job = new Job("Stopping Forge " + runtime.getVersion()) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
