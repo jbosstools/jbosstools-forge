@@ -13,10 +13,11 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.io.ForgeAnsiCommandFilter;
+import org.jboss.tools.forge.core.io.ForgeCommandFilter;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.commands.ForgeCommandFilter;
+import org.jboss.tools.forge.ui.commands.ForgeCommandProcessorImpl;
 
 public class ForgeDocument extends Document {
 	
@@ -28,7 +29,7 @@ public class ForgeDocument extends Document {
 	
 	private class SyncForgeCommandFilter extends ForgeCommandFilter {
 		public SyncForgeCommandFilter(ForgeOutputListener listener) {
-			super(listener);
+			super(listener, new ForgeCommandProcessorImpl());
 		}
 		public void outputAvailable(final String output) {
 			Display.getDefault().syncExec(new Runnable() {

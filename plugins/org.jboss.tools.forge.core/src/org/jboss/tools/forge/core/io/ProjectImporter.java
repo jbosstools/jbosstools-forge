@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.importer;
+package org.jboss.tools.forge.core.io;
 
 import java.io.File;
 import java.util.ArrayList;

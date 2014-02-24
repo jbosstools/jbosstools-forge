@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.importer;
+package org.jboss.tools.forge.core.io;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;

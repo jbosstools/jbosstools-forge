@@ -1,17 +1,15 @@
-package org.jboss.tools.forge.ui.commands;
+package org.jboss.tools.forge.core.io;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
-import org.jboss.tools.forge.core.io.ForgeOutputListener;
-import org.jboss.tools.forge.importer.ProjectConfigurationUpdater;
 
 public class ForgeCommandFilter extends ForgeHiddenOutputFilter {
 	
-	private ForgeCommandProcessor commandProcessor = new ForgeCommandProcessor();
+	private ForgeCommandProcessor commandProcessor = null;
 	
-	public ForgeCommandFilter(ForgeOutputListener listener) {
+	public ForgeCommandFilter(ForgeOutputListener listener, ForgeCommandProcessor commandProcessor) {
 		super(listener);
+		this.commandProcessor = commandProcessor;
 		
 	}
 
