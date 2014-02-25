@@ -2,6 +2,7 @@ package org.jboss.tools.forge.core.io;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.jboss.tools.forge.core.util.ProjectConfigurationUpdater;
 
 public class ForgeCommandFilter extends ForgeHiddenOutputFilter {
 	

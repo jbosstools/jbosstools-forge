@@ -13,7 +13,8 @@ Bundle-ActivationPolicy: lazy
 Export-Package: org.jboss.tools.forge.core.internal.process,
  org.jboss.tools.forge.core.io,
  org.jboss.tools.forge.core.preferences,
- org.jboss.tools.forge.core.runtime
+ org.jboss.tools.forge.core.runtime,
+ org.jboss.tools.forge.core.util
 Bundle-Activator: org.jboss.tools.forge.core.internal.ForgeCorePlugin
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin

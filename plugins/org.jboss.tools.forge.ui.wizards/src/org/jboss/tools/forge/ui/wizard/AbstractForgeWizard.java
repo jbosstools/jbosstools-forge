@@ -16,7 +16,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.core.io.ProjectConfigurationUpdater;
+import org.jboss.tools.forge.core.util.ProjectConfigurationUpdater;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 

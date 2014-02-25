@@ -7,10 +7,10 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
-import org.jboss.tools.forge.core.io.ProjectImporter;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
+import org.jboss.tools.forge.core.util.ProjectImporter;
 
 
 public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
