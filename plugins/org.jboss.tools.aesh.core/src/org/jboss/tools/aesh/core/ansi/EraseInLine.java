@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-import org.jboss.tools.aesh.core.document.AeshDocument;
+import org.jboss.tools.aesh.core.document.Document;
 
 
 public class EraseInLine extends ControlSequence {
@@ -13,7 +13,7 @@ public class EraseInLine extends ControlSequence {
 	}
 	
 	@Override
-	public void handle(AeshDocument document) {
+	public void handle(Document document) {
 		document.replace(
 				document.getCursorOffset(), 
 				document.getLength() - document.getCursorOffset(), 

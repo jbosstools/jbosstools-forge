@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.document;
 
-public interface AeshDocument {
+public interface Document {
 	
 	int getCursorOffset();
 	int getLineOfOffset(int offset);

@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-import org.jboss.tools.aesh.core.document.AeshDocument;
+import org.jboss.tools.aesh.core.document.Document;
 
 
 public class EraseData extends ControlSequence {
@@ -17,7 +17,7 @@ public class EraseData extends ControlSequence {
 	}
 	
 	@Override
-	public void handle(AeshDocument document) {
+	public void handle(Document document) {
     	if ("2".equals(arguments)) {
     		document.reset();
     	}		
