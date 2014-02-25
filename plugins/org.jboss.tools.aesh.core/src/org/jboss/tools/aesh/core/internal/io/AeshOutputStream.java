@@ -1,19 +1,17 @@
-package org.jboss.tools.aesh.core.io;
+package org.jboss.tools.aesh.core.internal.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import org.jboss.tools.aesh.core.io.StreamListener;
 
 public class AeshOutputStream extends OutputStream {
 	
 	public static final AeshOutputStream STD_OUT = new AeshOutputStream();
 	public static final AeshOutputStream STD_ERR = new AeshOutputStream();
 	
-	public static interface StreamListener {
-		public void outputAvailable(String str);
-	}
-	
-	private ArrayList<StreamListener> listeners = new ArrayList<AeshOutputStream.StreamListener>();
+	private ArrayList<StreamListener> listeners = new ArrayList<StreamListener>();
 
 	public void addStreamListener(StreamListener listener) {
 		listeners.add(listener);

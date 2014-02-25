@@ -14,7 +14,7 @@ import org.jboss.tools.aesh.core.ansi.ControlSequence;
 import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.document.DocumentProxy;
-import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
+import org.jboss.tools.aesh.core.io.StreamListener;
 import org.jboss.tools.aesh.ui.fonts.FontManager;
 
 public class AeshDocument extends Document {

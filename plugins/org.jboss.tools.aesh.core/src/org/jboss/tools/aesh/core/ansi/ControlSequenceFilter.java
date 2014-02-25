@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
+import org.jboss.tools.aesh.core.io.StreamListener;
 
 public abstract class ControlSequenceFilter implements StreamListener {
 

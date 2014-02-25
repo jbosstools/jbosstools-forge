@@ -25,9 +25,9 @@ import org.jboss.aesh.terminal.CharacterType;
 import org.jboss.aesh.terminal.Color;
 import org.jboss.aesh.terminal.TerminalCharacter;
 import org.jboss.aesh.terminal.TerminalColor;
-import org.jboss.tools.aesh.core.io.AeshInputStream;
-import org.jboss.tools.aesh.core.io.AeshOutputStream;
-import org.jboss.tools.aesh.core.io.AeshOutputStream.StreamListener;
+import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
+import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
+import org.jboss.tools.aesh.core.io.StreamListener;
 
 public class AeshConsole {
 

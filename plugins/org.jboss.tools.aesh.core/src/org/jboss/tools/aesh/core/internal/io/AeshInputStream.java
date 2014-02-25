@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.core.io;
+package org.jboss.tools.aesh.core.internal.io;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
