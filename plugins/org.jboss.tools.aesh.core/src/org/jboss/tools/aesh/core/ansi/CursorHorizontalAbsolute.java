@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-import org.jboss.tools.aesh.core.document.DocumentProxy;
+import org.jboss.tools.aesh.core.document.AeshDocument;
 
 
 public class CursorHorizontalAbsolute extends ControlSequence {
@@ -17,7 +17,7 @@ public class CursorHorizontalAbsolute extends ControlSequence {
 	}
 	
 	@Override
-	public void handle(DocumentProxy document) {
+	public void handle(AeshDocument document) {
 		int lineStart = document.getLineOffset(document.getLineOfOffset(document.getCursorOffset()));
 		document.moveCursorTo(lineStart + column); 
 	}

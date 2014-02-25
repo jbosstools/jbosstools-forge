@@ -13,8 +13,8 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.ui.AeshUIConstants;
-import org.jboss.tools.aesh.ui.document.AeshDocument;
-import org.jboss.tools.aesh.ui.document.AeshDocument.CursorListener;;
+import org.jboss.tools.aesh.ui.document.DelegateDocument;
+import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;;
 
 public class AeshTextViewer extends TextViewer {
 	
@@ -30,7 +30,7 @@ public class AeshTextViewer extends TextViewer {
 	private static String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
 
 	protected AeshConsole aeshConsole;
-	protected AeshDocument aeshDocument;
+	protected DelegateDocument aeshDocument;
 	
 	protected CursorListener cursorListener = new CursorListener() {		
 		@Override
@@ -70,7 +70,7 @@ public class AeshTextViewer extends TextViewer {
     }
     
     protected void initializeDocument() {
-    	aeshDocument = new AeshDocument();
+    	aeshDocument = new DelegateDocument();
     	aeshDocument.connect(aeshConsole);
     	aeshDocument.addCursorListener(cursorListener);
     	aeshDocument.addDocumentListener(documentListener);
@@ -150,8 +150,8 @@ public class AeshTextViewer extends TextViewer {
 		e.doit = false;    	
     }
     
-    public AeshDocument getDocument() {
-    	return (AeshDocument)super.getDocument();
+    public DelegateDocument getDocument() {
+    	return (DelegateDocument)super.getDocument();
     }
     
 }

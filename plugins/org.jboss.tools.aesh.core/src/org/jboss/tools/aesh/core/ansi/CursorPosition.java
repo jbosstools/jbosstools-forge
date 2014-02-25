@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-import org.jboss.tools.aesh.core.document.DocumentProxy;
+import org.jboss.tools.aesh.core.document.AeshDocument;
 
 
 public class CursorPosition extends ControlSequence {
@@ -23,7 +23,7 @@ public class CursorPosition extends ControlSequence {
 	}
 	
 	@Override
-	public void handle(DocumentProxy document) {
+	public void handle(AeshDocument document) {
     	int offset = document.getLineOffset(line);
     	int maxColumn = document.getLineLength(line);
     	offset += Math.min(maxColumn, column);

@@ -2,7 +2,7 @@ package org.jboss.tools.forge.ui.ext.cli;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.aesh.ui.document.AeshDocument;
+import org.jboss.tools.aesh.ui.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.view.AeshTextViewer;
 
 public class F2TextViewer extends AeshTextViewer {
@@ -12,7 +12,7 @@ public class F2TextViewer extends AeshTextViewer {
 	}
 
     protected void initializeDocument() {
-    	aeshDocument = new AeshDocument();
+    	aeshDocument = new DelegateDocument();
     	aeshDocument.addCursorListener(cursorListener);
     	aeshDocument.addDocumentListener(documentListener);
     }

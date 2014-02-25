@@ -13,11 +13,10 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.ansi.ControlSequence;
 import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
-import org.jboss.tools.aesh.core.document.DocumentProxy;
 import org.jboss.tools.aesh.core.io.StreamListener;
 import org.jboss.tools.aesh.ui.fonts.FontManager;
 
-public class AeshDocument extends Document {
+public class DelegateDocument extends Document {
 	
 	public interface CursorListener {
 		void cursorMoved();
@@ -29,12 +28,12 @@ public class AeshDocument extends Document {
 	private AeshConsole console;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
 	private StyleRange currentStyleRange;
-	private DocumentProxy proxy;
+	private DelegatingDocument proxy;
 	
 	private int savedCursor = 0;
 	
-	public AeshDocument() {
-		proxy = new AeshDocumentProxy(this);
+	public DelegateDocument() {
+		proxy = new DelegatingDocument(this);
 		currentStyleRange = getDefaultStyleRange();
 		stdOutListener = new StreamListener() {			
 			@Override

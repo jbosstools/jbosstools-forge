@@ -2,15 +2,15 @@ package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.custom.StyleRange;
-import org.jboss.tools.aesh.core.document.DocumentProxy;
+import org.jboss.tools.aesh.core.document.AeshDocument;
 import org.jboss.tools.aesh.core.document.StyleRangeProxy;
 import org.jboss.tools.aesh.ui.AeshUIPlugin;
 
-public class AeshDocumentProxy implements DocumentProxy {
+public class DelegatingDocument implements AeshDocument {
 	
-	private AeshDocument document;
+	private DelegateDocument document;
 	
-	public AeshDocumentProxy(AeshDocument document) {
+	public DelegatingDocument(DelegateDocument document) {
 		this.document = document;
 	}
 
