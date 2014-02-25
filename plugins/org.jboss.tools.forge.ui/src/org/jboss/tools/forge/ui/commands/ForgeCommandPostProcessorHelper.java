@@ -31,18 +31,6 @@ public class ForgeCommandPostProcessorHelper {
 		return result;
 	}
 
-//	public static String getProjectName(String command) {
-//		String result = null;
-//		int i = command.indexOf("Current Project Directory: ");
-//		if (i != -1 && command.length() >= i + 27) {
-//			result = command.substring(i + 27).trim();
-//			if ("".equals(result)) {
-//				result = null;
-//			}
-//		}
-//		return result;
-//	}
-	
 	public static IFile getFile(String fullyQualifiedName) {
 		IPath filePath = new Path(fullyQualifiedName);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
