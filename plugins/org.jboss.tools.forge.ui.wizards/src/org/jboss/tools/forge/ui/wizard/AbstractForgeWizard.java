@@ -16,7 +16,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.core.util.ProjectConfigurationUpdater;
+import org.jboss.tools.forge.core.util.ProjectTools;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.WizardsPlugin;
 
@@ -190,7 +190,7 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 	
 	protected void updateProjectConfiguration(IProject project, IProgressMonitor monitor) {
 		monitor.setTaskName("Updating configuration of project " + project.getName());
-		ProjectConfigurationUpdater.updateProject(project);
+		ProjectTools.updateProjectConfiguration(project);
 		monitor.worked(1);
 	}
 	

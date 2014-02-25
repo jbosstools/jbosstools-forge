@@ -10,7 +10,7 @@ import org.eclipse.swt.SWT;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
-import org.jboss.tools.forge.core.util.ProjectImporter;
+import org.jboss.tools.forge.core.util.ProjectTools;
 
 
 public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
@@ -56,8 +56,7 @@ public class NewProjectPostProcessor implements ForgeCommandPostProcessor {
 			if (index != -1) {
 				String projectDirName = projectPath.substring(index + 1);
 				String projectBaseDirPath = projectPath.substring(0, index);
-				ProjectImporter importer = new ProjectImporter(projectBaseDirPath, projectDirName);
-				importer.importProject();
+				ProjectTools.importProject(projectBaseDirPath, projectDirName);
 			}
 		}
 	}

@@ -2,7 +2,7 @@ package org.jboss.tools.forge.core.io;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.jboss.tools.forge.core.util.ProjectConfigurationUpdater;
+import org.jboss.tools.forge.core.util.ProjectTools;
 
 public class ForgeCommandFilter extends ForgeHiddenOutputFilter {
 	
@@ -21,7 +21,7 @@ public class ForgeCommandFilter extends ForgeHiddenOutputFilter {
 		} else if (str.startsWith("POM File Modified: ")) {
 			IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(str.substring(19));
 			if (project != null) {
-				ProjectConfigurationUpdater.updateProject(project);
+				ProjectTools.updateProjectConfiguration(project);
 			}
 		}
 	}
