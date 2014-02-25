@@ -97,8 +97,10 @@ public class ForgeWizard extends MutableWizard {
 						if (result != null) {
 							String message = result.getMessage();
 							if (message != null) {
+								NotificationType notificationType = result instanceof Failed ? NotificationType.ERROR
+										: NotificationType.INFO;
 								ForgeUIPlugin.displayMessage(getWindowTitle(),
-										message, NotificationType.INFO);
+										message, notificationType);
 							}
 							if (result instanceof Failed) {
 								Throwable exception = ((Failed) result)
