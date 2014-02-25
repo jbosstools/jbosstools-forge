@@ -2,9 +2,9 @@ package org.jboss.tools.aesh.core.ansi;
 
 import java.util.StringTokenizer;
 
-import org.jboss.tools.aesh.core.AeshCorePlugin;
 import org.jboss.tools.aesh.core.document.DocumentProxy;
 import org.jboss.tools.aesh.core.document.StyleRangeProxy;
+import org.jboss.tools.aesh.core.internal.AeshCorePlugin;
 
 
 public class SelectGraphicRendition extends ControlSequence {

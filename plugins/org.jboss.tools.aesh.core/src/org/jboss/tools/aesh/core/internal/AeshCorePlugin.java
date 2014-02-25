@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.core;
+package org.jboss.tools.aesh.core.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
