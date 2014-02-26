@@ -33,23 +33,17 @@ public class ForgeUIPrompt implements UIPrompt {
 			@Override
 			public void run() {
 				InputDialog dlg = new InputDialog(shell, "", message, "", null);
-				stringResult = (dlg.open() == Window.OK) ? dlg.getValue() : null;
+				stringResult = (dlg.open() == Window.OK) ? dlg.getValue()
+						: null;
 			}
-			
+
 		});
 		return stringResult;
 	}
 
 	@Override
 	public boolean promptBoolean(final String message) {
-		Display.getDefault().syncExec(new Runnable() {
-			@Override
-			public void run() {
-				booleanResult = MessageDialog.openQuestion(shell, "Question", message);;
-			}
-			
-		});
-		return booleanResult;
+		return promptBoolean(message, true);
 	}
 
 	@Override
@@ -59,11 +53,23 @@ public class ForgeUIPrompt implements UIPrompt {
 			public void run() {
 				// FIXME: Should mask the input
 				InputDialog dlg = new InputDialog(shell, "", message, "", null);
-				stringResult = (dlg.open() == Window.OK) ? dlg.getValue() : null;
+				stringResult = (dlg.open() == Window.OK) ? dlg.getValue()
+						: null;
 			}
-			
 		});
 		return stringResult;
 	}
 
+	@Override
+	public boolean promptBoolean(final String message,
+			final boolean defaultValue) {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				booleanResult = MessageDialog.openQuestion(shell, "Question",
+						message);
+			}
+		});
+		return booleanResult;
+	}
 }
