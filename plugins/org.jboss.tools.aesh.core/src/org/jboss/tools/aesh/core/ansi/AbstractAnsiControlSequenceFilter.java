@@ -1,18 +1,19 @@
 package org.jboss.tools.aesh.core.ansi;
 
+import org.jboss.tools.aesh.core.internal.ansi.AnsiControlSequenceFactory;
 import org.jboss.tools.aesh.core.io.StreamListener;
 
-public abstract class ControlSequenceFilter implements StreamListener {
+public abstract class AbstractAnsiControlSequenceFilter implements AnsiControlSequenceFilter {
 
 	private StreamListener target = null;
 	private StringBuffer escapeSequence = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();
 	
-	public ControlSequenceFilter(StreamListener target) {
+	public AbstractAnsiControlSequenceFilter(StreamListener target) {
 		this.target = target;
 	}
 	
-	public abstract void controlSequenceAvailable(ControlSequence controlSequence);	
+	public abstract void controlSequenceAvailable(AnsiControlSequence controlSequence);	
 	
 	@Override
 	public void outputAvailable(String output) {
@@ -38,7 +39,7 @@ public abstract class ControlSequenceFilter implements StreamListener {
 			escapeSequence.append(c);
 		} else if (escapeSequence.length() > 1) {
 			escapeSequence.append(c);
-			ControlSequence command = ControlSequenceFactory.create(escapeSequence.toString());
+			AnsiControlSequence command = AnsiControlSequenceFactory.create(escapeSequence.toString());
 			if (command != null) {
 				escapeSequence.setLength(0);
 				controlSequenceAvailable(command);

@@ -1,9 +1,9 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.document.AeshDocument;
 
 
-public class CursorBack extends ControlSequence {
+public class CursorBack extends AbstractAnsiControlSequence {
 	
 	private int amount;
 
@@ -12,8 +12,8 @@ public class CursorBack extends ControlSequence {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_BACK;
+	public AnsiControlSequenceType getType() {
+		return AnsiControlSequenceType.CURSOR_BACK;
 	}
 	
 	@Override

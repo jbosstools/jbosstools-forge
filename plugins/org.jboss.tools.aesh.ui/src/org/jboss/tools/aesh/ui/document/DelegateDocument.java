@@ -10,8 +10,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.aesh.core.ansi.ControlSequence;
-import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
+import org.jboss.tools.aesh.core.ansi.AbstractAnsiControlSequenceFilter;
+import org.jboss.tools.aesh.core.ansi.AnsiControlSequence;
+import org.jboss.tools.aesh.core.ansi.AnsiControlSequenceFilter;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.io.StreamListener;
 import org.jboss.tools.aesh.ui.fonts.FontManager;
@@ -23,7 +24,7 @@ public class DelegateDocument extends Document {
 	}
 	
 	private StreamListener stdOutListener, stdErrListener;
-	private ControlSequenceFilter ansiCommandSequenceFilter;
+	private AnsiControlSequenceFilter ansiCommandSequenceFilter;
 	private int cursorOffset = 0;
 	private AeshConsole console;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
@@ -46,9 +47,9 @@ public class DelegateDocument extends Document {
 				});
 			}
 		};
-		ansiCommandSequenceFilter = new ControlSequenceFilter(stdOutListener) {			
+		ansiCommandSequenceFilter = new AbstractAnsiControlSequenceFilter(stdOutListener) {			
 			@Override
-			public void controlSequenceAvailable(final ControlSequence controlSequence) {
+			public void controlSequenceAvailable(final AnsiControlSequence controlSequence) {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {

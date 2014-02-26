@@ -1,9 +1,9 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.document.AeshDocument;
 
 
-public class EraseData extends ControlSequence {
+public class EraseData extends AbstractAnsiControlSequence {
 	
 	private String arguments;
 
@@ -12,8 +12,8 @@ public class EraseData extends ControlSequence {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.ERASE_DATA;
+	public AnsiControlSequenceType getType() {
+		return AnsiControlSequenceType.ERASE_DATA;
 	}
 	
 	@Override

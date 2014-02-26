@@ -1,15 +1,15 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.document.AeshDocument;
 
 
-public class EraseInLine extends ControlSequence {
+public class EraseInLine extends AbstractAnsiControlSequence {
 
 	public EraseInLine(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.ERASE_IN_LINE;
+	public AnsiControlSequenceType getType() {
+		return AnsiControlSequenceType.ERASE_IN_LINE;
 	}
 	
 	@Override

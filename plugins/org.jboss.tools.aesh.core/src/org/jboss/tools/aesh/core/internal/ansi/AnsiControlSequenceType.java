@@ -1,9 +1,9 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.internal.ansi;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ControlSequenceType {
+public enum AnsiControlSequenceType {
 	
 	CURSOR_UP('A'),
 	CURSOR_DOWN('B'),
@@ -25,20 +25,20 @@ public enum ControlSequenceType {
 	HIDE_CURSOR('l'),
 	SHOW_CURSOR('h');
 	
-	private ControlSequenceType(char c) {
+	private AnsiControlSequenceType(char c) {
 		getAnsiControlSequenceTypeMap().put(c, this);
 	}
 	
-	private static Map<Character, ControlSequenceType> ansiControlSequenceTypeMap;
+	private static Map<Character, AnsiControlSequenceType> ansiControlSequenceTypeMap;
 	
-	private static Map<Character, ControlSequenceType> getAnsiControlSequenceTypeMap() {
+	private static Map<Character, AnsiControlSequenceType> getAnsiControlSequenceTypeMap() {
 		if (ansiControlSequenceTypeMap == null) {
-			ansiControlSequenceTypeMap = new HashMap<Character, ControlSequenceType>();
+			ansiControlSequenceTypeMap = new HashMap<Character, AnsiControlSequenceType>();
 		}
 		return ansiControlSequenceTypeMap;
 	}
 	
-	public static ControlSequenceType fromCharacter(char c) {
+	public static AnsiControlSequenceType fromCharacter(char c) {
 		return getAnsiControlSequenceTypeMap().get(c);
 	}
 

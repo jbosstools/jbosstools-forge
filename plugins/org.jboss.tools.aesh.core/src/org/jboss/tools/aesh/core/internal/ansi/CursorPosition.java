@@ -1,9 +1,9 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.document.AeshDocument;
 
 
-public class CursorPosition extends ControlSequence {
+public class CursorPosition extends AbstractAnsiControlSequence {
 	
 	private int line, column = 0;
 
@@ -18,8 +18,8 @@ public class CursorPosition extends ControlSequence {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_POSITION;
+	public AnsiControlSequenceType getType() {
+		return AnsiControlSequenceType.CURSOR_POSITION;
 	}
 	
 	@Override

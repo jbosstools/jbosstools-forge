@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.internal.ansi;
 
 import java.util.StringTokenizer;
 
@@ -7,7 +7,7 @@ import org.jboss.tools.aesh.core.document.AeshStyleRange;
 import org.jboss.tools.aesh.core.internal.AeshCorePlugin;
 
 
-public class SelectGraphicRendition extends ControlSequence {
+public class SelectGraphicRendition extends AbstractAnsiControlSequence {
 	
 	private String arguments;
 
@@ -16,8 +16,8 @@ public class SelectGraphicRendition extends ControlSequence {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.SELECT_GRAPHIC_RENDITION;
+	public AnsiControlSequenceType getType() {
+		return AnsiControlSequenceType.SELECT_GRAPHIC_RENDITION;
 	}
 	
 	@Override

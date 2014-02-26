@@ -1,12 +1,15 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.internal.ansi;
+
+import org.jboss.tools.aesh.core.ansi.AnsiControlSequence;
 
 
-public class ControlSequenceFactory {
+
+public class AnsiControlSequenceFactory {
 	
-	public static ControlSequence create(String controlSequence) {
+	public static AnsiControlSequence create(String controlSequence) {
 		int last = controlSequence.length() - 1;
 		char c = controlSequence.charAt(last);
-		ControlSequenceType type = ControlSequenceType.fromCharacter(c);
+		AnsiControlSequenceType type = AnsiControlSequenceType.fromCharacter(c);
 		if (type == null) {
 			return null;
 		} else {
@@ -15,8 +18,8 @@ public class ControlSequenceFactory {
 		}
 	}
 	
-	private static ControlSequence create(
-			ControlSequenceType type, 
+	private static AnsiControlSequence create(
+			AnsiControlSequenceType type, 
 			String arguments) {
 		switch (type) {
 		case CURSOR_UP: return new CursorUp(arguments);

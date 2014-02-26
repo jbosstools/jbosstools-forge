@@ -1,9 +1,9 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.document.AeshDocument;
 
 
-public class CursorHorizontalAbsolute extends ControlSequence {
+public class CursorHorizontalAbsolute extends AbstractAnsiControlSequence {
 	
 	private int column;
 
@@ -12,8 +12,8 @@ public class CursorHorizontalAbsolute extends ControlSequence {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_HORIZONTAL_ABSOLUTE;
+	public AnsiControlSequenceType getType() {
+		return AnsiControlSequenceType.CURSOR_HORIZONTAL_ABSOLUTE;
 	}
 	
 	@Override
