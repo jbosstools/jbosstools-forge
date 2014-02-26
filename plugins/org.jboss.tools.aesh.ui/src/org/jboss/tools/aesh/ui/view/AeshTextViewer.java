@@ -12,12 +12,11 @@ import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.aesh.core.console.AeshConsole;
-import org.jboss.tools.aesh.core.console.ExampleConsole;
 import org.jboss.tools.aesh.ui.AeshUIConstants;
 import org.jboss.tools.aesh.ui.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;
 
-public class AeshTextViewer extends TextViewer {
+public abstract class AeshTextViewer extends TextViewer {
 	
 	private static String START_LINE = new Character((char)1).toString();
 	private static String PREV_CHAR = new Character((char)2).toString();
@@ -66,9 +65,7 @@ public class AeshTextViewer extends TextViewer {
     	initialize();
     }
     
-    protected void initializeConsole() {
-    	aeshConsole = new ExampleConsole();
-    }
+    protected abstract void initializeConsole();
     
     protected void initializeDocument() {
     	aeshDocument = new DelegateDocument();

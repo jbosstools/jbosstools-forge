@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.jboss.tools.aesh.example"
+            name="Aesh Examples">
+      </category>
+      <view
+            category="org.jboss.tools.aesh.example"
+            class="org.jboss.tools.aesh.example.ExampleView"
+            id="org.jboss.tools.aesh.example.console"
+            name="Aesh Example Console"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>

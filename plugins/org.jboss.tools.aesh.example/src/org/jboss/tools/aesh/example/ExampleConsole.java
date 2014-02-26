@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.core.console;
+package org.jboss.tools.aesh.example;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -23,6 +23,7 @@ import org.jboss.aesh.terminal.CharacterType;
 import org.jboss.aesh.terminal.Color;
 import org.jboss.aesh.terminal.TerminalCharacter;
 import org.jboss.aesh.terminal.TerminalColor;
+import org.jboss.tools.aesh.core.console.AbstractAeshConsole;
 
 public class ExampleConsole extends AbstractAeshConsole {
 

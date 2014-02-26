@@ -1,17 +1,18 @@
-package org.jboss.tools.aesh.ui.view;
+package org.jboss.tools.aesh.example;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
+import org.jboss.tools.aesh.ui.view.AeshTextViewer;
 
-public class AeshView extends ViewPart {
+public class ExampleView extends ViewPart {
 	
-	public static final String ID = "org.jboss.tools.forge.aesh.view";
+	public static final String ID = "org.jboss.tools.forge.aesh.example";
 
 	private AeshTextViewer textViewer;	
 	
 	@Override
 	public void createPartControl(Composite parent) {
-		textViewer = new AeshTextViewer(parent);
+		textViewer = new ExampleTextViewer(parent);
 		textViewer.startConsole();
 	}
 
