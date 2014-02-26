@@ -25,7 +25,7 @@ public class F2TextViewer extends AeshTextViewer {
     	Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				aeshConsole.initialize();
+				((F2Console)aeshConsole).initialize();
 				aeshDocument.connect(aeshConsole);
 		    	setDocument(aeshDocument);
 		    	aeshConsole.start();

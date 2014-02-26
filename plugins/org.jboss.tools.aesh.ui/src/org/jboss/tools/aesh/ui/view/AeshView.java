@@ -12,6 +12,7 @@ public class AeshView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		textViewer = new AeshTextViewer(parent);
+		textViewer.startConsole();
 	}
 
 	@Override

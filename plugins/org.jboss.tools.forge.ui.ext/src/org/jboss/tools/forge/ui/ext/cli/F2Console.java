@@ -6,10 +6,10 @@ import java.io.PrintStream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.forge.addon.shell.ShellHandle;
-import org.jboss.tools.aesh.core.console.AeshConsole;
+import org.jboss.tools.aesh.core.console.AbstractAeshConsole;
 import org.jboss.tools.forge.ext.core.FurnaceService;
 
-public class F2Console extends AeshConsole {
+public class F2Console extends AbstractAeshConsole {
 	
 	private ShellHandle handle;
 
@@ -17,7 +17,7 @@ public class F2Console extends AeshConsole {
 		createStreams();
 	}
 
-	protected void createConsole() {
+	public void createConsole() {
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);
 		File currentDir = ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile();
 		OutputStream stdOut = getStdOut();

@@ -12,9 +12,10 @@ import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.aesh.core.console.AeshConsole;
+import org.jboss.tools.aesh.core.console.ExampleConsole;
 import org.jboss.tools.aesh.ui.AeshUIConstants;
 import org.jboss.tools.aesh.ui.document.DelegateDocument;
-import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;;
+import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;
 
 public class AeshTextViewer extends TextViewer {
 	
@@ -66,7 +67,7 @@ public class AeshTextViewer extends TextViewer {
     }
     
     protected void initializeConsole() {
-    	aeshConsole = new AeshConsole();
+    	aeshConsole = new ExampleConsole();
     }
     
     protected void initializeDocument() {
@@ -92,7 +93,8 @@ public class AeshTextViewer extends TextViewer {
 		});
     }
     
-    protected void startConsole() {
+    public void startConsole() {
+    	setDocument(aeshDocument);
     	aeshConsole.start();
     }
     
