@@ -3,10 +3,10 @@ package org.jboss.tools.aesh.ui.document;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
-import org.jboss.tools.aesh.core.document.AeshStyleRange;
+import org.jboss.tools.aesh.core.ansi.AnsiStyleRange;
 import org.jboss.tools.aesh.ui.fonts.FontManager;
 
-public class StyleRangeWrapper implements AeshStyleRange {
+public class StyleRangeWrapper implements AnsiStyleRange {
 	
 	private StyleRange styleRange;
 	

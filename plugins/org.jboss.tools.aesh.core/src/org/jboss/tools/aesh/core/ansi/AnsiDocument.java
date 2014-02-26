@@ -1,6 +1,7 @@
-package org.jboss.tools.aesh.core.document;
+package org.jboss.tools.aesh.core.ansi;
 
-public interface AeshDocument {
+
+public interface AnsiDocument {
 	
 	int getCursorOffset();
 	int getLineOfOffset(int offset);
@@ -14,8 +15,8 @@ public interface AeshDocument {
 	void reset();
 	void replace(int cursorOffset, int length, String str);
 	
-	AeshStyleRange newStyleRangeFromCurrent();
-	void setCurrentStyleRange(AeshStyleRange styleRange);
+	AnsiStyleRange newStyleRangeFromCurrent();
+	void setCurrentStyleRange(AnsiStyleRange styleRange);
 	void setDefaultStyleRange();
 
 }

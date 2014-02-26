@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
-import org.jboss.tools.aesh.core.document.AeshDocument;
+import org.jboss.tools.aesh.core.ansi.AnsiDocument;
 
 
 public class RestoreCursorPosition extends AbstractAnsiControlSequence {
@@ -13,7 +13,7 @@ public class RestoreCursorPosition extends AbstractAnsiControlSequence {
 	}
 	
 	@Override
-	public void handle(AeshDocument document) {
+	public void handle(AnsiDocument document) {
 		document.restoreCursor();
 	}
 

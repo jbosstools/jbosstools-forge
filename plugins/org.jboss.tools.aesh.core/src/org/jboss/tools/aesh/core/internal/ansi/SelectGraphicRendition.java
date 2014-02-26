@@ -2,8 +2,8 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 import java.util.StringTokenizer;
 
-import org.jboss.tools.aesh.core.document.AeshDocument;
-import org.jboss.tools.aesh.core.document.AeshStyleRange;
+import org.jboss.tools.aesh.core.ansi.AnsiDocument;
+import org.jboss.tools.aesh.core.ansi.AnsiStyleRange;
 import org.jboss.tools.aesh.core.internal.AeshCorePlugin;
 
 
@@ -21,8 +21,8 @@ public class SelectGraphicRendition extends AbstractAnsiControlSequence {
 	}
 	
 	@Override
-	public void handle(AeshDocument document) {
-		AeshStyleRange styleRange = document.newStyleRangeFromCurrent();
+	public void handle(AnsiDocument document) {
+		AnsiStyleRange styleRange = document.newStyleRangeFromCurrent();
 		StringTokenizer tokenizer = new StringTokenizer(arguments, ";");
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
@@ -44,7 +44,7 @@ public class SelectGraphicRendition extends AbstractAnsiControlSequence {
 	private void handleXTerm(
 			int sgrCode,
 			StringTokenizer tokenizer, 
-			AeshStyleRange styleRange) {
+			AnsiStyleRange styleRange) {
 		if (tokenizer.hasMoreTokens()) {
 			String str = tokenizer.nextToken();
 			try {
@@ -71,7 +71,7 @@ public class SelectGraphicRendition extends AbstractAnsiControlSequence {
 		}
 	}
 	
-	private void handleDefault(int sgrCode, AeshStyleRange styleRange) {
+	private void handleDefault(int sgrCode, AnsiStyleRange styleRange) {
 		switch(sgrCode) {
 			case   0 : styleRange.resetToNormal(); break;
 			case   1 : styleRange.setBoldOn(); break;

@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
-import org.jboss.tools.aesh.core.document.AeshDocument;
+import org.jboss.tools.aesh.core.ansi.AnsiDocument;
 
 
 public class CursorBack extends AbstractAnsiControlSequence {
@@ -17,7 +17,7 @@ public class CursorBack extends AbstractAnsiControlSequence {
 	}
 	
 	@Override
-	public void handle(AeshDocument document) {
+	public void handle(AnsiDocument document) {
 		document.moveCursorTo(document.getCursorOffset() - amount);
 	}
 

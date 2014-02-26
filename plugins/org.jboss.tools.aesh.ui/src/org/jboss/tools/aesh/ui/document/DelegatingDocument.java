@@ -2,11 +2,11 @@ package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.custom.StyleRange;
-import org.jboss.tools.aesh.core.document.AeshDocument;
-import org.jboss.tools.aesh.core.document.AeshStyleRange;
+import org.jboss.tools.aesh.core.ansi.AnsiDocument;
+import org.jboss.tools.aesh.core.ansi.AnsiStyleRange;
 import org.jboss.tools.aesh.ui.AeshUIPlugin;
 
-public class DelegatingDocument implements AeshDocument {
+public class DelegatingDocument implements AnsiDocument {
 	
 	private DelegateDocument document;
 	
@@ -87,7 +87,7 @@ public class DelegatingDocument implements AeshDocument {
 	}
 
 	@Override
-	public AeshStyleRange newStyleRangeFromCurrent() {
+	public AnsiStyleRange newStyleRangeFromCurrent() {
 		StyleRange oldStyleRange = document.getCurrentStyleRange();
 		StyleRange newStyleRange = new StyleRange(oldStyleRange);
 		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
@@ -96,7 +96,7 @@ public class DelegatingDocument implements AeshDocument {
 	}
 
 	@Override
-	public void setCurrentStyleRange(AeshStyleRange styleRangeProxy) {
+	public void setCurrentStyleRange(AnsiStyleRange styleRangeProxy) {
 		if (styleRangeProxy instanceof StyleRangeWrapper) {
 			StyleRange styleRange = ((StyleRangeWrapper)styleRangeProxy).getStyleRange();
 			document.setCurrentStyleRange(styleRange);
