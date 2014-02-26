@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.document;
 
-public interface StyleRangeProxy {
+public interface AeshStyleRange {
 	
 	void resetToNormal();					//   0
 	void setBoldOn();						//   1

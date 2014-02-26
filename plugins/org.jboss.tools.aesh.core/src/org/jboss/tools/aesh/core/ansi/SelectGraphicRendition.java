@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.ansi;
 import java.util.StringTokenizer;
 
 import org.jboss.tools.aesh.core.document.AeshDocument;
-import org.jboss.tools.aesh.core.document.StyleRangeProxy;
+import org.jboss.tools.aesh.core.document.AeshStyleRange;
 import org.jboss.tools.aesh.core.internal.AeshCorePlugin;
 
 
@@ -22,7 +22,7 @@ public class SelectGraphicRendition extends ControlSequence {
 	
 	@Override
 	public void handle(AeshDocument document) {
-		StyleRangeProxy styleRange = document.newStyleRangeFromCurrent();
+		AeshStyleRange styleRange = document.newStyleRangeFromCurrent();
 		StringTokenizer tokenizer = new StringTokenizer(arguments, ";");
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
@@ -44,7 +44,7 @@ public class SelectGraphicRendition extends ControlSequence {
 	private void handleXTerm(
 			int sgrCode,
 			StringTokenizer tokenizer, 
-			StyleRangeProxy styleRange) {
+			AeshStyleRange styleRange) {
 		if (tokenizer.hasMoreTokens()) {
 			String str = tokenizer.nextToken();
 			try {
@@ -71,7 +71,7 @@ public class SelectGraphicRendition extends ControlSequence {
 		}
 	}
 	
-	private void handleDefault(int sgrCode, StyleRangeProxy styleRange) {
+	private void handleDefault(int sgrCode, AeshStyleRange styleRange) {
 		switch(sgrCode) {
 			case   0 : styleRange.resetToNormal(); break;
 			case   1 : styleRange.setBoldOn(); break;

@@ -3,14 +3,14 @@ package org.jboss.tools.aesh.ui.document;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
-import org.jboss.tools.aesh.core.document.StyleRangeProxy;
+import org.jboss.tools.aesh.core.document.AeshStyleRange;
 import org.jboss.tools.aesh.ui.fonts.FontManager;
 
-public class AeshStyleRangeProxy implements StyleRangeProxy {
+public class StyleRangeWrapper implements AeshStyleRange {
 	
 	private StyleRange styleRange;
 	
-	public AeshStyleRangeProxy(StyleRange styleRange) {
+	public StyleRangeWrapper(StyleRange styleRange) {
 		this.styleRange = styleRange;
 	}
 	

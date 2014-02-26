@@ -14,8 +14,8 @@ public interface AeshDocument {
 	void reset();
 	void replace(int cursorOffset, int length, String str);
 	
-	StyleRangeProxy newStyleRangeFromCurrent();
-	void setCurrentStyleRange(StyleRangeProxy styleRange);
+	AeshStyleRange newStyleRangeFromCurrent();
+	void setCurrentStyleRange(AeshStyleRange styleRange);
 	void setDefaultStyleRange();
 
 }
