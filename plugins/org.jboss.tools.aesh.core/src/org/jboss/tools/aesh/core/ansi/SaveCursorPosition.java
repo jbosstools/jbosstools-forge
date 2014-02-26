@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-import org.jboss.tools.aesh.core.document.Document;
+import org.jboss.tools.aesh.core.document.AeshDocument;
 
 
 public class SaveCursorPosition extends ControlSequence {
@@ -13,7 +13,7 @@ public class SaveCursorPosition extends ControlSequence {
 	}
 	
 	@Override
-	public void handle(Document document) {
+	public void handle(AeshDocument document) {
 		document.saveCursor();
 	}
 

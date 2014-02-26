@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.ansi;
 
 import java.util.StringTokenizer;
 
-import org.jboss.tools.aesh.core.document.Document;
+import org.jboss.tools.aesh.core.document.AeshDocument;
 import org.jboss.tools.aesh.core.document.StyleRangeProxy;
 import org.jboss.tools.aesh.core.internal.AeshCorePlugin;
 
@@ -21,7 +21,7 @@ public class SelectGraphicRendition extends ControlSequence {
 	}
 	
 	@Override
-	public void handle(Document document) {
+	public void handle(AeshDocument document) {
 		StyleRangeProxy styleRange = document.newStyleRangeFromCurrent();
 		StringTokenizer tokenizer = new StringTokenizer(arguments, ";");
 		while (tokenizer.hasMoreTokens()) {
