@@ -8,7 +8,6 @@
 package org.jboss.tools.forge.ui.ext.wizards;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -85,38 +84,8 @@ public class ForgeWizard extends MutableWizard {
 					attributeMap.put(Shell.class, shell);
 
 					Result commandResult = controller.execute();
-
-					List<Result> results;
-					if (commandResult instanceof CompositeResult) {
-						results = ((CompositeResult) commandResult)
-								.getResults();
-					} else {
-						results = Arrays.asList(commandResult);
-					}
-					for (Result result : results) {
-						if (result != null) {
-							String message = result.getMessage();
-							if (message != null) {
-								NotificationType notificationType = result instanceof Failed ? NotificationType.ERROR
-										: NotificationType.INFO;
-								ForgeUIPlugin.displayMessage(getWindowTitle(),
-										message, notificationType);
-							}
-							if (result instanceof Failed) {
-								Throwable exception = ((Failed) result)
-										.getException();
-								if (exception != null) {
-									ForgeUIPlugin.log(exception);
-									ForgeUIPlugin.displayMessage(
-											getWindowTitle(), String
-													.valueOf(exception
-															.getMessage()),
-											NotificationType.ERROR);
-								}
-							}
-						}
-						EventBus.INSTANCE.fireWizardFinished(uiContext);
-					}
+					displayResult(commandResult);
+					EventBus.INSTANCE.fireWizardFinished(uiContext);
 				} catch (Exception e) {
 					ForgeUIPlugin.displayMessage(getWindowTitle(),
 							"Error while executing task, check Error log view",
@@ -131,6 +100,31 @@ public class ForgeWizard extends MutableWizard {
 				}
 			}
 		});
+	}
+
+	private void displayResult(Result result) {
+		if (result instanceof CompositeResult) {
+			for (Result thisResult : ((CompositeResult) result).getResults()) {
+				displayResult(thisResult);
+			}
+		} else if (result != null) {
+			String message = result.getMessage();
+			if (message != null) {
+				NotificationType notificationType = result instanceof Failed ? NotificationType.ERROR
+						: NotificationType.INFO;
+				ForgeUIPlugin.displayMessage(getWindowTitle(), message,
+						notificationType);
+			}
+			if (result instanceof Failed) {
+				Throwable exception = ((Failed) result).getException();
+				if (exception != null) {
+					ForgeUIPlugin.log(exception);
+					ForgeUIPlugin.displayMessage(getWindowTitle(),
+							String.valueOf(exception.getMessage()),
+							NotificationType.ERROR);
+				}
+			}
+		}
 	}
 
 	@Override
