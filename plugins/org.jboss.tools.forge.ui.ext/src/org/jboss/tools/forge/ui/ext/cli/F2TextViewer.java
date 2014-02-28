@@ -4,6 +4,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.ui.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.view.AeshTextViewer;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
+import org.jboss.tools.forge.ext.core.runtime.FurnaceRuntime;
 
 public class F2TextViewer extends AeshTextViewer {
 	
@@ -20,6 +22,13 @@ public class F2TextViewer extends AeshTextViewer {
 	protected void initializeConsole() {
     	aeshConsole = new F2Console();
     }
+	
+	protected void initialize() {
+		super.initialize();
+		if (ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
+			startConsole();
+		}
+	}
     
     public void startConsole() {
     	Display.getDefault().asyncExec(new Runnable() {
