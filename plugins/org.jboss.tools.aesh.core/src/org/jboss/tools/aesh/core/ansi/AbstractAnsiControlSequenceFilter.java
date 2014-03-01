@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-import org.jboss.tools.aesh.core.internal.ansi.AnsiControlSequenceFactory;
+import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 import org.jboss.tools.aesh.core.io.StreamListener;
 
 public abstract class AbstractAnsiControlSequenceFilter implements AnsiControlSequenceFilter {
@@ -39,7 +39,7 @@ public abstract class AbstractAnsiControlSequenceFilter implements AnsiControlSe
 			escapeSequence.append(c);
 		} else if (escapeSequence.length() > 1) {
 			escapeSequence.append(c);
-			AnsiControlSequence command = AnsiControlSequenceFactory.create(escapeSequence.toString());
+			AnsiControlSequence command = DefaultControlSequenceFactory.INSTANCE.create(escapeSequence.toString());
 			if (command != null) {
 				escapeSequence.setLength(0);
 				controlSequenceAvailable(command);
