@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.ansi;
 
 import java.util.ArrayList;
 
-import org.jboss.tools.aesh.core.internal.ansi.CursorBack;
+import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 import org.jboss.tools.aesh.core.io.StreamListener;
 import org.junit.Assert;
@@ -11,13 +11,26 @@ import org.junit.Test;
 
 public class AbstractAnsiControlSequenceFilterTest {
 	
-	private static final byte[] sequence = new byte[] { 27, '[', '5', 'D' };
+	private static final AnsiControlSequence TEST_CONTROL_SEQUENCE = 
+			new AnsiControlSequence() {		
+				@Override
+				public void handle(AnsiDocument document) {}
+			};
+	private static final AnsiControlSequenceFactory TEST_CONTROL_SEQUENCE_FACTORY = 
+			new AnsiControlSequenceFactory() {				
+				@Override
+				public AnsiControlSequence create(String controlSequence) {					// TODO Auto-generated method stub
+					return TEST_CONTROL_SEQUENCE;
+				}
+			};
+	private static final byte[] sequence = new byte[] { 27, '[', '#' };
 	
 	private ArrayList<String> producedOutput;
 	private AnsiControlSequence availableControlSequence;	
 	private StreamListener listener;	
 	private AbstractAnsiControlSequenceFilter filter;
 	private AeshOutputStream outputStream;
+	
 	
 	@Before
 	public void setup() {
@@ -47,11 +60,21 @@ public class AbstractAnsiControlSequenceFilterTest {
 	}
 	
 	@Test
+	public void testControlSequenceFactory() {
+		Assert.assertEquals(
+				DefaultControlSequenceFactory.INSTANCE, 
+				filter.getControlSequenceFactory());
+	}
+	
+	@Test
 	public void testControlSequenceAvailable() throws Exception {
+		filter.setControlSequenceFactory(TEST_CONTROL_SEQUENCE_FACTORY);
 		outputStream.write(sequence);
 		Assert.assertNotNull(availableControlSequence);
-		Assert.assertTrue(availableControlSequence instanceof CursorBack);
+		Assert.assertEquals(TEST_CONTROL_SEQUENCE, availableControlSequence);
 		Assert.assertTrue(producedOutput.isEmpty());
 	}
+	
+	
 	
 }

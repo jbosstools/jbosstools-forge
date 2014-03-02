@@ -9,6 +9,8 @@ public abstract class AbstractAnsiControlSequenceFilter implements AnsiControlSe
 	private StringBuffer escapeSequence = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();
 	
+	private AnsiControlSequenceFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
+	
 	public AbstractAnsiControlSequenceFilter(StreamListener target) {
 		this.target = target;
 	}
@@ -39,7 +41,7 @@ public abstract class AbstractAnsiControlSequenceFilter implements AnsiControlSe
 			escapeSequence.append(c);
 		} else if (escapeSequence.length() > 1) {
 			escapeSequence.append(c);
-			AnsiControlSequence command = DefaultControlSequenceFactory.INSTANCE.create(escapeSequence.toString());
+			AnsiControlSequence command = controlSequenceFactory.create(escapeSequence.toString());
 			if (command != null) {
 				escapeSequence.setLength(0);
 				controlSequenceAvailable(command);
@@ -48,5 +50,13 @@ public abstract class AbstractAnsiControlSequenceFilter implements AnsiControlSe
 			targetBuffer.append(c);
 		}
 	}
-
+	
+	void setControlSequenceFactory(AnsiControlSequenceFactory controlSequenceFactory) {
+		this.controlSequenceFactory = controlSequenceFactory;
+	}
+	
+	AnsiControlSequenceFactory getControlSequenceFactory() {
+		return controlSequenceFactory;
+	}
+	
 }
