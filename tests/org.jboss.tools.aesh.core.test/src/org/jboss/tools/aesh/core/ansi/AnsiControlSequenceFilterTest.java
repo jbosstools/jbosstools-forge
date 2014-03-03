@@ -9,7 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AbstractAnsiControlSequenceFilterTest {
+public class AnsiControlSequenceFilterTest {
 	
 	private static final AnsiControlSequence TEST_CONTROL_SEQUENCE = 
 			new AnsiControlSequence() {		
@@ -28,7 +28,8 @@ public class AbstractAnsiControlSequenceFilterTest {
 	private ArrayList<String> producedOutput;
 	private AnsiControlSequence availableControlSequence;	
 	private StreamListener listener;	
-	private AbstractAnsiControlSequenceFilter filter;
+	private AnsiControlSequenceFilter filter;
+	private AnsiControlSequenceHandler handler;
 	private AeshOutputStream outputStream;
 	
 	
@@ -43,12 +44,13 @@ public class AbstractAnsiControlSequenceFilterTest {
 				producedOutput.add(str);
 			}
 		};
-		filter = new AbstractAnsiControlSequenceFilter(listener) {
+		handler = new AnsiControlSequenceHandler() {			
 			@Override
-			public void controlSequenceAvailable(AnsiControlSequence controlSequence) {
+			public void handle(AnsiControlSequence controlSequence) {
 				availableControlSequence = controlSequence;
 			}
 		};
+		filter = new AnsiControlSequenceFilter(listener, handler);
 		outputStream.addStreamListener(filter);
 	}
 	

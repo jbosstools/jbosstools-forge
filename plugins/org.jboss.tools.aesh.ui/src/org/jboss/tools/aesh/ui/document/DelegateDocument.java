@@ -10,9 +10,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.aesh.core.ansi.AbstractAnsiControlSequenceFilter;
 import org.jboss.tools.aesh.core.ansi.AnsiControlSequence;
 import org.jboss.tools.aesh.core.ansi.AnsiControlSequenceFilter;
+import org.jboss.tools.aesh.core.ansi.AnsiControlSequenceHandler;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.io.StreamListener;
 import org.jboss.tools.aesh.ui.fonts.FontManager;
@@ -25,6 +25,7 @@ public class DelegateDocument extends Document {
 	
 	private StreamListener stdOutListener, stdErrListener;
 	private AnsiControlSequenceFilter ansiCommandSequenceFilter;
+	private AnsiControlSequenceHandler ansiCommandSequenceHandler;
 	private int cursorOffset = 0;
 	private AeshConsole console;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
@@ -47,9 +48,9 @@ public class DelegateDocument extends Document {
 				});
 			}
 		};
-		ansiCommandSequenceFilter = new AbstractAnsiControlSequenceFilter(stdOutListener) {			
+		ansiCommandSequenceHandler = new AnsiControlSequenceHandler() {			
 			@Override
-			public void controlSequenceAvailable(final AnsiControlSequence controlSequence) {
+			public void handle(final AnsiControlSequence controlSequence) {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {
@@ -58,6 +59,10 @@ public class DelegateDocument extends Document {
 				});
 			}
 		};
+		ansiCommandSequenceFilter = 
+				new AnsiControlSequenceFilter(
+						stdOutListener, 
+						ansiCommandSequenceHandler);
 		stdErrListener = new StreamListener() {		
 			@Override
 			public void outputAvailable(final String output) {
