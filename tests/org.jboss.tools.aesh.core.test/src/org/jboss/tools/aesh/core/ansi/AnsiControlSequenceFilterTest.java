@@ -2,6 +2,7 @@ package org.jboss.tools.aesh.core.ansi;
 
 import java.util.ArrayList;
 
+import org.jboss.tools.aesh.core.internal.ansi.AnsiControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 import org.jboss.tools.aesh.core.io.StreamListener;
