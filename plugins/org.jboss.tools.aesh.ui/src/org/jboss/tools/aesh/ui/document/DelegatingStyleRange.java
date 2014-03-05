@@ -1,20 +1,19 @@
 package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
-import org.jboss.tools.aesh.core.ansi.AnsiStyleRange;
+import org.jboss.tools.aesh.core.ansi.StyleRange;
 import org.jboss.tools.aesh.ui.fonts.FontManager;
 
-public class StyleRangeWrapper implements AnsiStyleRange {
+public class DelegatingStyleRange implements StyleRange {
 	
-	private StyleRange styleRange;
+	private DelegateStyleRange styleRange;
 	
-	public StyleRangeWrapper(StyleRange styleRange) {
+	public DelegatingStyleRange(DelegateStyleRange styleRange) {
 		this.styleRange = styleRange;
 	}
 	
-	public StyleRange getStyleRange() {
+	public DelegateStyleRange getStyleRange() {
 		return styleRange;
 	}
 	

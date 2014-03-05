@@ -1,8 +1,7 @@
 package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.swt.custom.StyleRange;
-import org.jboss.tools.aesh.core.ansi.AnsiStyleRange;
+import org.jboss.tools.aesh.core.ansi.StyleRange;
 import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.ui.AeshUIPlugin;
 
@@ -87,25 +86,25 @@ public class DelegatingDocument implements Document {
 	}
 
 	@Override
-	public AnsiStyleRange newStyleRangeFromCurrent() {
-		StyleRange oldStyleRange = document.getCurrentStyleRange();
-		StyleRange newStyleRange = new StyleRange(oldStyleRange);
+	public StyleRange newStyleRangeFromCurrent() {
+		DelegateStyleRange oldStyleRange = document.getCurrentStyleRange();
+		DelegateStyleRange newStyleRange = new DelegateStyleRange(oldStyleRange);
 		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
 		newStyleRange.length = 0;
-		return new StyleRangeWrapper(newStyleRange);
+		return new DelegatingStyleRange(newStyleRange);
 	}
 
 	@Override
-	public void setCurrentStyleRange(AnsiStyleRange styleRangeProxy) {
-		if (styleRangeProxy instanceof StyleRangeWrapper) {
-			StyleRange styleRange = ((StyleRangeWrapper)styleRangeProxy).getStyleRange();
+	public void setCurrentStyleRange(StyleRange styleRangeProxy) {
+		if (styleRangeProxy instanceof DelegatingStyleRange) {
+			DelegateStyleRange styleRange = ((DelegatingStyleRange)styleRangeProxy).getStyleRange();
 			document.setCurrentStyleRange(styleRange);
 		}
 	}
 	
 	@Override
 	public void setDefaultStyleRange() {
-		StyleRange styleRange = document.getDefaultStyleRange();
+		DelegateStyleRange styleRange = document.getDefaultStyleRange();
 		styleRange.start = document.getLength();
 		styleRange.length = 0;
 		document.setCurrentStyleRange(styleRange);

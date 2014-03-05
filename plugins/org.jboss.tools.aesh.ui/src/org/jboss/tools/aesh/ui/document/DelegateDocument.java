@@ -29,7 +29,7 @@ public class DelegateDocument extends Document {
 	private int cursorOffset = 0;
 	private AeshConsole console;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
-	private StyleRange currentStyleRange;
+	private DelegateStyleRange currentStyleRange;
 	private DelegatingDocument proxy;
 	
 	private int savedCursor = 0;
@@ -139,19 +139,19 @@ public class DelegateDocument extends Document {
 		cursorListeners.remove(listener);
 	}
 	
-	public StyleRange getCurrentStyleRange() {
+	public DelegateStyleRange getCurrentStyleRange() {
 		return currentStyleRange;
 	}
 	
-	public void setCurrentStyleRange(StyleRange styleRange) {
+	public void setCurrentStyleRange(DelegateStyleRange styleRange) {
 		currentStyleRange = styleRange;
 	}
 	
-	StyleRange getDefaultStyleRange() {
+	DelegateStyleRange getDefaultStyleRange() {
 		Font font = FontManager.INSTANCE.getDefault();
 		Color foreground = AeshColor.BLACK_TEXT.getColor();
 		Color background = AeshColor.WHITE_BG.getColor();		
-		return new StyleRange(new TextStyle(font, foreground, background));
+		return new DelegateStyleRange(new StyleRange(new TextStyle(font, foreground, background)));
 	}
 	
 }

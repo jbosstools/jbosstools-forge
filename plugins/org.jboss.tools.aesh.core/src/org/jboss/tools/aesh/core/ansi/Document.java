@@ -15,8 +15,8 @@ public interface Document {
 	void reset();
 	void replace(int cursorOffset, int length, String str);
 	
-	AnsiStyleRange newStyleRangeFromCurrent();
-	void setCurrentStyleRange(AnsiStyleRange styleRange);
+	StyleRange newStyleRangeFromCurrent();
+	void setCurrentStyleRange(StyleRange styleRange);
 	void setDefaultStyleRange();
 
 }
