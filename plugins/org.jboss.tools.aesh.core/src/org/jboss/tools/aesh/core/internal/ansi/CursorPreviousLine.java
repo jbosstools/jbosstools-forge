@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 
 
-public class CursorPreviousLine extends AbstractAnsiControlSequence {
+public class CursorPreviousLine extends AbstractControlSequence {
 
 	public CursorPreviousLine(String arguments) {}
 

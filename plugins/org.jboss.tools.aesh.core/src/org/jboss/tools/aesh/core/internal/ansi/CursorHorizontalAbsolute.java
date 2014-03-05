@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 import org.jboss.tools.aesh.core.ansi.AnsiDocument;
 
 
-public class CursorHorizontalAbsolute extends AbstractAnsiControlSequence {
+public class CursorHorizontalAbsolute extends AbstractControlSequence {
 	
 	private int column;
 

@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 
 
-public class ShowCursor extends AbstractAnsiControlSequence {
+public class ShowCursor extends AbstractControlSequence {
 
 	public ShowCursor(String arguments) {}
 

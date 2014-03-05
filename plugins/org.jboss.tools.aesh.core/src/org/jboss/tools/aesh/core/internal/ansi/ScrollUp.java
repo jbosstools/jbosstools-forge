@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 
 
-public class ScrollUp extends AbstractAnsiControlSequence {
+public class ScrollUp extends AbstractControlSequence {
 
 	public ScrollUp(String arguments) {}
 

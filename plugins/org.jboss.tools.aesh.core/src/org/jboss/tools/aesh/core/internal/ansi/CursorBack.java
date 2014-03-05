@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 import org.jboss.tools.aesh.core.ansi.AnsiDocument;
 
 
-public class CursorBack extends AbstractAnsiControlSequence {
+public class CursorBack extends AbstractControlSequence {
 	
 	private int amount;
 

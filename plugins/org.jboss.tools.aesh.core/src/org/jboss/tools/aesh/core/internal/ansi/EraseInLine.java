@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 import org.jboss.tools.aesh.core.ansi.AnsiDocument;
 
 
-public class EraseInLine extends AbstractAnsiControlSequence {
+public class EraseInLine extends AbstractControlSequence {
 
 	public EraseInLine(String arguments) {}
 

@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 
 
-public class CursorUp extends AbstractAnsiControlSequence {
+public class CursorUp extends AbstractControlSequence {
 	
 	public CursorUp(String arguments) {}
 

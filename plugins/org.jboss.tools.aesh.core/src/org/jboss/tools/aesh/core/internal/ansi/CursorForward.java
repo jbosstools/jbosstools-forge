@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 import org.jboss.tools.aesh.core.ansi.AnsiDocument;
 
 
-public class CursorForward extends AbstractAnsiControlSequence {
+public class CursorForward extends AbstractControlSequence {
 	
 	private int amount;
 
