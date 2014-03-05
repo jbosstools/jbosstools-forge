@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
-import org.jboss.tools.aesh.core.ansi.AnsiControlSequence;
+import org.jboss.tools.aesh.core.ansi.ControlSequence;
 
 
 
@@ -10,7 +10,7 @@ public class DefaultControlSequenceFactory implements AnsiControlSequenceFactory
 	
 	private DefaultControlSequenceFactory() {}
 	
-	public AnsiControlSequence create(String controlSequence) {
+	public ControlSequence create(String controlSequence) {
 		int last = controlSequence.length() - 1;
 		char c = controlSequence.charAt(last);
 		AnsiControlSequenceType type = AnsiControlSequenceType.fromCharacter(c);
@@ -22,7 +22,7 @@ public class DefaultControlSequenceFactory implements AnsiControlSequenceFactory
 		}
 	}
 	
-	private static AnsiControlSequence create(
+	private static ControlSequence create(
 			AnsiControlSequenceType type, 
 			String arguments) {
 		switch (type) {

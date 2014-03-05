@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.aesh.core.ansi.AnsiControlSequence;
+import org.jboss.tools.aesh.core.ansi.ControlSequence;
 import org.jboss.tools.aesh.core.ansi.AnsiControlSequenceFilter;
 import org.jboss.tools.aesh.core.ansi.AnsiControlSequenceHandler;
 import org.jboss.tools.aesh.core.console.AeshConsole;
@@ -50,7 +50,7 @@ public class DelegateDocument extends Document {
 		};
 		ansiCommandSequenceHandler = new AnsiControlSequenceHandler() {			
 			@Override
-			public void handle(final AnsiControlSequence controlSequence) {
+			public void handle(final ControlSequence controlSequence) {
 				Display.getDefault().syncExec(new Runnable() {
 					@Override
 					public void run() {

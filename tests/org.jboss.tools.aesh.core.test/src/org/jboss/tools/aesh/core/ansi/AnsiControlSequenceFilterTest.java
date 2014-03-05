@@ -12,22 +12,22 @@ import org.junit.Test;
 
 public class AnsiControlSequenceFilterTest {
 	
-	private static final AnsiControlSequence TEST_CONTROL_SEQUENCE = 
-			new AnsiControlSequence() {		
+	private static final ControlSequence TEST_CONTROL_SEQUENCE = 
+			new ControlSequence() {		
 				@Override
 				public void handle(AnsiDocument document) {}
 			};
 	private static final AnsiControlSequenceFactory TEST_CONTROL_SEQUENCE_FACTORY = 
 			new AnsiControlSequenceFactory() {				
 				@Override
-				public AnsiControlSequence create(String controlSequence) {					// TODO Auto-generated method stub
+				public ControlSequence create(String controlSequence) {					// TODO Auto-generated method stub
 					return TEST_CONTROL_SEQUENCE;
 				}
 			};
 	private static final byte[] sequence = new byte[] { 27, '[', '#' };
 	
 	private ArrayList<String> producedOutput;
-	private AnsiControlSequence availableControlSequence;	
+	private ControlSequence availableControlSequence;	
 	private StreamListener listener;	
 	private AnsiControlSequenceFilter filter;
 	private AnsiControlSequenceHandler handler;
@@ -47,7 +47,7 @@ public class AnsiControlSequenceFilterTest {
 		};
 		handler = new AnsiControlSequenceHandler() {			
 			@Override
-			public void handle(AnsiControlSequence controlSequence) {
+			public void handle(ControlSequence controlSequence) {
 				availableControlSequence = controlSequence;
 			}
 		};

@@ -1,9 +1,9 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.ansi.AnsiDocument;
-import org.jboss.tools.aesh.core.ansi.AnsiControlSequence;
+import org.jboss.tools.aesh.core.ansi.ControlSequence;
 
-public abstract class AbstractAnsiControlSequence implements AnsiControlSequence {
+public abstract class AbstractAnsiControlSequence implements ControlSequence {
 	
 	public abstract AnsiControlSequenceType getType();
 	

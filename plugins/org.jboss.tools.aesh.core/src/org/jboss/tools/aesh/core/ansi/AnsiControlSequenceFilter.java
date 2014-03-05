@@ -42,10 +42,10 @@ public class AnsiControlSequenceFilter implements StreamListener {
 			escapeSequence.append(c);
 		} else if (escapeSequence.length() > 1) {
 			escapeSequence.append(c);
-			AnsiControlSequence command = controlSequenceFactory.create(escapeSequence.toString());
-			if (command != null) {
+			ControlSequence controlSequence = controlSequenceFactory.create(escapeSequence.toString());
+			if (controlSequence != null) {
 				escapeSequence.setLength(0);
-				controlSequenceHandler.handle(command);;
+				controlSequenceHandler.handle(controlSequence);;
 			}
 		} else {
 			targetBuffer.append(c);
