@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
-import org.jboss.tools.aesh.core.ansi.AnsiDocument;
+import org.jboss.tools.aesh.core.ansi.Document;
 
 
 public class CursorPosition extends AbstractControlSequence {
@@ -23,7 +23,7 @@ public class CursorPosition extends AbstractControlSequence {
 	}
 	
 	@Override
-	public void handle(AnsiDocument document) {
+	public void handle(Document document) {
     	int offset = document.getLineOffset(line);
     	int maxColumn = document.getLineLength(line);
     	offset += Math.min(maxColumn, column);

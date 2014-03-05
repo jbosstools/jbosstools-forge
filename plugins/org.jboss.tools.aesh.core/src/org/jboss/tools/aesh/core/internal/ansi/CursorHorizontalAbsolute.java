@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
-import org.jboss.tools.aesh.core.ansi.AnsiDocument;
+import org.jboss.tools.aesh.core.ansi.Document;
 
 
 public class CursorHorizontalAbsolute extends AbstractControlSequence {
@@ -17,7 +17,7 @@ public class CursorHorizontalAbsolute extends AbstractControlSequence {
 	}
 	
 	@Override
-	public void handle(AnsiDocument document) {
+	public void handle(Document document) {
 		int lineStart = document.getLineOffset(document.getLineOfOffset(document.getCursorOffset()));
 		document.moveCursorTo(lineStart + column); 
 	}

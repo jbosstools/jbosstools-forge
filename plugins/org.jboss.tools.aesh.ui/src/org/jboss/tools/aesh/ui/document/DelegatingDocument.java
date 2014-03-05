@@ -2,11 +2,11 @@ package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.custom.StyleRange;
-import org.jboss.tools.aesh.core.ansi.AnsiDocument;
 import org.jboss.tools.aesh.core.ansi.AnsiStyleRange;
+import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.ui.AeshUIPlugin;
 
-public class DelegatingDocument implements AnsiDocument {
+public class DelegatingDocument implements Document {
 	
 	private DelegateDocument document;
 	

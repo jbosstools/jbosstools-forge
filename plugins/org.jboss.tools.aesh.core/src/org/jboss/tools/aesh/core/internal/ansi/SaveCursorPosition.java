@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
-import org.jboss.tools.aesh.core.ansi.AnsiDocument;
+import org.jboss.tools.aesh.core.ansi.Document;
 
 
 public class SaveCursorPosition extends AbstractControlSequence {
@@ -13,7 +13,7 @@ public class SaveCursorPosition extends AbstractControlSequence {
 	}
 	
 	@Override
-	public void handle(AnsiDocument document) {
+	public void handle(Document document) {
 		document.saveCursor();
 	}
 

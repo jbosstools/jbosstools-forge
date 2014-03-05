@@ -1,7 +1,7 @@
 package org.jboss.tools.aesh.core.ansi;
 
 
-public interface AnsiDocument {
+public interface Document {
 	
 	int getCursorOffset();
 	int getLineOfOffset(int offset);

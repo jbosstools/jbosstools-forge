@@ -15,7 +15,7 @@ public class ControlSequenceFilterTest {
 	private static final ControlSequence TEST_CONTROL_SEQUENCE = 
 			new ControlSequence() {		
 				@Override
-				public void handle(AnsiDocument document) {}
+				public void handle(Document document) {}
 			};
 	private static final ControlSequenceFactory TEST_CONTROL_SEQUENCE_FACTORY = 
 			new ControlSequenceFactory() {				
