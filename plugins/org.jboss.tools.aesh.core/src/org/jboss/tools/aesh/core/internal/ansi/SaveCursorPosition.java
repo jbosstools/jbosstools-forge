@@ -8,8 +8,8 @@ public class SaveCursorPosition extends AbstractControlSequence {
 	public SaveCursorPosition(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.SAVE_CURSOR_POSITION;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.SAVE_CURSOR_POSITION;
 	}
 	
 	@Override

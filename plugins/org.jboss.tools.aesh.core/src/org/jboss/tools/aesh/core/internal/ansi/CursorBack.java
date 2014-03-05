@@ -12,8 +12,8 @@ public class CursorBack extends AbstractControlSequence {
 	}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.CURSOR_BACK;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.CURSOR_BACK;
 	}
 	
 	@Override

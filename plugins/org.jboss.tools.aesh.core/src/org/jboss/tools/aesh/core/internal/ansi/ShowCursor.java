@@ -7,8 +7,8 @@ public class ShowCursor extends AbstractControlSequence {
 	public ShowCursor(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.SHOW_CURSOR;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.SHOW_CURSOR;
 	}
 
 }

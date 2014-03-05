@@ -7,8 +7,8 @@ public class CursorPreviousLine extends AbstractControlSequence {
 	public CursorPreviousLine(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.CURSOR_PREVIOUS_LINE;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.CURSOR_PREVIOUS_LINE;
 	}
 
 }

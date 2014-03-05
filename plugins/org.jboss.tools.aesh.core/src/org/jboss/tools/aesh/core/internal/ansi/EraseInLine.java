@@ -8,8 +8,8 @@ public class EraseInLine extends AbstractControlSequence {
 	public EraseInLine(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.ERASE_IN_LINE;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.ERASE_IN_LINE;
 	}
 	
 	@Override

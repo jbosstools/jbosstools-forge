@@ -7,8 +7,8 @@ public class ScrollUp extends AbstractControlSequence {
 	public ScrollUp(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.SCROLL_UP;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.SCROLL_UP;
 	}
 
 }

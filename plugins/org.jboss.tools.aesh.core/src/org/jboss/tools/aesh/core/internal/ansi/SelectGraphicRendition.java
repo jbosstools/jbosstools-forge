@@ -16,8 +16,8 @@ public class SelectGraphicRendition extends AbstractControlSequence {
 	}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.SELECT_GRAPHIC_RENDITION;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.SELECT_GRAPHIC_RENDITION;
 	}
 	
 	@Override

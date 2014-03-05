@@ -7,8 +7,8 @@ public class CursorUp extends AbstractControlSequence {
 	public CursorUp(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.CURSOR_UP;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.CURSOR_UP;
 	}
 
 }

@@ -12,8 +12,8 @@ public class CursorForward extends AbstractControlSequence {
 	}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.CURSOR_FORWARD;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.CURSOR_FORWARD;
 	}
 	
 	@Override

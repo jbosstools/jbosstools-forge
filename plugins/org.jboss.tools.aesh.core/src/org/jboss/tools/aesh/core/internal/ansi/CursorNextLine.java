@@ -7,8 +7,8 @@ public class CursorNextLine extends AbstractControlSequence {
 	public CursorNextLine(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.CURSOR_NEXT_LINE;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.CURSOR_NEXT_LINE;
 	}
 
 }

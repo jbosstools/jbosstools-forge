@@ -8,8 +8,8 @@ public class RestoreCursorPosition extends AbstractControlSequence {
 	public RestoreCursorPosition(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.RESTORE_CURSOR_POSITION;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.RESTORE_CURSOR_POSITION;
 	}
 	
 	@Override

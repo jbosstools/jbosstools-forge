@@ -12,8 +12,8 @@ public class CursorHorizontalAbsolute extends AbstractControlSequence {
 	}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.CURSOR_HORIZONTAL_ABSOLUTE;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.CURSOR_HORIZONTAL_ABSOLUTE;
 	}
 	
 	@Override

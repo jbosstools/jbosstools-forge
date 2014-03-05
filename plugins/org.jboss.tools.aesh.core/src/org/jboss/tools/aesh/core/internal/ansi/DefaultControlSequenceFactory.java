@@ -13,7 +13,7 @@ public class DefaultControlSequenceFactory implements AnsiControlSequenceFactory
 	public ControlSequence create(String controlSequence) {
 		int last = controlSequence.length() - 1;
 		char c = controlSequence.charAt(last);
-		AnsiControlSequenceType type = AnsiControlSequenceType.fromCharacter(c);
+		ControlSequenceType type = ControlSequenceType.fromCharacter(c);
 		if (type == null) {
 			return null;
 		} else {
@@ -23,7 +23,7 @@ public class DefaultControlSequenceFactory implements AnsiControlSequenceFactory
 	}
 	
 	private static ControlSequence create(
-			AnsiControlSequenceType type, 
+			ControlSequenceType type, 
 			String arguments) {
 		switch (type) {
 		case CURSOR_UP: return new CursorUp(arguments);

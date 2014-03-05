@@ -7,8 +7,8 @@ public class ScrollDown extends AbstractControlSequence {
 	public ScrollDown(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.SCROLL_DOWN;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.SCROLL_DOWN;
 	}
 
 }

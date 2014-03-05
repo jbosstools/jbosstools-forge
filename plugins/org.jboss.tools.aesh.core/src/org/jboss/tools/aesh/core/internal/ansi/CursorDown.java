@@ -7,8 +7,8 @@ public class CursorDown extends AbstractControlSequence {
 	public CursorDown(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.CURSOR_DOWN;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.CURSOR_DOWN;
 	}
 
 }

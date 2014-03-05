@@ -12,8 +12,8 @@ public class EraseData extends AbstractControlSequence {
 	}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.ERASE_DATA;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.ERASE_DATA;
 	}
 	
 	@Override

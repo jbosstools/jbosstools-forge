@@ -7,8 +7,8 @@ public class DeviceStatusReport extends AbstractControlSequence {
 	public DeviceStatusReport(String arguments) {}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.DEVICE_STATUS_REPORT;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.DEVICE_STATUS_REPORT;
 	}
 
 }

@@ -18,8 +18,8 @@ public class CursorPosition extends AbstractControlSequence {
 	}
 
 	@Override
-	public AnsiControlSequenceType getType() {
-		return AnsiControlSequenceType.CURSOR_POSITION;
+	public ControlSequenceType getType() {
+		return ControlSequenceType.CURSOR_POSITION;
 	}
 	
 	@Override
