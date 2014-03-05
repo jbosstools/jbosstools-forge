@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-import org.jboss.tools.aesh.core.internal.ansi.AnsiControlSequenceFactory;
+import org.jboss.tools.aesh.core.internal.ansi.ControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 import org.jboss.tools.aesh.core.io.StreamListener;
 
@@ -10,7 +10,7 @@ public class ControlSequenceFilter implements StreamListener {
 	private StringBuffer escapeSequence = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();
 	
-	private AnsiControlSequenceFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
+	private ControlSequenceFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
 	private AnsiControlSequenceHandler controlSequenceHandler;
 	
 	public ControlSequenceFilter(StreamListener target, AnsiControlSequenceHandler handler) {
@@ -52,11 +52,11 @@ public class ControlSequenceFilter implements StreamListener {
 		}
 	}
 	
-	void setControlSequenceFactory(AnsiControlSequenceFactory controlSequenceFactory) {
+	void setControlSequenceFactory(ControlSequenceFactory controlSequenceFactory) {
 		this.controlSequenceFactory = controlSequenceFactory;
 	}
 	
-	AnsiControlSequenceFactory getControlSequenceFactory() {
+	ControlSequenceFactory getControlSequenceFactory() {
 		return controlSequenceFactory;
 	}
 	

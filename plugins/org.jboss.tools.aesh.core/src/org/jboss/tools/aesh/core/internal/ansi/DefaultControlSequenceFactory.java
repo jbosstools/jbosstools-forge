@@ -4,7 +4,7 @@ import org.jboss.tools.aesh.core.ansi.ControlSequence;
 
 
 
-public class DefaultControlSequenceFactory implements AnsiControlSequenceFactory {
+public class DefaultControlSequenceFactory implements ControlSequenceFactory {
 	
 	public static final DefaultControlSequenceFactory INSTANCE = new DefaultControlSequenceFactory();
 	

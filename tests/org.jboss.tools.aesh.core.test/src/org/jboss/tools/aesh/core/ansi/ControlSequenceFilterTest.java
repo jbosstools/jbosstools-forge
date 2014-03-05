@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.ansi;
 
 import java.util.ArrayList;
 
-import org.jboss.tools.aesh.core.internal.ansi.AnsiControlSequenceFactory;
+import org.jboss.tools.aesh.core.internal.ansi.ControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 import org.jboss.tools.aesh.core.io.StreamListener;
@@ -17,8 +17,8 @@ public class ControlSequenceFilterTest {
 				@Override
 				public void handle(AnsiDocument document) {}
 			};
-	private static final AnsiControlSequenceFactory TEST_CONTROL_SEQUENCE_FACTORY = 
-			new AnsiControlSequenceFactory() {				
+	private static final ControlSequenceFactory TEST_CONTROL_SEQUENCE_FACTORY = 
+			new ControlSequenceFactory() {				
 				@Override
 				public ControlSequence create(String controlSequence) {					// TODO Auto-generated method stub
 					return TEST_CONTROL_SEQUENCE;
