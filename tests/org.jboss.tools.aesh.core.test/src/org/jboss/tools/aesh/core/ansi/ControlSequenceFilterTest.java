@@ -30,7 +30,7 @@ public class ControlSequenceFilterTest {
 	private ControlSequence availableControlSequence;	
 	private StreamListener listener;	
 	private ControlSequenceFilter filter;
-	private AnsiControlSequenceHandler handler;
+	private ControlSequenceHandler handler;
 	private AeshOutputStream outputStream;
 	
 	
@@ -45,7 +45,7 @@ public class ControlSequenceFilterTest {
 				producedOutput.add(str);
 			}
 		};
-		handler = new AnsiControlSequenceHandler() {			
+		handler = new ControlSequenceHandler() {			
 			@Override
 			public void handle(ControlSequence controlSequence) {
 				availableControlSequence = controlSequence;

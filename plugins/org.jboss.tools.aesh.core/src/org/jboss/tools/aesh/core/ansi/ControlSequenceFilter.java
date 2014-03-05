@@ -11,9 +11,9 @@ public class ControlSequenceFilter implements StreamListener {
 	private StringBuffer targetBuffer = new StringBuffer();
 	
 	private ControlSequenceFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
-	private AnsiControlSequenceHandler controlSequenceHandler;
+	private ControlSequenceHandler controlSequenceHandler;
 	
-	public ControlSequenceFilter(StreamListener target, AnsiControlSequenceHandler handler) {
+	public ControlSequenceFilter(StreamListener target, ControlSequenceHandler handler) {
 		this.target = target;
 		this.controlSequenceHandler = handler;
 	}
