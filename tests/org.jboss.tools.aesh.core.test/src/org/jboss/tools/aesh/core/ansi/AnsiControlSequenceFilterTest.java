@@ -29,7 +29,7 @@ public class AnsiControlSequenceFilterTest {
 	private ArrayList<String> producedOutput;
 	private ControlSequence availableControlSequence;	
 	private StreamListener listener;	
-	private AnsiControlSequenceFilter filter;
+	private ControlSequenceFilter filter;
 	private AnsiControlSequenceHandler handler;
 	private AeshOutputStream outputStream;
 	
@@ -51,7 +51,7 @@ public class AnsiControlSequenceFilterTest {
 				availableControlSequence = controlSequence;
 			}
 		};
-		filter = new AnsiControlSequenceFilter(listener, handler);
+		filter = new ControlSequenceFilter(listener, handler);
 		outputStream.addStreamListener(filter);
 	}
 	

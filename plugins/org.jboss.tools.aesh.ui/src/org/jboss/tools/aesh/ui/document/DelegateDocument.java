@@ -11,7 +11,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.TextStyle;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.ansi.ControlSequence;
-import org.jboss.tools.aesh.core.ansi.AnsiControlSequenceFilter;
+import org.jboss.tools.aesh.core.ansi.ControlSequenceFilter;
 import org.jboss.tools.aesh.core.ansi.AnsiControlSequenceHandler;
 import org.jboss.tools.aesh.core.console.AeshConsole;
 import org.jboss.tools.aesh.core.io.StreamListener;
@@ -24,7 +24,7 @@ public class DelegateDocument extends Document {
 	}
 	
 	private StreamListener stdOutListener, stdErrListener;
-	private AnsiControlSequenceFilter ansiCommandSequenceFilter;
+	private ControlSequenceFilter commandSequenceFilter;
 	private AnsiControlSequenceHandler ansiCommandSequenceHandler;
 	private int cursorOffset = 0;
 	private AeshConsole console;
@@ -59,8 +59,8 @@ public class DelegateDocument extends Document {
 				});
 			}
 		};
-		ansiCommandSequenceFilter = 
-				new AnsiControlSequenceFilter(
+		commandSequenceFilter = 
+				new ControlSequenceFilter(
 						stdOutListener, 
 						ansiCommandSequenceHandler);
 		stdErrListener = new StreamListener() {		
@@ -114,14 +114,14 @@ public class DelegateDocument extends Document {
 	public void connect(AeshConsole aeshConsole) {
 		if (console == null) {
 			console = aeshConsole;
-			console.addStdOutListener(ansiCommandSequenceFilter);
+			console.addStdOutListener(commandSequenceFilter);
 			console.addStdErrListener(stdErrListener);
 		}
 	}
 	
 	public void disconnect() {
 		if (console != null) {
-			console.removeStdOutListener(ansiCommandSequenceFilter);
+			console.removeStdOutListener(commandSequenceFilter);
 			console.removeStdErrListener(stdErrListener);
 			console = null;
 		}
