@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AnsiControlSequenceFilterTest {
+public class ControlSequenceFilterTest {
 	
 	private static final ControlSequence TEST_CONTROL_SEQUENCE = 
 			new ControlSequence() {		
