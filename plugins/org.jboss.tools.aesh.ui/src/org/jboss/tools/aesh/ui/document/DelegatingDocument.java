@@ -1,6 +1,7 @@
 package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.ansi.StyleRange;
 import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.ui.AeshUIPlugin;
@@ -53,12 +54,23 @@ public class DelegatingDocument implements Document {
 	}
 
 	@Override
-	public void moveCursorTo(int offset) {
-		document.moveCursorTo(offset);
+	public void moveCursorTo(final int offset) {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				document.moveCursorTo(offset);
+			}				
+		});
 	}
 	
 	@Override
 	public void reset() {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				document.reset();
+			}				
+		});
 		document.reset();
 	}
 
@@ -68,17 +80,27 @@ public class DelegatingDocument implements Document {
 	}
 
 	@Override
-	public void replace(int pos, int length, String text) {
-    	try {
-        	document.replace(pos, length, text);
-        } catch (BadLocationException e) {
-        	AeshUIPlugin.log(e);
-        }
+	public void replace(final int pos, final int length, final String text) {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+			  	try {
+		        	document.replace(pos, length, text);
+		        } catch (BadLocationException e) {
+		        	AeshUIPlugin.log(e);
+		        }
+			}				
+		});
 	}
 
 	@Override
 	public void restoreCursor() {
-		document.restoreCursor();
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				document.restoreCursor();
+			}				
+		});
 	}
 
 	@Override
