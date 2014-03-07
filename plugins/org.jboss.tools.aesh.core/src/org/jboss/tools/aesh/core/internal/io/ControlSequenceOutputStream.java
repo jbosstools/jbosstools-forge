@@ -1,6 +1,5 @@
 package org.jboss.tools.aesh.core.internal.io;
 
-import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -8,20 +7,15 @@ import org.jboss.tools.aesh.core.ansi.ControlSequence;
 import org.jboss.tools.aesh.core.internal.ansi.ControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 
-public abstract class ControlSequenceOutputStream extends FilterOutputStream {
+public abstract class ControlSequenceOutputStream extends OutputStream {
 	
-	private OutputStream target = null;
 	private StringBuffer escapeSequence = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();
 	
 	private ControlSequenceFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
 	
-	public ControlSequenceOutputStream(OutputStream out) {
-		super(out);
-		this.target = out;
-	}
-	
 	public abstract void onControlSequence(ControlSequence controlSequence);
+	public abstract void onOutput(String string);
 
 	@Override
 	public void write(int i) throws IOException {
@@ -40,7 +34,7 @@ public abstract class ControlSequenceOutputStream extends FilterOutputStream {
 		if (targetBuffer.length() > 0) {
 			String targetString = targetBuffer.toString();
 			targetBuffer.setLength(0);
-			target.write(targetString.getBytes());
+			onOutput(targetString);
 		}
 	}
 	
@@ -49,7 +43,7 @@ public abstract class ControlSequenceOutputStream extends FilterOutputStream {
 			if (targetBuffer.length() > 0) {
 				String targetString = targetBuffer.toString();
 				targetBuffer.setLength(0);
-				target.write(targetString.getBytes());
+				onOutput(targetString);
 			}
 			escapeSequence.append(c);
 		} else if (c == '[' && escapeSequence.length() == 1) {
