@@ -35,4 +35,7 @@ public interface StyleRange {
 	void setBackgroundXTerm(int colour);	//  48
 	void setBackgroundDefault();			//  49
 	
+	void setLength(int length);
+	int getLength();
+	
 }

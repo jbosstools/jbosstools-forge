@@ -197,6 +197,14 @@ public class DelegatingStyleRange implements StyleRange {
 		styleRange.background = AeshColor.WHITE_BG.getColor();
 	}
 	
+	public void setLength(int length) {
+		styleRange.length = length;
+	}
+	
+	public int getLength() {
+		return styleRange.length;
+	}
+	
 	private void reverseVideo() {
 		Color foreground = styleRange.foreground;
 		Color background = styleRange.background;
