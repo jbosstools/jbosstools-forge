@@ -35,7 +35,7 @@ public class F2TextViewer extends AeshTextViewer {
 			@Override
 			public void run() {
 				((F2Console)aeshConsole).initialize();
-				aeshDocument.connect(aeshConsole);
+				((F2Console)aeshConsole).connect(aeshDocument.getProxy());
 		    	setDocument(aeshDocument);
 		    	aeshConsole.start();
 			}   		
@@ -47,7 +47,7 @@ public class F2TextViewer extends AeshTextViewer {
 			@Override
 			public void run() {
 		    	aeshConsole.stop();
-		    	aeshDocument.disconnect();
+		    	((F2Console)aeshConsole).disconnect();
 		    	aeshDocument.reset();
 		    	setDocument(null);
 			}    		
