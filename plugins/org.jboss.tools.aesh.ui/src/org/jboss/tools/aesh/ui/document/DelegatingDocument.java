@@ -8,6 +8,7 @@ import org.jboss.tools.aesh.ui.AeshUIPlugin;
 public class DelegatingDocument implements Document {
 	
 	private DelegateDocument document;
+	private StyleRange currentStyleRange;
 	
 	public DelegatingDocument(DelegateDocument document) {
 		this.document = document;
@@ -99,7 +100,13 @@ public class DelegatingDocument implements Document {
 		if (styleRangeProxy instanceof DelegatingStyleRange) {
 			DelegateStyleRange styleRange = ((DelegatingStyleRange)styleRangeProxy).getStyleRange();
 			document.setCurrentStyleRange(styleRange);
+			currentStyleRange = styleRangeProxy;
 		}
+	}
+	
+	@Override
+	public StyleRange getCurrentStyleRange() {
+		return currentStyleRange;
 	}
 	
 	@Override
@@ -107,7 +114,7 @@ public class DelegatingDocument implements Document {
 		DelegateStyleRange styleRange = document.getDefaultStyleRange();
 		styleRange.start = document.getLength();
 		styleRange.length = 0;
-		document.setCurrentStyleRange(styleRange);
+		setCurrentStyleRange(new DelegatingStyleRange(styleRange));
 	}
 
 }

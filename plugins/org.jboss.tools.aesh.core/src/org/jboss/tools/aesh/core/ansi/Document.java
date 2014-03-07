@@ -17,6 +17,7 @@ public interface Document {
 	
 	StyleRange newStyleRangeFromCurrent();
 	void setCurrentStyleRange(StyleRange styleRange);
+	StyleRange getCurrentStyleRange();
 	void setDefaultStyleRange();
 
 }
