@@ -14,5 +14,9 @@ public class ExampleTextViewer extends AeshTextViewer {
     	aeshConsole = new ExampleConsole();
     }
     
+    protected void initialize() {
+    	super.initialize();
+    	((ExampleConsole)aeshConsole).connect(aeshDocument.getProxy());
+    }
 
 }

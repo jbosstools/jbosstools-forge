@@ -23,12 +23,17 @@ import org.jboss.aesh.terminal.CharacterType;
 import org.jboss.aesh.terminal.Color;
 import org.jboss.aesh.terminal.TerminalCharacter;
 import org.jboss.aesh.terminal.TerminalColor;
-import org.jboss.tools.aesh.core.console.AbstractAeshConsole;
+import org.jboss.tools.aesh.core.console.AbstractConsole;
 
-public class ExampleConsole extends AbstractAeshConsole {
+public class ExampleConsole extends AbstractConsole {
 
 	private org.jboss.aesh.console.AeshConsole console;
 
+	protected void initialize() {
+		super.initialize();
+		createConsole();
+	}
+	
 	public void start() {
 		if (console == null) {
 			createConsole();
@@ -106,8 +111,8 @@ public class ExampleConsole extends AbstractAeshConsole {
 	private Settings createAeshSettings() {
 		return new SettingsBuilder()
 			.inputStream(getInputStream())
-			.outputStream(new PrintStream(getStdOut()))
-			.outputStreamError(new PrintStream(getStdErr()))
+			.outputStream(new PrintStream(getOutputStream()))
+			.outputStreamError(new PrintStream(getErrorStream()))
 			.create();
 	}
 
