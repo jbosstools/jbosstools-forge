@@ -147,6 +147,10 @@ public class DelegateDocument extends Document {
 		currentStyleRange = styleRange;
 	}
 	
+	public DelegatingDocument getProxy() {
+		return proxy;
+	}
+	
 	DelegateStyleRange getDefaultStyleRange() {
 		Font font = FontManager.INSTANCE.getDefault();
 		Color foreground = AeshColor.BLACK_TEXT.getColor();
