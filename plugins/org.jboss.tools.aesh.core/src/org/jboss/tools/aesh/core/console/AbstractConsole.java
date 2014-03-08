@@ -8,7 +8,6 @@ import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.core.ansi.StyleRange;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
 import org.jboss.tools.aesh.core.internal.io.ControlSequenceOutputStream;
-import org.jboss.tools.aesh.core.io.StreamListener;
 
 public abstract class AbstractConsole implements AeshConsole {
 	
@@ -119,9 +118,4 @@ public abstract class AbstractConsole implements AeshConsole {
 		}
 	}
 
-	public void addStdOutListener(StreamListener listener) {}
-	public void removeStdOutListener(StreamListener listener) {}
-	public void addStdErrListener(StreamListener listener) {}
-	public void removeStdErrListener(StreamListener listener) {}
-	
 }
