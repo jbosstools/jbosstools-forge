@@ -69,9 +69,9 @@ public abstract class AeshTextViewer extends TextViewer {
     
     protected void initializeDocument() {
     	aeshDocument = new DelegateDocument();
-    	aeshDocument.connect(aeshConsole);
     	aeshDocument.addCursorListener(cursorListener);
     	aeshDocument.addDocumentListener(documentListener);
+    	aeshConsole.connect(aeshDocument.getProxy());
     }
     
     protected void initializeTextWidget() {
@@ -141,7 +141,7 @@ public abstract class AeshTextViewer extends TextViewer {
     	aeshConsole.stop();
     	aeshDocument.removeDocumentListener(documentListener);
     	aeshDocument.removeCursorListener(cursorListener);
-    	aeshDocument.disconnect();
+    	aeshConsole.disconnect();
     }
     
     protected void handleVerifyEvent(VerifyEvent e) {
