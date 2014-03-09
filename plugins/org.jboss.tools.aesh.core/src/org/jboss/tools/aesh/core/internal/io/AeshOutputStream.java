@@ -7,7 +7,7 @@ import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.ansi.ControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 
-public abstract class ControlSequenceOutputStream extends OutputStream {
+public abstract class AeshOutputStream extends OutputStream {
 	
 	private StringBuffer escapeSequence = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();

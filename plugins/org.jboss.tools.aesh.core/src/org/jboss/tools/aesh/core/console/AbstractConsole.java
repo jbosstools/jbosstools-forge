@@ -7,7 +7,7 @@ import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.core.ansi.Style;
 import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
-import org.jboss.tools.aesh.core.internal.io.ControlSequenceOutputStream;
+import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 
 public abstract class AbstractConsole implements AeshConsole {
 	
@@ -68,7 +68,7 @@ public abstract class AbstractConsole implements AeshConsole {
 	}
 	
 	private OutputStream createOutputStream() {
-		return new ControlSequenceOutputStream() {			
+		return new AeshOutputStream() {			
 			@Override
 			public void onOutput(String string) {
 				handleOutput(string);
@@ -81,7 +81,7 @@ public abstract class AbstractConsole implements AeshConsole {
 	}
 	
 	private OutputStream createErrorStream() {
-		return new ControlSequenceOutputStream() {			
+		return new AeshOutputStream() {			
 			@Override
 			public void onOutput(String string) {
 				handleOutput(string);
