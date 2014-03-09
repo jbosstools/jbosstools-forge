@@ -7,7 +7,7 @@ import org.jboss.tools.aesh.core.ansi.Style;
 import org.jboss.tools.aesh.core.internal.AeshCorePlugin;
 
 
-public class SelectGraphicRendition extends AbstractControlSequence {
+public class SelectGraphicRendition extends AbstractCommand {
 	
 	private String arguments;
 

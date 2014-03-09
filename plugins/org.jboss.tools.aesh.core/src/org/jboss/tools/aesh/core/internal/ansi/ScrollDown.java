@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 
 
-public class ScrollDown extends AbstractControlSequence {
+public class ScrollDown extends AbstractCommand {
 
 	public ScrollDown(String arguments) {}
 

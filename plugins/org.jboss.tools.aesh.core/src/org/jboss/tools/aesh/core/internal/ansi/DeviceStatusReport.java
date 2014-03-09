@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 
 
-public class DeviceStatusReport extends AbstractControlSequence {
+public class DeviceStatusReport extends AbstractCommand {
 
 	public DeviceStatusReport(String arguments) {}
 

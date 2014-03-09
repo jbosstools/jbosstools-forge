@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 import org.jboss.tools.aesh.core.ansi.Document;
 
 
-public class RestoreCursorPosition extends AbstractControlSequence {
+public class RestoreCursorPosition extends AbstractCommand {
 
 	public RestoreCursorPosition(String arguments) {}
 

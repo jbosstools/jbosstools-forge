@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 import org.jboss.tools.aesh.core.ansi.Document;
 
 
-public class EraseData extends AbstractControlSequence {
+public class EraseData extends AbstractCommand {
 	
 	private String arguments;
 

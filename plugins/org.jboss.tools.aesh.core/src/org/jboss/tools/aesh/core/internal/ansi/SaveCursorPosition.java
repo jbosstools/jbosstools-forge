@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 import org.jboss.tools.aesh.core.ansi.Document;
 
 
-public class SaveCursorPosition extends AbstractControlSequence {
+public class SaveCursorPosition extends AbstractCommand {
 
 	public SaveCursorPosition(String arguments) {}
 
