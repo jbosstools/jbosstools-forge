@@ -1,6 +1,6 @@
 package org.jboss.tools.aesh.core.ansi;
 
-public interface StyleRange {
+public interface Style {
 	
 	void resetToNormal();					//   0
 	void setBoldOn();						//   1

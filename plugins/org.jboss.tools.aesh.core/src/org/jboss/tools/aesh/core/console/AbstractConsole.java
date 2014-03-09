@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.jboss.tools.aesh.core.ansi.Document;
-import org.jboss.tools.aesh.core.ansi.StyleRange;
+import org.jboss.tools.aesh.core.ansi.Style;
 import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
 import org.jboss.tools.aesh.core.internal.io.ControlSequenceOutputStream;
@@ -102,7 +102,7 @@ public abstract class AbstractConsole implements AeshConsole {
 	private void handleOutput(String string) {
 		if (document != null) {
 			string.replaceAll("\r", "");
-			StyleRange style = document.getCurrentStyleRange();
+			Style style = document.getCurrentStyleRange();
 			if (style != null) {
 				int increase = 
 						document.getCursorOffset() - 

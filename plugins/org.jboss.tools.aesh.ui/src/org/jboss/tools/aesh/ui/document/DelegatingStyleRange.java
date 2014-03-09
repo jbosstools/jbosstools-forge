@@ -2,10 +2,10 @@ package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.jboss.tools.aesh.core.ansi.StyleRange;
+import org.jboss.tools.aesh.core.ansi.Style;
 import org.jboss.tools.aesh.ui.fonts.FontManager;
 
-public class DelegatingStyleRange implements StyleRange {
+public class DelegatingStyleRange implements Style {
 	
 	private DelegateStyleRange styleRange;
 	
