@@ -3,11 +3,11 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 
 
-public class DefaultControlSequenceFactory implements CommandFactory {
+public class DefaultCommandFactory implements CommandFactory {
 	
-	public static final DefaultControlSequenceFactory INSTANCE = new DefaultControlSequenceFactory();
+	public static final DefaultCommandFactory INSTANCE = new DefaultCommandFactory();
 	
-	private DefaultControlSequenceFactory() {}
+	private DefaultCommandFactory() {}
 	
 	public Command create(String controlSequence) {
 		int last = controlSequence.length() - 1;

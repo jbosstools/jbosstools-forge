@@ -5,14 +5,14 @@ import java.io.OutputStream;
 
 import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.ansi.CommandFactory;
-import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
+import org.jboss.tools.aesh.core.internal.ansi.DefaultCommandFactory;
 
 public abstract class AeshOutputStream extends OutputStream {
 	
 	private StringBuffer escapeSequence = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();
 	
-	private CommandFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
+	private CommandFactory controlSequenceFactory = DefaultCommandFactory.INSTANCE;
 	
 	public abstract void onCommand(Command command);
 	public abstract void onOutput(String string);
