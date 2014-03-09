@@ -1,9 +1,9 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
-import org.jboss.tools.aesh.core.ansi.ControlSequence;
+import org.jboss.tools.aesh.core.ansi.Command;
 
 public interface ControlSequenceFactory {
 
-	ControlSequence create(String controlSequence);
+	Command create(String controlSequence);
 	
 }

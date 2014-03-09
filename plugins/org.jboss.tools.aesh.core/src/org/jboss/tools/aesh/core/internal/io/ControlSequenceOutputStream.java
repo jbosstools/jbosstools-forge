@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.io;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.jboss.tools.aesh.core.ansi.ControlSequence;
+import org.jboss.tools.aesh.core.ansi.Command;
 import org.jboss.tools.aesh.core.internal.ansi.ControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 
@@ -14,7 +14,7 @@ public abstract class ControlSequenceOutputStream extends OutputStream {
 	
 	private ControlSequenceFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
 	
-	public abstract void onControlSequence(ControlSequence controlSequence);
+	public abstract void onControlSequence(Command controlSequence);
 	public abstract void onOutput(String string);
 
 	@Override
@@ -50,7 +50,7 @@ public abstract class ControlSequenceOutputStream extends OutputStream {
 			escapeSequence.append(c);
 		} else if (escapeSequence.length() > 1) {
 			escapeSequence.append(c);
-			ControlSequence controlSequence = controlSequenceFactory.create(escapeSequence.toString());
+			Command controlSequence = controlSequenceFactory.create(escapeSequence.toString());
 			if (controlSequence != null) {
 				escapeSequence.setLength(0);
 				onControlSequence(controlSequence);

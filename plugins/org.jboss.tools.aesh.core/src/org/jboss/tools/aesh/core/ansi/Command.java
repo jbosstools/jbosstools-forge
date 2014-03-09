@@ -1,7 +1,7 @@
 package org.jboss.tools.aesh.core.ansi;
 
 
-public interface ControlSequence {
+public interface Command {
 	
 	void handle(Document document);
 

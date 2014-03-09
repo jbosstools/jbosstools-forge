@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.console;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.jboss.tools.aesh.core.ansi.ControlSequence;
+import org.jboss.tools.aesh.core.ansi.Command;
 import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.core.ansi.StyleRange;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
@@ -74,7 +74,7 @@ public abstract class AbstractConsole implements AeshConsole {
 				handleOutput(string);
 			}			
 			@Override
-			public void onControlSequence(ControlSequence controlSequence) {
+			public void onControlSequence(Command controlSequence) {
 				handleControlSequence(controlSequence);
 			}
 		};
@@ -87,13 +87,13 @@ public abstract class AbstractConsole implements AeshConsole {
 				handleOutput(string);
 			}			
 			@Override
-			public void onControlSequence(ControlSequence controlSequence) {
+			public void onControlSequence(Command controlSequence) {
 				handleControlSequence(controlSequence);
 			}
 		};
 	}
 	
-	private void handleControlSequence(ControlSequence controlSequence) {
+	private void handleControlSequence(Command controlSequence) {
 		if (document != null) {
 			controlSequence.handle(document);
 		}
