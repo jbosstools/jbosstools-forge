@@ -7,8 +7,8 @@ public class ScrollDown extends AbstractCommand {
 	public ScrollDown(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.SCROLL_DOWN;
+	public CommandType getType() {
+		return CommandType.SCROLL_DOWN;
 	}
 
 }

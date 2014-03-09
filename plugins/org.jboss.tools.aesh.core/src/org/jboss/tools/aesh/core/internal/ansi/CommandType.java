@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum ControlSequenceType {
+public enum CommandType {
 	
 	CURSOR_UP('A'),
 	CURSOR_DOWN('B'),
@@ -25,21 +25,21 @@ public enum ControlSequenceType {
 	HIDE_CURSOR('l'),
 	SHOW_CURSOR('h');
 	
-	private ControlSequenceType(char c) {
-		getAnsiControlSequenceTypeMap().put(c, this);
+	private CommandType(char c) {
+		getCommandTypeMap().put(c, this);
 	}
 	
-	private static Map<Character, ControlSequenceType> ansiControlSequenceTypeMap;
+	private static Map<Character, CommandType> commandTypeMap;
 	
-	private static Map<Character, ControlSequenceType> getAnsiControlSequenceTypeMap() {
-		if (ansiControlSequenceTypeMap == null) {
-			ansiControlSequenceTypeMap = new HashMap<Character, ControlSequenceType>();
+	private static Map<Character, CommandType> getCommandTypeMap() {
+		if (commandTypeMap == null) {
+			commandTypeMap = new HashMap<Character, CommandType>();
 		}
-		return ansiControlSequenceTypeMap;
+		return commandTypeMap;
 	}
 	
-	public static ControlSequenceType fromCharacter(char c) {
-		return getAnsiControlSequenceTypeMap().get(c);
+	public static CommandType fromCharacter(char c) {
+		return getCommandTypeMap().get(c);
 	}
 
 }

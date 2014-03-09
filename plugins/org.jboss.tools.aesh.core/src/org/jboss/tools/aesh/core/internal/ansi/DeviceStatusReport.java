@@ -7,8 +7,8 @@ public class DeviceStatusReport extends AbstractCommand {
 	public DeviceStatusReport(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.DEVICE_STATUS_REPORT;
+	public CommandType getType() {
+		return CommandType.DEVICE_STATUS_REPORT;
 	}
 
 }

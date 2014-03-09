@@ -7,8 +7,8 @@ public class HideCursor extends AbstractCommand {
 	public HideCursor(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.HIDE_CURSOR;
+	public CommandType getType() {
+		return CommandType.HIDE_CURSOR;
 	}
 
 }

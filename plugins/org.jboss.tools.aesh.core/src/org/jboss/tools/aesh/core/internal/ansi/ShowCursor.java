@@ -7,8 +7,8 @@ public class ShowCursor extends AbstractCommand {
 	public ShowCursor(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.SHOW_CURSOR;
+	public CommandType getType() {
+		return CommandType.SHOW_CURSOR;
 	}
 
 }

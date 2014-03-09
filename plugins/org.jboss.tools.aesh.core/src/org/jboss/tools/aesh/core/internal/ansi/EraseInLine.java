@@ -8,8 +8,8 @@ public class EraseInLine extends AbstractCommand {
 	public EraseInLine(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.ERASE_IN_LINE;
+	public CommandType getType() {
+		return CommandType.ERASE_IN_LINE;
 	}
 	
 	@Override

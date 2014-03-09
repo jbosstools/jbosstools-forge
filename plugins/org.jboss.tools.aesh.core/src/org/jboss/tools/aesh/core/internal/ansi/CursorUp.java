@@ -7,8 +7,8 @@ public class CursorUp extends AbstractCommand {
 	public CursorUp(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_UP;
+	public CommandType getType() {
+		return CommandType.CURSOR_UP;
 	}
 
 }

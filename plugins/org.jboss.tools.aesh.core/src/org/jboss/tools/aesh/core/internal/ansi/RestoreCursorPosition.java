@@ -8,8 +8,8 @@ public class RestoreCursorPosition extends AbstractCommand {
 	public RestoreCursorPosition(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.RESTORE_CURSOR_POSITION;
+	public CommandType getType() {
+		return CommandType.RESTORE_CURSOR_POSITION;
 	}
 	
 	@Override

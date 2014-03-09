@@ -12,8 +12,8 @@ public class EraseData extends AbstractCommand {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.ERASE_DATA;
+	public CommandType getType() {
+		return CommandType.ERASE_DATA;
 	}
 	
 	@Override

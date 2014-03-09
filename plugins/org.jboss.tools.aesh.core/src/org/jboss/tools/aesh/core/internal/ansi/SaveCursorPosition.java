@@ -8,8 +8,8 @@ public class SaveCursorPosition extends AbstractCommand {
 	public SaveCursorPosition(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.SAVE_CURSOR_POSITION;
+	public CommandType getType() {
+		return CommandType.SAVE_CURSOR_POSITION;
 	}
 	
 	@Override

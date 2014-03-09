@@ -7,8 +7,8 @@ public class ScrollUp extends AbstractCommand {
 	public ScrollUp(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.SCROLL_UP;
+	public CommandType getType() {
+		return CommandType.SCROLL_UP;
 	}
 
 }

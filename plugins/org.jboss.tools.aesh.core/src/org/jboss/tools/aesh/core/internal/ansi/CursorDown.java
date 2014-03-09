@@ -7,8 +7,8 @@ public class CursorDown extends AbstractCommand {
 	public CursorDown(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_DOWN;
+	public CommandType getType() {
+		return CommandType.CURSOR_DOWN;
 	}
 
 }

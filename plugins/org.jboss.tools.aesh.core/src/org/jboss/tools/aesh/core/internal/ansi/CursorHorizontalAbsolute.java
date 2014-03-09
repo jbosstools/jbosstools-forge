@@ -12,8 +12,8 @@ public class CursorHorizontalAbsolute extends AbstractCommand {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_HORIZONTAL_ABSOLUTE;
+	public CommandType getType() {
+		return CommandType.CURSOR_HORIZONTAL_ABSOLUTE;
 	}
 	
 	@Override

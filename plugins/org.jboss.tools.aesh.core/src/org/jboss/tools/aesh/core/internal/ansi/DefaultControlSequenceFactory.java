@@ -12,7 +12,7 @@ public class DefaultControlSequenceFactory implements ControlSequenceFactory {
 	public Command create(String controlSequence) {
 		int last = controlSequence.length() - 1;
 		char c = controlSequence.charAt(last);
-		ControlSequenceType type = ControlSequenceType.fromCharacter(c);
+		CommandType type = CommandType.fromCharacter(c);
 		if (type == null) {
 			return null;
 		} else {
@@ -22,7 +22,7 @@ public class DefaultControlSequenceFactory implements ControlSequenceFactory {
 	}
 	
 	private static Command create(
-			ControlSequenceType type, 
+			CommandType type, 
 			String arguments) {
 		switch (type) {
 		case CURSOR_UP: return new CursorUp(arguments);

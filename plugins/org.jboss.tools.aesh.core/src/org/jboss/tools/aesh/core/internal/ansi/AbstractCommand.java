@@ -4,7 +4,7 @@ import org.jboss.tools.aesh.core.ansi.Document;
 
 public abstract class AbstractCommand implements Command {
 	
-	public abstract ControlSequenceType getType();
+	public abstract CommandType getType();
 	
 	public void handle(Document document) {
 		throw new RuntimeException("not implemented!");

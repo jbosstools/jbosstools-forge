@@ -7,8 +7,8 @@ public class CursorNextLine extends AbstractCommand {
 	public CursorNextLine(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_NEXT_LINE;
+	public CommandType getType() {
+		return CommandType.CURSOR_NEXT_LINE;
 	}
 
 }

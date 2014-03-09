@@ -7,8 +7,8 @@ public class CursorPreviousLine extends AbstractCommand {
 	public CursorPreviousLine(String arguments) {}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_PREVIOUS_LINE;
+	public CommandType getType() {
+		return CommandType.CURSOR_PREVIOUS_LINE;
 	}
 
 }

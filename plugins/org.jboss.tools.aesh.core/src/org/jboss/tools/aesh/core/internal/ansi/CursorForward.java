@@ -12,8 +12,8 @@ public class CursorForward extends AbstractCommand {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_FORWARD;
+	public CommandType getType() {
+		return CommandType.CURSOR_FORWARD;
 	}
 	
 	@Override

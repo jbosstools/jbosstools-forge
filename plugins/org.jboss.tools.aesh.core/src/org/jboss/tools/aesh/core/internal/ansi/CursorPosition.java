@@ -18,8 +18,8 @@ public class CursorPosition extends AbstractCommand {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_POSITION;
+	public CommandType getType() {
+		return CommandType.CURSOR_POSITION;
 	}
 	
 	@Override

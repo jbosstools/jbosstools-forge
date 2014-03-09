@@ -16,8 +16,8 @@ public class SelectGraphicRendition extends AbstractCommand {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.SELECT_GRAPHIC_RENDITION;
+	public CommandType getType() {
+		return CommandType.SELECT_GRAPHIC_RENDITION;
 	}
 	
 	@Override

@@ -12,8 +12,8 @@ public class CursorBack extends AbstractCommand {
 	}
 
 	@Override
-	public ControlSequenceType getType() {
-		return ControlSequenceType.CURSOR_BACK;
+	public CommandType getType() {
+		return CommandType.CURSOR_BACK;
 	}
 	
 	@Override
