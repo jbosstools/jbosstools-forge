@@ -9,7 +9,7 @@ import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
 import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 
-public abstract class AbstractConsole implements AeshConsole {
+public abstract class AbstractConsole implements Console {
 	
 	private AeshInputStream inputStream = null;
 	private AeshOutputStream outputStream, errorStream = null;

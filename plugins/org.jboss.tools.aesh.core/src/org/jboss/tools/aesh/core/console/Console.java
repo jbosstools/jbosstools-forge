@@ -2,7 +2,7 @@ package org.jboss.tools.aesh.core.console;
 
 import org.jboss.tools.aesh.core.ansi.Document;
 
-public interface AeshConsole {
+public interface Console {
 
 	void start();
 	void sendInput(String input);

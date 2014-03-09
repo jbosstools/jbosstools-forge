@@ -11,7 +11,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
-import org.jboss.tools.aesh.core.console.AeshConsole;
+import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.AeshUIConstants;
 import org.jboss.tools.aesh.ui.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;
@@ -29,7 +29,7 @@ public abstract class AeshTextViewer extends TextViewer {
 	private static String NEXT_HISTORY = new Character((char)14).toString();
 	private static String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
 
-	protected AeshConsole aeshConsole;
+	protected Console aeshConsole;
 	protected DelegateDocument aeshDocument;
 	
 	protected CursorListener cursorListener = new CursorListener() {		
