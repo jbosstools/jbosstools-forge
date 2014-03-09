@@ -5,16 +5,21 @@ import java.io.OutputStream;
 
 import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
+import org.jboss.tools.aesh.core.internal.io.AeshOutputFilter;
 import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
+import org.jboss.tools.aesh.core.internal.io.CommandFilter;
 import org.jboss.tools.aesh.core.internal.io.DocumentHandler;
 
 public abstract class AbstractConsole implements Console {
 	
 	private AeshInputStream inputStream = null;
 	private AeshOutputStream outputStream, errorStream = null;
-	private DocumentHandler handler = new DocumentHandler();
+	private DocumentHandler handler = null;
+	private AeshOutputFilter filter = null;
 	
 	public AbstractConsole() {
+		handler = new DocumentHandler();
+		filter = new CommandFilter(handler);
 		initialize();
 	}
 
@@ -36,7 +41,6 @@ public abstract class AbstractConsole implements Console {
 		}
 	}
 
-	
 	protected void initialize() {
 		createStreams();
 	}
@@ -58,17 +62,17 @@ public abstract class AbstractConsole implements Console {
 	protected OutputStream getErrorStream() {
 		return errorStream;
 	}
-
+	
 	private AeshInputStream createInputStream() {
 		return new AeshInputStream(); 
 	}
 	
 	private AeshOutputStream createOutputStream() {
-		return new AeshOutputStream(handler);
+		return new AeshOutputStream(filter);
 	}
 	
 	private AeshOutputStream createErrorStream() {
-		return new AeshOutputStream(handler);
+		return new AeshOutputStream(filter);
 	}
 	
 }
