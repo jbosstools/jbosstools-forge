@@ -102,7 +102,7 @@ public abstract class AbstractConsole implements AeshConsole {
 	private void handleOutput(String string) {
 		if (document != null) {
 			string.replaceAll("\r", "");
-			Style style = document.getCurrentStyleRange();
+			Style style = document.getCurrentStyle();
 			if (style != null) {
 				int increase = 
 						document.getCursorOffset() - 

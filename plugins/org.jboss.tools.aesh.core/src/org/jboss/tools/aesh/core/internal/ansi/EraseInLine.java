@@ -18,7 +18,7 @@ public class EraseInLine extends AbstractControlSequence {
 				document.getCursorOffset(), 
 				document.getLength() - document.getCursorOffset(), 
 				"");
-		document.setDefaultStyleRange();
+		document.setDefaultStyle();
 	}
 
 }

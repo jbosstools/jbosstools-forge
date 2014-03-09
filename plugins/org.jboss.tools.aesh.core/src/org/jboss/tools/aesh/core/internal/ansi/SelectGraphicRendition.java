@@ -22,7 +22,7 @@ public class SelectGraphicRendition extends AbstractControlSequence {
 	
 	@Override
 	public void handle(Document document) {
-		Style styleRange = document.newStyleRangeFromCurrent();
+		Style style = document.newStyleFromCurrent();
 		StringTokenizer tokenizer = new StringTokenizer(arguments, ";");
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
@@ -30,15 +30,15 @@ public class SelectGraphicRendition extends AbstractControlSequence {
 			try {
 				int value = Integer.valueOf(token);
 				if (value == 38 || value == 48) {
-					handleXTerm(value, tokenizer, styleRange);
+					handleXTerm(value, tokenizer, style);
 				} else {
-					handleDefault(value, styleRange);
+					handleDefault(value, style);
 				}
 			} catch (NumberFormatException e) {
 				AeshCorePlugin.log(e);
 			}
 		}
-    	document.setCurrentStyleRange(styleRange);
+    	document.setCurrentStyle(style);
 	}
 	
 	private void handleXTerm(
@@ -71,38 +71,38 @@ public class SelectGraphicRendition extends AbstractControlSequence {
 		}
 	}
 	
-	private void handleDefault(int sgrCode, Style styleRange) {
+	private void handleDefault(int sgrCode, Style style) {
 		switch(sgrCode) {
-			case   0 : styleRange.resetToNormal(); break;
-			case   1 : styleRange.setBoldOn(); break;
-			case   2 : styleRange.setFaintOn(); break;
- 			case   3 : styleRange.setItalicOn(); break;
- 			case   4 : styleRange.setUnderlineSingle(); break;
-			case   7 : styleRange.setImageNegative(); break;
-			case   9 : styleRange.setCrossedOut(); break;
-			case  22 : styleRange.setBoldOrFaintOff(); break;
-			case  23 : styleRange.setItalicOff(); break;
-			case  24 : styleRange.setUnderlineNone(); break;
-			case  27 : styleRange.setImagePositive(); break;
-			case  29 : styleRange.setNotCrossedOut(); break;
-			case  30 : styleRange.setForegroundBlack(); break;
-			case  31 : styleRange.setForegroundRed(); break;
-			case  32 : styleRange.setForegroundGreen(); break;
-			case  33 : styleRange.setForegroundYellow(); break;
-			case  34 : styleRange.setForegroundBlue(); break;
-			case  35 : styleRange.setForegroundMagenta(); break;
-			case  36 : styleRange.setForegroundCyan(); break;
-			case  37 : styleRange.setForegroundWhite(); break;
-			case  39 : styleRange.setForegroundDefault(); break;
-			case  40 : styleRange.setBackgroundBlack(); break;
-			case  41 : styleRange.setBackgroundRed(); break;
-			case  42 : styleRange.setBackgroundGreen(); break;
-			case  43 : styleRange.setBackgroundYellow();break;
-			case  44 : styleRange.setBackgroundBlue(); break;
-			case  45 : styleRange.setBackgroundMagenta(); break;
-			case  46 : styleRange.setBackgroundCyan(); break;
-			case  47 : styleRange.setBackgroundWhite(); break;
-			case  49 : styleRange.setBackgroundDefault(); break;
+			case   0 : style.resetToNormal(); break;
+			case   1 : style.setBoldOn(); break;
+			case   2 : style.setFaintOn(); break;
+ 			case   3 : style.setItalicOn(); break;
+ 			case   4 : style.setUnderlineSingle(); break;
+			case   7 : style.setImageNegative(); break;
+			case   9 : style.setCrossedOut(); break;
+			case  22 : style.setBoldOrFaintOff(); break;
+			case  23 : style.setItalicOff(); break;
+			case  24 : style.setUnderlineNone(); break;
+			case  27 : style.setImagePositive(); break;
+			case  29 : style.setNotCrossedOut(); break;
+			case  30 : style.setForegroundBlack(); break;
+			case  31 : style.setForegroundRed(); break;
+			case  32 : style.setForegroundGreen(); break;
+			case  33 : style.setForegroundYellow(); break;
+			case  34 : style.setForegroundBlue(); break;
+			case  35 : style.setForegroundMagenta(); break;
+			case  36 : style.setForegroundCyan(); break;
+			case  37 : style.setForegroundWhite(); break;
+			case  39 : style.setForegroundDefault(); break;
+			case  40 : style.setBackgroundBlack(); break;
+			case  41 : style.setBackgroundRed(); break;
+			case  42 : style.setBackgroundGreen(); break;
+			case  43 : style.setBackgroundYellow();break;
+			case  44 : style.setBackgroundBlue(); break;
+			case  45 : style.setBackgroundMagenta(); break;
+			case  46 : style.setBackgroundCyan(); break;
+			case  47 : style.setBackgroundWhite(); break;
+			case  49 : style.setBackgroundDefault(); break;
 			default  : throw new RuntimeException("Unknown SGR code: " + sgrCode);
 		}
 	}

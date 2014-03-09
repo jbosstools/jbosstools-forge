@@ -109,7 +109,7 @@ public class DelegatingDocument implements Document {
 	}
 
 	@Override
-	public Style newStyleRangeFromCurrent() {
+	public Style newStyleFromCurrent() {
 		DelegateStyleRange oldStyleRange = document.getCurrentStyleRange();
 		DelegateStyleRange newStyleRange = new DelegateStyleRange(oldStyleRange);
 		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
@@ -118,7 +118,7 @@ public class DelegatingDocument implements Document {
 	}
 
 	@Override
-	public void setCurrentStyleRange(Style styleRangeProxy) {
+	public void setCurrentStyle(Style styleRangeProxy) {
 		if (styleRangeProxy instanceof DelegatingStyleRange) {
 			DelegateStyleRange styleRange = ((DelegatingStyleRange)styleRangeProxy).getStyleRange();
 			document.setCurrentStyleRange(styleRange);
@@ -127,16 +127,16 @@ public class DelegatingDocument implements Document {
 	}
 	
 	@Override
-	public Style getCurrentStyleRange() {
+	public Style getCurrentStyle() {
 		return currentStyleRange;
 	}
 	
 	@Override
-	public void setDefaultStyleRange() {
+	public void setDefaultStyle() {
 		DelegateStyleRange styleRange = document.getDefaultStyleRange();
 		styleRange.start = document.getLength();
 		styleRange.length = 0;
-		setCurrentStyleRange(new DelegatingStyleRange(styleRange));
+		setCurrentStyle(new DelegatingStyleRange(styleRange));
 	}
 
 }
