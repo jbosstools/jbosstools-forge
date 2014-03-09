@@ -12,7 +12,7 @@ import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 public abstract class AbstractConsole implements AeshConsole {
 	
 	private AeshInputStream inputStream = null;
-	private OutputStream outputStream, errorStream = null;
+	private AeshOutputStream outputStream, errorStream = null;
 	private Document document = null;
 	
 	public AbstractConsole() {
@@ -67,27 +67,27 @@ public abstract class AbstractConsole implements AeshConsole {
 		return new AeshInputStream(); 
 	}
 	
-	private OutputStream createOutputStream() {
+	private AeshOutputStream createOutputStream() {
 		return new AeshOutputStream() {			
 			@Override
 			public void onOutput(String string) {
 				handleOutput(string);
 			}			
 			@Override
-			public void onControlSequence(Command controlSequence) {
+			public void onCommand(Command controlSequence) {
 				handleControlSequence(controlSequence);
 			}
 		};
 	}
 	
-	private OutputStream createErrorStream() {
+	private AeshOutputStream createErrorStream() {
 		return new AeshOutputStream() {			
 			@Override
 			public void onOutput(String string) {
 				handleOutput(string);
 			}			
 			@Override
-			public void onControlSequence(Command controlSequence) {
+			public void onCommand(Command controlSequence) {
 				handleControlSequence(controlSequence);
 			}
 		};

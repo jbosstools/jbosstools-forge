@@ -14,7 +14,7 @@ public abstract class AeshOutputStream extends OutputStream {
 	
 	private ControlSequenceFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
 	
-	public abstract void onControlSequence(Command controlSequence);
+	public abstract void onCommand(Command command);
 	public abstract void onOutput(String string);
 
 	@Override
@@ -53,7 +53,7 @@ public abstract class AeshOutputStream extends OutputStream {
 			Command controlSequence = controlSequenceFactory.create(escapeSequence.toString());
 			if (controlSequence != null) {
 				escapeSequence.setLength(0);
-				onControlSequence(controlSequence);
+				onCommand(controlSequence);
 			}
 		} else {
 			targetBuffer.append(c);
