@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.io;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.jboss.tools.aesh.core.ansi.Command;
+import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.ansi.ControlSequenceFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 

@@ -3,9 +3,9 @@ package org.jboss.tools.aesh.core.console;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.jboss.tools.aesh.core.ansi.Command;
 import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.core.ansi.StyleRange;
+import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
 import org.jboss.tools.aesh.core.internal.io.ControlSequenceOutputStream;
 
