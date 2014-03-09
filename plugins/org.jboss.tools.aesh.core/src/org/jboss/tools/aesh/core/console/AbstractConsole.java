@@ -4,16 +4,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.jboss.tools.aesh.core.ansi.Document;
-import org.jboss.tools.aesh.core.ansi.Style;
-import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
 import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
+import org.jboss.tools.aesh.core.internal.io.DocumentHandler;
 
 public abstract class AbstractConsole implements Console {
 	
 	private AeshInputStream inputStream = null;
 	private AeshOutputStream outputStream, errorStream = null;
-	private Document document = null;
+	private DocumentHandler handler = new DocumentHandler();
 	
 	public AbstractConsole() {
 		initialize();
@@ -24,14 +23,11 @@ public abstract class AbstractConsole implements Console {
 	protected abstract void createConsole();
 
 	public void connect(Document document) {
-		if (this.document != null) {
-			disconnect();
-		}
-		this.document = document;
+		handler.setDocument(document);		
 	}
 	
 	public void disconnect() {
-		document = null;
+		handler.setDocument(null);
 	}
 	
 	public void sendInput(String input) {
@@ -68,54 +64,11 @@ public abstract class AbstractConsole implements Console {
 	}
 	
 	private AeshOutputStream createOutputStream() {
-		return new AeshOutputStream() {			
-			@Override
-			public void onOutput(String string) {
-				handleOutput(string);
-			}			
-			@Override
-			public void onCommand(Command controlSequence) {
-				handleControlSequence(controlSequence);
-			}
-		};
+		return new AeshOutputStream(handler);
 	}
 	
 	private AeshOutputStream createErrorStream() {
-		return new AeshOutputStream() {			
-			@Override
-			public void onOutput(String string) {
-				handleOutput(string);
-			}			
-			@Override
-			public void onCommand(Command controlSequence) {
-				handleControlSequence(controlSequence);
-			}
-		};
+		return new AeshOutputStream(handler);
 	}
 	
-	private void handleControlSequence(Command controlSequence) {
-		if (document != null) {
-			controlSequence.handle(document);
-		}
-	}
-	
-	private void handleOutput(String string) {
-		if (document != null) {
-			string.replaceAll("\r", "");
-			Style style = document.getCurrentStyle();
-			if (style != null) {
-				int increase = 
-						document.getCursorOffset() - 
-						document.getLength() + 
-						string.length();
-				style.setLength(style.getLength() + increase);
-			}
-			document.replace(
-					document.getCursorOffset(), 
-					document.getLength() - document.getCursorOffset(), 
-					string);
-			document.moveCursorTo(document.getCursorOffset() + string.length());
-		}
-	}
-
 }

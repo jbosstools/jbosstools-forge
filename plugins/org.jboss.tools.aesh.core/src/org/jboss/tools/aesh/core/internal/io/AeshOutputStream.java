@@ -7,16 +7,19 @@ import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.ansi.CommandFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultCommandFactory;
 
-public abstract class AeshOutputStream extends OutputStream {
+public class AeshOutputStream extends OutputStream {
 	
 	private StringBuffer escapeSequence = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();
 	
-	private CommandFactory controlSequenceFactory = DefaultCommandFactory.INSTANCE;
+	private CommandFactory commandFactory = DefaultCommandFactory.INSTANCE;
 	
-	public abstract void onCommand(Command command);
-	public abstract void onOutput(String string);
-
+	private Handler handler = null;
+	
+	public AeshOutputStream(Handler handler) {
+		this.handler = handler;
+	}
+	
 	@Override
 	public void write(int i) throws IOException {
 		outputAvailable(new String( new char[] { (char)i }));
@@ -34,7 +37,7 @@ public abstract class AeshOutputStream extends OutputStream {
 		if (targetBuffer.length() > 0) {
 			String targetString = targetBuffer.toString();
 			targetBuffer.setLength(0);
-			onOutput(targetString);
+			handler.handleOutput(targetString);
 		}
 	}
 	
@@ -43,17 +46,17 @@ public abstract class AeshOutputStream extends OutputStream {
 			if (targetBuffer.length() > 0) {
 				String targetString = targetBuffer.toString();
 				targetBuffer.setLength(0);
-				onOutput(targetString);
+				handler.handleOutput(targetString);
 			}
 			escapeSequence.append(c);
 		} else if (c == '[' && escapeSequence.length() == 1) {
 			escapeSequence.append(c);
 		} else if (escapeSequence.length() > 1) {
 			escapeSequence.append(c);
-			Command controlSequence = controlSequenceFactory.create(escapeSequence.toString());
+			Command controlSequence = commandFactory.create(escapeSequence.toString());
 			if (controlSequence != null) {
 				escapeSequence.setLength(0);
-				onCommand(controlSequence);
+				handler.handleCommand(controlSequence);
 			}
 		} else {
 			targetBuffer.append(c);
@@ -61,11 +64,11 @@ public abstract class AeshOutputStream extends OutputStream {
 	}
 	
 	void setControlSequenceFactory(CommandFactory controlSequenceFactory) {
-		this.controlSequenceFactory = controlSequenceFactory;
+		this.commandFactory = controlSequenceFactory;
 	}
 	
 	CommandFactory getControlSequenceFactory() {
-		return controlSequenceFactory;
+		return commandFactory;
 	}
 	
 }
