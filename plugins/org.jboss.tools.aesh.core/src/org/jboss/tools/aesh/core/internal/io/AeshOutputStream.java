@@ -14,9 +14,9 @@ public class AeshOutputStream extends OutputStream {
 	
 	private CommandFactory commandFactory = DefaultCommandFactory.INSTANCE;
 	
-	private Handler handler = null;
+	private AeshOutputHandler handler = null;
 	
-	public AeshOutputStream(Handler handler) {
+	public AeshOutputStream(AeshOutputHandler handler) {
 		this.handler = handler;
 	}
 	

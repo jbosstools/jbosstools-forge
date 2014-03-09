@@ -4,7 +4,7 @@ import org.jboss.tools.aesh.core.ansi.Document;
 import org.jboss.tools.aesh.core.ansi.Style;
 import org.jboss.tools.aesh.core.internal.ansi.Command;
 
-public class DocumentHandler implements Handler {
+public class DocumentHandler implements AeshOutputHandler {
 	
 	private Document document;
 
