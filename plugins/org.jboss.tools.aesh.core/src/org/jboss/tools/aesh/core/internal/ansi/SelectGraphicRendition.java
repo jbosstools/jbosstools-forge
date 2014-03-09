@@ -44,7 +44,7 @@ public class SelectGraphicRendition extends AbstractCommand {
 	private void handleXTerm(
 			int sgrCode,
 			StringTokenizer tokenizer, 
-			Style styleRange) {
+			Style style) {
 		if (tokenizer.hasMoreTokens()) {
 			String str = tokenizer.nextToken();
 			try {
@@ -53,9 +53,9 @@ public class SelectGraphicRendition extends AbstractCommand {
 					if (tokenizer.hasMoreTokens()) {
 						int code = Integer.valueOf(tokenizer.nextToken());
 						if (sgrCode == 38) {
-							styleRange.setForegroundXTerm(code);
+							style.setForegroundXTerm(code);
 						} else if (sgrCode == 48) {
-							styleRange.setBackgroundXTerm(code);
+							style.setBackgroundXTerm(code);
 						}
 					} else {
 						AeshCorePlugin.log(new RuntimeException("Incorrect SGR instruction: " + arguments));
