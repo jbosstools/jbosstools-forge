@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.jboss.tools.aesh.core.internal.ansi.Command;
-import org.jboss.tools.aesh.core.internal.ansi.ControlSequenceFactory;
+import org.jboss.tools.aesh.core.internal.ansi.CommandFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultControlSequenceFactory;
 
 public abstract class AeshOutputStream extends OutputStream {
@@ -12,7 +12,7 @@ public abstract class AeshOutputStream extends OutputStream {
 	private StringBuffer escapeSequence = new StringBuffer();
 	private StringBuffer targetBuffer = new StringBuffer();
 	
-	private ControlSequenceFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
+	private CommandFactory controlSequenceFactory = DefaultControlSequenceFactory.INSTANCE;
 	
 	public abstract void onCommand(Command command);
 	public abstract void onOutput(String string);
@@ -60,11 +60,11 @@ public abstract class AeshOutputStream extends OutputStream {
 		}
 	}
 	
-	void setControlSequenceFactory(ControlSequenceFactory controlSequenceFactory) {
+	void setControlSequenceFactory(CommandFactory controlSequenceFactory) {
 		this.controlSequenceFactory = controlSequenceFactory;
 	}
 	
-	ControlSequenceFactory getControlSequenceFactory() {
+	CommandFactory getControlSequenceFactory() {
 		return controlSequenceFactory;
 	}
 	

@@ -1,7 +1,7 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
 
-public interface ControlSequenceFactory {
+public interface CommandFactory {
 
 	Command create(String controlSequence);
 	

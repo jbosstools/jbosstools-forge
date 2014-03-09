@@ -3,7 +3,7 @@ package org.jboss.tools.aesh.core.internal.ansi;
 
 
 
-public class DefaultControlSequenceFactory implements ControlSequenceFactory {
+public class DefaultControlSequenceFactory implements CommandFactory {
 	
 	public static final DefaultControlSequenceFactory INSTANCE = new DefaultControlSequenceFactory();
 	
