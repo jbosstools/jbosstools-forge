@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.core.ansi;
+package org.jboss.tools.aesh.core.document;
 
 public interface Style {
 	

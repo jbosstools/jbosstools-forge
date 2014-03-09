@@ -1,7 +1,7 @@
 package org.jboss.tools.aesh.core.internal.io;
 
-import org.jboss.tools.aesh.core.ansi.Document;
-import org.jboss.tools.aesh.core.ansi.Style;
+import org.jboss.tools.aesh.core.document.Document;
+import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.core.internal.ansi.Command;
 
 public class DocumentHandler implements AeshOutputHandler {
