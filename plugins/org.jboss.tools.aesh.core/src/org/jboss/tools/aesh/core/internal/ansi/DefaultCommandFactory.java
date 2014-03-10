@@ -1,8 +1,5 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
-
-
-
 public class DefaultCommandFactory implements CommandFactory {
 	
 	public static final DefaultCommandFactory INSTANCE = new DefaultCommandFactory();
