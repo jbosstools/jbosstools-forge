@@ -11,3 +11,4 @@ Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Export-Package: org.jboss.tools.aesh.core.console,
  org.jboss.tools.aesh.core.document
+Bundle-Activator: org.jboss.tools.aesh.core.internal.AeshCorePlugin
