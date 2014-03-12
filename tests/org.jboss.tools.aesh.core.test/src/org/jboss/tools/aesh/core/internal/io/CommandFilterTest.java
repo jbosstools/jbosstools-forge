@@ -26,7 +26,11 @@ public class CommandFilterTest {
 	private CommandFactory testFactory = new CommandFactory() {		
 		@Override
 		public Command create(String controlSequence) {
-			return testCommand;
+			if (testSequence.equals(controlSequence)) {
+				return testCommand;
+			} else {
+				return null;
+			}
 		}
 	};
 	
