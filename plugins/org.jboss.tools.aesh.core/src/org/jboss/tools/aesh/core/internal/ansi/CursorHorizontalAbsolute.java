@@ -1,14 +1,19 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.document.Document;
+import org.jboss.tools.aesh.core.internal.AeshCorePlugin;
 
 
 public class CursorHorizontalAbsolute extends AbstractCommand {
 	
-	private int column;
+	private int column = 0;
 
 	public CursorHorizontalAbsolute(String arguments) {
-		column = Integer.valueOf(arguments);
+		try {
+			column = Integer.valueOf(arguments);
+		} catch (NumberFormatException e) {
+			AeshCorePlugin.log(e);
+		}
 	}
 
 	@Override

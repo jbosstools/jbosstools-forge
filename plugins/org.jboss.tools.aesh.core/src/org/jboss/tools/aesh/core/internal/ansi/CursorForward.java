@@ -1,14 +1,19 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.document.Document;
+import org.jboss.tools.aesh.core.internal.AeshCorePlugin;
 
 
 public class CursorForward extends AbstractCommand {
 	
-	private int amount;
+	private int amount = 0;
 
 	public CursorForward(String arguments) {
-		amount = Integer.valueOf(arguments);
+		try { 
+			amount = Integer.valueOf(arguments);
+		} catch (NumberFormatException e) {
+			AeshCorePlugin.log(e);
+		}
 	}
 
 	@Override
