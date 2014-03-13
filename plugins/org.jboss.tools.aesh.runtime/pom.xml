@@ -14,6 +14,7 @@
 
    <properties>
       <version.aesh>0.48</version.aesh>
+      <version.jansi>1.11</version.jansi>
    </properties>
 
    <build>
@@ -57,6 +58,12 @@
                            <artifactId>aesh</artifactId>
                            <version>${version.aesh}</version>
                            <destFileName>aesh-${version.aesh}.jar</destFileName>
+                        </artifactItem>
+                        <artifactItem>
+                           <groupId>org.fusesource.jansi</groupId>
+                           <artifactId>jansi</artifactId>
+                           <version>${version.jansi}</version>
+                           <destFileName>jansi-${version.jansi}.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>
