@@ -23,25 +23,31 @@ public class SelectGraphicRendition extends AbstractCommand {
 	@Override
 	public void handle(Document document) {
 		Style style = document.newStyleFromCurrent();
+		boolean changeStyle = true;
 		StringTokenizer tokenizer = new StringTokenizer(arguments, ";");
-		while (tokenizer.hasMoreTokens()) {
+		int counter = 0;
+		while (tokenizer.hasMoreTokens() && changeStyle) {
 			String token = tokenizer.nextToken();
 			if ("".equals(token)) continue;
 			try {
 				int value = Integer.valueOf(token);
 				if (value == 38 || value == 48) {
-					handleXTerm(value, tokenizer, style);
+					changeStyle = handleXTerm(value, tokenizer, style);
 				} else {
-					handleDefault(value, style);
+					changeStyle = handleDefault(value, style);
 				}
+				counter++;
 			} catch (NumberFormatException e) {
 				AeshCorePlugin.log(e);
+				changeStyle = false;
 			}
 		}
-    	document.setCurrentStyle(style);
+		if (changeStyle && counter > 0) {
+			document.setCurrentStyle(style);
+		}
 	}
 	
-	private void handleXTerm(
+	private boolean handleXTerm(
 			int sgrCode,
 			StringTokenizer tokenizer, 
 			Style style) {
@@ -57,53 +63,58 @@ public class SelectGraphicRendition extends AbstractCommand {
 						} else if (sgrCode == 48) {
 							style.setBackgroundXTerm(code);
 						}
+						return true;
 					} else {
 						AeshCorePlugin.log(new RuntimeException("Incorrect SGR instruction: " + arguments));
+						return false;
 					}
 				} else {
 					AeshCorePlugin.log(new RuntimeException("Incorrect SGR instruction: " + arguments));
+					return false;
 				}
 			} catch (NumberFormatException e) {
 				AeshCorePlugin.log(e);
+				return false;
 			}
 		} else {
 			AeshCorePlugin.log(new RuntimeException("Incorrect SGR instruction: " + arguments));
+			return false;
 		}
 	}
 	
-	private void handleDefault(int sgrCode, Style style) {
+	private boolean handleDefault(int sgrCode, Style style) {
 		switch(sgrCode) {
-			case   0 : style.resetToNormal(); break;
-			case   1 : style.setBoldOn(); break;
-			case   2 : style.setFaintOn(); break;
- 			case   3 : style.setItalicOn(); break;
- 			case   4 : style.setUnderlineSingle(); break;
-			case   7 : style.setImageNegative(); break;
-			case   9 : style.setCrossedOut(); break;
-			case  22 : style.setBoldOrFaintOff(); break;
-			case  23 : style.setItalicOff(); break;
-			case  24 : style.setUnderlineNone(); break;
-			case  27 : style.setImagePositive(); break;
-			case  29 : style.setNotCrossedOut(); break;
-			case  30 : style.setForegroundBlack(); break;
-			case  31 : style.setForegroundRed(); break;
-			case  32 : style.setForegroundGreen(); break;
-			case  33 : style.setForegroundYellow(); break;
-			case  34 : style.setForegroundBlue(); break;
-			case  35 : style.setForegroundMagenta(); break;
-			case  36 : style.setForegroundCyan(); break;
-			case  37 : style.setForegroundWhite(); break;
-			case  39 : style.setForegroundDefault(); break;
-			case  40 : style.setBackgroundBlack(); break;
-			case  41 : style.setBackgroundRed(); break;
-			case  42 : style.setBackgroundGreen(); break;
-			case  43 : style.setBackgroundYellow();break;
-			case  44 : style.setBackgroundBlue(); break;
-			case  45 : style.setBackgroundMagenta(); break;
-			case  46 : style.setBackgroundCyan(); break;
-			case  47 : style.setBackgroundWhite(); break;
-			case  49 : style.setBackgroundDefault(); break;
-			default  : throw new RuntimeException("Unknown SGR code: " + sgrCode);
+			case   0 : style.resetToNormal(); return true;
+			case   1 : style.setBoldOn(); return true;
+			case   2 : style.setFaintOn(); return true;
+ 			case   3 : style.setItalicOn(); return true;
+ 			case   4 : style.setUnderlineSingle(); return true;
+			case   7 : style.setImageNegative(); return true;
+			case   9 : style.setCrossedOut(); return true;
+			case  22 : style.setBoldOrFaintOff(); return true;
+			case  23 : style.setItalicOff(); return true;
+			case  24 : style.setUnderlineNone(); return true;
+			case  27 : style.setImagePositive(); return true;
+			case  29 : style.setNotCrossedOut(); return true;
+			case  30 : style.setForegroundBlack(); return true;
+			case  31 : style.setForegroundRed(); return true;
+			case  32 : style.setForegroundGreen(); return true;
+			case  33 : style.setForegroundYellow(); return true;
+			case  34 : style.setForegroundBlue(); return true;
+			case  35 : style.setForegroundMagenta(); return true;
+			case  36 : style.setForegroundCyan(); return true;
+			case  37 : style.setForegroundWhite(); return true;
+			case  39 : style.setForegroundDefault(); return true;
+			case  40 : style.setBackgroundBlack(); return true;
+			case  41 : style.setBackgroundRed(); return true;
+			case  42 : style.setBackgroundGreen(); return true;
+			case  43 : style.setBackgroundYellow();return true;
+			case  44 : style.setBackgroundBlue(); return true;
+			case  45 : style.setBackgroundMagenta(); return true;
+			case  46 : style.setBackgroundCyan(); return true;
+			case  47 : style.setBackgroundWhite(); return true;
+			case  49 : style.setBackgroundDefault(); return true;
+			default  : AeshCorePlugin.log(new RuntimeException("Unknown SGR code: " + sgrCode)); return false;
 		}
 	}
 	
