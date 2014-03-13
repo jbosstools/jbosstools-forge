@@ -12,9 +12,9 @@ import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.aesh.core.console.Console;
-import org.jboss.tools.aesh.ui.AeshUIConstants;
 import org.jboss.tools.aesh.ui.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;
+import org.jboss.tools.aesh.ui.fonts.FontManager;
 
 public abstract class AeshTextViewer extends TextViewer {
 	
@@ -75,7 +75,7 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     protected void initializeTextWidget() {
-    	getTextWidget().setFont(JFaceResources.getFont(AeshUIConstants.AESH_CONSOLE_FONT));
+    	getTextWidget().setFont(JFaceResources.getFont(FontManager.AESH_CONSOLE_FONT));
     	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
 			@Override
 			public void verifyKey(VerifyEvent event) {

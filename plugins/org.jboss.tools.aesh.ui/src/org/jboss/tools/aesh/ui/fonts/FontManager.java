@@ -4,10 +4,11 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.jboss.tools.aesh.ui.AeshUIConstants;
 
 public class FontManager {
 	
+	public static final String AESH_CONSOLE_FONT = "org.jboss.tools.aesh.ui.font";
+
 	public static FontManager INSTANCE = new FontManager();
 	
 	private static Font ITALIC;
@@ -23,7 +24,7 @@ public class FontManager {
 	}
 	
 	private void initializeDefault() {
-		NORMAL = JFaceResources.getFont(AeshUIConstants.AESH_CONSOLE_FONT);
+		NORMAL = JFaceResources.getFont(AESH_CONSOLE_FONT);
 	}
 	
 	private FontData createFontDataFromNormal() {
