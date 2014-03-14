@@ -13,7 +13,7 @@
    <packaging>eclipse-plugin</packaging>
 
    <properties>
-      <version.aesh>0.48</version.aesh>
+      <version.aesh>0.49</version.aesh>
       <version.jansi>1.11</version.jansi>
    </properties>
 
