@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.ui;
+package org.jboss.tools.aesh.ui.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

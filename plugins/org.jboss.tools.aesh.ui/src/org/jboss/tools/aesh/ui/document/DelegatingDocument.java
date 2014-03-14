@@ -4,7 +4,7 @@ import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.document.Document;
 import org.jboss.tools.aesh.core.document.Style;
-import org.jboss.tools.aesh.ui.AeshUIPlugin;
+import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 
 public class DelegatingDocument implements Document {
 	
