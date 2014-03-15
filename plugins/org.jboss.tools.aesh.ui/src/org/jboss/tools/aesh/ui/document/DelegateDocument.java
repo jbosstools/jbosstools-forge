@@ -75,8 +75,8 @@ public class DelegateDocument extends Document {
 	
 	DelegateStyleRange getDefaultStyleRange() {
 		Font font = FontManager.INSTANCE.getDefault();
-		Color foreground = AeshColor.BLACK_TEXT.getColor();
-		Color background = AeshColor.WHITE_BG.getColor();		
+		Color foreground = ColorConstants.BLACK;
+		Color background = ColorConstants.WHITE;		
 		return new DelegateStyleRange(new StyleRange(new TextStyle(font, foreground, background)));
 	}
 	

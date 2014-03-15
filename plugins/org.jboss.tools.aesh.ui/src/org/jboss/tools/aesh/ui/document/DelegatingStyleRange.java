@@ -20,8 +20,8 @@ public class DelegatingStyleRange implements Style {
 	// 0
 	public void resetToNormal() {
 		styleRange.font = FontManager.INSTANCE.getDefault();
-		styleRange.foreground = AeshColor.BLACK_TEXT.getColor();
-		styleRange.background = AeshColor.WHITE_BG.getColor();		
+		styleRange.foreground = ColorConstants.BLACK;
+		styleRange.background = ColorConstants.WHITE;		
 	}
 	
 	// 1
@@ -101,42 +101,42 @@ public class DelegatingStyleRange implements Style {
 	
 	// 30
 	public void setForegroundBlack() {
-		styleRange.foreground = AeshColor.BLACK_TEXT.getColor();
+		styleRange.foreground = ColorConstants.BLACK;
 	}
 	
 	// 31
 	public void setForegroundRed() {
-		styleRange.foreground = AeshColor.RED_TEXT.getColor();
+		styleRange.foreground = ColorConstants.RED;
 	}
 	
 	// 32
 	public void setForegroundGreen() {
-		styleRange.foreground = AeshColor.GREEN_TEXT.getColor();
+		styleRange.foreground = ColorConstants.GREEN;
 	}
 	
 	// 33
 	public void setForegroundYellow() {
-		styleRange.foreground = AeshColor.YELLOW_TEXT.getColor();
+		styleRange.foreground =ColorConstants.YELLOW;
 	}
 	
 	// 34
 	public void setForegroundBlue() {
-		styleRange.foreground = AeshColor.BLUE_TEXT.getColor();
+		styleRange.foreground = ColorConstants.BLUE;
 	}
 	
 	// 35
 	public void setForegroundMagenta() {
-		styleRange.foreground = AeshColor.MAGENTA_TEXT.getColor();
+		styleRange.foreground = ColorConstants.MAGENTA;
 	}
 	
 	// 36
 	public void setForegroundCyan() {
-		styleRange.foreground = AeshColor.CYAN_TEXT.getColor();
+		styleRange.foreground = ColorConstants.CYAN;
 	}
 	
 	// 37
 	public void setForegroundWhite() {
-		styleRange.foreground = AeshColor.WHITE_TEXT.getColor();
+		styleRange.foreground = ColorConstants.WHITE;
 	}
 	
 	// 38
@@ -145,47 +145,47 @@ public class DelegatingStyleRange implements Style {
 	
 	// 39
 	public void setForegroundDefault() {
-		styleRange.foreground = AeshColor.DEFAULT_TEXT.getColor();
+		styleRange.foreground = ColorConstants.DEFAULT_FOREGROUND;
 	}
 	
 	// 40
 	public void setBackgroundBlack() {
-		styleRange.background = AeshColor.BLACK_BG.getColor();
+		styleRange.background = ColorConstants.BLACK;
 	}
 	
 	// 41
 	public void setBackgroundRed() {
-		styleRange.background = AeshColor.RED_BG.getColor();
+		styleRange.background = ColorConstants.RED;
 	}
 	
 	// 42
 	public void setBackgroundGreen() {
-		styleRange.background = AeshColor.GREEN_BG.getColor();
+		styleRange.background = ColorConstants.GREEN;
 	}
 	
 	// 43
 	public void setBackgroundYellow() {
-		styleRange.background = AeshColor.YELLOW_BG.getColor();
+		styleRange.background = ColorConstants.YELLOW;
 	}
 	
 	// 44
 	public void setBackgroundBlue() {
-		styleRange.background = AeshColor.BLUE_BG.getColor();
+		styleRange.background = ColorConstants.BLUE;
 	}
 	
 	// 45
 	public void setBackgroundMagenta() {
-		styleRange.background = AeshColor.MAGENTA_BG.getColor();
+		styleRange.background = ColorConstants.MAGENTA;
 	}
 	
 	// 46
 	public void setBackgroundCyan() {
-		styleRange.background = AeshColor.CYAN_BG.getColor();
+		styleRange.background = ColorConstants.CYAN;
 	}
 	
 	// 47
 	public void setBackgroundWhite() {
-		styleRange.background = AeshColor.WHITE_BG.getColor();
+		styleRange.background = ColorConstants.WHITE;
 	}
 	
 	// 48
@@ -194,7 +194,7 @@ public class DelegatingStyleRange implements Style {
 	
 	// 49
 	public void setBackgroundDefault() {
-		styleRange.background = AeshColor.WHITE_BG.getColor();
+		styleRange.background = ColorConstants.DEFAULT_BACKGROUND;
 	}
 	
 	public void setLength(int length) {
