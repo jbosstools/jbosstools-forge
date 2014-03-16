@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;
-import org.jboss.tools.aesh.ui.internal.fonts.FontManager;
+import org.jboss.tools.aesh.ui.internal.FontManager;
 
 public abstract class AeshTextViewer extends TextViewer {
 	
