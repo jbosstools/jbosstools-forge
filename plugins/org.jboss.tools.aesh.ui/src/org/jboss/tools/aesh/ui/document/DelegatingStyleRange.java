@@ -3,6 +3,7 @@ package org.jboss.tools.aesh.ui.document;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.jboss.tools.aesh.core.document.Style;
+import org.jboss.tools.aesh.ui.internal.ColorConstants;
 import org.jboss.tools.aesh.ui.internal.FontManager;
 
 public class DelegatingStyleRange implements Style {

@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.ui.document;
+package org.jboss.tools.aesh.ui.internal;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
