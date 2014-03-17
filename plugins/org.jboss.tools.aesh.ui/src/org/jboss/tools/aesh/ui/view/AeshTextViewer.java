@@ -52,7 +52,7 @@ public abstract class AeshTextViewer extends TextViewer {
             if (textWidget != null && !textWidget.isDisposed()) {
                 int lineCount = textWidget.getLineCount();
                 textWidget.setTopIndex(lineCount - 1);
-    			StyleRange styleRange = getDocument().getCurrentStyleRange();
+    			StyleRange styleRange = aeshDocument.getCurrentStyleRange();
     			if (styleRange != null && event.getLength() == 0) {
      				textWidget.setStyleRange(styleRange);
     			}
@@ -147,14 +147,6 @@ public abstract class AeshTextViewer extends TextViewer {
     protected void handleVerifyEvent(VerifyEvent e) {
     	console.sendInput(e.text);
 		e.doit = false;    	
-    }
-    
-    public DelegateDocument getDocument() {
-    	return (DelegateDocument)super.getDocument();
-    }
-    
-    protected Console getConsole() {
-    	return console;
     }
     
 }
