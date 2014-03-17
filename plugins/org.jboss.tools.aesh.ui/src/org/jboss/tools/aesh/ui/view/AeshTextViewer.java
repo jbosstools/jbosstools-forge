@@ -71,7 +71,6 @@ public abstract class AeshTextViewer extends TextViewer {
     	aeshDocument = new DelegateDocument();
     	aeshDocument.addCursorListener(cursorListener);
     	aeshDocument.addDocumentListener(documentListener);
-    	console.connect(aeshDocument.getProxy());
     }
     
     protected void initializeTextWidget() {
