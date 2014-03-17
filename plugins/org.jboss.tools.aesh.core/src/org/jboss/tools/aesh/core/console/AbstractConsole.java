@@ -25,7 +25,6 @@ public abstract class AbstractConsole implements Console {
 
 	public abstract void start();
 	public abstract void stop();
-	protected abstract void createConsole();
 
 	public void connect(Document document) {
 		handler.setDocument(document);		
@@ -41,11 +40,11 @@ public abstract class AbstractConsole implements Console {
 		}
 	}
 
-	protected void initialize() {
+	public void initialize() {
 		createStreams();
 	}
 	
-	public void createStreams() {
+	protected void createStreams() {
 		inputStream = createInputStream();
 		outputStream = createOutputStream();
 		errorStream = createErrorStream();

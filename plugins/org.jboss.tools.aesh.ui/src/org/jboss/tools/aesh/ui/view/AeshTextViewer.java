@@ -29,7 +29,7 @@ public abstract class AeshTextViewer extends TextViewer {
 	private static String NEXT_HISTORY = new Character((char)14).toString();
 	private static String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
 
-	protected Console aeshConsole;
+	private Console aeshConsole;
 	protected DelegateDocument aeshDocument;
 	
 	protected CursorListener cursorListener = new CursorListener() {		
@@ -65,7 +65,7 @@ public abstract class AeshTextViewer extends TextViewer {
     	initialize();
     }
     
-    protected abstract void initializeConsole();
+    protected abstract Console createConsole();
     
     protected void initializeDocument() {
     	aeshDocument = new DelegateDocument();
@@ -91,12 +91,21 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     public void startConsole() {
+		aeshConsole.initialize();
+		aeshConsole.connect(aeshDocument.getProxy());
     	setDocument(aeshDocument);
     	aeshConsole.start();
     }
     
+    public void stopConsole() {
+    	aeshConsole.stop();
+    	aeshConsole.disconnect();
+    	aeshDocument.reset();
+    	setDocument(null);    	
+    }
+    
     protected void initialize() {
-    	initializeConsole();
+    	aeshConsole = createConsole();
     	initializeDocument();
     	initializeTextWidget();
     }
@@ -151,6 +160,10 @@ public abstract class AeshTextViewer extends TextViewer {
     
     public DelegateDocument getDocument() {
     	return (DelegateDocument)super.getDocument();
+    }
+    
+    protected Console getConsole() {
+    	return aeshConsole;
     }
     
 }

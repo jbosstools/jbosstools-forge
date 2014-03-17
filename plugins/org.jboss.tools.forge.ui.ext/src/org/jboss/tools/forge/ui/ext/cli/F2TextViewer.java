@@ -2,6 +2,7 @@ package org.jboss.tools.forge.ui.ext.cli;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.view.AeshTextViewer;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
@@ -19,8 +20,8 @@ public class F2TextViewer extends AeshTextViewer {
     	aeshDocument.addDocumentListener(documentListener);
     }
     
-	protected void initializeConsole() {
-    	aeshConsole = new F2Console();
+	protected Console createConsole() {
+    	return new F2Console();
     }
 	
 	protected void initialize() {
@@ -34,10 +35,7 @@ public class F2TextViewer extends AeshTextViewer {
     	Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				((F2Console)aeshConsole).initialize();
-				((F2Console)aeshConsole).connect(aeshDocument.getProxy());
-		    	setDocument(aeshDocument);
-		    	aeshConsole.start();
+				F2TextViewer.super.startConsole();
 			}   		
     	});
     }
@@ -46,10 +44,7 @@ public class F2TextViewer extends AeshTextViewer {
     	Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-		    	aeshConsole.stop();
-		    	((F2Console)aeshConsole).disconnect();
-		    	aeshDocument.reset();
-		    	setDocument(null);
+		    	F2TextViewer.super.stopConsole();
 			}    		
     	});
     }

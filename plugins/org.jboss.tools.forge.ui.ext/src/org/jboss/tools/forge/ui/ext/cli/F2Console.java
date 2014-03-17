@@ -13,10 +13,6 @@ public class F2Console extends AbstractConsole {
 	
 	private ShellHandle handle;
 
-	public void initialize() {
-		createStreams();
-	}
-
 	public void createConsole() {
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);
 		File currentDir = ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile();

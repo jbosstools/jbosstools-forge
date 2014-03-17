@@ -15,7 +15,6 @@ public class AbstractConsoleTest {
 	private AbstractConsole console = new AbstractConsole() {
 		@Override public void start() {}
 		@Override public void stop() {}
-		@Override protected void createConsole() {}		
 	};
 	
 	private Document testDocument = new TestDocument() {

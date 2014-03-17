@@ -28,24 +28,22 @@ import org.jboss.tools.aesh.core.console.AbstractConsole;
 public class ExampleConsole extends AbstractConsole {
 
 	private org.jboss.aesh.console.AeshConsole console;
-
-	protected void initialize() {
-		super.initialize();
-		createConsole();
-	}
 	
 	public void start() {
-		if (console == null) {
-			createConsole();
-		}
+		System.out.println("starting console");
 		console.start();
 	}
 
 	public void stop() {
 		console.stop();
 	}
+	
+	public void initialize() {
+		super.initialize();
+		createAeshConsole();
+	}
 
-	public void createConsole() {
+	private void createAeshConsole() {
 		ProcessedCommand fooCommand;
 		try {
 			fooCommand = new CommandBuilder()

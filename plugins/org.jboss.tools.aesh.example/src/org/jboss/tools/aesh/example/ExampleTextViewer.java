@@ -1,6 +1,7 @@
 package org.jboss.tools.aesh.example;
 
 import org.eclipse.swt.widgets.Composite;
+import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.view.AeshTextViewer;
 
 public class ExampleTextViewer extends AeshTextViewer {
@@ -10,14 +11,8 @@ public class ExampleTextViewer extends AeshTextViewer {
 	}
 
 	@Override
-    protected void initializeConsole() {
-    	aeshConsole = new ExampleConsole();
+    protected Console createConsole() {
+		return new ExampleConsole();
     }
     
-	@Override
-    protected void initialize() {
-    	super.initialize();
-    	aeshConsole.connect(aeshDocument.getProxy());
-    }
-
 }
