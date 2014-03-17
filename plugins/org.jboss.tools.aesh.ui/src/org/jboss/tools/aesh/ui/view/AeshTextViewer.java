@@ -91,7 +91,6 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     public void startConsole() {
-		console.initialize();
 		console.connect(aeshDocument.getProxy());
     	setDocument(aeshDocument);
     	console.start();

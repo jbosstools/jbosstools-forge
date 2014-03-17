@@ -20,13 +20,15 @@ public abstract class AbstractConsole implements Console {
 	public AbstractConsole() {
 		handler = new DocumentHandler();
 		filter = new CommandFilter(handler);
-		initialize();
 	}
 
 	public abstract void start();
 	public abstract void stop();
 
 	public void connect(Document document) {
+		inputStream = new AeshInputStream(); 
+		outputStream = new AeshOutputStream(filter);
+		errorStream = new AeshOutputStream(filter);
 		handler.setDocument(document);		
 	}
 	
@@ -40,16 +42,6 @@ public abstract class AbstractConsole implements Console {
 		}
 	}
 
-	public void initialize() {
-		createStreams();
-	}
-	
-	protected void createStreams() {
-		inputStream = createInputStream();
-		outputStream = createOutputStream();
-		errorStream = createErrorStream();
-	}
-
 	protected InputStream getInputStream() {
 		return inputStream;
 	}
@@ -60,18 +52,6 @@ public abstract class AbstractConsole implements Console {
 
 	protected OutputStream getErrorStream() {
 		return errorStream;
-	}
-	
-	private AeshInputStream createInputStream() {
-		return new AeshInputStream(); 
-	}
-	
-	private AeshOutputStream createOutputStream() {
-		return new AeshOutputStream(filter);
-	}
-	
-	private AeshOutputStream createErrorStream() {
-		return new AeshOutputStream(filter);
 	}
 	
 }

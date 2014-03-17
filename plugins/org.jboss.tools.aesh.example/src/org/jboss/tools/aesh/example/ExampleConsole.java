@@ -30,7 +30,7 @@ public class ExampleConsole extends AbstractConsole {
 	private org.jboss.aesh.console.AeshConsole console;
 	
 	public void start() {
-		System.out.println("starting console");
+		createAeshConsole();
 		console.start();
 	}
 
@@ -38,11 +38,6 @@ public class ExampleConsole extends AbstractConsole {
 		console.stop();
 	}
 	
-	public void initialize() {
-		super.initialize();
-		createAeshConsole();
-	}
-
 	private void createAeshConsole() {
 		ProcessedCommand fooCommand;
 		try {
