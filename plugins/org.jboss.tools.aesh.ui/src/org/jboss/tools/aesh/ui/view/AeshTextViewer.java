@@ -30,7 +30,7 @@ public abstract class AeshTextViewer extends TextViewer {
 	private static String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
 
 	private Console console;
-	protected DelegateDocument aeshDocument;
+	private DelegateDocument aeshDocument;
 	
 	protected CursorListener cursorListener = new CursorListener() {		
 		@Override
@@ -144,13 +144,6 @@ public abstract class AeshTextViewer extends TextViewer {
 		return styledText;
 	}
 
-    public void cleanup() {
-    	console.stop();
-    	aeshDocument.removeDocumentListener(documentListener);
-    	aeshDocument.removeCursorListener(cursorListener);
-    	console.disconnect();
-    }
-    
     protected void handleVerifyEvent(VerifyEvent e) {
     	console.sendInput(e.text);
 		e.doit = false;    	

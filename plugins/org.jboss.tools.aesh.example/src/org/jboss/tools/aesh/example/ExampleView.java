@@ -23,7 +23,7 @@ public class ExampleView extends ViewPart {
 	
 	@Override
 	public void dispose() {
-		textViewer.cleanup();
+		textViewer.stopConsole();
 		super.dispose();
 	}
 
