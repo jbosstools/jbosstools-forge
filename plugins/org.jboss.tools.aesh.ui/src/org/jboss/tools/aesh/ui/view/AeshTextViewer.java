@@ -29,7 +29,7 @@ public abstract class AeshTextViewer extends TextViewer {
 	private static String NEXT_HISTORY = new Character((char)14).toString();
 	private static String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
 
-	private Console aeshConsole;
+	private Console console;
 	protected DelegateDocument aeshDocument;
 	
 	protected CursorListener cursorListener = new CursorListener() {		
@@ -71,7 +71,7 @@ public abstract class AeshTextViewer extends TextViewer {
     	aeshDocument = new DelegateDocument();
     	aeshDocument.addCursorListener(cursorListener);
     	aeshDocument.addDocumentListener(documentListener);
-    	aeshConsole.connect(aeshDocument.getProxy());
+    	console.connect(aeshDocument.getProxy());
     }
     
     protected void initializeTextWidget() {
@@ -81,9 +81,9 @@ public abstract class AeshTextViewer extends TextViewer {
 			public void verifyKey(VerifyEvent event) {
 				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
 					if (event.keyCode == 'd') {
-						aeshConsole.sendInput(CTRL_D);
+						console.sendInput(CTRL_D);
 					} else if (event.keyCode == 'c') {
-						aeshConsole.sendInput(CTRL_C);
+						console.sendInput(CTRL_C);
 					}
 				}
 			}
@@ -91,21 +91,21 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     public void startConsole() {
-		aeshConsole.initialize();
-		aeshConsole.connect(aeshDocument.getProxy());
+		console.initialize();
+		console.connect(aeshDocument.getProxy());
     	setDocument(aeshDocument);
-    	aeshConsole.start();
+    	console.start();
     }
     
     public void stopConsole() {
-    	aeshConsole.stop();
-    	aeshConsole.disconnect();
+    	console.stop();
+    	console.disconnect();
     	aeshDocument.reset();
     	setDocument(null);    	
     }
     
     protected void initialize() {
-    	aeshConsole = createConsole();
+    	console = createConsole();
     	initializeDocument();
     	initializeTextWidget();
     }
@@ -115,28 +115,28 @@ public abstract class AeshTextViewer extends TextViewer {
 			public void invokeAction(int action) {
 				switch (action) {
 					case ST.LINE_END:
-						aeshConsole.sendInput(END_LINE);
+						console.sendInput(END_LINE);
 						break;
 					case ST.LINE_START:
-						aeshConsole.sendInput(START_LINE);
+						console.sendInput(START_LINE);
 						break;
 					case ST.LINE_UP:
-						aeshConsole.sendInput(PREV_HISTORY);
+						console.sendInput(PREV_HISTORY);
 						break;
 					case ST.LINE_DOWN:
-						aeshConsole.sendInput(NEXT_HISTORY);
+						console.sendInput(NEXT_HISTORY);
 						break;
 					case ST.COLUMN_PREVIOUS:
-						aeshConsole.sendInput(PREV_CHAR);
+						console.sendInput(PREV_CHAR);
 						break;
 					case ST.COLUMN_NEXT:
-						aeshConsole.sendInput(NEXT_CHAR);
+						console.sendInput(NEXT_CHAR);
 						break;
 					case ST.DELETE_PREVIOUS:
-						aeshConsole.sendInput(DELETE_PREV_CHAR);
+						console.sendInput(DELETE_PREV_CHAR);
 						break;
 					case ST.DELETE_NEXT:
-						aeshConsole.sendInput(DELETE_NEXT_CHAR);
+						console.sendInput(DELETE_NEXT_CHAR);
 						break;
 					default: super.invokeAction(action);
 				}
@@ -147,14 +147,14 @@ public abstract class AeshTextViewer extends TextViewer {
 	}
 
     public void cleanup() {
-    	aeshConsole.stop();
+    	console.stop();
     	aeshDocument.removeDocumentListener(documentListener);
     	aeshDocument.removeCursorListener(cursorListener);
-    	aeshConsole.disconnect();
+    	console.disconnect();
     }
     
     protected void handleVerifyEvent(VerifyEvent e) {
-    	aeshConsole.sendInput(e.text);
+    	console.sendInput(e.text);
 		e.doit = false;    	
     }
     
@@ -163,7 +163,7 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     protected Console getConsole() {
-    	return aeshConsole;
+    	return console;
     }
     
 }
