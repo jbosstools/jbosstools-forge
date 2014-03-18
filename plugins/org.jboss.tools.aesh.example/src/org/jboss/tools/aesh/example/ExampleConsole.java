@@ -21,6 +21,7 @@ import org.jboss.aesh.console.settings.Settings;
 import org.jboss.aesh.console.settings.SettingsBuilder;
 import org.jboss.aesh.terminal.CharacterType;
 import org.jboss.aesh.terminal.Color;
+import org.jboss.aesh.terminal.POSIXTerminal;
 import org.jboss.aesh.terminal.TerminalCharacter;
 import org.jboss.aesh.terminal.TerminalColor;
 import org.jboss.tools.aesh.core.console.AbstractConsole;
@@ -106,6 +107,7 @@ public class ExampleConsole extends AbstractConsole {
 			.inputStream(getInputStream())
 			.outputStream(new PrintStream(getOutputStream()))
 			.outputStreamError(new PrintStream(getErrorStream()))
+			.terminal(new POSIXTerminal())
 			.create();
 	}
 
