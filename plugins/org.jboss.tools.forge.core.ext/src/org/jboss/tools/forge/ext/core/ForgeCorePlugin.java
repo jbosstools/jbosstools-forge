@@ -15,6 +15,7 @@ public class ForgeCorePlugin extends Plugin {
 	public void start(final BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		System.setProperty("org.jboss.forge.addon.shell.forcePOSIXTerminal", "true");
 	}
 	
 	@Override
