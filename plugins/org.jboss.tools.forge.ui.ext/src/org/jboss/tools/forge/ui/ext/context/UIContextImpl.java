@@ -11,8 +11,6 @@ import java.io.File;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.Callable;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -31,10 +29,6 @@ import org.jboss.forge.addon.ui.context.AbstractUIContext;
 import org.jboss.forge.addon.ui.context.UIContextListener;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.result.Result;
-import org.jboss.forge.furnace.addons.Addon;
-import org.jboss.forge.furnace.addons.AddonRegistry;
-import org.jboss.forge.furnace.lock.LockManager;
-import org.jboss.forge.furnace.lock.LockMode;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.ext.core.FurnaceService;
@@ -54,7 +48,7 @@ public class UIContextImpl extends AbstractUIContext {
 		ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
 		Converter<File, Resource> converter = converterFactory.getConverter(
-				File.class, locateNativeClass(Resource.class));
+				File.class, Resource.class);
 
 		if (selectedElements.isEmpty()) {
 			// Get the Workspace directory path
@@ -98,35 +92,6 @@ public class UIContextImpl extends AbstractUIContext {
 	@Override
 	public UISelectionImpl<?> getInitialSelection() {
 		return currentSelection;
-	}
-
-	private static <T> Class<T> locateNativeClass(final Class<T> type) {
-		LockManager manager = FurnaceService.INSTANCE.getLockManager();
-		Class<T> result = manager.performLocked(LockMode.READ,
-				new Callable<Class<T>>() {
-
-					@Override
-					public Class<T> call() throws Exception {
-						AddonRegistry registry = FurnaceService.INSTANCE
-								.getAddonRegistry();
-						Class<T> result = type;
-						Set<Addon> addons = registry.getAddons();
-						for (Addon addon : addons) {
-							if (addon.getStatus().isStarted()) {
-								try {
-									ClassLoader classLoader = addon
-											.getClassLoader();
-									result = (Class<T>) classLoader
-											.loadClass(type.getName());
-									break;
-								} catch (ClassNotFoundException e) {
-								}
-							}
-						}
-						return result;
-					}
-				});
-		return result;
 	}
 
 	public void initialize() {
