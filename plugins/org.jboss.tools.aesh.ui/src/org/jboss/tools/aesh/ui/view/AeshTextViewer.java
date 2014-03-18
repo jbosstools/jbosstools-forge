@@ -11,6 +11,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;
@@ -18,21 +19,21 @@ import org.jboss.tools.aesh.ui.internal.FontManager;
 
 public abstract class AeshTextViewer extends TextViewer {
 	
-	private static String START_LINE = new Character((char)1).toString();
-	private static String PREV_CHAR = new Character((char)2).toString();
-	private static String CTRL_C = new Character((char)3).toString();
-	private static String CTRL_D = new Character((char)4).toString();
-	private static String END_LINE = new Character((char)5).toString();
-	private static String NEXT_CHAR = new Character((char)6).toString();
-	private static String DELETE_PREV_CHAR = new Character((char)8).toString();
-	private static String PREV_HISTORY = new Character((char)16).toString();
-	private static String NEXT_HISTORY = new Character((char)14).toString();
-	private static String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
+	private static final String START_LINE = new Character((char)1).toString();
+	private static final String PREV_CHAR = new Character((char)2).toString();
+	private static final String CTRL_C = new Character((char)3).toString();
+	private static final String CTRL_D = new Character((char)4).toString();
+	private static final String END_LINE = new Character((char)5).toString();
+	private static final String NEXT_CHAR = new Character((char)6).toString();
+	private static final String DELETE_PREV_CHAR = new Character((char)8).toString();
+	private static final String PREV_HISTORY = new Character((char)16).toString();
+	private static final String NEXT_HISTORY = new Character((char)14).toString();
+	private static final String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
 
 	private Console console;
 	private DelegateDocument aeshDocument;
 	
-	protected CursorListener cursorListener = new CursorListener() {		
+	private CursorListener cursorListener = new CursorListener() {		
 		@Override
 		public void cursorMoved() {
 			StyledText textWidget = getTextWidget();
@@ -42,7 +43,7 @@ public abstract class AeshTextViewer extends TextViewer {
 		}
 	};
 	
-	protected IDocumentListener documentListener = new IDocumentListener() {
+	private IDocumentListener documentListener = new IDocumentListener() {
     	@Override
         public void documentAboutToBeChanged(DocumentEvent event) {
         }
@@ -65,48 +66,30 @@ public abstract class AeshTextViewer extends TextViewer {
     	initialize();
     }
     
-    protected abstract Console createConsole();
-    
-    protected void initializeDocument() {
-    	aeshDocument = new DelegateDocument();
-    	aeshDocument.addCursorListener(cursorListener);
-    	aeshDocument.addDocumentListener(documentListener);
-    }
-    
-    protected void initializeTextWidget() {
-    	getTextWidget().setFont(JFaceResources.getFont(FontManager.AESH_CONSOLE_FONT));
-    	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
-			@Override
-			public void verifyKey(VerifyEvent event) {
-				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
-					if (event.keyCode == 'd') {
-						console.sendInput(CTRL_D);
-					} else if (event.keyCode == 'c') {
-						console.sendInput(CTRL_C);
-					}
-				}
-			}
-		});
-    }
-    
     public void startConsole() {
-		console.connect(aeshDocument.getProxy());
-    	setDocument(aeshDocument);
-    	console.start();
+    	Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				console.connect(aeshDocument.getProxy());
+		    	setDocument(aeshDocument);
+		    	console.start();
+			}   		
+    	});
     }
     
     public void stopConsole() {
-    	console.stop();
-    	console.disconnect();
-    	aeshDocument.reset();
-    	setDocument(null);    	
+    	Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+		    	console.stop();
+		    	console.disconnect();
+		    	aeshDocument.reset();
+		    	setDocument(null);    	
+			}   		
+    	});
     }
     
-    protected void initialize() {
-    	console = createConsole();
-    	initializeDocument();
-    	initializeTextWidget();
-    }
+    protected abstract Console createConsole();
     
 	protected StyledText createTextWidget(Composite parent, int styles) {
 		StyledText styledText= new StyledText(parent, styles) {
@@ -147,6 +130,38 @@ public abstract class AeshTextViewer extends TextViewer {
     protected void handleVerifyEvent(VerifyEvent e) {
     	console.sendInput(e.text);
 		e.doit = false;    	
+    }
+    
+    private void initialize() {
+    	initializeConsole();
+    	initializeDocument();
+    	initializeTextWidget();
+    }
+    
+    private void initializeConsole() {
+    	console = createConsole();
+    }
+    
+    private void initializeDocument() {
+    	aeshDocument = new DelegateDocument();
+    	aeshDocument.addCursorListener(cursorListener);
+    	aeshDocument.addDocumentListener(documentListener);
+    }
+    
+    private void initializeTextWidget() {
+    	getTextWidget().setFont(JFaceResources.getFont(FontManager.AESH_CONSOLE_FONT));
+    	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
+			@Override
+			public void verifyKey(VerifyEvent event) {
+				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
+					if (event.keyCode == 'd') {
+						console.sendInput(CTRL_D);
+					} else if (event.keyCode == 'c') {
+						console.sendInput(CTRL_C);
+					}
+				}
+			}
+		});
     }
     
 }
