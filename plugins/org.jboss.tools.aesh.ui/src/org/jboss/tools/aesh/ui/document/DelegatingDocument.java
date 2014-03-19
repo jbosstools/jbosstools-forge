@@ -1,6 +1,7 @@
 package org.jboss.tools.aesh.ui.document;
 
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.document.Document;
 import org.jboss.tools.aesh.core.document.Style;
@@ -110,8 +111,8 @@ public class DelegatingDocument implements Document {
 
 	@Override
 	public Style newStyleFromCurrent() {
-		DelegateStyleRange oldStyleRange = document.getCurrentStyleRange();
-		DelegateStyleRange newStyleRange = new DelegateStyleRange(oldStyleRange);
+		StyleRange oldStyleRange = document.getCurrentStyleRange();
+		StyleRange newStyleRange = new StyleRange(oldStyleRange);
 		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
 		newStyleRange.length = 0;
 		return new DelegatingStyleRange(newStyleRange);
@@ -120,7 +121,7 @@ public class DelegatingDocument implements Document {
 	@Override
 	public void setCurrentStyle(Style styleRangeProxy) {
 		if (styleRangeProxy instanceof DelegatingStyleRange) {
-			DelegateStyleRange styleRange = ((DelegatingStyleRange)styleRangeProxy).getStyleRange();
+			StyleRange styleRange = ((DelegatingStyleRange)styleRangeProxy).getStyleRange();
 			document.setCurrentStyleRange(styleRange);
 			currentStyleRange = styleRangeProxy;
 		}
@@ -133,7 +134,7 @@ public class DelegatingDocument implements Document {
 	
 	@Override
 	public void setDefaultStyle() {
-		DelegateStyleRange styleRange = document.getDefaultStyleRange();
+		StyleRange styleRange = document.getDefaultStyleRange();
 		styleRange.start = document.getLength();
 		styleRange.length = 0;
 		setCurrentStyle(new DelegatingStyleRange(styleRange));

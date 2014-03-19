@@ -19,7 +19,7 @@ public class DelegateDocument extends Document {
 	
 	private int cursorOffset = 0;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
-	private DelegateStyleRange currentStyleRange;
+	private StyleRange currentStyleRange;
 	private DelegatingDocument proxy;
 	
 	private int savedCursor = 0;
@@ -62,11 +62,11 @@ public class DelegateDocument extends Document {
 		cursorListeners.remove(listener);
 	}
 	
-	public DelegateStyleRange getCurrentStyleRange() {
+	public StyleRange getCurrentStyleRange() {
 		return currentStyleRange;
 	}
 	
-	public void setCurrentStyleRange(DelegateStyleRange styleRange) {
+	public void setCurrentStyleRange(StyleRange styleRange) {
 		currentStyleRange = styleRange;
 	}
 	
@@ -74,11 +74,11 @@ public class DelegateDocument extends Document {
 		return proxy;
 	}
 	
-	DelegateStyleRange getDefaultStyleRange() {
+	StyleRange getDefaultStyleRange() {
 		Font font = FontManager.INSTANCE.getDefault();
 		Color foreground = ColorConstants.BLACK;
 		Color background = ColorConstants.WHITE;		
-		return new DelegateStyleRange(new StyleRange(new TextStyle(font, foreground, background)));
+		return new StyleRange(new TextStyle(font, foreground, background));
 	}
 	
 }
