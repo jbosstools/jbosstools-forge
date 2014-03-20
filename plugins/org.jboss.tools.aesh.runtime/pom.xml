@@ -13,15 +13,13 @@
    <packaging>eclipse-plugin</packaging>
 
    <properties>
-      <version.aesh>0.49</version.aesh>
-      <version.jansi>1.11</version.jansi>
+      <version.aesh>0.51</version.aesh>
    </properties>
 
    <build>
       <plugins>
          <plugin>
             <artifactId>maven-clean-plugin</artifactId>
-            <version>2.5</version>
             <executions>
                <execution>
                   <id>clean-build-libs</id>
@@ -58,12 +56,6 @@
                            <artifactId>aesh</artifactId>
                            <version>${version.aesh}</version>
                            <destFileName>aesh-${version.aesh}.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                           <groupId>org.fusesource.jansi</groupId>
-                           <artifactId>jansi</artifactId>
-                           <version>${version.jansi}</version>
-                           <destFileName>jansi-${version.jansi}.jar</destFileName>
                         </artifactItem>
                      </artifactItems>
                      <skip>false</skip>
