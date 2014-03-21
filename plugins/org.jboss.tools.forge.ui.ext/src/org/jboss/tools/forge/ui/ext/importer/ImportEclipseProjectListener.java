@@ -13,7 +13,6 @@ import java.util.Set;
 import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectListener;
 import org.jboss.forge.addon.projects.facets.MetadataFacet;
-import org.jboss.forge.addon.resource.DirectoryResource;
 import org.jboss.forge.addon.resource.Resource;
 import org.jboss.tools.forge.ui.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.ext.wizards.WizardListener;

@@ -5,7 +5,6 @@ import java.io.OutputStream;
 
 import org.jboss.tools.aesh.core.document.Document;
 import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
-import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 import org.jboss.tools.aesh.core.test.util.TestDocument;
 import org.junit.Assert;
 import org.junit.Test;
