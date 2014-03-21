@@ -26,14 +26,17 @@ public abstract class AbstractConsole implements Console {
 	public abstract void stop();
 
 	public void connect(Document document) {
-		inputStream = new AeshInputStream(); 
-		outputStream = new AeshOutputStream(filter);
-		errorStream = new AeshOutputStream(filter);
-		handler.setDocument(document);		
+		setInputStream(new AeshInputStream()); 
+		setOutputStream( new AeshOutputStream(filter));
+		setErrorStream(new AeshOutputStream(filter));
+		setHandlerDocument(document);		
 	}
 	
 	public void disconnect() {
-		handler.setDocument(null);
+		setHandlerDocument(null);
+		setErrorStream(null);
+		setOutputStream(null);
+		setInputStream(null);
 	}
 	
 	public void sendInput(String input) {
@@ -52,6 +55,22 @@ public abstract class AbstractConsole implements Console {
 
 	protected OutputStream getErrorStream() {
 		return errorStream;
+	}
+	
+	void setInputStream(AeshInputStream inputStream) {
+		this.inputStream = inputStream;
+	}
+	
+	void setOutputStream(AeshOutputStream outputStream) {
+		this.outputStream = outputStream;
+	}
+	
+	void setErrorStream(AeshOutputStream errorStream) {
+		this.errorStream = errorStream;
+	}
+	
+	void setHandlerDocument(Document document) {
+		handler.setDocument(document);
 	}
 	
 }

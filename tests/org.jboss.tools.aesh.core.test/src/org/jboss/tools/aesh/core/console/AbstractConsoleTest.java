@@ -4,12 +4,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.jboss.tools.aesh.core.document.Document;
+import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
+import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 import org.jboss.tools.aesh.core.test.util.TestDocument;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class AbstractConsoleTest {
 	
+	private final static byte[] OUT_BUFFER = new byte[] { 'o', 'u', 't' };
+	private final static byte[] ERROR_BUFFER = new byte[] { 'e', 'r', 'r', 'o', 'r' };
+
 	private String replacedString = null;
 	
 	private AbstractConsole console = new AbstractConsole() {
@@ -27,38 +32,52 @@ public class AbstractConsoleTest {
 	@Test
 	public void testSendInput() throws Exception {
 		byte[] buffer = new byte[4];
-		InputStream inputStream = console.getInputStream();
-		Assert.assertNotNull(inputStream);
+		Assert.assertNull(console.getInputStream());
 		Assert.assertNotEquals("test", new String(buffer));
+		AeshInputStream inputStream = new AeshInputStream();
+		console.setInputStream(inputStream);
 		console.sendInput("test");
 		inputStream.read(buffer);
 		Assert.assertEquals("test", new String(buffer));
 	}
 	
 	@Test
-	public void testConnectAndDisconnect() throws Exception {
-		byte[] outBuffer = new byte[] { 'o', 'u', 't' };
-		byte[] errorBuffer = new byte[] { 'e', 'r', 'r', 'o', 'r' };
+	public void testConnect() throws Exception {
 		Assert.assertNull(replacedString);
-		OutputStream outputStream = console.getOutputStream();
-		Assert.assertNotNull(outputStream);
-		OutputStream errorStream = console.getErrorStream();
-		Assert.assertNotNull(errorStream);
-		outputStream.write(outBuffer);
-		Assert.assertNull(replacedString);
-		errorStream.write(errorBuffer);
-		Assert.assertNull(replacedString);
+		Assert.assertNull(console.getInputStream());
+		Assert.assertNull(console.getOutputStream());
+		Assert.assertNull(console.getErrorStream());
 		console.connect(testDocument);
-		outputStream.write(outBuffer);
+		InputStream inputStream = console.getInputStream();
+		OutputStream outputStream = console.getOutputStream();
+		OutputStream errorStream = console.getErrorStream();
+		Assert.assertNotNull(inputStream);
+		Assert.assertNotNull(outputStream);
+		Assert.assertNotNull(errorStream);
+		outputStream.write(OUT_BUFFER);
 		Assert.assertEquals("out", replacedString);
-		errorStream.write(errorBuffer);
+		errorStream.write(ERROR_BUFFER);
+		Assert.assertEquals("error", replacedString);
+	}
+	
+	@Test
+	public void testDisconnect() throws Exception {
+		console.connect(testDocument);
+		OutputStream outputStream = console.getOutputStream();
+		OutputStream errorStream = console.getErrorStream();
+		outputStream.write(OUT_BUFFER);
+		Assert.assertEquals("out", replacedString);
+		errorStream.write(ERROR_BUFFER);
 		Assert.assertEquals("error", replacedString);
 		replacedString = null;
 		console.disconnect();
-		outputStream.write(outBuffer);
+		outputStream.write(OUT_BUFFER);
 		Assert.assertNull(replacedString);
-		errorStream.write(errorBuffer);
+		errorStream.write(ERROR_BUFFER);
 		Assert.assertNull(replacedString);
+		Assert.assertNull(console.getInputStream());
+		Assert.assertNull(console.getOutputStream());
+		Assert.assertNull(console.getErrorStream());
 	}
 
 }
