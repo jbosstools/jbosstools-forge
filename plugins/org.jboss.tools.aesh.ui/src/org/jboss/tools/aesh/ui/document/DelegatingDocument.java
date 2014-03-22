@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.document.Document;
 import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
+import org.jboss.tools.aesh.ui.internal.document.DelegatingStyleRange;
 
 public class DelegatingDocument implements Document {
 	
