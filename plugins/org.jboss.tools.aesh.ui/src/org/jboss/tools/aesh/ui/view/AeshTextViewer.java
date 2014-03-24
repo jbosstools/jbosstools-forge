@@ -13,9 +13,9 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.console.Console;
-import org.jboss.tools.aesh.ui.document.DelegateDocument;
-import org.jboss.tools.aesh.ui.document.DelegateDocument.CursorListener;
 import org.jboss.tools.aesh.ui.internal.FontManager;
+import org.jboss.tools.aesh.ui.internal.document.DelegateDocument;
+import org.jboss.tools.aesh.ui.internal.document.DelegateDocument.CursorListener;
 
 public abstract class AeshTextViewer extends TextViewer {
 	

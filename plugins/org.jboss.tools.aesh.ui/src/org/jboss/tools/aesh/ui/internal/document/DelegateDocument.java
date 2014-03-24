@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.ui.document;
+package org.jboss.tools.aesh.ui.internal.document;
 
 import java.util.HashSet;
 import java.util.Set;
