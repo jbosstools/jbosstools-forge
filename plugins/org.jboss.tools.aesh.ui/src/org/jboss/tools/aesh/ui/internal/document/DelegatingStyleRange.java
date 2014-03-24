@@ -4,8 +4,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.jboss.tools.aesh.core.document.Style;
-import org.jboss.tools.aesh.ui.internal.ColorConstants;
-import org.jboss.tools.aesh.ui.internal.FontManager;
+import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
+import org.jboss.tools.aesh.ui.internal.util.FontManager;
 
 public class DelegatingStyleRange implements Style {
 	

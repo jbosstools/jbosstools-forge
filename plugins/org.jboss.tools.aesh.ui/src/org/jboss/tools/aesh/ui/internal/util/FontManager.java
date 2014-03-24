@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.ui.internal;
+package org.jboss.tools.aesh.ui.internal.util;
 
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;

@@ -8,8 +8,8 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.TextStyle;
-import org.jboss.tools.aesh.ui.internal.ColorConstants;
-import org.jboss.tools.aesh.ui.internal.FontManager;
+import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
+import org.jboss.tools.aesh.ui.internal.util.FontManager;
 
 public class DelegateDocument extends Document {
 	
