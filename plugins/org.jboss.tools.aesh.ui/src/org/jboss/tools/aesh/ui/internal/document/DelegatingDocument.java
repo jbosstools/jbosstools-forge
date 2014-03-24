@@ -13,14 +13,14 @@ import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 public class DelegatingDocument implements org.jboss.tools.aesh.core.document.Document {
 	
 	private Document delegate;
-	private DelegatingStyleRange currentStyle;
+	private StyleImpl currentStyle;
 	private int savedCursor = 0;
 	private int cursorOffset = 0;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
 	
 	public DelegatingDocument() {
 		this.delegate = new Document();
-		this.currentStyle = DelegatingStyleRange.getDefault();
+		this.currentStyle = StyleImpl.getDefault();
 	}
 
 	@Override
@@ -122,17 +122,17 @@ public class DelegatingDocument implements org.jboss.tools.aesh.core.document.Do
 
 	@Override
 	public Style newStyleFromCurrent() {
-		StyleRange oldStyleRange = currentStyle.getDelegate();
+		StyleRange oldStyleRange = currentStyle.getStyleRange();
 		StyleRange newStyleRange = new StyleRange(oldStyleRange);
 		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
 		newStyleRange.length = 0;
-		return new DelegatingStyleRange(newStyleRange);
+		return new StyleImpl(newStyleRange);
 	}
 
 	@Override
 	public void setCurrentStyle(Style styleRangeProxy) {
-		if (styleRangeProxy instanceof DelegatingStyleRange) {
-			currentStyle = (DelegatingStyleRange)styleRangeProxy;
+		if (styleRangeProxy instanceof StyleImpl) {
+			currentStyle = (StyleImpl)styleRangeProxy;
 		}
 	}
 	
@@ -143,7 +143,7 @@ public class DelegatingDocument implements org.jboss.tools.aesh.core.document.Do
 	
 	@Override
 	public void setDefaultStyle() {
-		DelegatingStyleRange defaultStyle = DelegatingStyleRange.getDefault();
+		StyleImpl defaultStyle = StyleImpl.getDefault();
 		StyleRange styleRange = defaultStyle.getStyleRange();
 		styleRange.start = delegate.getLength();
 		styleRange.length = 0;
@@ -154,7 +154,7 @@ public class DelegatingDocument implements org.jboss.tools.aesh.core.document.Do
 		return delegate;
 	}
 	
-	public DelegatingStyleRange getCurrentStyleRange() {
+	public StyleImpl getCurrentStyleRange() {
 		return currentStyle;
 	}
 	

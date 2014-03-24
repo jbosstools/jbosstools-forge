@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.internal.document.CursorListener;
 import org.jboss.tools.aesh.ui.internal.document.DelegatingDocument;
-import org.jboss.tools.aesh.ui.internal.document.DelegatingStyleRange;
+import org.jboss.tools.aesh.ui.internal.document.StyleImpl;
 import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
 
@@ -44,8 +44,8 @@ public abstract class AeshTextViewer extends TextViewer {
             if (textWidget != null && !textWidget.isDisposed()) {
                 int lineCount = textWidget.getLineCount();
                 textWidget.setTopIndex(lineCount - 1);
-                DelegatingStyleRange style = aeshDocument.getCurrentStyleRange();
-    			StyleRange styleRange = style.getDelegate();
+                StyleImpl style = aeshDocument.getCurrentStyleRange();
+    			StyleRange styleRange = style.getStyleRange();
     			if (styleRange != null && 
     					event.getLength() == 0 && 
     					styleRange.start <= getDocument().getLength() && 

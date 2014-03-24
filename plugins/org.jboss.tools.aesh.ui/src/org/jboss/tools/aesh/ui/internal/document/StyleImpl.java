@@ -9,15 +9,15 @@ import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
 
-public class DelegatingStyleRange implements Style {
+public class StyleImpl implements Style {
 	
 	private StyleRange styleRange;
 	
-	public DelegatingStyleRange(StyleRange styleRange) {
+	public StyleImpl(StyleRange styleRange) {
 		this.styleRange = styleRange;
 	}
 	
-	StyleRange getStyleRange() {
+	public StyleRange getStyleRange() {
 		return styleRange;
 	}
 	
@@ -216,17 +216,13 @@ public class DelegatingStyleRange implements Style {
 		styleRange.foreground = background;
 	}
 	
-	public static DelegatingStyleRange getDefault() {
+	public static StyleImpl getDefault() {
 		Font font = FontManager.INSTANCE.getDefault();
 		Color foreground = ColorConstants.BLACK;
 		Color background = ColorConstants.WHITE;
 		TextStyle textStyle = new TextStyle(font, foreground, background);
 		StyleRange styleRange = new StyleRange(textStyle);
-		return new DelegatingStyleRange(styleRange);
-	}
-	
-	public StyleRange getDelegate() {
-		return styleRange;
+		return new StyleImpl(styleRange);
 	}
 	
 }
