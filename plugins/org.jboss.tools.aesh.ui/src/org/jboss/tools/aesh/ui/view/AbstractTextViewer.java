@@ -15,13 +15,13 @@ import org.jboss.tools.aesh.ui.internal.viewer.DocumentListenerImpl;
 import org.jboss.tools.aesh.ui.internal.viewer.TextWidget;
 import org.jboss.tools.aesh.ui.internal.viewer.VerifyKeyListenerImpl;
 
-public abstract class AeshTextViewer extends TextViewer {
+public abstract class AbstractTextViewer extends TextViewer {
 	
 	private Console console;
 	private DocumentImpl document;
 	private TextWidget textWidget;
 	
-    public AeshTextViewer(Composite parent) {
+    public AbstractTextViewer(Composite parent) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
     	initialize();
     }
