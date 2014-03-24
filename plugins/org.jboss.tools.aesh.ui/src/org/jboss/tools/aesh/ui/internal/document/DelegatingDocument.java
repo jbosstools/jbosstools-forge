@@ -10,7 +10,7 @@ import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 public class DelegatingDocument implements Document {
 	
 	private DelegateDocument delegate;
-	private Style currentStyleRange;
+	private Style currentStyle;
 	private int savedCursor = 0;
 
 	
@@ -124,13 +124,13 @@ public class DelegatingDocument implements Document {
 		if (styleRangeProxy instanceof DelegatingStyleRange) {
 			StyleRange styleRange = ((DelegatingStyleRange)styleRangeProxy).getStyleRange();
 			delegate.setCurrentStyleRange(styleRange);
-			currentStyleRange = styleRangeProxy;
+			currentStyle = styleRangeProxy;
 		}
 	}
 	
 	@Override
 	public Style getCurrentStyle() {
-		return currentStyleRange;
+		return currentStyle;
 	}
 	
 	@Override
