@@ -1,8 +1,5 @@
 package org.jboss.tools.aesh.ui.internal.document;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.custom.StyleRange;
@@ -16,7 +13,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	private StyleImpl currentStyle;
 	private int savedCursor = 0;
 	private int cursorOffset = 0;
-	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
+	private CursorListener cursorListener;
 	
 	public DocumentImpl() {
 		this.document = new Document();
@@ -67,9 +64,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				for (CursorListener listener : cursorListeners) {
-					listener.cursorMoved();
-				}
+				cursorListener.cursorMoved();
 			}				
 		});
 	}
@@ -158,12 +153,8 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 		return currentStyle;
 	}
 	
-	public void addCursorListener(CursorListener listener) {
-		cursorListeners.add(listener);
-	}
-	
-	public void removeCursorListener(CursorListener listener) {
-		cursorListeners.remove(listener);
+	public void setCursorListener(CursorListener listener) {
+		this.cursorListener = listener;
 	}
 	
 }

@@ -11,10 +11,10 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.console.Console;
-import org.jboss.tools.aesh.ui.internal.document.CursorListener;
 import org.jboss.tools.aesh.ui.internal.document.DocumentImpl;
 import org.jboss.tools.aesh.ui.internal.document.StyleImpl;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
+import org.jboss.tools.aesh.ui.internal.viewer.CursorListenerImpl;
 import org.jboss.tools.aesh.ui.internal.viewer.TextWidget;
 import org.jboss.tools.aesh.ui.internal.viewer.VerifyKeyListenerImpl;
 
@@ -23,16 +23,6 @@ public abstract class AeshTextViewer extends TextViewer {
 	private Console console;
 	private DocumentImpl document;
 	private TextWidget textWidget;
-	
-	private CursorListener cursorListener = new CursorListener() {		
-		@Override
-		public void cursorMoved() {
-			StyledText textWidget = getTextWidget();
-			if (textWidget != null && !textWidget.isDisposed()) {
-				textWidget.setCaretOffset(document.getCursorOffset());
-			}
-		}
-	};
 	
 	private IDocumentListener documentListener = new IDocumentListener() {
     	@Override
@@ -109,7 +99,7 @@ public abstract class AeshTextViewer extends TextViewer {
     
     private void initializeDocument() {
     	document = new DocumentImpl();
-    	document.addCursorListener(cursorListener);
+    	document.setCursorListener(new CursorListenerImpl(textWidget, document));
     	document.getDelegate().addDocumentListener(documentListener);
     }
     
