@@ -10,12 +10,12 @@ import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 public class DelegatingDocument implements Document {
 	
 	private DelegateDocument delegate;
-	private Style currentStyle;
+	private DelegatingStyleRange currentStyle;
 	private int savedCursor = 0;
-
 	
 	public DelegatingDocument(DelegateDocument document) {
 		this.delegate = document;
+		this.currentStyle = DelegatingStyleRange.getDefault();
 	}
 
 	@Override
@@ -71,9 +71,11 @@ public class DelegatingDocument implements Document {
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				delegate.reset();
+				delegate.set("");
 			}				
 		});
+		moveCursorTo(0);
+		setDefaultStyle();
 	}
 
 	@Override
@@ -112,7 +114,7 @@ public class DelegatingDocument implements Document {
 
 	@Override
 	public Style newStyleFromCurrent() {
-		StyleRange oldStyleRange = delegate.getCurrentStyleRange();
+		StyleRange oldStyleRange = currentStyle.getDelegate();
 		StyleRange newStyleRange = new StyleRange(oldStyleRange);
 		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
 		newStyleRange.length = 0;
@@ -122,9 +124,7 @@ public class DelegatingDocument implements Document {
 	@Override
 	public void setCurrentStyle(Style styleRangeProxy) {
 		if (styleRangeProxy instanceof DelegatingStyleRange) {
-			StyleRange styleRange = ((DelegatingStyleRange)styleRangeProxy).getStyleRange();
-			delegate.setCurrentStyleRange(styleRange);
-			currentStyle = styleRangeProxy;
+			currentStyle = (DelegatingStyleRange)styleRangeProxy;
 		}
 	}
 	
@@ -135,10 +135,19 @@ public class DelegatingDocument implements Document {
 	
 	@Override
 	public void setDefaultStyle() {
-		StyleRange styleRange = delegate.getDefaultStyleRange();
+		DelegatingStyleRange defaultStyle = DelegatingStyleRange.getDefault();
+		StyleRange styleRange = defaultStyle.getStyleRange();
 		styleRange.start = delegate.getLength();
 		styleRange.length = 0;
-		setCurrentStyle(new DelegatingStyleRange(styleRange));
+		setCurrentStyle(defaultStyle);
 	}
-
+	
+	public DelegateDocument getDelegate() {
+		return delegate;
+	}
+	
+	public DelegatingStyleRange getCurrentStyleRange() {
+		return currentStyle;
+	}
+	
 }

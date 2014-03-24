@@ -5,11 +5,6 @@ import java.util.Set;
 
 import org.eclipse.jface.text.Document;
 import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.TextStyle;
-import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
-import org.jboss.tools.aesh.ui.internal.util.FontManager;
 
 public class DelegateDocument extends Document {
 	
@@ -24,15 +19,8 @@ public class DelegateDocument extends Document {
 	
 	public DelegateDocument() {
 		proxy = new DelegatingDocument(this);
-		currentStyleRange = getDefaultStyleRange();
 	}
 	
-    public void reset() {
-		set("");
-		moveCursorTo(0);
-		currentStyleRange = getDefaultStyleRange();
-    }
-    
 	void moveCursorTo(int newOffset) {
 		cursorOffset = newOffset;
 		for (CursorListener listener : cursorListeners) {
@@ -62,13 +50,6 @@ public class DelegateDocument extends Document {
 	
 	public DelegatingDocument getProxy() {
 		return proxy;
-	}
-	
-	StyleRange getDefaultStyleRange() {
-		Font font = FontManager.INSTANCE.getDefault();
-		Color foreground = ColorConstants.BLACK;
-		Color background = ColorConstants.WHITE;		
-		return new StyleRange(new TextStyle(font, foreground, background));
 	}
 	
 }

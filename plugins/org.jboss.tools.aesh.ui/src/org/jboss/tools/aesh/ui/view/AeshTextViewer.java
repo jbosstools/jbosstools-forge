@@ -15,23 +15,15 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.internal.document.DelegateDocument;
 import org.jboss.tools.aesh.ui.internal.document.DelegateDocument.CursorListener;
+import org.jboss.tools.aesh.ui.internal.document.DelegatingDocument;
+import org.jboss.tools.aesh.ui.internal.document.DelegatingStyleRange;
+import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
 
 public abstract class AeshTextViewer extends TextViewer {
 	
-	private static final String START_LINE = new Character((char)1).toString();
-	private static final String PREV_CHAR = new Character((char)2).toString();
-	private static final String CTRL_C = new Character((char)3).toString();
-	private static final String CTRL_D = new Character((char)4).toString();
-	private static final String END_LINE = new Character((char)5).toString();
-	private static final String NEXT_CHAR = new Character((char)6).toString();
-	private static final String DELETE_PREV_CHAR = new Character((char)8).toString();
-	private static final String PREV_HISTORY = new Character((char)16).toString();
-	private static final String NEXT_HISTORY = new Character((char)14).toString();
-	private static final String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
-
 	private Console console;
-	private DelegateDocument aeshDocument;
+	private DelegatingDocument aeshDocument;
 	
 	private CursorListener cursorListener = new CursorListener() {		
 		@Override
@@ -53,7 +45,8 @@ public abstract class AeshTextViewer extends TextViewer {
             if (textWidget != null && !textWidget.isDisposed()) {
                 int lineCount = textWidget.getLineCount();
                 textWidget.setTopIndex(lineCount - 1);
-    			StyleRange styleRange = aeshDocument.getCurrentStyleRange();
+                DelegatingStyleRange style = aeshDocument.getCurrentStyleRange();
+    			StyleRange styleRange = style.getDelegate();
     			if (styleRange != null && 
     					event.getLength() == 0 && 
     					styleRange.start <= getDocument().getLength() && 
@@ -74,8 +67,8 @@ public abstract class AeshTextViewer extends TextViewer {
     	Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				console.connect(aeshDocument.getProxy());
-		    	setDocument(aeshDocument);
+				console.connect(aeshDocument);
+		    	setDocument(aeshDocument.getDelegate());
 		    	console.start();
 			}   		
     	});
@@ -100,28 +93,28 @@ public abstract class AeshTextViewer extends TextViewer {
 			public void invokeAction(int action) {
 				switch (action) {
 					case ST.LINE_END:
-						console.sendInput(END_LINE);
+						console.sendInput(CharacterConstants.END_LINE);
 						break;
 					case ST.LINE_START:
-						console.sendInput(START_LINE);
+						console.sendInput(CharacterConstants.START_LINE);
 						break;
 					case ST.LINE_UP:
-						console.sendInput(PREV_HISTORY);
+						console.sendInput(CharacterConstants.PREV_HISTORY);
 						break;
 					case ST.LINE_DOWN:
-						console.sendInput(NEXT_HISTORY);
+						console.sendInput(CharacterConstants.NEXT_HISTORY);
 						break;
 					case ST.COLUMN_PREVIOUS:
-						console.sendInput(PREV_CHAR);
+						console.sendInput(CharacterConstants.PREV_CHAR);
 						break;
 					case ST.COLUMN_NEXT:
-						console.sendInput(NEXT_CHAR);
+						console.sendInput(CharacterConstants.NEXT_CHAR);
 						break;
 					case ST.DELETE_PREVIOUS:
-						console.sendInput(DELETE_PREV_CHAR);
+						console.sendInput(CharacterConstants.DELETE_PREV_CHAR);
 						break;
 					case ST.DELETE_NEXT:
-						console.sendInput(DELETE_NEXT_CHAR);
+						console.sendInput(CharacterConstants.DELETE_NEXT_CHAR);
 						break;
 					default: super.invokeAction(action);
 				}
@@ -147,9 +140,10 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     private void initializeDocument() {
-    	aeshDocument = new DelegateDocument();
-    	aeshDocument.addCursorListener(cursorListener);
-    	aeshDocument.addDocumentListener(documentListener);
+    	DelegateDocument delegate = new DelegateDocument();
+    	aeshDocument = new DelegatingDocument(delegate);
+    	delegate.addCursorListener(cursorListener);
+    	delegate.addDocumentListener(documentListener);
     }
     
     private void initializeTextWidget() {
@@ -159,9 +153,9 @@ public abstract class AeshTextViewer extends TextViewer {
 			public void verifyKey(VerifyEvent event) {
 				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
 					if (event.keyCode == 'd') {
-						console.sendInput(CTRL_D);
+						console.sendInput(CharacterConstants.CTRL_D);
 					} else if (event.keyCode == 'c') {
-						console.sendInput(CTRL_C);
+						console.sendInput(CharacterConstants.CTRL_C);
 					}
 				}
 			}

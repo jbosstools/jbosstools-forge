@@ -3,6 +3,8 @@ package org.jboss.tools.aesh.ui.internal.document;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.TextStyle;
 import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
@@ -15,7 +17,7 @@ public class DelegatingStyleRange implements Style {
 		this.styleRange = styleRange;
 	}
 	
-	public StyleRange getStyleRange() {
+	StyleRange getStyleRange() {
 		return styleRange;
 	}
 	
@@ -212,6 +214,19 @@ public class DelegatingStyleRange implements Style {
 		Color background = styleRange.background;
 		styleRange.background = foreground;
 		styleRange.foreground = background;
+	}
+	
+	public static DelegatingStyleRange getDefault() {
+		Font font = FontManager.INSTANCE.getDefault();
+		Color foreground = ColorConstants.BLACK;
+		Color background = ColorConstants.WHITE;
+		TextStyle textStyle = new TextStyle(font, foreground, background);
+		StyleRange styleRange = new StyleRange(textStyle);
+		return new DelegatingStyleRange(styleRange);
+	}
+	
+	public StyleRange getDelegate() {
+		return styleRange;
 	}
 	
 }
