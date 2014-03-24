@@ -2,6 +2,7 @@ package org.jboss.tools.aesh.ui.internal.document;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.document.Style;
@@ -149,12 +150,12 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 		return document;
 	}
 	
-	public StyleImpl getCurrentStyleRange() {
-		return currentStyle;
-	}
-	
 	public void setCursorListener(CursorListener listener) {
 		this.cursorListener = listener;
+	}
+	
+	public void setDocumentListener(IDocumentListener listener) {
+		document.addDocumentListener(listener);
 	}
 	
 }
