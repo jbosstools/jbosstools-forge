@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 
-public class DelegatingDocument implements org.jboss.tools.aesh.core.document.Document {
+public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document {
 	
 	private Document delegate;
 	private StyleImpl currentStyle;
@@ -18,7 +18,7 @@ public class DelegatingDocument implements org.jboss.tools.aesh.core.document.Do
 	private int cursorOffset = 0;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
 	
-	public DelegatingDocument() {
+	public DocumentImpl() {
 		this.delegate = new Document();
 		this.currentStyle = StyleImpl.getDefault();
 	}

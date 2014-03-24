@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.internal.document.CursorListener;
-import org.jboss.tools.aesh.ui.internal.document.DelegatingDocument;
+import org.jboss.tools.aesh.ui.internal.document.DocumentImpl;
 import org.jboss.tools.aesh.ui.internal.document.StyleImpl;
 import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
@@ -22,7 +22,7 @@ import org.jboss.tools.aesh.ui.internal.util.FontManager;
 public abstract class AeshTextViewer extends TextViewer {
 	
 	private Console console;
-	private DelegatingDocument aeshDocument;
+	private DocumentImpl aeshDocument;
 	
 	private CursorListener cursorListener = new CursorListener() {		
 		@Override
@@ -139,7 +139,7 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     private void initializeDocument() {
-    	aeshDocument = new DelegatingDocument();
+    	aeshDocument = new DocumentImpl();
     	aeshDocument.addCursorListener(cursorListener);
     	aeshDocument.getDelegate().addDocumentListener(documentListener);
     }
