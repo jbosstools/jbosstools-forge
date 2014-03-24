@@ -9,25 +9,25 @@ import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 
 public class DelegatingDocument implements Document {
 	
-	private DelegateDocument document;
+	private DelegateDocument delegate;
 	private Style currentStyleRange;
 	private int savedCursor = 0;
 
 	
 	public DelegatingDocument(DelegateDocument document) {
-		this.document = document;
+		this.delegate = document;
 	}
 
 	@Override
 	public int getCursorOffset() {
-		return document.getCursorOffset();
+		return delegate.getCursorOffset();
 	}
 	
 	@Override
 	public int getLineOfOffset(int offset) {
 		int result = -1;
 		try {
-			result = document.getLineOfOffset(offset);
+			result = delegate.getLineOfOffset(offset);
 		} catch (BadLocationException e) {
 			AeshUIPlugin.log(e);
 		}
@@ -38,7 +38,7 @@ public class DelegatingDocument implements Document {
 	public int getLineOffset(int line) {
 		int result = -1;
 		try {
-			result = document.getLineOffset(line);
+			result = delegate.getLineOffset(line);
 		} catch (BadLocationException e) {
 			AeshUIPlugin.log(e);
 		}
@@ -49,7 +49,7 @@ public class DelegatingDocument implements Document {
 	public int getLineLength(int line) {
 		int result = -1;
 		try {
-			result = document.getLineLength(line);
+			result = delegate.getLineLength(line);
 		} catch (BadLocationException e) {
 			AeshUIPlugin.log(e);
 		}
@@ -61,7 +61,7 @@ public class DelegatingDocument implements Document {
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				document.moveCursorTo(offset);
+				delegate.moveCursorTo(offset);
 			}				
 		});
 	}
@@ -71,14 +71,14 @@ public class DelegatingDocument implements Document {
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				document.reset();
+				delegate.reset();
 			}				
 		});
 	}
 
 	@Override
 	public int getLength() {
-		return document.getLength();
+		return delegate.getLength();
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class DelegatingDocument implements Document {
 			@Override
 			public void run() {
 			  	try {
-		        	document.replace(pos, length, text);
+		        	delegate.replace(pos, length, text);
 		        } catch (BadLocationException e) {
 		        	AeshUIPlugin.log(e);
 		        }
@@ -112,7 +112,7 @@ public class DelegatingDocument implements Document {
 
 	@Override
 	public Style newStyleFromCurrent() {
-		StyleRange oldStyleRange = document.getCurrentStyleRange();
+		StyleRange oldStyleRange = delegate.getCurrentStyleRange();
 		StyleRange newStyleRange = new StyleRange(oldStyleRange);
 		newStyleRange.start = oldStyleRange.start + oldStyleRange.length;
 		newStyleRange.length = 0;
@@ -123,7 +123,7 @@ public class DelegatingDocument implements Document {
 	public void setCurrentStyle(Style styleRangeProxy) {
 		if (styleRangeProxy instanceof DelegatingStyleRange) {
 			StyleRange styleRange = ((DelegatingStyleRange)styleRangeProxy).getStyleRange();
-			document.setCurrentStyleRange(styleRange);
+			delegate.setCurrentStyleRange(styleRange);
 			currentStyleRange = styleRangeProxy;
 		}
 	}
@@ -135,8 +135,8 @@ public class DelegatingDocument implements Document {
 	
 	@Override
 	public void setDefaultStyle() {
-		StyleRange styleRange = document.getDefaultStyleRange();
-		styleRange.start = document.getLength();
+		StyleRange styleRange = delegate.getDefaultStyleRange();
+		styleRange.start = delegate.getLength();
 		styleRange.length = 0;
 		setCurrentStyle(new DelegatingStyleRange(styleRange));
 	}
