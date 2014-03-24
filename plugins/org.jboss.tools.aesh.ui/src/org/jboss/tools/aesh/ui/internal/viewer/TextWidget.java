@@ -1,4 +1,4 @@
-package org.jboss.tools.aesh.ui.internal.widget;
+package org.jboss.tools.aesh.ui.internal.viewer;
 
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyledText;

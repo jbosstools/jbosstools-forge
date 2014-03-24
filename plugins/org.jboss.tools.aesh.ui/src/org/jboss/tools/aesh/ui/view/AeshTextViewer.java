@@ -17,12 +17,12 @@ import org.jboss.tools.aesh.ui.internal.document.DocumentImpl;
 import org.jboss.tools.aesh.ui.internal.document.StyleImpl;
 import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
-import org.jboss.tools.aesh.ui.internal.widget.TextWidget;
+import org.jboss.tools.aesh.ui.internal.viewer.TextWidget;
 
 public abstract class AeshTextViewer extends TextViewer {
 	
 	private Console console;
-	private DocumentImpl aeshDocument;
+	private DocumentImpl document;
 	private TextWidget textWidget;
 	
 	private CursorListener cursorListener = new CursorListener() {		
@@ -30,7 +30,7 @@ public abstract class AeshTextViewer extends TextViewer {
 		public void cursorMoved() {
 			StyledText textWidget = getTextWidget();
 			if (textWidget != null && !textWidget.isDisposed()) {
-				textWidget.setCaretOffset(aeshDocument.getCursorOffset());
+				textWidget.setCaretOffset(document.getCursorOffset());
 			}
 		}
 	};
@@ -45,7 +45,7 @@ public abstract class AeshTextViewer extends TextViewer {
             if (textWidget != null && !textWidget.isDisposed()) {
                 int lineCount = textWidget.getLineCount();
                 textWidget.setTopIndex(lineCount - 1);
-                StyleImpl style = aeshDocument.getCurrentStyleRange();
+                StyleImpl style = document.getCurrentStyleRange();
     			StyleRange styleRange = style.getStyleRange();
     			if (styleRange != null && 
     					event.getLength() == 0 && 
@@ -67,8 +67,8 @@ public abstract class AeshTextViewer extends TextViewer {
     	Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				console.connect(aeshDocument);
-		    	setDocument(aeshDocument.getDelegate());
+				console.connect(document);
+		    	setDocument(document.getDelegate());
 		    	console.start();
 			}   		
     	});
@@ -80,7 +80,7 @@ public abstract class AeshTextViewer extends TextViewer {
 			public void run() {
 		    	console.stop();
 		    	console.disconnect();
-		    	aeshDocument.reset();
+		    	document.reset();
 		    	setDocument(null);    	
 			}   		
     	});
@@ -109,9 +109,9 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     private void initializeDocument() {
-    	aeshDocument = new DocumentImpl();
-    	aeshDocument.addCursorListener(cursorListener);
-    	aeshDocument.getDelegate().addDocumentListener(documentListener);
+    	document = new DocumentImpl();
+    	document.addCursorListener(cursorListener);
+    	document.getDelegate().addDocumentListener(documentListener);
     }
     
     private void initializeTextWidget() {
