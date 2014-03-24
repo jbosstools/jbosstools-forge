@@ -11,20 +11,14 @@ public class DelegateDocument extends Document {
 		void cursorMoved();
 	}
 	
-	private int cursorOffset = 0;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
 	
 	void moveCursorTo(int newOffset) {
-		cursorOffset = newOffset;
 		for (CursorListener listener : cursorListeners) {
 			listener.cursorMoved();
 		}
 	}
 
-	public int getCursorOffset() {
-		return cursorOffset;
-	}
-	
 	public void addCursorListener(CursorListener listener) {
 		cursorListeners.add(listener);
 	}

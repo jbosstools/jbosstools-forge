@@ -12,6 +12,7 @@ public class DelegatingDocument implements Document {
 	private DelegateDocument delegate;
 	private DelegatingStyleRange currentStyle;
 	private int savedCursor = 0;
+	private int cursorOffset = 0;
 	
 	public DelegatingDocument(DelegateDocument document) {
 		this.delegate = document;
@@ -20,7 +21,7 @@ public class DelegatingDocument implements Document {
 
 	@Override
 	public int getCursorOffset() {
-		return delegate.getCursorOffset();
+		return cursorOffset;
 	}
 	
 	@Override
@@ -58,6 +59,7 @@ public class DelegatingDocument implements Document {
 
 	@Override
 	public void moveCursorTo(final int offset) {
+		cursorOffset = offset;
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
