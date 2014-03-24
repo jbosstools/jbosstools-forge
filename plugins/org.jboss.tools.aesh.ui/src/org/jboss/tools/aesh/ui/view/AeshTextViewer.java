@@ -7,7 +7,6 @@ import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -15,9 +14,9 @@ import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.internal.document.CursorListener;
 import org.jboss.tools.aesh.ui.internal.document.DocumentImpl;
 import org.jboss.tools.aesh.ui.internal.document.StyleImpl;
-import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
 import org.jboss.tools.aesh.ui.internal.viewer.TextWidget;
+import org.jboss.tools.aesh.ui.internal.viewer.VerifyKeyListenerImpl;
 
 public abstract class AeshTextViewer extends TextViewer {
 	
@@ -117,18 +116,7 @@ public abstract class AeshTextViewer extends TextViewer {
     private void initializeTextWidget() {
     	textWidget.setConsole(console);
     	textWidget.setFont(JFaceResources.getFont(FontManager.AESH_CONSOLE_FONT));
-    	textWidget.addVerifyKeyListener(new VerifyKeyListener() {			
-			@Override
-			public void verifyKey(VerifyEvent event) {
-				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
-					if (event.keyCode == 'd') {
-						console.sendInput(CharacterConstants.CTRL_D);
-					} else if (event.keyCode == 'c') {
-						console.sendInput(CharacterConstants.CTRL_C);
-					}
-				}
-			}
-		});
+    	textWidget.addVerifyKeyListener(new VerifyKeyListenerImpl(console));
     }
     
 }
