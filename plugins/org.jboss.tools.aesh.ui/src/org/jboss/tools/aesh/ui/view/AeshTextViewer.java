@@ -5,7 +5,6 @@ import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
@@ -18,11 +17,13 @@ import org.jboss.tools.aesh.ui.internal.document.DocumentImpl;
 import org.jboss.tools.aesh.ui.internal.document.StyleImpl;
 import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
+import org.jboss.tools.aesh.ui.internal.widget.TextWidget;
 
 public abstract class AeshTextViewer extends TextViewer {
 	
 	private Console console;
 	private DocumentImpl aeshDocument;
+	private TextWidget textWidget;
 	
 	private CursorListener cursorListener = new CursorListener() {		
 		@Override
@@ -88,39 +89,8 @@ public abstract class AeshTextViewer extends TextViewer {
     protected abstract Console createConsole();
     
 	protected StyledText createTextWidget(Composite parent, int styles) {
-		StyledText styledText= new StyledText(parent, styles) {
-			public void invokeAction(int action) {
-				switch (action) {
-					case ST.LINE_END:
-						console.sendInput(CharacterConstants.END_LINE);
-						break;
-					case ST.LINE_START:
-						console.sendInput(CharacterConstants.START_LINE);
-						break;
-					case ST.LINE_UP:
-						console.sendInput(CharacterConstants.PREV_HISTORY);
-						break;
-					case ST.LINE_DOWN:
-						console.sendInput(CharacterConstants.NEXT_HISTORY);
-						break;
-					case ST.COLUMN_PREVIOUS:
-						console.sendInput(CharacterConstants.PREV_CHAR);
-						break;
-					case ST.COLUMN_NEXT:
-						console.sendInput(CharacterConstants.NEXT_CHAR);
-						break;
-					case ST.DELETE_PREVIOUS:
-						console.sendInput(CharacterConstants.DELETE_PREV_CHAR);
-						break;
-					case ST.DELETE_NEXT:
-						console.sendInput(CharacterConstants.DELETE_NEXT_CHAR);
-						break;
-					default: super.invokeAction(action);
-				}
-			}
-		};
-		styledText.setLeftMargin(Math.max(styledText.getLeftMargin(), 2));
-		return styledText;
+		textWidget = new TextWidget(parent, styles);
+		return textWidget;
 	}
 
     protected void handleVerifyEvent(VerifyEvent e) {
@@ -145,8 +115,9 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     private void initializeTextWidget() {
-    	getTextWidget().setFont(JFaceResources.getFont(FontManager.AESH_CONSOLE_FONT));
-    	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
+    	textWidget.setConsole(console);
+    	textWidget.setFont(JFaceResources.getFont(FontManager.AESH_CONSOLE_FONT));
+    	textWidget.addVerifyKeyListener(new VerifyKeyListener() {			
 			@Override
 			public void verifyKey(VerifyEvent event) {
 				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
