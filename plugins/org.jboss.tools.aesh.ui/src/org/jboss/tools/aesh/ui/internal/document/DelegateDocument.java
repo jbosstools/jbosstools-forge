@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.jface.text.Document;
-import org.eclipse.swt.custom.StyleRange;
 
 public class DelegateDocument extends Document {
 	
@@ -14,12 +13,6 @@ public class DelegateDocument extends Document {
 	
 	private int cursorOffset = 0;
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
-	private StyleRange currentStyleRange;
-	private DelegatingDocument proxy;
-	
-	public DelegateDocument() {
-		proxy = new DelegatingDocument(this);
-	}
 	
 	void moveCursorTo(int newOffset) {
 		cursorOffset = newOffset;
@@ -38,18 +31,6 @@ public class DelegateDocument extends Document {
 	
 	public void removeCursorListener(CursorListener listener) {
 		cursorListeners.remove(listener);
-	}
-	
-	public StyleRange getCurrentStyleRange() {
-		return currentStyleRange;
-	}
-	
-	public void setCurrentStyleRange(StyleRange styleRange) {
-		currentStyleRange = styleRange;
-	}
-	
-	public DelegatingDocument getProxy() {
-		return proxy;
 	}
 	
 }
