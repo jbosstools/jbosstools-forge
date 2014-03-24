@@ -1,21 +1,25 @@
 package org.jboss.tools.aesh.ui.internal.document;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.aesh.core.document.Document;
 import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 
-public class DelegatingDocument implements Document {
+public class DelegatingDocument implements org.jboss.tools.aesh.core.document.Document {
 	
-	private DelegateDocument delegate;
+	private Document delegate;
 	private DelegatingStyleRange currentStyle;
 	private int savedCursor = 0;
 	private int cursorOffset = 0;
+	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
 	
-	public DelegatingDocument(DelegateDocument document) {
-		this.delegate = document;
+	public DelegatingDocument() {
+		this.delegate = new Document();
 		this.currentStyle = DelegatingStyleRange.getDefault();
 	}
 
@@ -63,7 +67,9 @@ public class DelegatingDocument implements Document {
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				delegate.moveCursorTo(offset);
+				for (CursorListener listener : cursorListeners) {
+					listener.cursorMoved();
+				}
 			}				
 		});
 	}
@@ -144,12 +150,20 @@ public class DelegatingDocument implements Document {
 		setCurrentStyle(defaultStyle);
 	}
 	
-	public DelegateDocument getDelegate() {
+	public Document getDelegate() {
 		return delegate;
 	}
 	
 	public DelegatingStyleRange getCurrentStyleRange() {
 		return currentStyle;
+	}
+	
+	public void addCursorListener(CursorListener listener) {
+		cursorListeners.add(listener);
+	}
+	
+	public void removeCursorListener(CursorListener listener) {
+		cursorListeners.remove(listener);
 	}
 	
 }

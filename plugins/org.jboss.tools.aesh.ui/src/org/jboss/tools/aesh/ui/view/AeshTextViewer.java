@@ -13,8 +13,7 @@ import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.console.Console;
-import org.jboss.tools.aesh.ui.internal.document.DelegateDocument;
-import org.jboss.tools.aesh.ui.internal.document.DelegateDocument.CursorListener;
+import org.jboss.tools.aesh.ui.internal.document.CursorListener;
 import org.jboss.tools.aesh.ui.internal.document.DelegatingDocument;
 import org.jboss.tools.aesh.ui.internal.document.DelegatingStyleRange;
 import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
@@ -140,10 +139,9 @@ public abstract class AeshTextViewer extends TextViewer {
     }
     
     private void initializeDocument() {
-    	DelegateDocument delegate = new DelegateDocument();
-    	aeshDocument = new DelegatingDocument(delegate);
-    	delegate.addCursorListener(cursorListener);
-    	delegate.addDocumentListener(documentListener);
+    	aeshDocument = new DelegatingDocument();
+    	aeshDocument.addCursorListener(cursorListener);
+    	aeshDocument.getDelegate().addDocumentListener(documentListener);
     }
     
     private void initializeTextWidget() {
