@@ -22,19 +22,9 @@ public class DelegateDocument extends Document {
 	private StyleRange currentStyleRange;
 	private DelegatingDocument proxy;
 	
-	private int savedCursor = 0;
-	
 	public DelegateDocument() {
 		proxy = new DelegatingDocument(this);
 		currentStyleRange = getDefaultStyleRange();
-	}
-	
-	void saveCursor() {
-		savedCursor = getCursorOffset();
-	}
-	
-	void restoreCursor() {
-		moveCursorTo(savedCursor);
 	}
 	
     public void reset() {

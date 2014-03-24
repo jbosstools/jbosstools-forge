@@ -11,6 +11,8 @@ public class DelegatingDocument implements Document {
 	
 	private DelegateDocument document;
 	private Style currentStyleRange;
+	private int savedCursor = 0;
+
 	
 	public DelegatingDocument(DelegateDocument document) {
 		this.document = document;
@@ -72,7 +74,6 @@ public class DelegatingDocument implements Document {
 				document.reset();
 			}				
 		});
-		document.reset();
 	}
 
 	@Override
@@ -99,14 +100,14 @@ public class DelegatingDocument implements Document {
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				document.restoreCursor();
+				moveCursorTo(savedCursor);
 			}				
 		});
 	}
 
 	@Override
 	public void saveCursor() {
-		document.saveCursor();
+		savedCursor = getCursorOffset();
 	}
 
 	@Override
