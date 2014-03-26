@@ -9,7 +9,7 @@ public class DocumentImplTest {
 	
 	@Test
 	public void testConstructor() {
-		Assert.assertNotNull(documentImpl.document);
+		Assert.assertNotNull(documentImpl.delegateDocument);
 		Assert.assertNotNull(documentImpl.currentStyle);
 		Assert.assertEquals(0, documentImpl.cursorOffset);
 		Assert.assertEquals(0, documentImpl.savedCursor);

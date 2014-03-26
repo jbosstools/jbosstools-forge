@@ -10,14 +10,14 @@ import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 
 public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document {
 	
-	Document document;
+	Document delegateDocument;
 	StyleImpl currentStyle;
 	CursorListener cursorListener;
 	int savedCursor = 0;
 	int cursorOffset = 0;
 	
 	public DocumentImpl() {
-		this.document = new Document();
+		this.delegateDocument = new Document();
 		this.currentStyle = StyleImpl.getDefault();
 	}
 
@@ -30,7 +30,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	public int getLineOfOffset(int offset) {
 		int result = -1;
 		try {
-			result = document.getLineOfOffset(offset);
+			result = delegateDocument.getLineOfOffset(offset);
 		} catch (BadLocationException e) {
 			AeshUIPlugin.log(e);
 		}
@@ -41,7 +41,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	public int getLineOffset(int line) {
 		int result = -1;
 		try {
-			result = document.getLineOffset(line);
+			result = delegateDocument.getLineOffset(line);
 		} catch (BadLocationException e) {
 			AeshUIPlugin.log(e);
 		}
@@ -52,7 +52,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	public int getLineLength(int line) {
 		int result = -1;
 		try {
-			result = document.getLineLength(line);
+			result = delegateDocument.getLineLength(line);
 		} catch (BadLocationException e) {
 			AeshUIPlugin.log(e);
 		}
@@ -75,7 +75,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				document.set("");
+				delegateDocument.set("");
 			}				
 		});
 		moveCursorTo(0);
@@ -84,7 +84,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 
 	@Override
 	public int getLength() {
-		return document.getLength();
+		return delegateDocument.getLength();
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 			@Override
 			public void run() {
 			  	try {
-		        	document.replace(pos, length, text);
+		        	delegateDocument.replace(pos, length, text);
 		        } catch (BadLocationException e) {
 		        	AeshUIPlugin.log(e);
 		        }
@@ -141,13 +141,13 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	public void setDefaultStyle() {
 		StyleImpl defaultStyle = StyleImpl.getDefault();
 		StyleRange styleRange = defaultStyle.getStyleRange();
-		styleRange.start = document.getLength();
+		styleRange.start = delegateDocument.getLength();
 		styleRange.length = 0;
 		setCurrentStyle(defaultStyle);
 	}
 	
 	public Document getDelegate() {
-		return document;
+		return delegateDocument;
 	}
 	
 	public void setCursorListener(CursorListener listener) {
@@ -155,7 +155,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	}
 	
 	public void setDocumentListener(IDocumentListener listener) {
-		document.addDocumentListener(listener);
+		delegateDocument.addDocumentListener(listener);
 	}
 	
 }
