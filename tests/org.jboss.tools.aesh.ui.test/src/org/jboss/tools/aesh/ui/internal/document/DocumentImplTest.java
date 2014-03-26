@@ -16,4 +16,12 @@ public class DocumentImplTest {
 		Assert.assertNull(documentImpl.cursorListener);
 	}
 	
+	@Test
+	public void testGetCursorOffset() {
+		Assert.assertEquals(0, documentImpl.getCursorOffset());
+		documentImpl.cursorOffset = 7;
+		Assert.assertEquals(7, documentImpl.getCursorOffset());
+		
+	}
+	
 }
