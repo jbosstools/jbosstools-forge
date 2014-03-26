@@ -21,6 +21,7 @@ public class F2Console extends AbstractConsole {
 		PrintStream out = new PrintStream(stdOut, true);
 		PrintStream err = new PrintStream(stdErr, true);
 		handle.initialize(currentDir, getInputStream(), out, err);
+		handle.addCommandExecutionListener(new CommandExecutionListenerImpl());	
 	}
 
 	@Override
