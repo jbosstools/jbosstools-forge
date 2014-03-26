@@ -1,11 +1,19 @@
 package org.jboss.tools.aesh.ui.internal.document;
 
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class DocumentImplTest {
 	
 	private DocumentImpl documentImpl = new DocumentImpl();
+	
+	private Document testDocument = new Document() {
+		@Override public int getLineOfOffset(int offset) throws BadLocationException { 
+			return offset < 10 ? offset : super.getLineOfOffset(offset);
+		}
+	};
 	
 	@Test
 	public void testConstructor() {
@@ -20,8 +28,15 @@ public class DocumentImplTest {
 	public void testGetCursorOffset() {
 		Assert.assertEquals(0, documentImpl.getCursorOffset());
 		documentImpl.cursorOffset = 7;
-		Assert.assertEquals(7, documentImpl.getCursorOffset());
-		
+		Assert.assertEquals(7, documentImpl.getCursorOffset());		
+	}
+	
+	@Test
+	public void testGetLineOfOffset() {
+		Assert.assertEquals(-1, documentImpl.getLineOfOffset(5));
+		documentImpl.delegateDocument = testDocument;
+		Assert.assertEquals(5, documentImpl.getLineOfOffset(5));
+		Assert.assertEquals(-1, documentImpl.getLineOfOffset(100));
 	}
 	
 }
