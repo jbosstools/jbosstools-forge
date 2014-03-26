@@ -10,11 +10,11 @@ import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
 
 public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document {
 	
-	private Document document;
-	private StyleImpl currentStyle;
-	private int savedCursor = 0;
-	private int cursorOffset = 0;
-	private CursorListener cursorListener;
+	Document document;
+	StyleImpl currentStyle;
+	CursorListener cursorListener;
+	int savedCursor = 0;
+	int cursorOffset = 0;
 	
 	public DocumentImpl() {
 		this.document = new Document();
