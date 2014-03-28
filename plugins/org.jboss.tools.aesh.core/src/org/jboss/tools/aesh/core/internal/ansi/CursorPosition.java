@@ -7,13 +7,14 @@ public class CursorPosition extends AbstractCommand {
 	
 	private int line, column = 0;
 
+	// need to subtract 1 from the arguments as the ansi cursor position arguments are 1-based
 	public CursorPosition(String arguments) {
     	int i = arguments.indexOf(';');
     	if (i != -1) {
-    		line = Integer.valueOf(arguments.substring(0, i));
-    		column = Integer.valueOf(arguments.substring(i + 1));
+    		line = Integer.valueOf(arguments.substring(0, i)) - 1;
+    		column = Integer.valueOf(arguments.substring(i + 1)) - 1;
     	} else if (arguments.length() > 0) {
-    		line = Integer.valueOf(arguments);
+    		line = Integer.valueOf(arguments) - 1;
     	}
 	}
 
