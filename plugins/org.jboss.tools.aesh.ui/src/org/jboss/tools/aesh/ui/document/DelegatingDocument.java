@@ -72,7 +72,6 @@ public class DelegatingDocument implements Document {
 				document.reset();
 			}				
 		});
-		document.reset();
 	}
 
 	@Override
