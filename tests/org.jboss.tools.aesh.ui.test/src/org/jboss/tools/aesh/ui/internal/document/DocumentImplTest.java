@@ -18,6 +18,10 @@ public class DocumentImplTest {
 		public int getLineOffset(int line) throws BadLocationException {
 			return line < 5 ? line * 10 : super.getLineOffset(line);
 		}
+		@Override
+		public int getLineLength(int line) throws BadLocationException {
+			return line < 5 ? 80 : super.getLineLength(line);
+		}
 	};
 	
 	@Test
@@ -50,6 +54,14 @@ public class DocumentImplTest {
 		documentImpl.delegateDocument = testDocument;
 		Assert.assertEquals(20, documentImpl.getLineOffset(2));
 		Assert.assertEquals(-1, documentImpl.getLineOffset(10));
+	}
+	
+	@Test
+	public void testGetLineLength() {
+		Assert.assertEquals(-1, documentImpl.getLineLength(2));
+		documentImpl.delegateDocument = testDocument;
+		Assert.assertEquals(80, documentImpl.getLineLength(2));
+		Assert.assertEquals(-1, documentImpl.getLineLength(10));
 	}
 	
 }
