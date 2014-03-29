@@ -25,13 +25,13 @@ public class CursorPositionTest {
 	public void testHandle() {
 		CursorPosition cursorPosition = new CursorPosition("4");
 		cursorPosition.handle(testDocument);
-		Assert.assertEquals(testOffset, 320);
+		Assert.assertEquals(testOffset, 240);
 		cursorPosition = new CursorPosition("5;100");
 		cursorPosition.handle(testDocument);
-		Assert.assertEquals(testOffset, 455);
+		Assert.assertEquals(testOffset, 375);
 		cursorPosition = new CursorPosition("3;45");
 		cursorPosition.handle(testDocument);
-		Assert.assertEquals(testOffset, 285);
+		Assert.assertEquals(testOffset, 204);
 	}
 
 }
