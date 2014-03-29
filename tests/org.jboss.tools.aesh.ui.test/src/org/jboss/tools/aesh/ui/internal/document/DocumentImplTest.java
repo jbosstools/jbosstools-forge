@@ -7,6 +7,8 @@ import org.junit.Test;
 
 public class DocumentImplTest {
 	
+	private boolean cursorMoved = false;
+	
 	private DocumentImpl documentImpl = new DocumentImpl();
 	
 	private Document testDocument = new Document() {
@@ -22,6 +24,13 @@ public class DocumentImplTest {
 		public int getLineLength(int line) throws BadLocationException {
 			return line < 5 ? 80 : super.getLineLength(line);
 		}
+	};
+	
+	private CursorListener testListener = new CursorListener() {
+		@Override
+		public void cursorMoved() {
+			cursorMoved = true;
+		}		
 	};
 	
 	@Test
@@ -62,6 +71,16 @@ public class DocumentImplTest {
 		documentImpl.delegateDocument = testDocument;
 		Assert.assertEquals(80, documentImpl.getLineLength(2));
 		Assert.assertEquals(-1, documentImpl.getLineLength(10));
+	}
+	
+	@Test
+	public void testMoveCursorTo() {
+		documentImpl.cursorListener = testListener;
+		Assert.assertFalse(cursorMoved);
+		Assert.assertEquals(0, documentImpl.cursorOffset);
+		documentImpl.moveCursorTo(6);
+		Assert.assertTrue(cursorMoved);
+		Assert.assertEquals(6, documentImpl.cursorOffset);
 	}
 	
 }
