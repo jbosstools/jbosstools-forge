@@ -83,4 +83,12 @@ public class DocumentImplTest {
 		Assert.assertEquals(6, documentImpl.cursorOffset);
 	}
 	
+	@Test
+	public void testGetLenght() {
+		documentImpl.delegateDocument = testDocument;
+		Assert.assertEquals(0, documentImpl.getLength());
+		testDocument.set("blah");
+		Assert.assertEquals(4, documentImpl.getLength());
+	}
+	
 }
