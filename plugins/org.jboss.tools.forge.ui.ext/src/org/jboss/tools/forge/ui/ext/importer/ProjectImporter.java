@@ -31,7 +31,7 @@ import org.eclipse.ui.wizards.datatransfer.ImportOperation;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  * 
  */
-class ProjectImporter {
+public class ProjectImporter {
 
 	private String baseDirPath;
 	private String moduleLocation;
