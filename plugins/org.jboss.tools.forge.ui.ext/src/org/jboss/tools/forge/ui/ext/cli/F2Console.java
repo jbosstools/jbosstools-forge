@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.shell.ShellHandle;
 import org.jboss.tools.aesh.core.console.AbstractConsole;
 import org.jboss.tools.forge.ext.core.FurnaceService;
@@ -12,6 +13,7 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 public class F2Console extends AbstractConsole {
 	
 	private ShellHandle handle;
+	private CommandExecutionListenerImpl executionListener = new CommandExecutionListenerImpl();
 
 	public void start() {
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);
@@ -21,7 +23,9 @@ public class F2Console extends AbstractConsole {
 		PrintStream out = new PrintStream(stdOut, true);
 		PrintStream err = new PrintStream(stdErr, true);
 		handle.initialize(currentDir, getInputStream(), out, err);
-		handle.addCommandExecutionListener(new CommandExecutionListenerImpl());	
+		handle.addCommandExecutionListener(executionListener);	
+		ProjectFactory projectFactory = FurnaceService.INSTANCE.lookup(ProjectFactory.class);
+		projectFactory.addProjectListener(executionListener);
 	}
 
 	@Override
