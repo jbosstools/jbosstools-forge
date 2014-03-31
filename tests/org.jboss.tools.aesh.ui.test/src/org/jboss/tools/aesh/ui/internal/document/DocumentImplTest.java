@@ -2,6 +2,7 @@ package org.jboss.tools.aesh.ui.internal.document;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.jboss.tools.aesh.core.document.Style;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -81,6 +82,15 @@ public class DocumentImplTest {
 		documentImpl.moveCursorTo(6);
 		Assert.assertTrue(cursorMoved);
 		Assert.assertEquals(6, documentImpl.cursorOffset);
+	}
+	
+	@Test
+	public void testSetCurrentStyle() {
+		Style newStyle = StyleImpl.getDefault();
+		Assert.assertNotNull(documentImpl.currentStyle);
+		Assert.assertNotEquals(documentImpl.currentStyle, newStyle);
+		documentImpl.setCurrentStyle(newStyle);
+		Assert.assertEquals(documentImpl.currentStyle, newStyle);
 	}
 	
 	@Test
