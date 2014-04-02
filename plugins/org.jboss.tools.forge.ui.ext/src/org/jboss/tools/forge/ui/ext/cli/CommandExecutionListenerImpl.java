@@ -10,7 +10,9 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -81,13 +83,14 @@ implements ProjectListener {
 	}
 	
 	private void refresh(Resource<?> resource) {
-		System.out.println("refreshing initial selection: " + resource.getFullyQualifiedName());
+		Object object = resource.getUnderlyingResourceObject();
+		if (object instanceof File) {
+			refreshResource((File)object);
+		}
 	}
 	
 	private void selectResource(Resource<?> resource) {
 		Object object = resource.getUnderlyingResourceObject();
-		System.out.println("highlighting final selection: " + resource.getFullyQualifiedName());
-		System.out.println("the object is of class : " + object.getClass().getName());
 		if (object instanceof File) {
 			selectFile((File)object);
 		}
@@ -249,6 +252,36 @@ implements ProjectListener {
 			ForgeUIPlugin.log(e);
 		}
 	}
+
+	private void refreshResource(File file) {
+		try {
+			IPath path = new Path(file.getCanonicalPath());
+			IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
+			IFileInfo fileInfo = fileStore.fetchInfo();
+			if (!fileInfo.exists()) return;
+			if (fileInfo.isDirectory()) {
+				IContainer container = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
+				if (container != null) {
+					container.refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+			} else {
+				IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
+				if (resource != null) {
+					resource.refreshLocal(IResource.DEPTH_INFINITE, null);
+				}
+			}
+		} catch (IOException e) {
+			ForgeUIPlugin.log(e);
+		} catch (CoreException e) {
+			ForgeUIPlugin.log(e);
+		}
+		try {
+			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			ForgeUIPlugin.log(e);
+		}
+	}
+	
 	
 	
 }
