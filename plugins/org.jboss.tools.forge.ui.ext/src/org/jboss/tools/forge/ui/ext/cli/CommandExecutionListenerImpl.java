@@ -10,6 +10,8 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -38,17 +40,16 @@ import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectListener;
 import org.jboss.forge.addon.projects.facets.MetadataFacet;
 import org.jboss.forge.addon.resource.Resource;
-import org.jboss.forge.addon.ui.command.AbstractCommandExecutionListener;
+import org.jboss.forge.addon.ui.command.CommandExecutionListener;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.addon.ui.result.Result;
+import org.jboss.tools.forge.core.util.ProjectTools;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.ext.importer.ProjectImporter;
 
 public class CommandExecutionListenerImpl 
-extends AbstractCommandExecutionListener 
-implements ProjectListener {
+implements ProjectListener, CommandExecutionListener {
 	
 	private List<Project> projects = new ArrayList<Project>();
 
@@ -72,12 +73,17 @@ implements ProjectListener {
 						refresh((Resource<?>)object);
 					}
 				}
+				if (pomFileModificationStamp != -1 && pomFile != null && pomFile.getModificationStamp() > pomFileModificationStamp) {
+					ProjectTools.updateProjectConfiguration(pomFile.getProject());
+				}
 				Object object = uiExecutionContext.getUIContext().getSelection();
 				if (object != null) {
 					if (object instanceof Resource<?>) {
 						selectResource((Resource<?>)object);
 					}
 				}
+				pomFile = null;
+				pomFileModificationStamp = -1;
 			}			
 		});
 	}
@@ -106,12 +112,9 @@ implements ProjectListener {
 			Resource<?> projectRoot = project.getRoot();
 			String baseDirPath = projectRoot.getParent()
 					.getFullyQualifiedName();
-			String moduleLocation = projectRoot.getName();
 			String projectName = project.getFacet(MetadataFacet.class)
 					.getProjectName();
-			ProjectImporter projectImporter = new ProjectImporter(baseDirPath,
-					moduleLocation, projectName);
-			projectImporter.importProject();
+			ProjectTools.importProject(baseDirPath, projectName);
 		}
 	}
 
@@ -280,6 +283,60 @@ implements ProjectListener {
 		} catch (CoreException e) {
 			ForgeUIPlugin.log(e);
 		}
+	}
+
+	@Override
+	public void postCommandFailure(UICommand arg0, UIExecutionContext arg1,
+			Throwable arg2) {
+		pomFile = null;
+		pomFileModificationStamp = -1;
+	}
+	
+	private IFile pomFile = null;
+	private long pomFileModificationStamp = -1;
+
+	@Override
+	public void preCommandExecuted(UICommand command, UIExecutionContext executionContext) {
+		UISelection<?> selection = executionContext.getUIContext().getInitialSelection();
+		Iterator<?> iterator = selection.iterator();
+		while (iterator.hasNext()) {
+			Object object = iterator.next();
+			if (object instanceof Resource<?>) {
+				pomFile = determinePomFile((Resource<?>)object);
+				if (pomFile != null) {
+					pomFileModificationStamp = pomFile.getModificationStamp();
+				}
+			}
+		}
+	}
+	
+	private IFile determinePomFile(Resource<?> resource) {
+		IFile result = null;
+		try {
+			Object object = resource.getUnderlyingResourceObject();
+			if (object != null && object instanceof File) {
+				Path path = new Path(((File)object).getCanonicalPath());
+				IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
+				IFileInfo fileInfo = fileStore.fetchInfo();
+				if (fileInfo.exists()) {
+					IResource res = null;
+					if (fileInfo.isDirectory()) {
+						res = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
+					} else {
+						res = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
+					}
+					if (res != null) {
+						IProject project = res.getProject();
+						if (project != null) {
+							result = project.getFile(new Path("pom.xml"));
+						}
+					}
+				}
+			}
+		} catch (IOException e) {
+			ForgeUIPlugin.log(e);
+		}
+		return result;
 	}
 	
 	
