@@ -124,22 +124,24 @@ implements ProjectListener, CommandExecutionListener {
 			IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
 			IFileInfo fileInfo = fileStore.fetchInfo();
 			if (!fileInfo.exists()) return;
+			IResource resource = null;
 			if (fileInfo.isDirectory()) {
-				IContainer container = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
-				if (container != null) {
-					expandWorkspaceDirectory(container);
-				} else {
-					expandSystemDirectory(fileStore);
-				}
+				resource = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
 			} else {
+				resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
 				openFileInEditor(fileStore);
+			}
+			if (resource != null) {
+				expandWorkspaceResource(resource);
+			} else {
+				expandSystemDirectory(fileStore);
 			}
 		} catch (IOException e) {
 			ForgeUIPlugin.log(e);
 		}
 	}
 	
-	private void expandWorkspaceDirectory(IContainer container) {
+	private void expandWorkspaceResource(IResource container) {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 		if (workbenchPage != null) {
 			IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
@@ -165,13 +167,13 @@ implements ProjectListener, CommandExecutionListener {
 		return result;		
 	}
 
-	private void expandInProjectExplorer(CommonNavigator projectExplorer, IContainer container) {
+	private void expandInProjectExplorer(CommonNavigator projectExplorer, IResource container) {
 		projectExplorer.selectReveal(new StructuredSelection(container));
 		TreeViewer treeViewer = projectExplorer.getCommonViewer();
 		treeViewer.expandToLevel(container, 1);
 	}
 	
-	private void expandInPackageExplorer(IViewPart packageExplorer, IContainer container) {
+	private void expandInPackageExplorer(IViewPart packageExplorer, IResource container) {
 		if (packageExplorer instanceof ISetSelectionTarget) {
 			((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(container));
 		}
