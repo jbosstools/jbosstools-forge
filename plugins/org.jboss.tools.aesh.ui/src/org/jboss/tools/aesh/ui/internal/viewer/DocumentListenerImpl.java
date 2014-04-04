@@ -7,10 +7,10 @@ import org.jboss.tools.aesh.ui.internal.document.DocumentImpl;
 import org.jboss.tools.aesh.ui.internal.document.StyleImpl;
 
 public class DocumentListenerImpl implements IDocumentListener {
-	
+
 	private TextWidget textWidget;
 	private DocumentImpl document;
-	
+
 	public DocumentListenerImpl(TextWidget textWidget, DocumentImpl document) {
 		this.textWidget = textWidget;
 		this.document = document;
@@ -27,10 +27,11 @@ public class DocumentListenerImpl implements IDocumentListener {
             textWidget.setTopIndex(lineCount - 1);
             StyleImpl style = (StyleImpl)document.getCurrentStyle();
 			StyleRange styleRange = style.getStyleRange();
-			if (styleRange != null && 
-					event.getLength() == 0 && 
-					styleRange.start <= document.getLength() && 
-					styleRange.length >= 0 && 
+			if (styleRange != null &&
+					event.getLength() == 0 &&
+					styleRange.start >= 0 &&
+					styleRange.start <= document.getLength() &&
+					styleRange.length >= 0 &&
 					styleRange.start + styleRange.length <= document.getLength()) {
  				textWidget.setStyleRange(styleRange);
 			}
