@@ -39,7 +39,8 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Table build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Composite container) {
+			final InputComponent<?, ?> input, final String inputName,
+			final Composite container) {
 
 		final Group group = new Group(container, SWT.SHADOW_NONE);
 		GridData layoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -92,7 +93,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 						data.remove(source.getData());
 					}
 					CommandController controller = page.getController();
-					controller.setValueFor(input.getName(), data);
+					controller.setValueFor(inputName, data);
 				}
 			}
 		});

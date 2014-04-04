@@ -32,7 +32,8 @@ public class RadioControlBuilder extends ControlBuilder<Control> {
 	@Override
 	@SuppressWarnings({ "unchecked" })
 	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Composite parent) {
+			final InputComponent<?, ?> input, final String inputName,
+			final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -62,7 +63,7 @@ public class RadioControlBuilder extends ControlBuilder<Control> {
 						if (button.getSelection()) {
 							final CommandController controller = page
 									.getController();
-							controller.setValueFor(input.getName(),
+							controller.setValueFor(inputName,
 									Proxies.unwrap(choice));
 						}
 					}

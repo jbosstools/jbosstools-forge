@@ -9,6 +9,7 @@ package org.jboss.tools.forge.ui.ext.wizards;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -34,9 +35,9 @@ import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
  * A Forge Wizard Page
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public class ForgeWizardPage extends WizardPage implements Listener {
 	private CommandController controller;
@@ -82,10 +83,13 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		layout.verticalSpacing = 9;
 
 		// Init component control array
-		for (InputComponent<?, ?> input : inputs.values()) {
+		for (Entry<String, InputComponent<?, ?>> entry : inputs.entrySet()) {
+			String inputName = entry.getKey();
+			InputComponent<?, ?> input = entry.getValue();
 			ControlBuilder<Control> controlBuilder = ControlBuilderRegistry
 					.getBuilderFor(input);
-			Control control = controlBuilder.build(this, input, container);
+			Control control = controlBuilder.build(this, input, inputName,
+					container);
 
 			if (input.isRequired()) {
 				decorateRequiredField(input, control);
@@ -163,7 +167,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 
 	/**
 	 * Called when the page is opened for the first time.
-	 * 
+	 *
 	 * It should display error messages unless the error message indicates a
 	 * required field
 	 */
@@ -182,7 +186,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 * Returns whether this page's controls currently all contain valid values.
 	 * It also calls {@link ForgeWizardPage#setErrorMessage(String)} if an error
 	 * is found
-	 * 
+	 *
 	 * @return <code>true</code> if all controls are valid, and
 	 *         <code>false</code> if at least one is invalid
 	 */

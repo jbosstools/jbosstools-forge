@@ -29,7 +29,8 @@ public class CheckboxControlBuilder extends ControlBuilder<Button> {
 
 	@Override
 	public Button build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Composite container) {
+			final InputComponent<?, ?> input, final String inputName,
+			final Composite container) {
 
 		// Checkbox should be placed in second column
 		Label dummy1 = new Label(container, SWT.NONE);
@@ -57,7 +58,7 @@ public class CheckboxControlBuilder extends ControlBuilder<Button> {
 			public void widgetSelected(SelectionEvent e) {
 				boolean selection = ((Button) e.widget).getSelection();
 				CommandController controller = page.getController();
-				controller.setValueFor(input.getName(), selection);
+				controller.setValueFor(inputName, selection);
 			}
 		});
 

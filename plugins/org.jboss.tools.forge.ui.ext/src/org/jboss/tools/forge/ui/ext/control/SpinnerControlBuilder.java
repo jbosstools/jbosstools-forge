@@ -27,7 +27,7 @@ import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**
- * 
+ *
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
 public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
@@ -35,7 +35,8 @@ public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Spinner build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Composite container) {
+			final InputComponent<?, ?> input, final String inputName,
+			final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -62,10 +63,10 @@ public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 			public void modifyText(ModifyEvent e) {
 				CommandController controller = page.getController();
 				try {
-					controller.setValueFor(input.getName(), txt.getText());
+					controller.setValueFor(inputName, txt.getText());
 				} catch (Exception ex) {
 					ForgeUIPlugin.log(ex);
-					controller.setValueFor(input.getName(), null);
+					controller.setValueFor(inputName, null);
 				}
 			}
 		});

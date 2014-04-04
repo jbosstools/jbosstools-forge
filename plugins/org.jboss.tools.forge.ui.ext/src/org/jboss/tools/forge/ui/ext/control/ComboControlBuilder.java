@@ -35,7 +35,8 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	private static final Set<Combo> COMBO_STATUS_CHANGE = new HashSet<Combo>();
 
 	@Override
-	public Combo build(final ForgeWizardPage page, final InputComponent<?, ?> input,
+	public Combo build(final ForgeWizardPage page,
+			final InputComponent<?, ?> input, final String inputName,
 			final Composite container) {
 		final CommandController controller = page.getController();
 		// Create the label
@@ -49,7 +50,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				String text = combo.getText();
-				controller.setValueFor(input.getName(), text);
+				controller.setValueFor(inputName, text);
 			}
 		});
 		combo.setToolTipText(input.getDescription());

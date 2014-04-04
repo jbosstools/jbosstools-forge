@@ -30,7 +30,8 @@ public class TextBoxControlBuilder extends ControlBuilder<Text> {
 
 	@Override
 	public Text build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Composite container) {
+			final InputComponent<?, ?> input, final String inputName,
+			final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -54,20 +55,20 @@ public class TextBoxControlBuilder extends ControlBuilder<Text> {
 			public void modifyText(ModifyEvent e) {
 				CommandController controller = page.getController();
 				try {
-					controller.setValueFor(input.getName(), txt.getText());
+					controller.setValueFor(inputName, txt.getText());
 				} catch (Exception ex) {
 					ForgeUIPlugin.log(ex);
-					controller.setValueFor(input.getName(), null);
+					controller.setValueFor(inputName, null);
 				}
 			}
 		});
 		setupAutoCompleteForText(page.getWizard().getUIContext(), input,
 				InputComponents.getCompleterFor(input), txt);
-		
+
 		// skip the third column
 		Label dummy = new Label(container, SWT.NONE);
 		dummy.setText("");
-		
+
 		return txt;
 	}
 

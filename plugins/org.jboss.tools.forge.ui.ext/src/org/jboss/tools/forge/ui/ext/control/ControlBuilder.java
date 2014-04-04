@@ -31,50 +31,52 @@ import org.jboss.tools.forge.ui.ext.wizards.ForgeWizardPage;
 
 /**
  * Builds a control
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public abstract class ControlBuilder<CONTROL extends Control> {
 
 	/**
 	 * Builds an Eclipse {@link Control} object based on the input
-	 * 
+	 *
 	 * @param page
 	 *            TODO
 	 * @param input
+	 * @param inputName
+	 *            TODO
 	 * @param container
 	 *            the container this control will be placed on
-	 * 
 	 * @return
 	 */
 	public abstract CONTROL build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Composite container);
+			final InputComponent<?, ?> input, final String inputName,
+			final Composite container);
 
 	/**
 	 * Returns the supported type this control may produce
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract Class<?> getProducedType();
 
 	/**
 	 * Returns the supported input type for this component
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract String getSupportedInputType();
 
 	/**
 	 * Returns the subclasses of {@link InputComponent}
-	 * 
+	 *
 	 * @return
 	 */
 	protected abstract Class<?>[] getSupportedInputComponentTypes();
 
 	/**
 	 * Tests if this builder may handle this specific input
-	 * 
+	 *
 	 * @param input
 	 * @return
 	 */
@@ -89,7 +91,8 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 
 		if (handles) {
 			String inputTypeHint = InputComponents.getInputType(input);
-			if (inputTypeHint != null && !inputTypeHint.equals(InputType.DEFAULT)) {
+			if (inputTypeHint != null
+					&& !inputTypeHint.equals(InputType.DEFAULT)) {
 				handles = Proxies.areEquivalent(inputTypeHint,
 						getSupportedInputType());
 			} else {

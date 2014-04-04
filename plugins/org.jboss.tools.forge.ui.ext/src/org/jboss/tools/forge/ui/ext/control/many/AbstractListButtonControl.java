@@ -37,7 +37,7 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Composite container) {
+			final InputComponent<?, ?> input, String inputName, final Composite container) {
 		final Group group = new Group(container, SWT.SHADOW_NONE);
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 3;

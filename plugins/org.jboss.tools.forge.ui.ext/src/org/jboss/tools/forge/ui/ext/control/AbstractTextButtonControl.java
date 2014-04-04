@@ -31,7 +31,8 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Composite parent) {
+			final InputComponent<?, ?> input, final String inputName,
+			final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
@@ -57,7 +58,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 				String text = containerText.getText();
 				if (text != null) {
 					final CommandController controller = page.getController();
-					controller.setValueFor(input.getName(), text);
+					controller.setValueFor(inputName, text);
 				}
 			}
 		});
@@ -78,7 +79,7 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 	/**
 	 * Ugly workaround because the Browse button is not exposed to the caller
 	 * class
-	 * 
+	 *
 	 * TODO: Refactor ControlBuilder
 	 */
 	@Override
