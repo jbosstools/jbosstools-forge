@@ -24,26 +24,25 @@ import org.jboss.forge.furnace.services.Imported;
 public enum FurnaceService {
 	INSTANCE;
 
-	private transient Furnace forge;
-	private ConverterFactory converterFactory;
+	private transient Furnace furnace;
 
 	private FurnaceService() {
 	}
 
 	public void setFurnace(Furnace forge) {
-		this.forge = forge;
+		this.furnace = forge;
 	}
 
 	public void start(final ClassLoader loader) {
-		forge.startAsync(loader);
+		furnace.startAsync(loader);
 	}
 
 	public AddonRegistry getAddonRegistry() {
-		return forge.getAddonRegistry();
+		return furnace.getAddonRegistry();
 	}
 
 	public void stop() {
-		forge.stop();
+		furnace.stop();
 	}
 
 	public void waitUntilContainerIsStarted() throws InterruptedException {
@@ -53,19 +52,18 @@ public enum FurnaceService {
 	}
 
 	public ContainerStatus getContainerStatus() {
-		return (forge == null) ? ContainerStatus.STOPPED : forge.getStatus();
+		return (furnace == null) ? ContainerStatus.STOPPED : furnace
+				.getStatus();
 	}
 
 	public ConverterFactory getConverterFactory() {
-		if (converterFactory == null) {
-			converterFactory = lookup(ConverterFactory.class);
-			while (converterFactory == null) {
-				try {
-					Thread.sleep(100);
-					converterFactory = lookup(ConverterFactory.class);
-				} catch (InterruptedException e) {
-					break;
-				}
+		ConverterFactory converterFactory = lookup(ConverterFactory.class);
+		while (converterFactory == null) {
+			try {
+				Thread.sleep(100);
+				converterFactory = lookup(ConverterFactory.class);
+			} catch (InterruptedException e) {
+				break;
 			}
 		}
 		return converterFactory;
@@ -73,21 +71,21 @@ public enum FurnaceService {
 
 	public <S> Imported<S> lookupImported(Class<S> service) {
 		Imported<S> instance = null;
-		if (forge != null) {
-			instance = forge.getAddonRegistry().getServices(service);
+		if (furnace != null) {
+			instance = furnace.getAddonRegistry().getServices(service);
 		}
 		return instance;
 	}
 
 	public <S> S lookup(Class<S> service) {
 		Imported<S> instance = null;
-		if (forge != null) {
-			instance = forge.getAddonRegistry().getServices(service);
+		if (furnace != null) {
+			instance = furnace.getAddonRegistry().getServices(service);
 		}
 		return (instance == null) ? null : instance.get();
 	}
 
 	public LockManager getLockManager() {
-		return forge.getLockManager();
+		return furnace.getLockManager();
 	}
 }
