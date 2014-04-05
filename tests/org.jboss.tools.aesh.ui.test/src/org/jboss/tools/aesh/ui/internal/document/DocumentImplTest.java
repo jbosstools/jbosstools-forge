@@ -2,7 +2,10 @@ package org.jboss.tools.aesh.ui.internal.document;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.swt.custom.StyleRange;
 import org.jboss.tools.aesh.core.document.Style;
+import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
+import org.jboss.tools.aesh.ui.internal.util.FontManager;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -99,6 +102,25 @@ public class DocumentImplTest {
 		Assert.assertEquals(0, documentImpl.getLength());
 		testDocument.set("blah");
 		Assert.assertEquals(4, documentImpl.getLength());
+	}
+	
+	@Test
+	public void testSetDefaultStyle() {
+		documentImpl.delegateDocument = testDocument;
+		StyleRange oldRange = new StyleRange(0, 0, ColorConstants.BLUE, ColorConstants.CYAN);
+		oldRange.font = FontManager.INSTANCE.getItalicBold();
+		StyleImpl oldStyle = new StyleImpl(oldRange);
+		documentImpl.currentStyle = oldStyle;
+		Assert.assertEquals(0, oldStyle.getLength());
+		Assert.assertEquals(0, oldStyle.getStart());
+		testDocument.set("blah");
+		documentImpl.setDefaultStyle();
+		StyleImpl newStyle = documentImpl.currentStyle;
+		Assert.assertEquals(0, newStyle.getLength());
+		Assert.assertEquals(4, newStyle.getStart());
+		Assert.assertEquals(ColorConstants.BLACK, newStyle.styleRange.foreground);
+		Assert.assertEquals(ColorConstants.WHITE, newStyle.styleRange.background);
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), newStyle.styleRange.font);
 	}
 	
 }

@@ -11,7 +11,7 @@ import org.jboss.tools.aesh.ui.internal.util.FontManager;
 
 public class StyleImpl implements Style {
 	
-	private StyleRange styleRange;
+	StyleRange styleRange;
 	
 	public StyleImpl(StyleRange styleRange) {
 		this.styleRange = styleRange;
@@ -207,6 +207,10 @@ public class StyleImpl implements Style {
 	
 	public int getLength() {
 		return styleRange.length;
+	}
+	
+	public int getStart() {
+		return styleRange.start;
 	}
 	
 	private void reverseVideo() {

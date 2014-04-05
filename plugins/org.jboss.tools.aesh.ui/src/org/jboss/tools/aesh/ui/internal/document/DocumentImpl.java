@@ -143,7 +143,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 		StyleRange styleRange = defaultStyle.getStyleRange();
 		styleRange.start = delegateDocument.getLength();
 		styleRange.length = 0;
-		setCurrentStyle(defaultStyle);
+		setCurrentStyle(new StyleImpl(styleRange));
 	}
 	
 	public Document getDelegate() {
