@@ -16,9 +16,9 @@ import org.jboss.tools.forge.ui.ext.wizards.WizardListener;
 
 /**
  * Fires events related to wizard manipulation. Used in {@link ForgeWizard}
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public enum EventBus {
 
@@ -41,5 +41,9 @@ public enum EventBus {
 		for (WizardListener listener : wizardListeners) {
 			listener.dispose();
 		}
+	}
+
+	public void clearListeners() {
+		wizardListeners.clear();
 	}
 }

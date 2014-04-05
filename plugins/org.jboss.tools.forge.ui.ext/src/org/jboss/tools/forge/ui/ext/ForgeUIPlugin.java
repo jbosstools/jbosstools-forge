@@ -84,6 +84,7 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 		if (projectListenerRegistration != null) {
 			projectListenerRegistration.removeListener();
 		}
+		EventBus.INSTANCE.clearListeners();
 		super.stop(context);
 	}
 
