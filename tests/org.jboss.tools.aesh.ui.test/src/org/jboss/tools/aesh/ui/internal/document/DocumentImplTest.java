@@ -111,16 +111,46 @@ public class DocumentImplTest {
 		oldRange.font = FontManager.INSTANCE.getItalicBold();
 		StyleImpl oldStyle = new StyleImpl(oldRange);
 		documentImpl.currentStyle = oldStyle;
-		Assert.assertEquals(0, oldStyle.getLength());
-		Assert.assertEquals(0, oldStyle.getStart());
+		Assert.assertEquals(0, documentImpl.currentStyle.getLength());
+		Assert.assertEquals(0, documentImpl.currentStyle.getStart());
+		Assert.assertEquals(ColorConstants.BLUE, documentImpl.currentStyle.styleRange.foreground);
+		Assert.assertEquals(ColorConstants.CYAN, documentImpl.currentStyle.styleRange.background);
 		testDocument.set("blah");
 		documentImpl.setDefaultStyle();
-		StyleImpl newStyle = documentImpl.currentStyle;
-		Assert.assertEquals(0, newStyle.getLength());
-		Assert.assertEquals(4, newStyle.getStart());
-		Assert.assertEquals(ColorConstants.BLACK, newStyle.styleRange.foreground);
-		Assert.assertEquals(ColorConstants.WHITE, newStyle.styleRange.background);
-		Assert.assertEquals(FontManager.INSTANCE.getDefault(), newStyle.styleRange.font);
+		Assert.assertEquals(0, documentImpl.currentStyle.getLength());
+		Assert.assertEquals(4, documentImpl.currentStyle.getStart());
+		Assert.assertEquals(ColorConstants.BLACK, documentImpl.currentStyle.styleRange.foreground);
+		Assert.assertEquals(ColorConstants.WHITE, documentImpl.currentStyle.styleRange.background);
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), documentImpl.currentStyle.styleRange.font);
+	}
+	
+	@Test
+	public void testReset() {
+		documentImpl.delegateDocument = testDocument;
+		documentImpl.cursorListener = testListener;
+		testDocument.set("i blah");
+		documentImpl.cursorOffset = 6;
+		StyleRange oldRange = new StyleRange(2, 4, ColorConstants.BLUE, ColorConstants.CYAN);
+		oldRange.font = FontManager.INSTANCE.getItalicBold();
+		StyleImpl oldStyle = new StyleImpl(oldRange);
+		documentImpl.currentStyle = oldStyle;
+		Assert.assertEquals("1", 4, documentImpl.currentStyle.getLength());
+		Assert.assertEquals("2", 2, documentImpl.currentStyle.getStart());
+		Assert.assertEquals("3", ColorConstants.BLUE, documentImpl.currentStyle.styleRange.foreground);
+		Assert.assertEquals("4", ColorConstants.CYAN, documentImpl.currentStyle.styleRange.background);
+		Assert.assertEquals("5", "i blah", documentImpl.delegateDocument.get());
+		Assert.assertEquals("6", 6,  documentImpl.cursorOffset);
+		Assert.assertFalse(cursorMoved);
+		System.out.println("before reset");
+		documentImpl.reset();
+		System.out.println("after reset");
+		Assert.assertEquals(0, documentImpl.currentStyle.getLength());
+		Assert.assertEquals(0, documentImpl.currentStyle.getStart());
+		Assert.assertEquals(ColorConstants.BLACK, documentImpl.currentStyle.styleRange.foreground);
+		Assert.assertEquals(ColorConstants.WHITE, documentImpl.currentStyle.styleRange.background);
+		Assert.assertEquals("", documentImpl.delegateDocument.get());
+		Assert.assertEquals(0, documentImpl.cursorOffset);
+		Assert.assertTrue(cursorMoved);
 	}
 	
 }
