@@ -12,6 +12,8 @@ import org.junit.Test;
 public class DocumentImplTest {
 	
 	private boolean cursorMoved = false;
+	private int replacedPos = -1, replacedLength = -1;
+	private String replacedText = null;
 	
 	private DocumentImpl documentImpl = new DocumentImpl();
 	
@@ -27,6 +29,12 @@ public class DocumentImplTest {
 		@Override
 		public int getLineLength(int line) throws BadLocationException {
 			return line < 5 ? 80 : super.getLineLength(line);
+		}
+		@Override
+		public void replace(int pos, int length, String text) {
+			replacedPos = pos;
+			replacedLength = length;
+			replacedText = text;
 		}
 	};
 	
@@ -151,6 +159,18 @@ public class DocumentImplTest {
 		Assert.assertEquals("", documentImpl.delegateDocument.get());
 		Assert.assertEquals(0, documentImpl.cursorOffset);
 		Assert.assertTrue(cursorMoved);
+	}
+	
+	@Test
+	public void testReplace() {
+		documentImpl.delegateDocument = testDocument;
+		Assert.assertEquals(-1, replacedPos);
+		Assert.assertEquals(-1, replacedLength);
+		Assert.assertNull(replacedText);
+		documentImpl.replace(5,  9, "blahblah");
+		Assert.assertEquals(5, replacedPos);
+		Assert.assertEquals(9,  replacedLength);
+		Assert.assertEquals("blahblah", replacedText);
 	}
 	
 }
