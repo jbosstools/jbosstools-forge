@@ -173,4 +173,22 @@ public class DocumentImplTest {
 		Assert.assertEquals("blahblah", replacedText);
 	}
 	
+	@Test
+	public void testSaveCursor() {
+		documentImpl.savedCursor = -1;
+		documentImpl.cursorOffset = 34;
+		documentImpl.saveCursor();
+		Assert.assertEquals(34, documentImpl.savedCursor);
+	}
+	
+	@Test
+	public void testRestoreCursor() {
+		documentImpl.cursorListener = testListener;
+		documentImpl.cursorOffset = 45;
+		documentImpl.savedCursor = 23;
+		documentImpl.restoreCursor();
+		Assert.assertEquals(23, documentImpl.cursorOffset);
+		Assert.assertTrue(cursorMoved);
+	}
+	
 }
