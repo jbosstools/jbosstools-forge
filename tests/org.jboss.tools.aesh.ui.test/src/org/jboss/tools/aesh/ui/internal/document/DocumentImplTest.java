@@ -191,4 +191,24 @@ public class DocumentImplTest {
 		Assert.assertTrue(cursorMoved);
 	}
 	
+	@Test
+	public void testNewStyleFromCurrent() {
+		documentImpl.delegateDocument = testDocument;
+		StyleRange oldRange = new StyleRange(5, 10, ColorConstants.BLUE, ColorConstants.CYAN);
+		oldRange.font = FontManager.INSTANCE.getItalicBold();
+		StyleImpl oldStyle = new StyleImpl(oldRange);
+		documentImpl.currentStyle = oldStyle;
+		Style style = documentImpl.newStyleFromCurrent();
+		Assert.assertTrue(style instanceof StyleImpl);
+		StyleImpl styleImpl = (StyleImpl)style;
+		Assert.assertEquals(0, styleImpl.getLength());
+		Assert.assertEquals(15, styleImpl.getStart());
+		StyleRange styleRange = styleImpl.styleRange;
+		Assert.assertEquals(ColorConstants.BLUE, styleRange.foreground);
+		Assert.assertEquals(ColorConstants.CYAN, styleRange.background);
+		Assert.assertEquals(FontManager.INSTANCE.getItalicBold(), styleRange.font);
+		Assert.assertEquals(15, styleRange.start);
+		Assert.assertEquals(0, styleRange.length);
+	}
+	
 }
