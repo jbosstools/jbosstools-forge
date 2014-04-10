@@ -112,9 +112,7 @@ public class DocumentImplTest {
 		Assert.assertEquals("5", "i blah", documentImpl.delegateDocument.get());
 		Assert.assertEquals("6", 6,  documentImpl.cursorOffset);
 		Assert.assertFalse(cursorMoved);
-		System.out.println("before reset");
 		documentImpl.reset();
-		System.out.println("after reset");
 		Assert.assertEquals(0, documentImpl.currentStyle.getLength());
 		Assert.assertEquals(0, documentImpl.currentStyle.getStart());
 		Assert.assertEquals(ColorConstants.BLACK, documentImpl.currentStyle.styleRange.foreground);
