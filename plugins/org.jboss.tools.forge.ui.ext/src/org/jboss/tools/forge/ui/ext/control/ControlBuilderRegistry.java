@@ -17,9 +17,9 @@ import org.jboss.tools.forge.ui.ext.control.many.TextBoxMultipleControlBuilder;
 
 /**
  * A factory for {@link ControlBuilder} instances.
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public class ControlBuilderRegistry {
 
@@ -32,6 +32,7 @@ public class ControlBuilderRegistry {
 			new JavaPackageChooserControlBuilder(),
 			new JavaClassChooserControlBuilder(),
 			new TextBoxMultipleControlBuilder(),
+			new TextAreaBoxControlBuilder(),
 			new FileChooserMultipleControlBuilder(),
 			new DirectoryChooserMultipleControlBuilder(),
 			new JavaClassChooserMultipleControlBuilder(),
