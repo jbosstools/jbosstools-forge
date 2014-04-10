@@ -96,43 +96,6 @@ public class DocumentImplTest {
 	}
 	
 	@Test
-	public void testSetCurrentStyle() {
-		Style newStyle = StyleImpl.getDefault();
-		Assert.assertNotNull(documentImpl.currentStyle);
-		Assert.assertNotEquals(documentImpl.currentStyle, newStyle);
-		documentImpl.setCurrentStyle(newStyle);
-		Assert.assertEquals(documentImpl.currentStyle, newStyle);
-	}
-	
-	@Test
-	public void testGetLenght() {
-		documentImpl.delegateDocument = testDocument;
-		Assert.assertEquals(0, documentImpl.getLength());
-		testDocument.set("blah");
-		Assert.assertEquals(4, documentImpl.getLength());
-	}
-	
-	@Test
-	public void testSetDefaultStyle() {
-		documentImpl.delegateDocument = testDocument;
-		StyleRange oldRange = new StyleRange(0, 0, ColorConstants.BLUE, ColorConstants.CYAN);
-		oldRange.font = FontManager.INSTANCE.getItalicBold();
-		StyleImpl oldStyle = new StyleImpl(oldRange);
-		documentImpl.currentStyle = oldStyle;
-		Assert.assertEquals(0, documentImpl.currentStyle.getLength());
-		Assert.assertEquals(0, documentImpl.currentStyle.getStart());
-		Assert.assertEquals(ColorConstants.BLUE, documentImpl.currentStyle.styleRange.foreground);
-		Assert.assertEquals(ColorConstants.CYAN, documentImpl.currentStyle.styleRange.background);
-		testDocument.set("blah");
-		documentImpl.setDefaultStyle();
-		Assert.assertEquals(0, documentImpl.currentStyle.getLength());
-		Assert.assertEquals(4, documentImpl.currentStyle.getStart());
-		Assert.assertEquals(ColorConstants.BLACK, documentImpl.currentStyle.styleRange.foreground);
-		Assert.assertEquals(ColorConstants.WHITE, documentImpl.currentStyle.styleRange.background);
-		Assert.assertEquals(FontManager.INSTANCE.getDefault(), documentImpl.currentStyle.styleRange.font);
-	}
-	
-	@Test
 	public void testReset() {
 		documentImpl.delegateDocument = testDocument;
 		documentImpl.cursorListener = testListener;
@@ -160,6 +123,14 @@ public class DocumentImplTest {
 		Assert.assertEquals(0, documentImpl.cursorOffset);
 		Assert.assertTrue(cursorMoved);
 	}
+
+	@Test
+	public void testGetLenght() {
+		documentImpl.delegateDocument = testDocument;
+		Assert.assertEquals(0, documentImpl.getLength());
+		testDocument.set("blah");
+		Assert.assertEquals(4, documentImpl.getLength());
+	}
 	
 	@Test
 	public void testReplace() {
@@ -174,14 +145,6 @@ public class DocumentImplTest {
 	}
 	
 	@Test
-	public void testSaveCursor() {
-		documentImpl.savedCursor = -1;
-		documentImpl.cursorOffset = 34;
-		documentImpl.saveCursor();
-		Assert.assertEquals(34, documentImpl.savedCursor);
-	}
-	
-	@Test
 	public void testRestoreCursor() {
 		documentImpl.cursorListener = testListener;
 		documentImpl.cursorOffset = 45;
@@ -189,6 +152,14 @@ public class DocumentImplTest {
 		documentImpl.restoreCursor();
 		Assert.assertEquals(23, documentImpl.cursorOffset);
 		Assert.assertTrue(cursorMoved);
+	}
+	
+	@Test
+	public void testSaveCursor() {
+		documentImpl.savedCursor = -1;
+		documentImpl.cursorOffset = 34;
+		documentImpl.saveCursor();
+		Assert.assertEquals(34, documentImpl.savedCursor);
 	}
 	
 	@Test
@@ -209,6 +180,35 @@ public class DocumentImplTest {
 		Assert.assertEquals(FontManager.INSTANCE.getItalicBold(), styleRange.font);
 		Assert.assertEquals(15, styleRange.start);
 		Assert.assertEquals(0, styleRange.length);
+	}
+	
+	@Test
+	public void testSetCurrentStyle() {
+		Style newStyle = StyleImpl.getDefault();
+		Assert.assertNotNull(documentImpl.currentStyle);
+		Assert.assertNotEquals(documentImpl.currentStyle, newStyle);
+		documentImpl.setCurrentStyle(newStyle);
+		Assert.assertEquals(documentImpl.currentStyle, newStyle);
+	}
+	
+	@Test
+	public void testSetDefaultStyle() {
+		documentImpl.delegateDocument = testDocument;
+		StyleRange oldRange = new StyleRange(0, 0, ColorConstants.BLUE, ColorConstants.CYAN);
+		oldRange.font = FontManager.INSTANCE.getItalicBold();
+		StyleImpl oldStyle = new StyleImpl(oldRange);
+		documentImpl.currentStyle = oldStyle;
+		Assert.assertEquals(0, documentImpl.currentStyle.getLength());
+		Assert.assertEquals(0, documentImpl.currentStyle.getStart());
+		Assert.assertEquals(ColorConstants.BLUE, documentImpl.currentStyle.styleRange.foreground);
+		Assert.assertEquals(ColorConstants.CYAN, documentImpl.currentStyle.styleRange.background);
+		testDocument.set("blah");
+		documentImpl.setDefaultStyle();
+		Assert.assertEquals(0, documentImpl.currentStyle.getLength());
+		Assert.assertEquals(4, documentImpl.currentStyle.getStart());
+		Assert.assertEquals(ColorConstants.BLACK, documentImpl.currentStyle.styleRange.foreground);
+		Assert.assertEquals(ColorConstants.WHITE, documentImpl.currentStyle.styleRange.background);
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), documentImpl.currentStyle.styleRange.font);
 	}
 	
 }
