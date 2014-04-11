@@ -209,4 +209,11 @@ public class DocumentImplTest {
 		Assert.assertEquals(FontManager.INSTANCE.getDefault(), documentImpl.currentStyle.styleRange.font);
 	}
 	
+	@Test
+	public void testGetDelegate() {
+		Assert.assertNotEquals(testDocument, documentImpl.getDelegate());
+		documentImpl.delegateDocument = testDocument;
+		Assert.assertEquals(testDocument, documentImpl.getDelegate());
+	}
+	
 }
