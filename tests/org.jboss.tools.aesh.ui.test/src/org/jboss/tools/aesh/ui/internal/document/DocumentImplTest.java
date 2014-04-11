@@ -216,4 +216,11 @@ public class DocumentImplTest {
 		Assert.assertEquals(testDocument, documentImpl.getDelegate());
 	}
 	
+	@Test
+	public void testSetCursorListener() {
+		Assert.assertNull(documentImpl.cursorListener);
+		documentImpl.setCursorListener(testListener);
+		Assert.assertEquals(testListener, documentImpl.cursorListener);
+	}
+	
 }
