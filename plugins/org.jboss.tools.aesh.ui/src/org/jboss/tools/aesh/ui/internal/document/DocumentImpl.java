@@ -15,6 +15,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	CursorListener cursorListener;
 	int savedCursor = 0;
 	int cursorOffset = 0;
+	IDocumentListener documentListener = null;
 	
 	public DocumentImpl() {
 		this.delegateDocument = new Document();
@@ -155,7 +156,16 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	}
 	
 	public void setDocumentListener(IDocumentListener listener) {
-		delegateDocument.addDocumentListener(listener);
+		if (listener != documentListener) {
+			if (documentListener != null) {
+				delegateDocument.removeDocumentListener(documentListener);
+				documentListener = null;
+			}
+			if (listener != null) {
+				delegateDocument.addDocumentListener(listener);
+				documentListener = listener;
+			}
+		}
 	}
 	
 }

@@ -2,6 +2,8 @@ package org.jboss.tools.aesh.ui.internal.document;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.custom.StyleRange;
 import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
@@ -11,7 +13,18 @@ import org.junit.Test;
 
 public class DocumentImplTest {
 	
+	private class TestDocumentListener implements IDocumentListener {
+		@Override
+		public void documentAboutToBeChanged(DocumentEvent arg0) {
+		}
+		@Override
+		public void documentChanged(DocumentEvent arg0) {
+			documentChanged = true;
+		}		
+	}
+	
 	private boolean cursorMoved = false;
+	private boolean documentChanged = false;
 	private int replacedPos = -1, replacedLength = -1;
 	private String replacedText = null;
 	
@@ -221,6 +234,25 @@ public class DocumentImplTest {
 		Assert.assertNull(documentImpl.cursorListener);
 		documentImpl.setCursorListener(testListener);
 		Assert.assertEquals(testListener, documentImpl.cursorListener);
+	}
+	
+	@Test
+	public void testSetDocumentListener() {
+		IDocumentListener firstDocumentListener = new TestDocumentListener();
+		IDocumentListener secondDocumentListener = new TestDocumentListener();
+		Assert.assertNull(documentImpl.documentListener);
+		documentImpl.setDocumentListener(firstDocumentListener);
+		Assert.assertEquals(firstDocumentListener, documentImpl.documentListener);
+		documentChanged = false;
+		documentImpl.delegateDocument.set("blah");
+		Assert.assertTrue(documentChanged);
+		documentImpl.setDocumentListener(secondDocumentListener);
+		Assert.assertNotEquals(firstDocumentListener, documentImpl.documentListener);
+		documentImpl.setDocumentListener(null);
+		Assert.assertNull(documentImpl.documentListener);
+		documentChanged = false;
+		documentImpl.delegateDocument.set("blahblah");
+		Assert.assertFalse(documentChanged);
 	}
 	
 }
