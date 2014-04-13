@@ -42,5 +42,20 @@ public class StyleImplTest {
 		Assert.assertEquals(ColorConstants.DEFAULT_FOREGROUND, testStyleRange.foreground);
 	}
 	
+	@Test
+	public void testSetBoldOn() {
+		testStyleRange.font = FontManager.INSTANCE.getDefault();
+		testStyleImpl.setBoldOn();
+		Assert.assertEquals(FontManager.INSTANCE.getBold(), testStyleRange.font);
+		testStyleRange.font = FontManager.INSTANCE.getItalicBold();
+		testStyleImpl.setBoldOn();
+		Assert.assertEquals(FontManager.INSTANCE.getItalicBold(), testStyleRange.font);
+		testStyleRange.font = FontManager.INSTANCE.getItalic();
+		testStyleImpl.setBoldOn();
+		Assert.assertEquals(FontManager.INSTANCE.getItalicBold(), testStyleRange.font);
+		testStyleRange.font = FontManager.INSTANCE.getBold();
+		testStyleImpl.setBoldOn();
+		Assert.assertEquals(FontManager.INSTANCE.getBold(), testStyleRange.font);
+	}
 
 }
