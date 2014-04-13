@@ -57,5 +57,11 @@ public class StyleImplTest {
 		testStyleImpl.setBoldOn();
 		Assert.assertEquals(FontManager.INSTANCE.getBold(), testStyleRange.font);
 	}
+	
+	@Test
+	public void testSetFaintOn() {
+		// setFaintOn() is ignored for now
+		Assert.assertTrue(true);
+	}
 
 }
