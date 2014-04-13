@@ -1,9 +1,9 @@
 package org.jboss.tools.aesh.ui.internal.document;
 
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.widgets.Display;
+import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
+import org.jboss.tools.aesh.ui.internal.util.FontManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,12 +15,7 @@ public class StyleImplTest {
 	
 	@Before
 	public void setup() {
-		testStyleRange = 
-				new StyleRange(
-						99, 
-						999, 
-						Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY), 
-						Display.getDefault().getSystemColor(SWT.COLOR_GRAY));
+		testStyleRange = new StyleRange();
 		testStyleImpl = new StyleImpl(testStyleRange);
 	}
 	
@@ -34,6 +29,17 @@ public class StyleImplTest {
 	@Test
 	public void testGetStyleRange() {
 		Assert.assertEquals(testStyleRange, testStyleImpl.getStyleRange());
+	}
+	
+	@Test
+	public void testResetToNormal() {
+		testStyleRange.font = FontManager.INSTANCE.getItalicBold();
+		testStyleRange.background = ColorConstants.CYAN;
+		testStyleRange.foreground = ColorConstants.GREEN;
+		testStyleImpl.resetToNormal();
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), testStyleRange.font);
+		Assert.assertEquals(ColorConstants.DEFAULT_BACKGROUND, testStyleRange.background);
+		Assert.assertEquals(ColorConstants.DEFAULT_FOREGROUND, testStyleRange.foreground);
 	}
 	
 
