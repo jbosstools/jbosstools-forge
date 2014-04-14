@@ -13,6 +13,8 @@ public class StyleImpl implements Style {
 	
 	StyleRange styleRange;
 	
+	private boolean imageNegative = false;
+	
 	public StyleImpl(StyleRange styleRange) {
 		this.styleRange = styleRange;
 	}
@@ -61,7 +63,9 @@ public class StyleImpl implements Style {
 	
 	// 7
 	public void setImageNegative() {
-		reverseVideo();
+		if (!imageNegative) {
+			reverseVideo();
+		}
 	}
 	
 	// 9
@@ -95,7 +99,9 @@ public class StyleImpl implements Style {
 	
 	// 27
 	public void setImagePositive() {
-		reverseVideo();
+		if (imageNegative) {
+			reverseVideo();
+		}
 	}
 	
 	// 29
@@ -218,6 +224,7 @@ public class StyleImpl implements Style {
 		Color background = styleRange.background;
 		styleRange.background = foreground;
 		styleRange.foreground = background;
+		imageNegative = !imageNegative;
 	}
 	
 	public static StyleImpl getDefault() {

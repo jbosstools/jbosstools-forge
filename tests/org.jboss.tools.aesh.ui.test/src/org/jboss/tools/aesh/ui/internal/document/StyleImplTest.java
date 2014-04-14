@@ -89,5 +89,17 @@ public class StyleImplTest {
 		Assert.assertTrue(testStyleRange.underline);
 		Assert.assertEquals(SWT.SINGLE, testStyleRange.underlineStyle);
 	}
+	
+	@Test
+	public void testSetImageNegative() {
+		testStyleRange.background = ColorConstants.CYAN;
+		testStyleRange.foreground = ColorConstants.GREEN;
+		testStyleImpl.setImageNegative();
+		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.background);
+		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.foreground);
+		testStyleImpl.setImageNegative();
+		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.background);
+		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.foreground);
+	}
 
 }
