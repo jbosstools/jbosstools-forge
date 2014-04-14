@@ -101,5 +101,12 @@ public class StyleImplTest {
 		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.background);
 		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.foreground);
 	}
+	
+	@Test
+	public void testSetCrossedOut() {
+		testStyleRange.strikeout = false;
+		testStyleImpl.setCrossedOut();
+		Assert.assertTrue(testStyleRange.strikeout);
+	}
 
 }
