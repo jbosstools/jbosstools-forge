@@ -1,6 +1,7 @@
 package org.jboss.tools.aesh.ui.internal.document;
 
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.jboss.tools.aesh.ui.internal.util.ColorConstants;
 import org.jboss.tools.aesh.ui.internal.util.FontManager;
@@ -65,7 +66,7 @@ public class StyleImplTest {
 	}
 	
 	@Test
-	public void setItalicOn() {
+	public void testSetItalicOn() {
 		testStyleRange.font = FontManager.INSTANCE.getDefault();
 		testStyleImpl.setItalicOn();
 		Assert.assertEquals(FontManager.INSTANCE.getItalic(), testStyleRange.font);
@@ -78,6 +79,15 @@ public class StyleImplTest {
 		testStyleRange.font = FontManager.INSTANCE.getItalic();
 		testStyleImpl.setItalicOn();
 		Assert.assertEquals(FontManager.INSTANCE.getItalic(), testStyleRange.font);
+	}
+	
+	@Test
+	public void testSetUnderlineSingle() {
+		Assert.assertFalse(testStyleRange.underline);
+		Assert.assertEquals(SWT.NONE, testStyleRange.underlineStyle);
+		testStyleImpl.setUnderlineSingle();
+		Assert.assertTrue(testStyleRange.underline);
+		Assert.assertEquals(SWT.SINGLE, testStyleRange.underlineStyle);
 	}
 
 }
