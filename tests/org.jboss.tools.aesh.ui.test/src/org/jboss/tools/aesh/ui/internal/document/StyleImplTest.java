@@ -108,5 +108,22 @@ public class StyleImplTest {
 		testStyleImpl.setCrossedOut();
 		Assert.assertTrue(testStyleRange.strikeout);
 	}
+	
+	@Test 
+	public void testSetBoldOrFaintOff() {
+		// only for bold since faint is not implemented
+		testStyleRange.font = FontManager.INSTANCE.getDefault();
+		testStyleImpl.setBoldOrFaintOff();
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), testStyleRange.font);
+		testStyleRange.font = FontManager.INSTANCE.getItalicBold();
+		testStyleImpl.setBoldOrFaintOff();
+		Assert.assertEquals(FontManager.INSTANCE.getItalic(), testStyleRange.font);
+		testStyleRange.font = FontManager.INSTANCE.getBold();
+		testStyleImpl.setBoldOrFaintOff();
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), testStyleRange.font);		
+		testStyleRange.font = FontManager.INSTANCE.getItalic();
+		testStyleImpl.setBoldOrFaintOff();
+		Assert.assertEquals(FontManager.INSTANCE.getItalic(), testStyleRange.font);
+	}
 
 }
