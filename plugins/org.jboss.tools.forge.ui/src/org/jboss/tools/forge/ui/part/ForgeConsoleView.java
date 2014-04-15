@@ -31,6 +31,7 @@ public class ForgeConsoleView extends ViewPart {
 	}
 	
 	public void showForgeConsole(ForgeConsole forgeConsole) {
+		current = forgeConsole;
 		forgeConsolePageBook.showForgeConsole(forgeConsole);
 	}
 	
