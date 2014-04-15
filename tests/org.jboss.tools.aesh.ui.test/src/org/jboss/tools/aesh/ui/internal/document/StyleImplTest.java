@@ -142,4 +142,13 @@ public class StyleImplTest {
 		Assert.assertEquals(FontManager.INSTANCE.getDefault(), testStyleRange.font);
 	}
 
+	@Test
+	public void testSetUnderlineNone() {
+		testStyleRange.underline = true;
+		testStyleRange.underlineStyle = SWT.SINGLE;
+		testStyleImpl.setUnderlineNone();
+		Assert.assertFalse(testStyleRange.underline);
+		Assert.assertEquals(SWT.NONE, testStyleRange.underlineStyle);
+	}
+	
 }
