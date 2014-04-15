@@ -169,4 +169,11 @@ public class StyleImplTest {
 		Assert.assertFalse(testStyleImpl.imageNegative);
 	}
 	
+	@Test
+	public void testSetNotCrossedOut() {
+		testStyleRange.strikeout = true;
+		testStyleImpl.setNotCrossedOut();
+		Assert.assertFalse(testStyleRange.strikeout);
+	}
+	
 }
