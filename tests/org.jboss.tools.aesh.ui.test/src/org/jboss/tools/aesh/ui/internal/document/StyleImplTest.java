@@ -94,12 +94,15 @@ public class StyleImplTest {
 	public void testSetImageNegative() {
 		testStyleRange.background = ColorConstants.CYAN;
 		testStyleRange.foreground = ColorConstants.GREEN;
+		Assert.assertFalse(testStyleImpl.imageNegative);
 		testStyleImpl.setImageNegative();
 		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.background);
 		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.foreground);
+		Assert.assertTrue(testStyleImpl.imageNegative);
 		testStyleImpl.setImageNegative();
 		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.background);
 		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.foreground);
+		Assert.assertTrue(testStyleImpl.imageNegative);
 	}
 	
 	@Test
@@ -149,6 +152,21 @@ public class StyleImplTest {
 		testStyleImpl.setUnderlineNone();
 		Assert.assertFalse(testStyleRange.underline);
 		Assert.assertEquals(SWT.NONE, testStyleRange.underlineStyle);
+	}
+	
+	@Test
+	public void testSetImagePositive() {
+		testStyleImpl.imageNegative = true;
+		testStyleRange.background = ColorConstants.CYAN;
+		testStyleRange.foreground = ColorConstants.GREEN;
+		testStyleImpl.setImagePositive();
+		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.background);
+		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.foreground);
+		Assert.assertFalse(testStyleImpl.imageNegative);
+		testStyleImpl.setImagePositive();
+		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.background);
+		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.foreground);
+		Assert.assertFalse(testStyleImpl.imageNegative);
 	}
 	
 }

@@ -13,7 +13,7 @@ public class StyleImpl implements Style {
 	
 	StyleRange styleRange;
 	
-	private boolean imageNegative = false;
+	boolean imageNegative = false;
 	
 	public StyleImpl(StyleRange styleRange) {
 		this.styleRange = styleRange;
