@@ -125,5 +125,21 @@ public class StyleImplTest {
 		testStyleImpl.setBoldOrFaintOff();
 		Assert.assertEquals(FontManager.INSTANCE.getItalic(), testStyleRange.font);
 	}
+	
+	@Test
+	public void testSetItalicOff() {
+		testStyleRange.font = FontManager.INSTANCE.getItalic();
+		testStyleImpl.setItalicOff();
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), testStyleRange.font);
+		testStyleRange.font = FontManager.INSTANCE.getBold();
+		testStyleImpl.setItalicOff();
+		Assert.assertEquals(FontManager.INSTANCE.getBold(), testStyleRange.font);
+		testStyleRange.font = FontManager.INSTANCE.getItalicBold();
+		testStyleImpl.setItalicOff();
+		Assert.assertEquals(FontManager.INSTANCE.getBold(), testStyleRange.font);		
+		testStyleRange.font = FontManager.INSTANCE.getDefault();
+		testStyleImpl.setItalicOff();
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), testStyleRange.font);
+	}
 
 }
