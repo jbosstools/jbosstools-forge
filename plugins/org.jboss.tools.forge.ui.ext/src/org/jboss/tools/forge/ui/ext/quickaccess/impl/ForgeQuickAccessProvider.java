@@ -8,6 +8,7 @@
 package org.jboss.tools.forge.ui.ext.quickaccess.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,19 +26,27 @@ public class ForgeQuickAccessProvider extends QuickAccessProvider implements
 	private String category;
 
 	public ForgeQuickAccessProvider(String category, UIContext context,
-			List<UICommand> commands) {
+			List<UICommand> commands, List<QuickAccessElement> previous,
+			Collection<QuickAccessElement> allElements) {
 		this.category = category;
 		if (commands != null)
 			for (UICommand command : commands) {
 				ForgeQuickAccessElement elem = new ForgeQuickAccessElement(
 						this, context, command);
-				candidates.put(elem.getId(), elem);
+				int idx = previous.indexOf(elem);
+				if (idx < 0) {
+					candidates.put(elem.getId(), elem);
+				} else {
+					// Previous UICommand has old values. Replace with a new one
+					previous.set(idx, elem);
+				}
+				allElements.add(elem);
 			}
 	}
 
 	@Override
 	public String getId() {
-		return "forge-" + category;
+		return "org.jboss.tools.forge.ui." + category;
 	}
 
 	@Override

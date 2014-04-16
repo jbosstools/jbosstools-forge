@@ -1,6 +1,9 @@
 package org.jboss.tools.forge.ui.ext.dialog;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,6 +13,7 @@ import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.PopupDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -37,6 +41,7 @@ import org.jboss.tools.forge.ext.core.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessContents;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessElement;
+import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessProvider;
 import org.jboss.tools.forge.ui.ext.quickaccess.impl.ForgeQuickAccessElement;
 import org.jboss.tools.forge.ui.ext.quickaccess.impl.ForgeQuickAccessProvider;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
@@ -44,6 +49,10 @@ import org.jboss.tools.forge.ui.notifications.NotificationType;
 public class UICommandListDialog extends PopupDialog {
 
 	private final WizardDialogHelper wizardHelper;
+	private static final int MAXIMUM_NUMBER_OF_ELEMENTS = 5;
+
+	// TODO: when would this list be cleaned up?
+	private static final LinkedList<QuickAccessElement> PREVIOUS_CHOICES_LIST = new LinkedList<>();
 
 	public UICommandListDialog(IWorkbenchWindow window) {
 		super(window.getShell(), SWT.RESIZE, true,
@@ -119,7 +128,7 @@ public class UICommandListDialog extends PopupDialog {
 					ForgeUIPlugin.log(ie);
 					return;
 				}
-				final ForgeQuickAccessProvider[] providers;
+				final QuickAccessProvider[] providers;
 				try {
 					providers = getProviders();
 				} catch (Exception e) {
@@ -143,7 +152,7 @@ public class UICommandListDialog extends PopupDialog {
 
 					@Override
 					public QuickAccessElement getPerfectMatch(String filter) {
-						for (ForgeQuickAccessProvider provider : providers) {
+						for (QuickAccessProvider provider : providers) {
 							QuickAccessElement elem = provider
 									.getElementForId(filter);
 							if (elem != null) {
@@ -158,6 +167,7 @@ public class UICommandListDialog extends PopupDialog {
 							Object selectedElement) {
 						if (selectedElement instanceof ForgeQuickAccessElement) {
 							ForgeQuickAccessElement element = (ForgeQuickAccessElement) selectedElement;
+							addPreviousChoice(element);
 							wizardHelper.openWizard(element.getLabel(),
 									element.getCommand());
 						}
@@ -176,7 +186,9 @@ public class UICommandListDialog extends PopupDialog {
 	/**
 	 * Returns each provider by a category
 	 */
-	private ForgeQuickAccessProvider[] getProviders() {
+	private QuickAccessProvider[] getProviders() {
+		List<QuickAccessProvider> allProviders = new ArrayList<>();
+		Collection<QuickAccessElement> allElements = new HashSet<>();
 		Map<String, List<UICommand>> categories = new TreeMap<>();
 		for (UICommand command : wizardHelper.getAllCandidatesAsList()) {
 			String categoryName = getCategoryName(wizardHelper.getContext(),
@@ -191,11 +203,18 @@ public class UICommandListDialog extends PopupDialog {
 		// Create Providers for each category
 		Set<ForgeQuickAccessProvider> providers = new TreeSet<>();
 		for (Entry<String, List<UICommand>> entry : categories.entrySet()) {
-			providers.add(new ForgeQuickAccessProvider(entry.getKey(),
-					wizardHelper.getContext(), entry.getValue()));
+			ForgeQuickAccessProvider provider = new ForgeQuickAccessProvider(
+					entry.getKey(), wizardHelper.getContext(),
+					entry.getValue(), PREVIOUS_CHOICES_LIST, allElements);
+			providers.add(provider);
 		}
-		return providers
-				.toArray(new ForgeQuickAccessProvider[providers.size()]);
+		// In case a command is unavailable, remove from previous choices list
+		PREVIOUS_CHOICES_LIST.retainAll(allElements);
+		// Add PreviousChoicesProvider
+		allProviders.add(new PreviousChoicesProvider());
+		allProviders.addAll(providers);
+		return allProviders
+				.toArray(new QuickAccessProvider[allProviders.size()]);
 	}
 
 	private String getCategoryName(UIContext context, UICommand command) {
@@ -205,5 +224,48 @@ public class UICommandListDialog extends PopupDialog {
 		}
 		return category.toString();
 	}
-	
+
+	private void addPreviousChoice(QuickAccessElement element) {
+		PREVIOUS_CHOICES_LIST.remove(element);
+		if (PREVIOUS_CHOICES_LIST.size() == MAXIMUM_NUMBER_OF_ELEMENTS) {
+			PREVIOUS_CHOICES_LIST.removeLast();
+		}
+		PREVIOUS_CHOICES_LIST.addFirst(element);
+	}
+
+	private class PreviousChoicesProvider extends QuickAccessProvider {
+		@Override
+		public String getId() {
+			return "org.jboss.tools.forge.ui.previousChoices";
+		}
+
+		@Override
+		public String getName() {
+			return "Previous Choices";
+		}
+
+		@Override
+		public ImageDescriptor getImageDescriptor() {
+			return ForgeUIPlugin.getForgeIcon();
+		}
+
+		@Override
+		public List<QuickAccessElement> getElements() {
+			return PREVIOUS_CHOICES_LIST;
+		}
+
+		@Override
+		public List<QuickAccessElement> getElementsSorted() {
+			return PREVIOUS_CHOICES_LIST;
+		}
+
+		@Override
+		public QuickAccessElement getElementForId(String id) {
+			return null;
+		}
+
+		@Override
+		protected void doReset() {
+		}
+	}
 }
