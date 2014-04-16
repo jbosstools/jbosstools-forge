@@ -176,4 +176,74 @@ public class StyleImplTest {
 		Assert.assertFalse(testStyleRange.strikeout);
 	}
 	
+	@Test
+	public void testSetForegroundBlack() {
+		testStyleRange.foreground = ColorConstants.BLUE;
+		testStyleImpl.setForegroundBlack();
+		Assert.assertEquals(ColorConstants.BLACK, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetForegroundRed() {
+		testStyleRange.foreground = ColorConstants.BLACK;
+		testStyleImpl.setForegroundRed();
+		Assert.assertEquals(ColorConstants.RED, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetForegroundGreen() {
+		testStyleRange.foreground = ColorConstants.BLACK;
+		testStyleImpl.setForegroundGreen();
+		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetForegroundYellow() {
+		testStyleRange.foreground = ColorConstants.BLACK;
+		testStyleImpl.setForegroundYellow();
+		Assert.assertEquals(ColorConstants.YELLOW, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetForegroundBlue() {
+		testStyleRange.foreground = ColorConstants.BLACK;
+		testStyleImpl.setForegroundBlue();
+		Assert.assertEquals(ColorConstants.BLUE, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetForegroundMagenta() {
+		testStyleRange.foreground = ColorConstants.BLACK;
+		testStyleImpl.setForegroundMagenta();
+		Assert.assertEquals(ColorConstants.MAGENTA, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetForegroundCyan() {
+		testStyleRange.foreground = ColorConstants.BLACK;
+		testStyleImpl.setForegroundCyan();
+		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetForegroundWhite() {
+		testStyleRange.foreground = ColorConstants.BLACK;
+		testStyleImpl.setForegroundWhite();
+		Assert.assertEquals(ColorConstants.WHITE, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetForegroundXTerm() {
+		// not yet implemented
+		Assert.assertTrue(true);
+	}
+	
+	@Test
+	public void testSetForegroundDefault() {
+		testStyleRange.foreground = ColorConstants.DEFAULT_BACKGROUND;
+		Assert.assertNotEquals(ColorConstants.DEFAULT_FOREGROUND, testStyleRange.foreground);
+		testStyleImpl.setForegroundDefault();
+		Assert.assertEquals(ColorConstants.DEFAULT_FOREGROUND, testStyleRange.foreground);
+	}
+	
 }
