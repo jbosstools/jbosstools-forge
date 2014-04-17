@@ -8,12 +8,12 @@
    </parent>
    <groupId>org.jboss.tools.forge.plugins</groupId>
    <artifactId>org.jboss.tools.aesh.runtime</artifactId>
-   <version>1.3.52-SNAPSHOT</version>
+   <version>1.3.53-SNAPSHOT</version>
 
    <packaging>eclipse-plugin</packaging>
 
    <properties>
-      <version.aesh>0.52</version.aesh>
+      <version.aesh>0.53-SNAPSHOT</version.aesh>
    </properties>
 
    <build>
