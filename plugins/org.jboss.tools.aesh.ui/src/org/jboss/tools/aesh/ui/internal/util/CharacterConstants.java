@@ -1,16 +1,27 @@
 package org.jboss.tools.aesh.ui.internal.util;
 
+import org.jboss.aesh.terminal.Key;
+
 public class CharacterConstants {
 
-	public static final String START_LINE = new Character((char)1).toString();
-	public static final String PREV_CHAR = new Character((char)2).toString();
-	public static final String CTRL_C = new Character((char)3).toString();
-	public static final String CTRL_D = new Character((char)4).toString();
-	public static final String END_LINE = new Character((char)5).toString();
-	public static final String NEXT_CHAR = new Character((char)6).toString();
-	public static final String DELETE_PREV_CHAR = new Character((char)8).toString();
-	public static final String PREV_HISTORY = new Character((char)16).toString();
-	public static final String NEXT_HISTORY = new Character((char)14).toString();
-	public static final String DELETE_NEXT_CHAR = new String(new char[] {(char)27,(char)91,(char)51,(char)126});
+	public static final String START_LINE = toString(Key.HOME);
+	public static final String PREV_CHAR = toString(Key.LEFT);
+	public static final String CTRL_C = toString(Key.CTRL_C);
+	public static final String CTRL_D = toString(Key.CTRL_D);
+	public static final String END_LINE = toString(Key.END);
+	public static final String NEXT_CHAR = toString(Key.RIGHT);
+	public static final String DELETE_PREV_CHAR = toString(Key.BACKSPACE);
+	public static final String PREV_HISTORY = toString(Key.UP);
+	public static final String NEXT_HISTORY = toString(Key.DOWN);
+	public static final String DELETE_NEXT_CHAR = toString(Key.DELETE);
+	
+	private static String toString(Key key) {
+		int[] keyValues = key.getKeyValues();
+		StringBuffer buffer = new StringBuffer(keyValues.length);
+		for (int i : keyValues) {
+			buffer.append((char)i);
+		}
+		return buffer.toString();
+	}
 
 }
