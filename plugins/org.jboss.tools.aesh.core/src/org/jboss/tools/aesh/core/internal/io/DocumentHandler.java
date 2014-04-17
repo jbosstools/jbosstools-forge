@@ -10,6 +10,7 @@ public class DocumentHandler implements AeshOutputHandler {
 
 	@Override
 	public void handleOutput(String output) {
+		if ("".equals(output)) return;
 		if (document != null) {
 			output.replaceAll("\r", "");
 			Style style = document.getCurrentStyle();
