@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
-import org.jboss.tools.forge.core.preferences.ForgeExtPreferences;
+import org.jboss.tools.forge.core.preferences.ForgePreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 
@@ -58,7 +58,7 @@ public class ForgeExtPreferencesPage extends PreferencePage implements
 
 		addonDirText = new Text(container, SWT.BORDER);
 		addonDirText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addonDirText.setText(ForgeExtPreferences.INSTANCE.getAddonDir());
+		addonDirText.setText(ForgePreferences.INSTANCE.getAddonDir());
 		Button button = new Button(container, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
@@ -96,7 +96,7 @@ public class ForgeExtPreferencesPage extends PreferencePage implements
 
 	@Override
 	public boolean performOk() {
-		ForgeExtPreferences.INSTANCE.setAddonDir(addonDirText.getText());
+		ForgePreferences.INSTANCE.setAddonDir(addonDirText.getText());
 		try {
 			restartForge();
 		} catch (BundleException be) {

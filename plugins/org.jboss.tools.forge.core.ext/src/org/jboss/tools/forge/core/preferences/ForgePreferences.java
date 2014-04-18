@@ -21,7 +21,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
  *
  */
-public enum ForgeExtPreferences {
+public enum ForgePreferences {
     INSTANCE;
 
     private static final String PREF_FORGE_ADDON_DIR = "org.jboss.tools.forge.ext.core.addon_dir";
