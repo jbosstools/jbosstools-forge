@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ext.core;
+package org.jboss.tools.forge.core.furnace;
 
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.furnace.ContainerStatus;

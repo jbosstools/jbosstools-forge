@@ -31,7 +31,7 @@ import org.jboss.forge.addon.ui.context.UIExecutionContext;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.forge.furnace.services.Imported;
-import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })

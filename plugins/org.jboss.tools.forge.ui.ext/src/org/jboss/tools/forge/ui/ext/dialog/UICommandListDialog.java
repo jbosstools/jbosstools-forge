@@ -37,7 +37,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.util.Categories;
-import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessContents;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessElement;

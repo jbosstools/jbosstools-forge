@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ext.core;
+package org.jboss.tools.forge.core.furnace;
 
 import java.io.Closeable;
 import java.io.File;
@@ -17,6 +17,8 @@ import org.jboss.forge.furnace.Furnace;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
 import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.util.ClassLoaders;
+import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
+import org.jboss.tools.forge.ext.core.ForgeExtPreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleWiring;
 

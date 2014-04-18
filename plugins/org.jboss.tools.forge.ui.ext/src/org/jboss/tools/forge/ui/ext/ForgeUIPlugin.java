@@ -13,7 +13,7 @@ import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.projects.ProjectListener;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.forge.furnace.spi.ListenerRegistration;
-import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.ext.database.ConnectionProfileManagerImpl;
 import org.jboss.tools.forge.ui.ext.importer.ImportEclipseProjectListener;
 import org.jboss.tools.forge.ui.ext.listeners.EventBus;

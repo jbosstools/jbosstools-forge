@@ -19,7 +19,7 @@ import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.output.UIOutput;
-import org.jboss.tools.forge.ext.core.runtime.FurnaceRuntime;
+import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 
 /**
  * Eclipse implementation of {@link UIProvider}

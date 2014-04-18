@@ -8,7 +8,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.shell.ShellHandle;
 import org.jboss.tools.aesh.core.console.AbstractConsole;
-import org.jboss.tools.forge.ext.core.FurnaceService;
+import org.jboss.tools.forge.core.furnace.FurnaceService;
 
 public class F2Console extends AbstractConsole {
 	

@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ext.core.runtime;
+package org.jboss.tools.forge.core.furnace;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -18,8 +18,6 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
-import org.jboss.tools.forge.ext.core.FurnaceProvider;
-import org.jboss.tools.forge.ext.core.FurnaceService;
 
 public class FurnaceRuntime implements ForgeRuntime {
 	
