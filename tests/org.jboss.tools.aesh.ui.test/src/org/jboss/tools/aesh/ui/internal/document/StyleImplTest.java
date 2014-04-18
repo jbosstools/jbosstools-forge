@@ -339,4 +339,12 @@ public class StyleImplTest {
 		Assert.assertEquals(999, testStyleImpl.getStart());
 	}
 	
+	@Test
+	public void testGetDefault() {
+		StyleImpl style = StyleImpl.getDefault();
+		Assert.assertEquals(FontManager.INSTANCE.getDefault(), style.styleRange.font);
+		Assert.assertEquals(ColorConstants.BLACK, style.styleRange.foreground);
+		Assert.assertEquals(ColorConstants.WHITE, style.styleRange.background);
+	}
+	
 }
