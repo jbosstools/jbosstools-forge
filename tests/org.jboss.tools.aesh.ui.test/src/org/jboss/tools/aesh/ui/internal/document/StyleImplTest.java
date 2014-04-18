@@ -320,4 +320,23 @@ public class StyleImplTest {
 		Assert.assertEquals(ColorConstants.DEFAULT_BACKGROUND, testStyleRange.background);
 	}
 	
+	@Test
+	public void testSetLength() {
+		testStyleRange.length = 0;
+		testStyleImpl.setLength(999);
+		Assert.assertEquals(999, testStyleRange.length);
+	}
+	
+	@Test
+	public void testGetLength() {
+		testStyleRange.length = 999;
+		Assert.assertEquals(999, testStyleImpl.getLength());
+	}
+	
+	@Test
+	public void testGetStart() {
+		testStyleRange.start = 999;
+		Assert.assertEquals(999, testStyleImpl.getStart());
+	}
+	
 }
