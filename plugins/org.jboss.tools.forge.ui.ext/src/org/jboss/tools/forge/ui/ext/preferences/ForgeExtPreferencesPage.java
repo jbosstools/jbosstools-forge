@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
-import org.jboss.tools.forge.ext.core.ForgeExtPreferences;
+import org.jboss.tools.forge.core.ForgeCorePlugin;
+import org.jboss.tools.forge.core.ForgeExtPreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 

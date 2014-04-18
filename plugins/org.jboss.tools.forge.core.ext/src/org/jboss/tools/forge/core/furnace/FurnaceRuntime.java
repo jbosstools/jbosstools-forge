@@ -13,11 +13,11 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.furnace.services.Imported;
+import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
-import org.jboss.tools.forge.ext.core.ForgeCorePlugin;
 
 public class FurnaceRuntime implements ForgeRuntime {
 	

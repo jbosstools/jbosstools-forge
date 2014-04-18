@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ext.core;
+package org.jboss.tools.forge.core;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;

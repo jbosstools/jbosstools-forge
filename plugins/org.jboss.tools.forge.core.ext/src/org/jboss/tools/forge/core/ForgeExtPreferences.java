@@ -5,7 +5,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.ext.core;
+package org.jboss.tools.forge.core;
 
 import java.io.File;
 
