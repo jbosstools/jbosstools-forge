@@ -235,6 +235,8 @@ public class StyleImplTest {
 	@Test
 	public void testSetForegroundXTerm() {
 		// not yet implemented
+		testStyleRange.foreground = ColorConstants.BLACK;
+		testStyleImpl.setForegroundXTerm(999);
 		Assert.assertTrue(true);
 	}
 	
@@ -244,6 +246,78 @@ public class StyleImplTest {
 		Assert.assertNotEquals(ColorConstants.DEFAULT_FOREGROUND, testStyleRange.foreground);
 		testStyleImpl.setForegroundDefault();
 		Assert.assertEquals(ColorConstants.DEFAULT_FOREGROUND, testStyleRange.foreground);
+	}
+	
+	@Test
+	public void testSetBackgroundBlack() {
+		testStyleRange.background = ColorConstants.BLUE;
+		testStyleImpl.setBackgroundBlack();
+		Assert.assertEquals(ColorConstants.BLACK, testStyleRange.background);
+	}
+	
+	@Test
+	public void testSetBackgroundRed() {
+		testStyleRange.background = ColorConstants.BLACK;
+		testStyleImpl.setBackgroundRed();
+		Assert.assertEquals(ColorConstants.RED, testStyleRange.background);
+	}
+	
+	@Test
+	public void testSetBackgroundGreen() {
+		testStyleRange.background = ColorConstants.BLACK;
+		testStyleImpl.setBackgroundGreen();
+		Assert.assertEquals(ColorConstants.GREEN, testStyleRange.background);
+	}
+	
+	@Test
+	public void testSetBackgroundYellow() {
+		testStyleRange.background = ColorConstants.BLACK;
+		testStyleImpl.setBackgroundYellow();
+		Assert.assertEquals(ColorConstants.YELLOW, testStyleRange.background);
+	}
+	
+	@Test
+	public void testSetBackgroundBlue() {
+		testStyleRange.background = ColorConstants.BLACK;
+		testStyleImpl.setBackgroundBlue();
+		Assert.assertEquals(ColorConstants.BLUE, testStyleRange.background);
+	}
+	
+	@Test
+	public void testSetBackgroundMagenta() {
+		testStyleRange.background = ColorConstants.BLACK;
+		testStyleImpl.setBackgroundMagenta();
+		Assert.assertEquals(ColorConstants.MAGENTA, testStyleRange.background);
+	}
+	
+	@Test
+	public void testSetBackgroundCyan() {
+		testStyleRange.background = ColorConstants.BLACK;
+		testStyleImpl.setBackgroundCyan();
+		Assert.assertEquals(ColorConstants.CYAN, testStyleRange.background);
+	}
+	
+	@Test
+	public void testSetBackgroundWhite() {
+		testStyleRange.background = ColorConstants.BLACK;
+		testStyleImpl.setBackgroundWhite();
+		Assert.assertEquals(ColorConstants.WHITE, testStyleRange.background);
+	}
+	
+	@Test
+	public void testSetBackgroundXTerm() {
+		// not yet implemented
+		testStyleRange.background = ColorConstants.BLACK;
+		testStyleImpl.setBackgroundXTerm(999);
+		Assert.assertTrue(true);
+	}
+	
+	@Test
+	public void testSetBackgroundDefault() {
+		testStyleRange.background = ColorConstants.DEFAULT_FOREGROUND;
+		Assert.assertNotEquals(ColorConstants.DEFAULT_BACKGROUND, testStyleRange.background);
+		testStyleImpl.setBackgroundDefault();
+		Assert.assertEquals(ColorConstants.DEFAULT_BACKGROUND, testStyleRange.background);
 	}
 	
 }
