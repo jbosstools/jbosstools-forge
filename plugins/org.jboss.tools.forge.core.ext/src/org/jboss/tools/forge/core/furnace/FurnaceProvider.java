@@ -18,7 +18,7 @@ import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
 import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.util.ClassLoaders;
 import org.jboss.tools.forge.core.ForgeCorePlugin;
-import org.jboss.tools.forge.core.ForgeExtPreferences;
+import org.jboss.tools.forge.core.preferences.ForgeExtPreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleWiring;
 

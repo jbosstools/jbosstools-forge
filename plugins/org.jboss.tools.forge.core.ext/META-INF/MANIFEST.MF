@@ -6,7 +6,8 @@ Bundle-Version: 1.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
 Export-Package: org.jboss.tools.forge.core,
- org.jboss.tools.forge.core.furnace
+ org.jboss.tools.forge.core.furnace,
+ org.jboss.tools.forge.core.preferences
 Bundle-Activator: org.jboss.tools.forge.core.ForgeCorePlugin
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin

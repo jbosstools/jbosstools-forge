@@ -5,13 +5,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.jboss.tools.forge.core;
+package org.jboss.tools.forge.core.preferences;
 
 import java.io.File;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
+import org.jboss.tools.forge.core.ForgeCorePlugin;
 import org.osgi.service.prefs.BackingStoreException;
 
 /**
