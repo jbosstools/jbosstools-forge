@@ -9,7 +9,7 @@
              parentCategory="org.jboss.ide.eclipse.ui.wizards" />
        <wizard
              category="org.jboss.ide.eclipse.ui.wizards/org.jboss.tools.forge.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.scaffold.ScaffoldWizard"
+             class="org.jboss.tools.forge.ui.wizards.internal.wizard.scaffold.ScaffoldWizard"
              icon="icons/scaffold_ui.gif"
              id="org.jboss.tools.forge.ui.wizard.scaffold.entities"
              name="Scaffold UI From Entities">
@@ -21,7 +21,7 @@
        </wizard>
        <wizard
              category="org.jboss.ide.eclipse.ui.wizards/org.jboss.tools.forge.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.rest.RestWizard"
+             class="org.jboss.tools.forge.ui.wizards.internal.wizard.rest.RestWizard"
              icon="icons/gen-rest.gif"
              id="org.jboss.tools.forge.ui.wizard.rest"
              name="REST Endpoints From Entities">
@@ -33,7 +33,7 @@
        </wizard>
        <wizard
              category="org.jboss.ide.eclipse.ui.wizards/org.jboss.tools.forge.ui.wizards"
-             class="org.jboss.tools.forge.ui.wizard.reveng.GenerateEntitiesWizard"
+             class="org.jboss.tools.forge.ui.wizards.internal.wizard.reveng.GenerateEntitiesWizard"
              icon="icons/gen-entity.gif"
              id="org.jboss.tools.forge.ui.wizard.reveng.entities"
              name="Entities From Tables">
