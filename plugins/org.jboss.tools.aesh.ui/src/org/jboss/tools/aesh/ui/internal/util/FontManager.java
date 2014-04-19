@@ -12,7 +12,7 @@ public class FontManager {
 	public static FontManager INSTANCE = new FontManager();
 	
 	private static Font ITALIC;
-	private static Font NORMAL;
+	private static Font DEFAULT;
 	private static Font BOLD;
 	private static Font ITALIC_BOLD;
 	
@@ -24,11 +24,11 @@ public class FontManager {
 	}
 	
 	private void initializeDefault() {
-		NORMAL = JFaceResources.getFont(AESH_CONSOLE_FONT);
+		DEFAULT = JFaceResources.getFont(AESH_CONSOLE_FONT);
 	}
 	
 	private FontData createFontDataFromNormal() {
-		FontData normalData = NORMAL.getFontData()[0];
+		FontData normalData = DEFAULT.getFontData()[0];
 		FontData result = new FontData();
 		result.setName(normalData.getName());
 		result.height = normalData.height;
@@ -38,23 +38,23 @@ public class FontManager {
 	private void initializeItalic() {
 		FontData italicData = createFontDataFromNormal();
 		italicData.setStyle(SWT.ITALIC);
-		ITALIC = new Font(NORMAL.getDevice(), italicData);
+		ITALIC = new Font(DEFAULT.getDevice(), italicData);
 	}
 	
 	private void initializeBold() {
 		FontData boldData = createFontDataFromNormal();
 		boldData.setStyle(SWT.BOLD);
-		BOLD = new Font(NORMAL.getDevice(), boldData);
+		BOLD = new Font(DEFAULT.getDevice(), boldData);
 	}
 	
 	private void initializeItalicBold() {
 		FontData italicBoldData = createFontDataFromNormal();
 		italicBoldData.setStyle(SWT.BOLD | SWT.ITALIC);
-		ITALIC_BOLD = new Font(NORMAL.getDevice(), italicBoldData);
+		ITALIC_BOLD = new Font(DEFAULT.getDevice(), italicBoldData);
 	}
 	
 	public Font getDefault() {
-		return NORMAL;
+		return DEFAULT;
 	}
 	
 	public Font getItalic() {
