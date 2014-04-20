@@ -8,7 +8,7 @@ import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
 
 public class TextWidget extends StyledText {
 	
-	private Console console = null;
+	Console console = null;
 
 	public TextWidget(Composite parent, int style) {
 		super(parent, style);
