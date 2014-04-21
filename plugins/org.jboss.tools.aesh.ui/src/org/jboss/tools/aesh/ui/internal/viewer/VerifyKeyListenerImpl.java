@@ -8,7 +8,7 @@ import org.jboss.tools.aesh.ui.internal.util.CharacterConstants;
 
 public class VerifyKeyListenerImpl implements VerifyKeyListener {
 	
-	private Console console = null;
+	Console console = null;
 	
 	public VerifyKeyListenerImpl(Console console) {
 		this.console = console;
