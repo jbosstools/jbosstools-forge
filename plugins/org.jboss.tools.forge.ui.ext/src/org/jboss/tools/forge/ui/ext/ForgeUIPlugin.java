@@ -68,7 +68,7 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 						provider.setConnectionProfileManager(new ConnectionProfileManagerImpl());
 					}
 				} catch (Throwable t) {
-					t.printStackTrace();
+					ForgeUIPlugin.log(t);
 				}
 				EventBus.INSTANCE.register(RefreshListener.INSTANCE);
 				EventBus.INSTANCE.register(PickUpListener.INSTANCE);
