@@ -58,24 +58,29 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 				if (projectFactory != null) {
 					projectListenerRegistration = projectFactory
 							.addProjectListener(ImportEclipseProjectListener.INSTANCE);
-					EventBus.INSTANCE
-							.register(ImportEclipseProjectListener.INSTANCE);
 				}
 				try {
-					Imported<ConnectionProfileManagerProvider> imported = forgeService.lookupImported(ConnectionProfileManagerProvider.class);
+					Imported<ConnectionProfileManagerProvider> imported = forgeService
+							.lookupImported(ConnectionProfileManagerProvider.class);
 					if (imported != null) {
-						ConnectionProfileManagerProvider provider = imported.get();
+						ConnectionProfileManagerProvider provider = imported
+								.get();
 						provider.setConnectionProfileManager(new ConnectionProfileManagerImpl());
 					}
 				} catch (Throwable t) {
 					ForgeUIPlugin.log(t);
 				}
-				EventBus.INSTANCE.register(RefreshListener.INSTANCE);
-				EventBus.INSTANCE.register(PickUpListener.INSTANCE);
 			}
 		});
+		registerEventListeners();
 		executor.shutdown();
 		plugin = this;
+	}
+
+	private void registerEventListeners() {
+		EventBus.INSTANCE.register(ImportEclipseProjectListener.INSTANCE);
+		EventBus.INSTANCE.register(RefreshListener.INSTANCE);
+		EventBus.INSTANCE.register(PickUpListener.INSTANCE);
 	}
 
 	@Override
