@@ -19,11 +19,11 @@ public class FurnaceHelper {
 		if (runtime == null || ForgeRuntimeState.RUNNING.equals(runtime.getState())) return;
 		createStartFurnaceJob().schedule();
 	}
-	
+
 	public static void stopFurnace() {
 		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
 		if (runtime == null || ForgeRuntimeState.STOPPED.equals(runtime.getState())) return;
-		Job job = new Job("Stopping Forge " + runtime.getVersion()) {
+		Job job = new Job("Stopping JBoss Forge " + runtime.getVersion()) {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				runtime.stop(monitor);
@@ -32,15 +32,15 @@ public class FurnaceHelper {
 		};
 		job.schedule();
 	}
-	
+
 	public static Job createStartFurnaceJob() {
 		final FurnaceRuntime runtime = FurnaceRuntime.INSTANCE;
 		final String version = runtime.getVersion();
-		WorkspaceJob job = new WorkspaceJob("Starting Forge " + version) {					
+		WorkspaceJob job = new WorkspaceJob("Starting JBoss Forge " + version) {
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor)
 					throws CoreException {
-				String taskName = "Please wait while Forge " + version + " is started.";
+				String taskName = "Please wait while JBoss Forge " + version + " is started.";
 				monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
 				runtime.start(monitor);
 				if (runtime.getErrorMessage() != null) {
@@ -48,17 +48,17 @@ public class FurnaceHelper {
 						@Override
 						public void run() {
 							MessageDialog.openError(
-									null, 
-									"Forge Startup Error", 
+									null,
+									"JBoss Forge Startup Error",
 									runtime.getErrorMessage());
-						}			
+						}
 					});
 				}
 				return Status.OK_STATUS;
 			}
 		};
-		job.setUser(true);	
+		job.setUser(true);
 		return job;
 	}
-	
+
 }
