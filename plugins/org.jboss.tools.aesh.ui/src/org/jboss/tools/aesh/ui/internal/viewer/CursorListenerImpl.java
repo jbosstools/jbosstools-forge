@@ -5,8 +5,8 @@ import org.jboss.tools.aesh.ui.internal.document.CursorListener;
 
 public class CursorListenerImpl implements CursorListener {
 	
-	private TextWidget textWidget;
-	private Document document;
+	TextWidget textWidget;
+	Document document;
 	
 	public CursorListenerImpl(TextWidget textWidget, Document document) {
 		this.textWidget = textWidget;
