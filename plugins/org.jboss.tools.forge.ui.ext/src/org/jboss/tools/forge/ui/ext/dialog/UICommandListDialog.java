@@ -37,6 +37,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.util.Categories;
+import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.ext.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.ext.quickaccess.QuickAccessContents;
@@ -55,11 +56,11 @@ public class UICommandListDialog extends PopupDialog {
 	private static final LinkedList<QuickAccessElement> PREVIOUS_CHOICES_LIST = new LinkedList<>();
 
 	public UICommandListDialog(IWorkbenchWindow window) {
-		super(window.getShell(), SWT.RESIZE, true,
-				true, // persist size
+		super(window.getShell(), SWT.RESIZE, true, true, // persist size
 				false, // but not location
-				true, true, "Run a Forge command",
-				"Start typing to filter the list");
+				true, true, "Run a Forge command", "JBoss Forge v."
+						+ FurnaceRuntime.INSTANCE.getVersion()
+						+ " - Start typing to filter the list");
 		ISelection selection = window.getSelectionService().getSelection();
 		IStructuredSelection currentSelection = null;
 		if (selection instanceof TreeSelection) {
