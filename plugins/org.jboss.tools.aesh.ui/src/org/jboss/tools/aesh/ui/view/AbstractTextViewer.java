@@ -17,9 +17,9 @@ import org.jboss.tools.aesh.ui.internal.viewer.VerifyKeyListenerImpl;
 
 public abstract class AbstractTextViewer extends TextViewer {
 	
-	private Console console;
-	private DocumentImpl document;
-	private TextWidget textWidget;
+	Console console;
+	DocumentImpl document;
+	TextWidget textWidget;
 	
     public AbstractTextViewer(Composite parent) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -27,7 +27,7 @@ public abstract class AbstractTextViewer extends TextViewer {
     }
     
     public void startConsole() {
-    	Display.getDefault().asyncExec(new Runnable() {
+    	Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				console.connect(document);
@@ -38,7 +38,7 @@ public abstract class AbstractTextViewer extends TextViewer {
     }
     
     public void stopConsole() {
-    	Display.getDefault().asyncExec(new Runnable() {
+    	Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 		    	console.stop();
