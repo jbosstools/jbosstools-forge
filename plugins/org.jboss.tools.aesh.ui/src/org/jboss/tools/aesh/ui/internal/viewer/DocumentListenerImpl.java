@@ -3,15 +3,15 @@ package org.jboss.tools.aesh.ui.internal.viewer;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.custom.StyleRange;
-import org.jboss.tools.aesh.ui.internal.document.DocumentImpl;
+import org.jboss.tools.aesh.core.document.Document;
 import org.jboss.tools.aesh.ui.internal.document.StyleImpl;
 
 public class DocumentListenerImpl implements IDocumentListener {
 
-	private TextWidget textWidget;
-	private DocumentImpl document;
+	TextWidget textWidget;
+	Document document;
 
-	public DocumentListenerImpl(TextWidget textWidget, DocumentImpl document) {
+	public DocumentListenerImpl(TextWidget textWidget, Document document) {
 		this.textWidget = textWidget;
 		this.document = document;
 	}
