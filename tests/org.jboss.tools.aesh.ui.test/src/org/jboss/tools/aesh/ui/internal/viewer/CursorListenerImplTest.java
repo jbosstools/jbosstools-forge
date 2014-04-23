@@ -40,6 +40,7 @@ public class CursorListenerImplTest {
 		testCursorListenerImpl.textWidget = null;
 		cursorOffset = 55;
 		caretOffset = 11;
+		testCursorListenerImpl.cursorMoved();
 		Assert.assertEquals(11, caretOffset);
 	}
 
