@@ -13,7 +13,7 @@
    <packaging>eclipse-plugin</packaging>
 
    <properties>
-      <version.aesh>0.53-SNAPSHOT</version.aesh>
+      <version.aesh>0.53</version.aesh>
    </properties>
 
    <build>
