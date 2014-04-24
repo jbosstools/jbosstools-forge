@@ -7,7 +7,6 @@
 
 package org.jboss.tools.forge.ui.ext.preferences;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -22,10 +21,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.jboss.tools.forge.core.ForgeCorePlugin;
-import org.jboss.tools.forge.core.preferences.ForgePreferences;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 
 /**
  * Preferences Page for Forge 2
@@ -58,7 +54,7 @@ public class ForgeExtPreferencesPage extends PreferencePage implements
 
 		addonDirText = new Text(container, SWT.BORDER);
 		addonDirText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		addonDirText.setText(ForgePreferences.INSTANCE.getAddonDir());
+		addonDirText.setText(ForgeCorePreferences.INSTANCE.getAddonDir());
 		Button button = new Button(container, SWT.PUSH);
 		button.setText("Browse...");
 		button.addSelectionListener(new SelectionAdapter() {
@@ -96,21 +92,8 @@ public class ForgeExtPreferencesPage extends PreferencePage implements
 
 	@Override
 	public boolean performOk() {
-		ForgePreferences.INSTANCE.setAddonDir(addonDirText.getText());
-		try {
-			restartForge();
-		} catch (BundleException be) {
-			ForgeCorePlugin.log(be);
-		}
+		ForgeCorePreferences.INSTANCE.setAddonDir(addonDirText.getText());
 		return true;
 	}
 
-	/**
-	 * Attempts to restart the forge service
-	 */
-	private void restartForge() throws BundleException {
-		Bundle bundle = Platform.getBundle(ForgeCorePlugin.PLUGIN_ID);
-		bundle.stop();
-		bundle.start();
-	}
 }

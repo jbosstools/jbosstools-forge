@@ -24,6 +24,7 @@ public class ForgeCorePlugin extends Plugin {
 		super.start(context);
 		initializeShutdownHook();
 		plugin = this;
+		System.setProperty("org.jboss.forge.addon.shell.forcePOSIXTerminal", "true");
 	}
 
 	private void initializeShutdownHook() {

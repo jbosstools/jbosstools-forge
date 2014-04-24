@@ -5,12 +5,5 @@ Bundle-SymbolicName: org.jboss.tools.forge.core.ext;singleton:=true
 Bundle-Version: 1.3.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Export-Package: org.jboss.tools.forge.core,
- org.jboss.tools.forge.core.furnace,
- org.jboss.tools.forge.core.preferences
-Bundle-Activator: org.jboss.tools.forge.core.ForgeCorePlugin
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",
- org.jboss.tools.forge2.runtime,
- org.jboss.tools.forge.core;bundle-version="1.3.0"

@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -30,6 +31,8 @@ import org.jboss.tools.forge.core.internal.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.internal.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.service.prefs.BackingStoreException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -290,9 +293,17 @@ public class ForgeCorePreferences {
 		prefs.put(PREF_FORGE_ADDON_DIR, addonDir);
 		try {
 			prefs.flush();
+			restartForge();
 		} catch (BackingStoreException bse) {
 			ForgeCorePlugin.log(bse);
+		} catch (BundleException e) {
+			ForgeCorePlugin.log(e);
 		}
 	}
 
+	private void restartForge() throws BundleException {
+		Bundle bundle = Platform.getBundle(ForgeCorePlugin.PLUGIN_ID);
+		bundle.stop();
+		bundle.start();
+	}
 }
