@@ -3,6 +3,7 @@ package org.jboss.tools.forge.core.preferences;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -22,6 +23,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 import org.jboss.tools.forge.core.internal.preferences.ForgeCorePreferencesInitializer;
 import org.jboss.tools.forge.core.internal.runtime.ForgeEmbeddedRuntime;
@@ -36,42 +38,46 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class ForgeCorePreferences {
-	
+
 	public static final String PREF_FORGE_RUNTIMES = "org.jboss.tools.forge.core.runtimes";
 	public static final String PREF_FORGE_STARTUP = "org.jboss.tools.forge.core.startup";
 	public static final String PREF_FORGE_START_IN_DEBUG = "org.jboss.tools.forge.core.startInDebug";
 	public static final String PREF_FORGE_VM_ARGS = "org.jboss.tools.forge.core.vmArgs";
-	
+	private static final String PREF_FORGE_ADDON_DIR = "org.jboss.tools.forge.ext.core.addon_dir";
+
 	public static final ForgeCorePreferences INSTANCE = new ForgeCorePreferences();
-	
+
 	private List<ForgeRuntime> runtimes = null;
 	private ForgeRuntime defaultRuntime = null;
-	
-	private ForgeCorePreferences() {}
-	
+
+	private ForgeCorePreferences() {
+	}
+
 	public ForgeRuntime[] getRuntimes() {
 		if (runtimes == null) {
 			initializeRuntimes();
 		}
-		return (ForgeRuntime[])runtimes.toArray(new ForgeRuntime[runtimes.size()]);
+		return (ForgeRuntime[]) runtimes.toArray(new ForgeRuntime[runtimes
+				.size()]);
 	}
-	
+
 	public ForgeRuntime getDefaultRuntime() {
 		if (defaultRuntime == null) {
 			initializeRuntimes();
 		}
 		return defaultRuntime;
 	}
-	
+
 	public boolean getStartup() {
 		return getForgeCorePreferences().getBoolean(PREF_FORGE_STARTUP, false);
-		
+
 	}
-	
+
 	public boolean getStartInDebug() {
-		return getForgeCorePreferences().getBoolean(PREF_FORGE_START_IN_DEBUG, false);
+		return getForgeCorePreferences().getBoolean(PREF_FORGE_START_IN_DEBUG,
+				false);
 	}
-	
+
 	public String getVmArgs() {
 		return getForgeCorePreferences().get(PREF_FORGE_VM_ARGS, "");
 	}
@@ -79,41 +85,45 @@ public class ForgeCorePreferences {
 	private IEclipsePreferences getForgeCorePreferences() {
 		return InstanceScope.INSTANCE.getNode(ForgeCorePlugin.PLUGIN_ID);
 	}
-	
+
 	private String getForgeRuntimesPreference() {
-		return getForgeCorePreferences().get(
-				PREF_FORGE_RUNTIMES, 
+		return getForgeCorePreferences().get(PREF_FORGE_RUNTIMES,
 				ForgeCorePreferencesInitializer.INITIAL_RUNTIMES_PREFERENCE);
 	}
-	
+
 	private void initializeRuntimes() {
 		initializeFromXml(getForgeRuntimesPreference());
 	}
-	
+
 	private void initializeFromXml(String xml) {
 		DocumentBuilder documentBuilder = newDocumentBuilder();
-		if (documentBuilder == null) return;
+		if (documentBuilder == null)
+			return;
 		InputStream inputStream = createInputStream(xml);
-		if (inputStream == null) return;
+		if (inputStream == null)
+			return;
 		runtimes = new ArrayList<ForgeRuntime>();
-		Document document = parseRuntimes(documentBuilder, inputStream);	
+		Document document = parseRuntimes(documentBuilder, inputStream);
 		Element runtimeElement = document.getDocumentElement();
 		String defaultRuntimeName = runtimeElement.getAttribute("default");
 		NodeList nodeList = runtimeElement.getChildNodes();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				Element element = (Element)node;
+				Element element = (Element) node;
 				String type = element.getAttribute("type").toUpperCase();
 				ForgeRuntime runtime = null;
-				if (ForgeRuntimeType.valueOf(type).equals(ForgeRuntimeType.EMBEDDED)) {
+				if (ForgeRuntimeType.valueOf(type).equals(
+						ForgeRuntimeType.EMBEDDED)) {
 					runtime = ForgeEmbeddedRuntime.INSTANCE;
-				} else if (ForgeRuntimeType.valueOf(type).equals(ForgeRuntimeType.EXTERNAL)) {
+				} else if (ForgeRuntimeType.valueOf(type).equals(
+						ForgeRuntimeType.EXTERNAL)) {
 					String name = element.getAttribute("name");
 					String location = element.getAttribute("location");
 					runtime = new ForgeExternalRuntime(name, location);
 				}
-				if (runtime == null) continue;
+				if (runtime == null)
+					continue;
 				runtimes.add(runtime);
 				if (defaultRuntimeName.equals(runtime.getName())) {
 					defaultRuntime = runtime;
@@ -121,8 +131,9 @@ public class ForgeCorePreferences {
 			}
 		}
 	}
-	
-	private Document parseRuntimes(DocumentBuilder documentBuilder, InputStream inputStream) {
+
+	private Document parseRuntimes(DocumentBuilder documentBuilder,
+			InputStream inputStream) {
 		Document result = null;
 		try {
 			result = documentBuilder.parse(inputStream);
@@ -133,17 +144,18 @@ public class ForgeCorePreferences {
 		}
 		return result;
 	}
-	
+
 	private InputStream createInputStream(String string) {
 		InputStream result = null;
 		try {
-			result = new BufferedInputStream(new ByteArrayInputStream(string.getBytes("UTF8")));
+			result = new BufferedInputStream(new ByteArrayInputStream(
+					string.getBytes("UTF8")));
 		} catch (UnsupportedEncodingException e) {
 			ForgeCorePlugin.log(e);
 		}
 		return result;
 	}
-	
+
 	private DocumentBuilder newDocumentBuilder() {
 		try {
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -152,7 +164,7 @@ public class ForgeCorePreferences {
 			return null;
 		}
 	}
-		
+
 	public void setRuntimes(ForgeRuntime[] runtimes, ForgeRuntime defaultRuntime) {
 		this.runtimes.clear();
 		for (ForgeRuntime runtime : runtimes) {
@@ -161,7 +173,7 @@ public class ForgeCorePreferences {
 		this.defaultRuntime = defaultRuntime;
 		saveRuntimes();
 	}
-	
+
 	public void setStartup(boolean startup) {
 		try {
 			setBoolean(PREF_FORGE_STARTUP, startup);
@@ -192,20 +204,22 @@ public class ForgeCorePreferences {
 		}
 	}
 
-	private void setBoolean(String prefKey, boolean startup) throws BackingStoreException {
+	private void setBoolean(String prefKey, boolean startup)
+			throws BackingStoreException {
 		IEclipsePreferences eclipsePreferences = getForgeCorePreferences();
 		eclipsePreferences.putBoolean(prefKey, startup);
 		eclipsePreferences.flush();
 	}
-	
+
 	public void addPreferenceChangeListener(IPreferenceChangeListener listener) {
 		getForgeCorePreferences().addPreferenceChangeListener(listener);
 	}
-	
-	public void removePreferenceChangeListener(IPreferenceChangeListener listener) {
+
+	public void removePreferenceChangeListener(
+			IPreferenceChangeListener listener) {
 		getForgeCorePreferences().removePreferenceChangeListener(listener);
 	}
-	
+
 	private void saveRuntimes() {
 		try {
 			IEclipsePreferences eclipsePreferences = getForgeCorePreferences();
@@ -220,7 +234,7 @@ public class ForgeCorePreferences {
 			ForgeCorePlugin.log(e);
 		}
 	}
-	
+
 	private Document createRuntimesDocument() {
 		Document document = createEmptyDocument();
 		if (document == null)
@@ -241,7 +255,7 @@ public class ForgeCorePreferences {
 		}
 		return document;
 	}
-	
+
 	private Document createEmptyDocument() {
 		DocumentBuilder documentBuilder = newDocumentBuilder();
 		if (documentBuilder == null) {
@@ -250,17 +264,35 @@ public class ForgeCorePreferences {
 			return documentBuilder.newDocument();
 		}
 	}
-	
-	private static String serializeDocument(Document doc) throws TransformerException, IOException {
+
+	private static String serializeDocument(Document doc)
+			throws TransformerException, IOException {
 		ByteArrayOutputStream s = new ByteArrayOutputStream();
 		TransformerFactory factory = TransformerFactory.newInstance();
 		Transformer transformer = factory.newTransformer();
 		transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-		transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		DOMSource source = new DOMSource(doc);
 		StreamResult outputTarget = new StreamResult(s);
 		transformer.transform(source, outputTarget);
-		return s.toString("UTF8"); 		
+		return s.toString("UTF8");
+	}
+
+	public String getAddonDir() {
+		IEclipsePreferences prefs = getForgeCorePreferences();
+		return prefs.get(PREF_FORGE_ADDON_DIR,
+				new File(OperatingSystemUtils.getUserForgeDir(), "addons")
+						.getAbsolutePath());
+	}
+
+	public void setAddonDir(String addonDir) {
+		IEclipsePreferences prefs = getForgeCorePreferences();
+		prefs.put(PREF_FORGE_ADDON_DIR, addonDir);
+		try {
+			prefs.flush();
+		} catch (BackingStoreException bse) {
+			ForgeCorePlugin.log(bse);
+		}
 	}
 
 }
