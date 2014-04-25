@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
 <schema targetNamespace="org.jboss.tools.forge.ui" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
@@ -16,7 +17,7 @@
          </appinfo>
       </annotation>
       <complexType>
-         <sequence>
+         <sequence minOccurs="1" maxOccurs="unbounded">
             <element ref="console"/>
          </sequence>
          <attribute name="point" type="string" use="required">
@@ -43,5 +44,10 @@
          </attribute>
       </complexType>
    </element>
+
+
+
+
+
 
 </schema>
