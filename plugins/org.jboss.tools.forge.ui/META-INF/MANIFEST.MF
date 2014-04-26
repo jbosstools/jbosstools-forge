@@ -32,9 +32,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.datatools.connectivity
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.jboss.tools.forge.ui.ForgeUIPlugin
+Bundle-Activator: org.jboss.tools.forge.ui.internal.ForgeUIPlugin
 Bundle-ClassPath: .
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
-Export-Package: org.jboss.tools.forge.ui.console,
- org.jboss.tools.forge.ui.util
+Export-Package: org.jboss.tools.forge.ui.util

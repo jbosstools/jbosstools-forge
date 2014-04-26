@@ -174,10 +174,10 @@
    <extension
          point="org.jboss.tools.forge.ui.consoles">
       <console
-            class="org.jboss.tools.forge.ui.console.f1.ForgeConsoleImpl">
+            class="org.jboss.tools.forge.ui.internal.console.f1.ForgeConsoleImpl">
       </console>
       <console
-            class="org.jboss.tools.forge.ui.ext.console.ForgeConsoleImpl">
+            class="org.jboss.tools.forge.ui.internal.ext.console.ForgeConsoleImpl">
       </console>
    </extension>
    <extension

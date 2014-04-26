@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
-import org.jboss.tools.forge.ui.document.ForgeDocument;
+import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
 
 public class ForgeHelper {
 	
