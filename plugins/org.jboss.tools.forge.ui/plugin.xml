@@ -19,7 +19,7 @@
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			name="Forge"
-			class="org.jboss.tools.forge.ui.internal.preferences.ForgeStartupPreferencePage"
+			class="org.jboss.tools.forge.ui.internal.preferences.ForgeMainPreferencePage"
 			id="org.jboss.tools.forge">
 		</page>
 		<page

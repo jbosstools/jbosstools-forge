@@ -16,7 +16,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 
-public class ForgeStartupPreferencePage extends PreferencePage implements
+public class ForgeMainPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 	
 	private Button startupButton;
