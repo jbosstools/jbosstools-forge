@@ -19,17 +19,17 @@
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			name="Forge"
-			class="org.jboss.tools.forge.ui.preferences.ForgeStartupPreferencePage"
+			class="org.jboss.tools.forge.ui.internal.preferences.ForgeStartupPreferencePage"
 			id="org.jboss.tools.forge">
 		</page>
 		<page
 			name="Installed Forge Runtimes"
 			category="org.jboss.tools.forge"
-			class="org.jboss.tools.forge.ui.preferences.ForgeInstallationsPreferencePage"
+			class="org.jboss.tools.forge.ui.internal.preferences.ForgeInstallationsPreferencePage"
 			id="org.jboss.tools.forge.runtimes">
         </page>
         <page
-            class="org.jboss.tools.forge.ui.ext.preferences.ForgeExtPreferencesPage"
+            class="org.jboss.tools.forge.ui.internal.ext.preferences.ForgeExtPreferencesPage"
             id="org.jboss.tools.forge.ui.ext"
             name="Forge 2">
        </page>
