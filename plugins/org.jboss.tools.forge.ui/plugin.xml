@@ -105,15 +105,11 @@
 	</extension>
 	<extension
 			point="org.eclipse.ui.bindings">
-		<key
-			commandId="org.jboss.tools.forge.ui.commandList"
-            sequence="M1+4"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration" />
         <key
             commandId="org.jboss.tools.forge.ui.command.runForgeCommand"
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
-            sequence="M1+5" />
+            sequence="M1+4" />
 	</extension>
     <extension
             point="org.eclipse.ui.perspectiveExtensions">
