@@ -13,6 +13,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
@@ -32,6 +33,8 @@ public class ForgeTextViewer extends TextViewer {
 	
 	private static final String FORGE_CONSOLE_FONT = "org.jboss.tools.forge.console.font";
 	
+	private ForgeDocument forgeDocument = ForgeDocument.INSTANCE;
+	
 	private class DocumentListener implements IDocumentListener, ForgeDocument.CursorListener {
     	@Override
         public void documentAboutToBeChanged(DocumentEvent event) {
@@ -42,7 +45,7 @@ public class ForgeTextViewer extends TextViewer {
             if (textWidget != null && !textWidget.isDisposed()) {
                 int lineCount = textWidget.getLineCount();
                 textWidget.setTopIndex(lineCount - 1);
-    			StyleRange styleRange = ForgeDocument.INSTANCE.getCurrentStyleRange();
+    			StyleRange styleRange = forgeDocument.getCurrentStyleRange();
     			if (styleRange != null) {
     				textWidget.setStyleRange(styleRange);
     			}
@@ -52,7 +55,7 @@ public class ForgeTextViewer extends TextViewer {
 		public void cursorMoved() {
 			StyledText textWidget = getTextWidget();
 			if (textWidget != null && !textWidget.isDisposed()) {
-				textWidget.setCaretOffset(ForgeDocument.INSTANCE.getCursorOffset());
+				textWidget.setCaretOffset(forgeDocument.getCursorOffset());
 			}
 		}
     }
@@ -83,13 +86,13 @@ public class ForgeTextViewer extends TextViewer {
     }
         
     private void initDocument() {
-        ForgeDocument.INSTANCE.addDocumentListener(documentListener);
-        ForgeDocument.INSTANCE.addCursorListener(documentListener);
-    	setDocument(ForgeDocument.INSTANCE);
+        forgeDocument.addDocumentListener(documentListener);
+        forgeDocument.addCursorListener(documentListener);
+    	setDocument(forgeDocument);
     }
     
     private void initViewer() {
-		getTextWidget().setStyleRanges(ForgeDocument.INSTANCE.getStyleRanges());
+		getTextWidget().setStyleRanges(forgeDocument.getStyleRanges());
     	getTextWidget().setFont(JFaceResources.getFont(FORGE_CONSOLE_FONT));
     	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
 			@Override
@@ -106,8 +109,8 @@ public class ForgeTextViewer extends TextViewer {
     }
     
     protected void handleDispose() {
-    	ForgeDocument.INSTANCE.removeCursorListener(documentListener);
-    	ForgeDocument.INSTANCE.removeDocumentListener(documentListener);
+    	forgeDocument.removeCursorListener(documentListener);
+    	forgeDocument.removeDocumentListener(documentListener);
     	JFaceResources.getFontRegistry().removeListener(fontListener);
     	super.handleDispose();
     }
@@ -155,6 +158,17 @@ public class ForgeTextViewer extends TextViewer {
     
     private ForgeRuntime getRuntime() {
 		return ForgeCorePreferences.INSTANCE.getDefaultRuntime();    	
+    }
+    
+    public void stopConsole() {
+    	Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+		    	if (forgeDocument != null) {
+		    		forgeDocument.reset();
+		    	}
+			}   		
+    	});
     }
     
 }

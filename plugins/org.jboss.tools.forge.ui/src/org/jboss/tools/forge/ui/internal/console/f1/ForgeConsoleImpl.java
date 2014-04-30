@@ -6,7 +6,6 @@ import java.beans.PropertyChangeListener;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
@@ -15,7 +14,6 @@ import org.jboss.tools.forge.ui.internal.actions.f1.LinkAction;
 import org.jboss.tools.forge.ui.internal.actions.f1.StartAction;
 import org.jboss.tools.forge.ui.internal.actions.f1.StopAction;
 import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
-import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
 import org.jboss.tools.forge.ui.internal.part.ForgeTextViewer;
 
 public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
@@ -56,17 +54,8 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
 		if (ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
-			resetForgeDocument();
+			forgeTextViewer.stopConsole();
 		}
-	}
-	
-	private void resetForgeDocument() {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				ForgeDocument.INSTANCE.reset();
-			}			
-		});
 	}
 	
 	@Override
