@@ -34,7 +34,7 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	public IAction[] createActions() {
 		return new IAction[] {
 				new StartAction(getRuntime()),
-				new StopAction()
+				new StopAction(getRuntime())
 		};
 	}
 	

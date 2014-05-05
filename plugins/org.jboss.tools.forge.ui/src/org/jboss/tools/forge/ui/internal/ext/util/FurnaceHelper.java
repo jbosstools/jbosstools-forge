@@ -10,7 +10,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
-import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 
 public class FurnaceHelper {
 
@@ -20,18 +19,18 @@ public class FurnaceHelper {
 //		createStartFurnaceJob().schedule();
 //	}
 
-	public static void stopFurnace() {
-		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
-		if (runtime == null || ForgeRuntimeState.STOPPED.equals(runtime.getState())) return;
-		Job job = new Job("Stopping JBoss Forge " + runtime.getVersion()) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				runtime.stop(monitor);
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
-	}
+//	public static void stopFurnace() {
+//		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
+//		if (runtime == null || ForgeRuntimeState.STOPPED.equals(runtime.getState())) return;
+//		Job job = new Job("Stopping JBoss Forge " + runtime.getVersion()) {
+//			@Override
+//			protected IStatus run(IProgressMonitor monitor) {
+//				runtime.stop(monitor);
+//				return Status.OK_STATUS;
+//			}
+//		};
+//		job.schedule();
+//	}
 
 	public static Job createStartFurnaceJob() {
 		final FurnaceRuntime runtime = FurnaceRuntime.INSTANCE;
@@ -81,6 +80,18 @@ public class FurnaceHelper {
 						}
 					});
 				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setUser(true);
+		return job;
+	}
+	
+	public static Job createStopRuntimeJob(final ForgeRuntime runtime) {
+		Job job = new Job("Stopping JBoss Forge " + runtime.getVersion()) {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				runtime.stop(monitor);
 				return Status.OK_STATUS;
 			}
 		};
