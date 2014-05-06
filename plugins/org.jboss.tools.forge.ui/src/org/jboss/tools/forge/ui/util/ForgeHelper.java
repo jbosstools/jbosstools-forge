@@ -10,8 +10,13 @@ import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
+import org.jboss.tools.forge.ui.internal.ext.util.FurnaceHelper;
 
 public class ForgeHelper {
+	
+	public static void start(ForgeRuntime runtime) {
+		FurnaceHelper.createStartRuntimeJob(runtime).schedule();
+	}
 	
 	public static void startForge() {
 		final ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();

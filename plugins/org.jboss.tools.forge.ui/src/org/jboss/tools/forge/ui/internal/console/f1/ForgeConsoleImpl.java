@@ -38,7 +38,7 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	@Override
 	public IAction[] createActions() {
 		return new IAction[] { 
-				new StartAction(),
+				new StartAction(getRuntime()),
 				new StopAction(),
 				new GoToAction(),
 				new LinkAction()
@@ -53,6 +53,10 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
+		if (ForgeRuntimeState.STOPPED.equals(evt.getOldValue()) 
+				&& ForgeRuntimeState.STARTING.equals(evt.getNewValue())) {
+			forgeTextViewer.startConsole();
+		}
 		if (ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
 			forgeTextViewer.stopConsole();
 		}

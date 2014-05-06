@@ -171,4 +171,14 @@ public class ForgeTextViewer extends TextViewer {
     	});
     }
     
+    public void startConsole() {
+    	Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				forgeDocument.connect(getRuntime());
+		    	setDocument(forgeDocument);
+			}   		
+    	});
+    }
+    
 }

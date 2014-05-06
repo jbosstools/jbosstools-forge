@@ -4,24 +4,29 @@ import java.net.URL;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class StartAction extends Action {
+	
+	ForgeRuntime runtime;
 
-	public StartAction() {
+	public StartAction(ForgeRuntime runtime) {
 		super();
+		this.runtime = runtime;
 		setImageDescriptor(createImageDescriptor());
 	}
 
 	@Override
 	public void run() {
-		ForgeHelper.startForge();
+		ForgeHelper.start(runtime);
 	}
 	
 	@Override
 	public boolean isEnabled() {
-		return !ForgeHelper.isForgeRunning();
+		return ForgeRuntimeState.STOPPED.equals(runtime.getState());
 	}
 
 	private ImageDescriptor createImageDescriptor() {
