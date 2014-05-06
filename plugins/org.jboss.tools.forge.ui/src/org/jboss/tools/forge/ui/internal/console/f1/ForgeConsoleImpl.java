@@ -10,9 +10,9 @@ import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.actions.GoToAction;
+import org.jboss.tools.forge.ui.internal.actions.LinkAction;
 import org.jboss.tools.forge.ui.internal.actions.StartAction;
 import org.jboss.tools.forge.ui.internal.actions.StopAction;
-import org.jboss.tools.forge.ui.internal.actions.f1.LinkAction;
 import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
 import org.jboss.tools.forge.ui.internal.part.ForgeTextViewer;
 
