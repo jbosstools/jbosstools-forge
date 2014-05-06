@@ -10,8 +10,8 @@ import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.actions.StartAction;
+import org.jboss.tools.forge.ui.internal.actions.StopAction;
 import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
-import org.jboss.tools.forge.ui.internal.ext.actions.StopAction;
 import org.jboss.tools.forge.ui.internal.ext.cli.F2TextViewer;
 
 public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
