@@ -22,7 +22,7 @@ public class ForgeCommandHandler extends AbstractHandler {
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);
 			if (!ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
-				Job job = FurnaceHelper.createStartFurnaceJob();
+				Job job = FurnaceHelper.createStartRuntimeJob(FurnaceRuntime.INSTANCE);
 				job.addJobChangeListener(new JobChangeAdapter() {
 					@Override
 					public void done(IJobChangeEvent event) {
