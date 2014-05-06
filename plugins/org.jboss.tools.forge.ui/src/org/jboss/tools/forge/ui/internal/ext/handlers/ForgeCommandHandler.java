@@ -12,7 +12,7 @@ import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.dialog.UICommandListDialog;
-import org.jboss.tools.forge.ui.internal.ext.util.FurnaceHelper;
+import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ForgeCommandHandler extends AbstractHandler {
 	
@@ -22,7 +22,7 @@ public class ForgeCommandHandler extends AbstractHandler {
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);
 			if (!ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
-				Job job = FurnaceHelper.createStartRuntimeJob(FurnaceRuntime.INSTANCE);
+				Job job = ForgeHelper.createStartRuntimeJob(FurnaceRuntime.INSTANCE);
 				job.addJobChangeListener(new JobChangeAdapter() {
 					@Override
 					public void done(IJobChangeEvent event) {
