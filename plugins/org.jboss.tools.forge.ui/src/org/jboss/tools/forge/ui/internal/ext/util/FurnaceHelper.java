@@ -13,25 +13,6 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 
 public class FurnaceHelper {
 
-//	public static void startFurnace() {
-//		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
-//		if (runtime == null || ForgeRuntimeState.RUNNING.equals(runtime.getState())) return;
-//		createStartFurnaceJob().schedule();
-//	}
-
-//	public static void stopFurnace() {
-//		final ForgeRuntime runtime = FurnaceRuntime.INSTANCE;
-//		if (runtime == null || ForgeRuntimeState.STOPPED.equals(runtime.getState())) return;
-//		Job job = new Job("Stopping JBoss Forge " + runtime.getVersion()) {
-//			@Override
-//			protected IStatus run(IProgressMonitor monitor) {
-//				runtime.stop(monitor);
-//				return Status.OK_STATUS;
-//			}
-//		};
-//		job.schedule();
-//	}
-
 	public static Job createStartFurnaceJob() {
 		final FurnaceRuntime runtime = FurnaceRuntime.INSTANCE;
 		final String version = runtime.getVersion();
