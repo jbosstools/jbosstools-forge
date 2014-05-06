@@ -18,6 +18,10 @@ public class ForgeHelper {
 		FurnaceHelper.createStartRuntimeJob(runtime).schedule();
 	}
 	
+	public static void stop(ForgeRuntime runtime) {
+		FurnaceHelper.createStopRuntimeJob(runtime).schedule();
+	}
+	
 	public static void startForge() {
 		final ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 		if (runtime == null || ForgeRuntimeState.RUNNING.equals(runtime.getState())) return;
