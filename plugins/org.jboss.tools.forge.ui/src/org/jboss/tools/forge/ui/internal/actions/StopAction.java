@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.internal.actions.f1;
+package org.jboss.tools.forge.ui.internal.actions;
 
 import java.net.URL;
 
