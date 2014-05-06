@@ -4,7 +4,6 @@ import java.net.URL;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
@@ -28,7 +27,7 @@ public class StopAction extends Action {
 	
 	@Override
 	public boolean isEnabled() {
-		return FurnaceService.INSTANCE.getContainerStatus().isStarted();
+		return ForgeRuntimeState.RUNNING.equals(runtime.getState());
 	}
 
 	private ImageDescriptor createImageDescriptor() {
