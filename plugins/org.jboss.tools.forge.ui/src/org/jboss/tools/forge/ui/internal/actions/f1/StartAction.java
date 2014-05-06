@@ -21,6 +21,7 @@ public class StartAction extends Action {
 
 	@Override
 	public void run() {
+		if (ForgeRuntimeState.RUNNING.equals(runtime.getState())) return;
 		ForgeHelper.start(runtime);
 	}
 	
