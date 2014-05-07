@@ -21,8 +21,6 @@ import org.jboss.tools.forge.ui.internal.commands.ForgeCommandProcessorImpl;
 
 public class ForgeDocument extends Document {
 	
-	public static final ForgeDocument INSTANCE = new ForgeDocument();
-	
 	public interface CursorListener {
 		void cursorMoved();
 	}
@@ -49,7 +47,7 @@ public class ForgeDocument extends Document {
 	private List<StyleRange> styleRanges = new ArrayList<StyleRange>();
 	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
 	
-	private ForgeDocument() {
+	public ForgeDocument() {
 		initColors();
 	}
 	

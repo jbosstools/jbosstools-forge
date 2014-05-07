@@ -33,7 +33,7 @@ public class ForgeTextViewer extends TextViewer {
 	
 	private static final String FORGE_CONSOLE_FONT = "org.jboss.tools.forge.console.font";
 	
-	private ForgeDocument forgeDocument = ForgeDocument.INSTANCE;
+	private ForgeDocument forgeDocument = new ForgeDocument();
 	
 	private class DocumentListener implements IDocumentListener, ForgeDocument.CursorListener {
     	@Override
