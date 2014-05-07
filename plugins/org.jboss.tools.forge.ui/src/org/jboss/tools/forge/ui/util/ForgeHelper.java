@@ -48,19 +48,6 @@ public class ForgeHelper {
 		job.schedule();
 	}
 	
-	public static void stopForge() {
-		final ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-		if (runtime == null || ForgeRuntimeState.STOPPED.equals(runtime.getState())) return;
-		Job job = new Job("Stopping Forge " + runtime.getVersion()) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				runtime.stop(monitor);
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
-	}
-	
 	public static boolean isForgeRunning() {
 		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 		return runtime != null && ForgeRuntimeState.RUNNING.equals(runtime.getState());
