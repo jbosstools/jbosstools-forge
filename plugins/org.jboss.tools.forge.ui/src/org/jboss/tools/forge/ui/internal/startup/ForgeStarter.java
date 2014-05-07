@@ -13,7 +13,7 @@ public class ForgeStarter implements IStartup {
 			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
-					ForgeHelper.startForge();
+					ForgeHelper.start(ForgeCorePreferences.INSTANCE.getDefaultRuntime());
 				}				
 			});
 		}

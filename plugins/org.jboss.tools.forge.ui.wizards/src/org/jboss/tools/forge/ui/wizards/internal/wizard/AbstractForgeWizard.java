@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.util.ProjectTools;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.internal.WizardsPlugin;
@@ -50,7 +51,7 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 
 					@Override
 					public void run() {
-						ForgeHelper.startForge();
+						ForgeHelper.start(ForgeCorePreferences.INSTANCE.getDefaultRuntime());
 					}
 
 				});

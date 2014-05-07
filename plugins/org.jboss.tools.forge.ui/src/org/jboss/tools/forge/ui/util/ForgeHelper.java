@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
-import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
 
 public class ForgeHelper {
 	
@@ -21,31 +20,6 @@ public class ForgeHelper {
 	
 	public static void stop(ForgeRuntime runtime) {
 		createStopRuntimeJob(runtime).schedule();
-	}
-	
-	public static void startForge() {
-		final ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-		if (runtime == null || ForgeRuntimeState.RUNNING.equals(runtime.getState())) return;
- 		ForgeDocument.INSTANCE.connect(runtime);
-		Job job = new Job("Starting Forge " + runtime.getVersion()) {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				runtime.start(monitor);
-				if (runtime.getErrorMessage() != null) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							MessageDialog.openError(
-									null, 
-									"Forge Startup Error", 
-									runtime.getErrorMessage());
-						}			
-					});
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
 	}
 	
 	public static boolean isForgeRunning() {
