@@ -124,16 +124,6 @@
         </perspectiveExtension>
     </extension>
     <extension
-          point="org.eclipse.ui.services">
-       <sourceProvider
-             provider="org.jboss.tools.forge.ui.internal.part.SourceProvider">
-          <variable
-                name="org.jboss.tools.forge.runtime.state"
-                priorityLevel="workbench">
-          </variable>
-       </sourceProvider>
-    </extension>
-    <extension
           point="org.eclipse.ui.startup">
        <startup
              class="org.jboss.tools.forge.ui.internal.startup.ForgeStarter">
