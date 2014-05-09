@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.rse.ui.view.IRSEViewPart;
 import org.eclipse.rse.ui.view.ISystemViewElementAdapter;
 import org.eclipse.rse.ui.view.SystemAdapterHelpers;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -43,33 +44,38 @@ public enum PickUpListener implements WizardListener {
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public void onFinish(UIContextImpl context) {
-		Object selection = context.getSelection();
-		if (selection != null) {
-			if (selection instanceof Iterable<?>) {
-				for (Object item : (Iterable<Object>) selection) {
-					if (item != null)
-						open(item.toString());
-				}
-			} else if (selection instanceof Iterator<?>) {
-				Iterator<Object> it = (Iterator<Object>) selection;
-				while (it.hasNext()) {
-					Object item = it.next();
-					if (item != null)
-						open(item.toString());
-				}
-			} else if (selection.getClass().isArray()) {
-				int length = Array.getLength(selection);
-				for (int i = 0; i < length; i++) {
-					Object item = Array.get(selection, i);
-					if (item != null) {
-						open(item.toString());
+	public void onFinish(final UIContextImpl context) {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				Object selection = context.getSelection();
+				if (selection != null) {
+					if (selection instanceof Iterable<?>) {
+						for (Object item : (Iterable<Object>) selection) {
+							if (item != null)
+								open(item.toString());
+						}
+					} else if (selection instanceof Iterator<?>) {
+						Iterator<Object> it = (Iterator<Object>) selection;
+						while (it.hasNext()) {
+							Object item = it.next();
+							if (item != null)
+								open(item.toString());
+						}
+					} else if (selection.getClass().isArray()) {
+						int length = Array.getLength(selection);
+						for (int i = 0; i < length; i++) {
+							Object item = Array.get(selection, i);
+							if (item != null) {
+								open(item.toString());
+							}
+						}
+					} else {
+						open(selection.toString());
 					}
 				}
-			} else {
-				open(selection.toString());
-			}
-		}
+			}			
+		});
 	}
 
 	public void open(String resource) {

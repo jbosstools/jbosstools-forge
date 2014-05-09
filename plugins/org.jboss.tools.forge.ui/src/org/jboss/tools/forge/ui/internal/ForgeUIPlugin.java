@@ -35,62 +35,62 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		ExecutorService executor = Executors.newSingleThreadExecutor();
-		// Register the project listener
-		executor.submit(new Runnable() {
-			@Override
-			public void run() {
-				FurnaceService forgeService = FurnaceService.INSTANCE;
-				try {
-					forgeService.waitUntilContainerIsStarted();
-				} catch (InterruptedException e) {
-					ForgeUIPlugin.log(e);
-					return;
-				}
-				ProjectFactory projectFactory;
-				while ((projectFactory = forgeService
-						.lookup(ProjectFactory.class)) == null) {
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						break;
-					}
-				}
-				if (projectFactory != null) {
-					projectListenerRegistration = projectFactory
-							.addProjectListener(ImportEclipseProjectListener.INSTANCE);
-				}
-				try {
-					Imported<ConnectionProfileManagerProvider> imported = forgeService
-							.lookupImported(ConnectionProfileManagerProvider.class);
-					if (imported != null) {
-						ConnectionProfileManagerProvider provider = imported
-								.get();
-						provider.setConnectionProfileManager(new ConnectionProfileManagerImpl());
-					}
-				} catch (Throwable t) {
-					ForgeUIPlugin.log(t);
-				}
-			}
-		});
-		registerEventListeners();
-		executor.shutdown();
+//		ExecutorService executor = Executors.newSingleThreadExecutor();
+//		// Register the project listener
+//		executor.submit(new Runnable() {
+//			@Override
+//			public void run() {
+//				FurnaceService forgeService = FurnaceService.INSTANCE;
+//				try {
+//					forgeService.waitUntilContainerIsStarted();
+//				} catch (InterruptedException e) {
+//					ForgeUIPlugin.log(e);
+//					return;
+//				}
+//				ProjectFactory projectFactory;
+//				while ((projectFactory = forgeService
+//						.lookup(ProjectFactory.class)) == null) {
+//					try {
+//						Thread.sleep(1000);
+//					} catch (InterruptedException e) {
+//						break;
+//					}
+//				}
+//				if (projectFactory != null) {
+//					projectListenerRegistration = projectFactory
+//							.addProjectListener(ImportEclipseProjectListener.INSTANCE);
+//				}
+//				try {
+//					Imported<ConnectionProfileManagerProvider> imported = forgeService
+//							.lookupImported(ConnectionProfileManagerProvider.class);
+//					if (imported != null) {
+//						ConnectionProfileManagerProvider provider = imported
+//								.get();
+//						provider.setConnectionProfileManager(new ConnectionProfileManagerImpl());
+//					}
+//				} catch (Throwable t) {
+//					ForgeUIPlugin.log(t);
+//				}
+//			}
+//		});
+//		registerEventListeners();
+//		executor.shutdown();
 		plugin = this;
 	}
 
-	private void registerEventListeners() {
-		EventBus.INSTANCE.register(ImportEclipseProjectListener.INSTANCE);
-		EventBus.INSTANCE.register(RefreshListener.INSTANCE);
-		EventBus.INSTANCE.register(PickUpListener.INSTANCE);
-	}
+//	private void registerEventListeners() {
+//		EventBus.INSTANCE.register(ImportEclipseProjectListener.INSTANCE);
+//		EventBus.INSTANCE.register(RefreshListener.INSTANCE);
+//		EventBus.INSTANCE.register(PickUpListener.INSTANCE);
+//	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		if (projectListenerRegistration != null) {
-			projectListenerRegistration.removeListener();
-		}
-		EventBus.INSTANCE.clearListeners();
+//		if (projectListenerRegistration != null) {
+//			projectListenerRegistration.removeListener();
+//		}
+//		EventBus.INSTANCE.clearListeners();
 		super.stop(context);
 	}
 

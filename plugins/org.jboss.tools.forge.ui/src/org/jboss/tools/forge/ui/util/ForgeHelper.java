@@ -8,9 +8,17 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.jboss.forge.addon.database.tools.connections.ConnectionProfileManagerProvider;
+import org.jboss.forge.addon.projects.ProjectFactory;
+import org.jboss.forge.furnace.services.Imported;
+import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
+import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
+import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.internal.ext.database.ConnectionProfileManagerImpl;
+import org.jboss.tools.forge.ui.internal.ext.importer.ImportEclipseProjectListener;
 
 public class ForgeHelper {
 	
@@ -45,6 +53,9 @@ public class ForgeHelper {
 				String taskName = "Please wait while JBoss Forge " + version + " is started.";
 				monitor.beginTask(taskName, IProgressMonitor.UNKNOWN);
 				runtime.start(monitor);
+				if (runtime instanceof FurnaceRuntime) {
+					initializeFurnaceRuntime();
+				}
 				if (runtime.getErrorMessage() != null) {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
@@ -73,6 +84,40 @@ public class ForgeHelper {
 		};
 		job.setUser(true);
 		return job;
+	}
+	
+	private static void initializeFurnaceRuntime() {
+		FurnaceService forgeService = FurnaceService.INSTANCE;
+		try {
+			forgeService.waitUntilContainerIsStarted();
+		} catch (InterruptedException e) {
+			ForgeUIPlugin.log(e);
+			return;
+		}
+		ProjectFactory projectFactory;
+		while ((projectFactory = forgeService
+				.lookup(ProjectFactory.class)) == null) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				break;
+			}
+		}
+		if (projectFactory != null) {
+			projectFactory
+					.addProjectListener(ImportEclipseProjectListener.INSTANCE);
+		}
+		try {
+			Imported<ConnectionProfileManagerProvider> imported = forgeService
+					.lookupImported(ConnectionProfileManagerProvider.class);
+			if (imported != null) {
+				ConnectionProfileManagerProvider provider = imported
+						.get();
+				provider.setConnectionProfileManager(new ConnectionProfileManagerImpl());
+			}
+		} catch (Throwable t) {
+			ForgeUIPlugin.log(t);
+		}
 	}
 
 }

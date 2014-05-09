@@ -34,6 +34,10 @@ public enum ImportEclipseProjectListener implements ProjectListener,
 	public void projectCreated(Project project) {
 		projects.add(project);
 	}
+	
+	public boolean projectsAvailableForImport() {
+		return !projects.isEmpty();
+	}
 
 	public void doImport() {
 		for (Project project : projects) {
@@ -47,6 +51,7 @@ public enum ImportEclipseProjectListener implements ProjectListener,
 					moduleLocation, projectName);
 			projectImporter.importProject();
 		}
+		projects.clear();
 	}
 
 	@Override

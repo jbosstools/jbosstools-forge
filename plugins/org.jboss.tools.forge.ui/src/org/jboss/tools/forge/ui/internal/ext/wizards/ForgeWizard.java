@@ -24,7 +24,6 @@ import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
-import org.jboss.tools.forge.ui.internal.ext.listeners.EventBus;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
@@ -35,6 +34,7 @@ public class ForgeWizard extends MutableWizard {
 
 	private final CommandController controller;
 	private final UIContextImpl uiContext;
+	private ForgeWizardHelper helper = new ForgeWizardHelper();
 
 	public ForgeWizard(String windowTitle, CommandController controller,
 			UIContextImpl contextImpl) {
@@ -43,6 +43,7 @@ public class ForgeWizard extends MutableWizard {
 		setWindowTitle(windowTitle);
 		setNeedsProgressMonitor(true);
 		setForcePreviousAndNextButtons(isWizard());
+		helper.onCreate(contextImpl);
 	}
 
 	public UIContextImpl getUIContext() {
@@ -85,7 +86,7 @@ public class ForgeWizard extends MutableWizard {
 
 					Result commandResult = controller.execute();
 					displayResult(commandResult);
-					EventBus.INSTANCE.fireWizardFinished(uiContext);
+					helper.onFinish(getUIContext());
 				} catch (Exception e) {
 					ForgeUIPlugin.displayMessage(getWindowTitle(),
 							"Error while executing task, check Error log view",
@@ -129,7 +130,7 @@ public class ForgeWizard extends MutableWizard {
 
 	@Override
 	public boolean performCancel() {
-		EventBus.INSTANCE.fireWizardClosed(uiContext);
+		helper.onCancel(getUIContext());
 		return true;
 	}
 

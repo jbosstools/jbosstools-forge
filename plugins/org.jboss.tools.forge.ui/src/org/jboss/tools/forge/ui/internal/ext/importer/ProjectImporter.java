@@ -20,6 +20,7 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 import org.eclipse.ui.dialogs.IOverwriteQuery;
 import org.eclipse.ui.wizards.datatransfer.FileSystemStructureProvider;
 import org.eclipse.ui.wizards.datatransfer.ImportOperation;
+import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 
 /**
  * Imports a maven-ized project into the workspace
@@ -54,7 +55,13 @@ public class ProjectImporter {
 		} else {
 			job = new GeneralImportWorkspaceJob(name);
 		}
+		job.setUser(true);
 		job.schedule();
+		try {
+			job.join();
+		} catch (InterruptedException e) {
+			ForgeUIPlugin.log(e);
+		}
 	}
 
 	private Collection<MavenProjectInfo> getProjectToImport() {
