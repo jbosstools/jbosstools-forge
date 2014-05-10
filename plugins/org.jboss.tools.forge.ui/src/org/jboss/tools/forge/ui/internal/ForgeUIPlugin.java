@@ -1,25 +1,11 @@
 package org.jboss.tools.forge.ui.internal;
 
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.jboss.forge.addon.database.tools.connections.ConnectionProfileManagerProvider;
-import org.jboss.forge.addon.projects.ProjectFactory;
-import org.jboss.forge.addon.projects.ProjectListener;
-import org.jboss.forge.furnace.services.Imported;
-import org.jboss.forge.furnace.spi.ListenerRegistration;
-import org.jboss.tools.forge.core.furnace.FurnaceService;
-import org.jboss.tools.forge.ui.internal.ext.database.ConnectionProfileManagerImpl;
-import org.jboss.tools.forge.ui.internal.ext.importer.ImportEclipseProjectListener;
-import org.jboss.tools.forge.ui.internal.ext.listeners.EventBus;
-import org.jboss.tools.forge.ui.internal.ext.listeners.PickUpListener;
-import org.jboss.tools.forge.ui.internal.ext.listeners.RefreshListener;
 import org.jboss.tools.forge.ui.notifications.NotificationDialog;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
 import org.osgi.framework.BundleContext;
@@ -30,67 +16,15 @@ public class ForgeUIPlugin extends AbstractUIPlugin {
 
 	private static ForgeUIPlugin plugin;
 
-	private ListenerRegistration<ProjectListener> projectListenerRegistration;
-
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-//		ExecutorService executor = Executors.newSingleThreadExecutor();
-//		// Register the project listener
-//		executor.submit(new Runnable() {
-//			@Override
-//			public void run() {
-//				FurnaceService forgeService = FurnaceService.INSTANCE;
-//				try {
-//					forgeService.waitUntilContainerIsStarted();
-//				} catch (InterruptedException e) {
-//					ForgeUIPlugin.log(e);
-//					return;
-//				}
-//				ProjectFactory projectFactory;
-//				while ((projectFactory = forgeService
-//						.lookup(ProjectFactory.class)) == null) {
-//					try {
-//						Thread.sleep(1000);
-//					} catch (InterruptedException e) {
-//						break;
-//					}
-//				}
-//				if (projectFactory != null) {
-//					projectListenerRegistration = projectFactory
-//							.addProjectListener(ImportEclipseProjectListener.INSTANCE);
-//				}
-//				try {
-//					Imported<ConnectionProfileManagerProvider> imported = forgeService
-//							.lookupImported(ConnectionProfileManagerProvider.class);
-//					if (imported != null) {
-//						ConnectionProfileManagerProvider provider = imported
-//								.get();
-//						provider.setConnectionProfileManager(new ConnectionProfileManagerImpl());
-//					}
-//				} catch (Throwable t) {
-//					ForgeUIPlugin.log(t);
-//				}
-//			}
-//		});
-//		registerEventListeners();
-//		executor.shutdown();
 		plugin = this;
 	}
-
-//	private void registerEventListeners() {
-//		EventBus.INSTANCE.register(ImportEclipseProjectListener.INSTANCE);
-//		EventBus.INSTANCE.register(RefreshListener.INSTANCE);
-//		EventBus.INSTANCE.register(PickUpListener.INSTANCE);
-//	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-//		if (projectListenerRegistration != null) {
-//			projectListenerRegistration.removeListener();
-//		}
-//		EventBus.INSTANCE.clearListeners();
 		super.stop(context);
 	}
 

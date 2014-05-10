@@ -15,7 +15,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
-import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 
 public class ProjectTools {
 
