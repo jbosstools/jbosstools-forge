@@ -40,7 +40,7 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 		return new IAction[] { 
 				new StartAction(getRuntime()),
 				new StopAction(getRuntime()),
-				new GoToAction(),
+				new GoToAction(getRuntime()),
 				new LinkAction()
 		};
 	}
