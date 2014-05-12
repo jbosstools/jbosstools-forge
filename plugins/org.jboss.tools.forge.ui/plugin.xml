@@ -146,6 +146,10 @@
            id="consoles" 
            name="Console Providers" 
            schema="schema/consoles.exsd"/>
+   <extension-point
+           id="runtimes"
+           name="Runtime Providers"
+           schema="schema/runtimes.exsd"/>
    <extension
          point="org.jboss.tools.forge.ui.consoles">
       <console
