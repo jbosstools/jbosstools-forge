@@ -13,9 +13,7 @@ import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
-import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
-import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.database.ConnectionProfileManagerImpl;
 import org.jboss.tools.forge.ui.internal.ext.importer.ImportEclipseProjectListener;
@@ -28,11 +26,6 @@ public class ForgeHelper {
 	
 	public static void stop(ForgeRuntime runtime) {
 		createStopRuntimeJob(runtime).schedule();
-	}
-	
-	public static boolean isForgeStarting() {
-		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-		return runtime != null && ForgeRuntimeState.STARTING.equals(runtime.getState());
 	}
 	
 	public static Job createStartRuntimeJob(final ForgeRuntime runtime) {
