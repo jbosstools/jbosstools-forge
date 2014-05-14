@@ -9,7 +9,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.internal.wizard.AbstractForgeWizard;
 import org.jboss.tools.forge.ui.wizards.internal.wizard.util.WizardsHelper;
 
@@ -36,7 +35,7 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 			@Override
 			public void run() {
 				if (!isAngularJsPluginAvailable()) {
-					new AngularJsInstaller().install(getShell());
+					new AngularJsInstaller().install(getShell(), getRuntime());
 				}
 			}			
 		};
@@ -44,7 +43,7 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 	}
 	
 	private boolean isAngularJsPluginAvailable() {
-		String str = ForgeHelper.getDefaultRuntime().sendCommand("forge list-plugins");
+		String str = getRuntime().sendCommand("forge list-plugins");
 		return str != null && str.contains("org.jboss.forge.angularjs-scaffoldx-plugin");
 	}
 	
@@ -132,7 +131,7 @@ public class ScaffoldWizard extends AbstractForgeWizard {
 	
 	void checkIfSetupNeeded() {
 		setBusy(true);
-		new ScaffoldWizardHelper(this).checkIfSetupNeeded();
+		new ScaffoldWizardHelper(this).checkIfSetupNeeded(getRuntime());
 	}
 	
 	void setBusy(boolean b) {

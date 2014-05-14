@@ -8,7 +8,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ScaffoldWizardHelper {
 	
@@ -20,11 +19,10 @@ public class ScaffoldWizardHelper {
 		this.wizard = wizard;
 	}
 	
-	void checkIfSetupNeeded() {
+	void checkIfSetupNeeded(final ForgeRuntime runtime) {
 		Job job = new Job("Setup Needed") {			
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
 				currentDirectory = runtime.sendCommand("pwd").trim();
 				runtime.sendCommand("cd " + wizard.getProjectLocation());
 				installedFacets = runtime.sendCommand("project list-facets");

@@ -9,7 +9,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 
 public class ForgeConnectionProfileHelper {
 	
@@ -26,12 +26,12 @@ public class ForgeConnectionProfileHelper {
 		this.wizardPage = wizardPage;
 	}
 	
-	boolean retrieveConnectionProfiles() {
+	boolean retrieveConnectionProfiles(final ForgeRuntime runtime) {
 		Job job = new WorkspaceJob("Retrieving connection profiles") {
 			@Override
 			public IStatus runInWorkspace(IProgressMonitor monitor)
 					throws CoreException {
-				String rawString = ForgeHelper.getDefaultRuntime().sendCommand("connection-profiles list");				
+				String rawString = runtime.sendCommand("connection-profiles list");				
 				refreshConnectionProfiles(getConnectionProfiles(rawString));
 				return Status.OK_STATUS;
 			}

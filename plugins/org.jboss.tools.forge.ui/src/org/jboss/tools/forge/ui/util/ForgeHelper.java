@@ -40,10 +40,6 @@ public class ForgeHelper {
 		return runtime != null && ForgeRuntimeState.STARTING.equals(runtime.getState());
 	}
 	
-	public static ForgeRuntime getDefaultRuntime() {
-		return ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-	}
-	
 	public static Job createStartRuntimeJob(final ForgeRuntime runtime) {
 		final String version = runtime.getVersion();
 		WorkspaceJob job = new WorkspaceJob("Starting JBoss Forge " + version) {

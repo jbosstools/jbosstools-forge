@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IWorkbenchWizard;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 
 public interface IForgeWizard extends IWorkbenchWizard {
 
@@ -11,4 +12,5 @@ public interface IForgeWizard extends IWorkbenchWizard {
 	void doRefresh(IProgressMonitor monitor);
 	Map<Object, Object> getWizardDescriptor();
 	String getStatusMessage();
+	ForgeRuntime getRuntime();
 }

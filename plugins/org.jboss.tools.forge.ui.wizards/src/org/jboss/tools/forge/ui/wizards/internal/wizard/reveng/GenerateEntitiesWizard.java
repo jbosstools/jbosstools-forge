@@ -7,7 +7,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.internal.wizard.AbstractForgeWizard;
 import org.jboss.tools.forge.ui.wizards.internal.wizard.util.WizardsHelper;
 
@@ -31,7 +30,7 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 			@Override
 			public void run() {
 				if (!isHibernateToolsPluginAvailable()) {
-					new HibernateToolsInstaller().install(getShell());
+					new HibernateToolsInstaller().install(getShell(), getRuntime());
 				}
 			}			
 		};
@@ -39,7 +38,7 @@ public class GenerateEntitiesWizard extends AbstractForgeWizard {
 	}
 	
 	private boolean isHibernateToolsPluginAvailable() {
-		String str = ForgeHelper.getDefaultRuntime().sendCommand("forge list-plugins");
+		String str = getRuntime().sendCommand("forge list-plugins");
 		return str != null && str.contains("org.jboss.hibernate.forge.hibernate-tools-plugin");
 	}
 	

@@ -8,14 +8,13 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.internal.WizardsPlugin;
 
 public class AngularJsInstaller {
 	
 	private boolean done = false;
 	
-	void install(Shell shell) {
+	void install(Shell shell, final ForgeRuntime runtime) {
 		final ProgressMonitorDialog pmd = new ProgressMonitorDialog(shell);
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
@@ -30,7 +29,6 @@ public class AngularJsInstaller {
 							Runnable installer = new Runnable() {
 								@Override
 								public void run() {
-									ForgeRuntime runtime = ForgeHelper.getDefaultRuntime();
 									runtime.sendCommand("forge install-plugin angularjs");
 									runtime.sendInput(System.getProperty("line.separator"));
 									done = true;

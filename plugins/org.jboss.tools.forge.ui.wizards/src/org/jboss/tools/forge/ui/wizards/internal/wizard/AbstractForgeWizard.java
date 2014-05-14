@@ -29,11 +29,11 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 	
 	private String startDir = null;
 	private boolean acceptDefaults = false;
+	private ForgeRuntime runtime = WizardsHelper.getForgeRuntime();
 	
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection sel) {
 		try {
-			ForgeRuntime runtime = WizardsHelper.getForgeRuntime();
 			if (ForgeRuntimeState.STOPPED.equals(runtime.getState())) {
 				startForge(runtime);
 			}
@@ -134,7 +134,7 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 	
 	protected String sendRuntimeCommand(String command, IProgressMonitor monitor) {
 		monitor.setTaskName("Executing '" + command + "'");
-		String result = ForgeHelper.getDefaultRuntime().sendCommand(command);
+		String result = getRuntime().sendCommand(command);
 		monitor.worked(1);
 		return result;
 	}
@@ -203,6 +203,10 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 			wizardDescriptor = new HashMap<Object, Object>();
 		}
 		return wizardDescriptor;
+	}
+	
+	public ForgeRuntime getRuntime() {
+		return runtime;
 	}
 	
 //	protected void displayNotification(final String title, final String message) {

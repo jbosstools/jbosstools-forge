@@ -227,7 +227,7 @@ public class RestWizardPage extends AbstractForgeWizardPage {
 	}
 	
 	private void checkRestSetup() {
-		new RestSetupHelper((RestWizard)getWizard()).checkRestSetup();
+		new RestSetupHelper((RestWizard)getWizard()).checkRestSetup(getWizard().getRuntime());
 	}
 	
 	void setSetupNeeded(boolean b) {
