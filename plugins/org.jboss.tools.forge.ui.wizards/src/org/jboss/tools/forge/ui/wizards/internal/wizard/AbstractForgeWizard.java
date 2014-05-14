@@ -16,10 +16,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
-import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.core.util.ProjectTools;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 import org.jboss.tools.forge.ui.wizards.internal.WizardsPlugin;
+import org.jboss.tools.forge.ui.wizards.internal.wizard.util.WizardsHelper;
 
 public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard {
 
@@ -31,15 +33,16 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection sel) {
 		try {
-			if (!ForgeHelper.isForgeRunning() && !ForgeHelper.isForgeStarting()) {
-				startForge();
+			ForgeRuntime runtime = WizardsHelper.getForgeRuntime();
+			if (ForgeRuntimeState.STOPPED.equals(runtime.getState())) {
+				startForge(runtime);
 			}
 		} catch (Exception e) {
 			WizardsPlugin.log(e);
 		}
 	}
 
-	private void startForge() throws Exception {
+	private void startForge(final ForgeRuntime runtime) throws Exception {
 		ProgressMonitorDialog pmd = new ProgressMonitorDialog(getShell());
 		pmd.run(true, true, new IRunnableWithProgress() {
 			@Override
@@ -51,11 +54,11 @@ public abstract class AbstractForgeWizard extends Wizard implements IForgeWizard
 
 					@Override
 					public void run() {
-						ForgeHelper.start(ForgeCorePreferences.INSTANCE.getDefaultRuntime());
+						ForgeHelper.start(runtime);
 					}
 
 				});
-				while (!ForgeHelper.isForgeRunning()) {
+				while (!ForgeRuntimeState.RUNNING.equals(runtime.getState())) {
 					taskName += ".";
 					monitor.setTaskName(taskName);
 					Thread.sleep(1000);
