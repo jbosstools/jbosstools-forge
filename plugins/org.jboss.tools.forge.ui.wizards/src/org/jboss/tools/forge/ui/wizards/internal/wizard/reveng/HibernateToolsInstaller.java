@@ -13,8 +13,6 @@ import org.jboss.tools.forge.ui.wizards.internal.WizardsPlugin;
 public class HibernateToolsInstaller {
 	
 	private boolean done = false;
-//	private String prompt = null;
-//	private String promptNoProject = null;
 	
 	void install(Shell shell, final ForgeRuntime runtime) {
 		final ProgressMonitorDialog pmd = new ProgressMonitorDialog(shell);
@@ -31,12 +29,8 @@ public class HibernateToolsInstaller {
 							Runnable installer = new Runnable() {
 								@Override
 								public void run() {
-//									prompt = runtime.sendCommand("get-prompt");
-//									promptNoProject = runtime.sendCommand("get-prompt-no-project");		
 									runtime.sendCommand("forge install-plugin hibernate-tools");
 									runtime.sendInput(System.getProperty("line.separator"));
-//									runtime.sendCommand("set-prompt " + prompt);
-//									runtime.sendCommand("set-prompt-no-project " + promptNoProject);
 									done = true;
 								}								
 							};
