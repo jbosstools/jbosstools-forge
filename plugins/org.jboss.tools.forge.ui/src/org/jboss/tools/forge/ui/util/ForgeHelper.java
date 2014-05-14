@@ -30,11 +30,6 @@ public class ForgeHelper {
 		createStopRuntimeJob(runtime).schedule();
 	}
 	
-	public static boolean isForgeRunning() {
-		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-		return runtime != null && ForgeRuntimeState.RUNNING.equals(runtime.getState());
-	}
-
 	public static boolean isForgeStarting() {
 		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 		return runtime != null && ForgeRuntimeState.STARTING.equals(runtime.getState());

@@ -15,8 +15,8 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class GoToAction extends Action implements ISelectionListener {
 	
@@ -46,7 +46,7 @@ public class GoToAction extends Action implements ISelectionListener {
 	}
 
 	public boolean isEnabled() {
-		return ForgeHelper.isForgeRunning();
+		return ForgeRuntimeState.RUNNING.equals(runtime.getState());
 	}
 
 	private ImageDescriptor createImageDescriptor() {
