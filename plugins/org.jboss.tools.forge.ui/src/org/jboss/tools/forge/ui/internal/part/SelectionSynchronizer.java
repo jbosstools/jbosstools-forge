@@ -11,28 +11,22 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
-import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 
 
 public class SelectionSynchronizer implements ISelectionListener {
+	
+	private ForgeRuntime runtime;
 
 	private IEditorPart selectedPart;
 	
-	private IPartListener partListener = new IPartListener() {
-		
-		@Override
-		public void partOpened(IWorkbenchPart part) {}
-		
-		@Override
-		public void partDeactivated(IWorkbenchPart part) {}
-		
-		@Override
-		public void partClosed(IWorkbenchPart part) {}
-		
-		@Override
-		public void partBroughtToTop(IWorkbenchPart part) {
+	private IPartListener partListener = new IPartListener() {		
+		@Override public void partOpened(IWorkbenchPart part) {}		
+		@Override public void partDeactivated(IWorkbenchPart part) {}		
+		@Override public void partClosed(IWorkbenchPart part) {}		
+		@Override public void partActivated(IWorkbenchPart part) {}
+		@Override public void partBroughtToTop(IWorkbenchPart part) {
 			if (!(part instanceof IEditorPart) || part == selectedPart) return;
 			selectedPart = (IEditorPart)part;
 			IEditorInput editorInput = selectedPart.getEditorInput();
@@ -43,17 +37,15 @@ public class SelectionSynchronizer implements ISelectionListener {
 			if (path.indexOf(' ') != -1) {
 				path = '\"' + path + '\"';
 			}
-			ForgeRuntime forgeRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-			if (forgeRuntime != null && ForgeRuntimeState.RUNNING.equals(forgeRuntime.getState())) {
-				forgeRuntime.sendInput("pick-up " + path + "\n");
+			if (ForgeRuntimeState.RUNNING.equals(getRuntime().getState())) {
+				getRuntime().sendInput("pick-up " + path + "\n");
 			}
-		}
-		
-		@Override
-		public void partActivated(IWorkbenchPart part) {
-			// Ignore
-		}
+		}		
 	};
+	
+	public SelectionSynchronizer(ForgeRuntime runtime) {
+		this.runtime = runtime;
+	}
 	
 	public void setEnabled(boolean enabled) {
 		if (enabled) {
@@ -76,9 +68,8 @@ public class SelectionSynchronizer implements ISelectionListener {
 		if (path.indexOf(' ') != -1) {
 			path = '\"' + path + '\"';
 		}
-		ForgeRuntime forgeRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-		if (forgeRuntime != null && ForgeRuntimeState.RUNNING.equals(forgeRuntime.getState())) {
-			forgeRuntime.sendInput("pick-up " + path + "\n");
+		if (ForgeRuntimeState.RUNNING.equals(getRuntime().getState())) {
+			getRuntime().sendInput("pick-up " + path + "\n");
 		}
 	}
 	
@@ -88,6 +79,10 @@ public class SelectionSynchronizer implements ISelectionListener {
 	
 	private IPartService getPartService() {
 		return getWorkbenchWidow().getPartService();
+	}
+	
+	private ForgeRuntime getRuntime() {
+		return runtime;
 	}
 	
 }

@@ -12,12 +12,13 @@ import org.jboss.tools.forge.ui.internal.part.SelectionSynchronizer;
 
 public class LinkAction extends Action {
 	
-	private SelectionSynchronizer selectionSynchronizer = new SelectionSynchronizer();
+	private SelectionSynchronizer selectionSynchronizer;
 	private ForgeRuntime runtime;
 	
 	public LinkAction(ForgeRuntime runtime) {
 		super("", SWT.TOGGLE);
 		this.runtime = runtime;
+		this.selectionSynchronizer = new SelectionSynchronizer(runtime);
 		setImageDescriptor(createImageDescriptor());
 	}
 
