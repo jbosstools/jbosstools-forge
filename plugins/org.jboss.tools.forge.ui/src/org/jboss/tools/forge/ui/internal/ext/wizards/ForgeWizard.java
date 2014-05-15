@@ -79,6 +79,9 @@ public class ForgeWizard extends MutableWizard {
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException, InterruptedException {
 				try {
+					monitor.beginTask(
+							"Executing Forge Wizard", 
+							IProgressMonitor.UNKNOWN);
 					Map<Object, Object> attributeMap = uiContext
 							.getAttributeMap();
 					attributeMap.put(IProgressMonitor.class, monitor);
@@ -87,6 +90,7 @@ public class ForgeWizard extends MutableWizard {
 					Result commandResult = controller.execute();
 					displayResult(commandResult);
 					helper.onFinish(getUIContext());
+					monitor.done();
 				} catch (Exception e) {
 					ForgeUIPlugin.displayMessage(getWindowTitle(),
 							"Error while executing task, check Error log view",
