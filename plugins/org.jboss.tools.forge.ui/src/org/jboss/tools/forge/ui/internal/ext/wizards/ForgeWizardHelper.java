@@ -126,7 +126,6 @@ public class ForgeWizardHelper {
 	}
 	
 	private void showFinalSelection(UIContextImpl context) {
-		System.out.println("showFinalSelection");
 		Object object = context.getSelection();
 		if (object != null) {
 			selectResourceFor(object);
@@ -134,7 +133,6 @@ public class ForgeWizardHelper {
 	}
 	
 	private void selectResourceFor(Object object) {
-		System.out.println("selectResourceFor");
 		try {
 			Method method = object.getClass().getMethod(
 					"getUnderlyingResourceObject", 
@@ -153,7 +151,6 @@ public class ForgeWizardHelper {
 	}
 
 	private void selectFile(File file) {
-		System.out.println("selectFile");
 		try {
 			IPath path = new Path(file.getCanonicalPath());
 			IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
@@ -177,9 +174,7 @@ public class ForgeWizardHelper {
 	}
 	
 	private void expandWorkspaceResource(IResource container) {
-		System.out.println("expandWorkspaceResource");
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
-		System.out.println("activeWorkbenchPage: " + workbenchPage);
 		if (workbenchPage != null) {
 			IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
 			if (projectExplorer != null && projectExplorer instanceof CommonNavigator) {

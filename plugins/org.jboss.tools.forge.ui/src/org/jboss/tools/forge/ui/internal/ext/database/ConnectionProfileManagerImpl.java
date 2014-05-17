@@ -182,7 +182,6 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 	}
 	
 	private DriverInstance getDriver(String name) {
-		System.out.println("getDriver(" + name + ")");
 		return DriverManager.getInstance().getDriverInstanceByName(name);
 	}
 
