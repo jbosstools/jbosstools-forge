@@ -25,6 +25,7 @@ public class ForgeRuntimesPreferencesTest {
 			"   <runtime name=\"foo\" location=\"foofoo\" type=\"external\"/>" +
 			"   <runtime name=\"bar\" location=\"barbar\" type=\"external\"/>" +
 			"</forgeRuntimes>";
+	private static final String EMBEDDED_RUNTIME_NAME = "1.4.4.Final - embedded";
 	
 	private ForgeRuntime[] savedRuntimes;
 	private ForgeRuntime savedDefaultRuntime;
@@ -168,7 +169,9 @@ public class ForgeRuntimesPreferencesTest {
 	}
 	
 	private void verifyEmbedded(ForgeRuntime[] runtimes) {
-		assertEquals(ForgeEmbeddedRuntime.INSTANCE, getRuntimeToVerify("embedded", runtimes));
+		assertEquals(ForgeEmbeddedRuntime.INSTANCE, getRuntimeToVerify(
+				EMBEDDED_RUNTIME_NAME, 
+				runtimes));
 	}
 	
 	private void verifyFoo(ForgeRuntime[] runtimes) {

@@ -128,7 +128,9 @@ public class ForgeCorePreferences {
 				if (runtime == null)
 					continue;
 				runtimes.add(runtime);
-				if (defaultRuntimeName.equals(runtime.getName())) {
+				if (("embedded".equals(defaultRuntimeName) &&
+						ForgeRuntimeType.EMBEDDED.equals(runtime.getType())) ||
+						defaultRuntimeName.equals(runtime.getName())) {
 					defaultRuntime = runtime;
 				}
 			}

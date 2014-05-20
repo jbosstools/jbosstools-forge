@@ -16,6 +16,7 @@ import org.junit.Test;
 public class ForgeEmbeddedRuntimeTest {
 	
 	private String location = null;
+	private String name = null;
 	
 	@Before 
 	public void setUp() throws Exception {
@@ -25,6 +26,7 @@ public class ForgeEmbeddedRuntimeTest {
 				location = file.getAbsolutePath() + File.separator + str;
 			}
 		}
+		name = "1.4.4.Final - embedded";
 	}
 	
 	@After
@@ -36,7 +38,7 @@ public class ForgeEmbeddedRuntimeTest {
 	@Test
 	public void testForgeEmbeddedRuntime() {
 		assertNotNull(ForgeEmbeddedRuntime.INSTANCE);
-		assertEquals("embedded", ForgeEmbeddedRuntime.INSTANCE.getName());
+		assertEquals(name, ForgeEmbeddedRuntime.INSTANCE.getName());
 		assertEquals(location, ForgeEmbeddedRuntime.INSTANCE.getLocation());
 		assertEquals(ForgeRuntimeType.EMBEDDED, ForgeEmbeddedRuntime.INSTANCE.getType());
 	}

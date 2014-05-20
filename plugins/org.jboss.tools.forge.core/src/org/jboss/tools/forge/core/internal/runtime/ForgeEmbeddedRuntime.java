@@ -19,7 +19,7 @@ public class ForgeEmbeddedRuntime extends ForgeAbstractRuntime {
 
 	@Override
 	public final String getName() {
-		return "embedded";
+		return getVersion() + " - " + getType().toString().toLowerCase();
 	}
 	
 	@Override
