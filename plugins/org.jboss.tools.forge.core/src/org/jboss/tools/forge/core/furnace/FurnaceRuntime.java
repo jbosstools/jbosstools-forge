@@ -31,7 +31,7 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	@Override
 	public String getName() {
-		return FurnaceService.INSTANCE.name();
+		return getVersion() + " - " + getType().toString().toLowerCase();
 	}
 
 	@Override
