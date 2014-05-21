@@ -18,6 +18,7 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
+import org.jboss.tools.forge.core.internal.helper.ForgeHelper;
 import org.jboss.tools.forge.core.internal.process.ForgeLaunchHelper;
 import org.jboss.tools.forge.core.internal.process.ForgeRuntimeProcess;
 import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
@@ -72,6 +73,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	}
 	
 	public void start(IProgressMonitor progressMonitor) {
+		ForgeHelper.sendStartEvent(this);
 		errorMessage = null;
 		IStreamListener startupListener = null;
 		IStreamListener errorListener = null;
