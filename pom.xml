@@ -20,5 +20,12 @@
 		<module>features</module>
 		<module>site</module>
 	</modules>
+	<repositories>
+		<repository>
+			<id>jbosstools-base</id>
+			<layout>p2</layout>
+			<url>${jbosstools-base-site}</url>
+		</repository>
+	</repositories>
 </project>
 
