@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IProcess;
+import org.jboss.tools.usage.event.UsageEventType;
 import org.osgi.framework.BundleContext;
 
 public class ForgeCorePlugin extends Plugin {
@@ -19,12 +20,19 @@ public class ForgeCorePlugin extends Plugin {
 
 	private static Thread shutdownHook;
 	private static List<IProcess> processes = new ArrayList<IProcess>();
+	
+	private UsageEventType forgeStartEventType;
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		initializeShutdownHook();
 		plugin = this;
 		System.setProperty("org.jboss.forge.addon.shell.forcePOSIXTerminal", "true");
+		forgeStartEventType = new UsageEventType(this, "start");
+	}
+	
+	public UsageEventType getForgeStartEventType() {
+		return forgeStartEventType;
 	}
 
 	private void initializeShutdownHook() {
