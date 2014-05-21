@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.internal.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.internal.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
@@ -43,12 +44,12 @@ public class ForgeRuntimesPreferencesTest {
 	
 	@Test
 	public void testGetDefaultInitialCase() {
-		assertEquals(ForgeEmbeddedRuntime.INSTANCE, ForgeCorePreferences.INSTANCE.getDefaultRuntime());
+		assertEquals(FurnaceRuntime.INSTANCE, ForgeCorePreferences.INSTANCE.getDefaultRuntime());
 	}
 	
 	@Test
 	public void testGetRuntimesInitialCase() {
-		assertEquals(1, ForgeCorePreferences.INSTANCE.getRuntimes().length);
+		assertEquals(2, ForgeCorePreferences.INSTANCE.getRuntimes().length);
 	}
 	
 	@Test
@@ -169,9 +170,11 @@ public class ForgeRuntimesPreferencesTest {
 	}
 	
 	private void verifyEmbedded(ForgeRuntime[] runtimes) {
-		assertEquals(ForgeEmbeddedRuntime.INSTANCE, getRuntimeToVerify(
-				EMBEDDED_RUNTIME_NAME, 
-				runtimes));
+		assertEquals(
+				ForgeEmbeddedRuntime.INSTANCE, 
+				getRuntimeToVerify(
+						EMBEDDED_RUNTIME_NAME, 
+						runtimes));
 	}
 	
 	private void verifyFoo(ForgeRuntime[] runtimes) {

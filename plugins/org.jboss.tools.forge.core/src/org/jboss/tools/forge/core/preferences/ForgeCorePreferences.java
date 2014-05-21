@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.jboss.forge.furnace.util.OperatingSystemUtils;
+import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 import org.jboss.tools.forge.core.internal.preferences.ForgeCorePreferencesInitializer;
 import org.jboss.tools.forge.core.internal.runtime.ForgeEmbeddedRuntime;
@@ -52,6 +53,7 @@ public class ForgeCorePreferences {
 
 	private List<ForgeRuntime> runtimes = null;
 	private ForgeRuntime defaultRuntime = null;
+	private String defaultRuntimeName = null;
 
 	private ForgeCorePreferences() {
 	}
@@ -95,43 +97,49 @@ public class ForgeCorePreferences {
 	}
 
 	private void initializeRuntimes() {
-		initializeFromXml(getForgeRuntimesPreference());
+		runtimes = new ArrayList<ForgeRuntime>();
+		runtimes.add(FurnaceRuntime.INSTANCE);
+		runtimes.add(ForgeEmbeddedRuntime.INSTANCE);
+		addFromXml(getForgeRuntimesPreference());
+		initializeDefaultRuntime();
+	}
+	
+	private void initializeDefaultRuntime() {
+		for (ForgeRuntime runtime : runtimes) {
+			if (runtime.getName().equals(defaultRuntimeName)) {
+				defaultRuntime = runtime;
+				break;
+			}
+		}
+		if (defaultRuntime == null) {
+			if ("embedded".equals(defaultRuntimeName)) {
+				defaultRuntime = ForgeEmbeddedRuntime.INSTANCE;
+			} else {
+				defaultRuntime = FurnaceRuntime.INSTANCE;
+			}
+			defaultRuntimeName = defaultRuntime.getName();
+		}
 	}
 
-	private void initializeFromXml(String xml) {
+	private void addFromXml(String xml) {
 		DocumentBuilder documentBuilder = newDocumentBuilder();
-		if (documentBuilder == null)
-			return;
+		if (documentBuilder == null) return;
 		InputStream inputStream = createInputStream(xml);
-		if (inputStream == null)
-			return;
-		runtimes = new ArrayList<ForgeRuntime>();
+		if (inputStream == null) return;
 		Document document = parseRuntimes(documentBuilder, inputStream);
 		Element runtimeElement = document.getDocumentElement();
-		String defaultRuntimeName = runtimeElement.getAttribute("default");
+		defaultRuntimeName = runtimeElement.getAttribute("default");
 		NodeList nodeList = runtimeElement.getChildNodes();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element element = (Element) node;
 				String type = element.getAttribute("type").toUpperCase();
-				ForgeRuntime runtime = null;
 				if (ForgeRuntimeType.valueOf(type).equals(
-						ForgeRuntimeType.EMBEDDED)) {
-					runtime = ForgeEmbeddedRuntime.INSTANCE;
-				} else if (ForgeRuntimeType.valueOf(type).equals(
 						ForgeRuntimeType.EXTERNAL)) {
 					String name = element.getAttribute("name");
 					String location = element.getAttribute("location");
-					runtime = new ForgeExternalRuntime(name, location);
-				}
-				if (runtime == null)
-					continue;
-				runtimes.add(runtime);
-				if (("embedded".equals(defaultRuntimeName) &&
-						ForgeRuntimeType.EMBEDDED.equals(runtime.getType())) ||
-						defaultRuntimeName.equals(runtime.getName())) {
-					defaultRuntime = runtime;
+					runtimes.add(new ForgeExternalRuntime(name, location));
 				}
 			}
 		}
