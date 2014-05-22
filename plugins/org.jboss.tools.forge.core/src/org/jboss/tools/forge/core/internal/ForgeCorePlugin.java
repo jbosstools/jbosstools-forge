@@ -33,7 +33,14 @@ public class ForgeCorePlugin extends Plugin {
 	}
 	
 	private void initializeUsageReporting() {
-		forgeStartEventType = new UsageEventType(this, "start");
+		forgeStartEventType = new UsageEventType(
+				"forge",
+				UsageEventType.getVersion(this),
+				null,
+				"start",
+				"Forge Runtime Version",
+				"major.minor.micro.identifier"
+				);
 		UsageReporter.getInstance().registerEvent(forgeStartEventType);
 	}
 	
