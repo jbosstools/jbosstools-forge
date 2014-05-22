@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IProcess;
 import org.jboss.tools.usage.event.UsageEventType;
+import org.jboss.tools.usage.event.UsageReporter;
 import org.osgi.framework.BundleContext;
 
 public class ForgeCorePlugin extends Plugin {
@@ -29,6 +30,7 @@ public class ForgeCorePlugin extends Plugin {
 		plugin = this;
 		System.setProperty("org.jboss.forge.addon.shell.forcePOSIXTerminal", "true");
 		forgeStartEventType = new UsageEventType(this, "start");
+		UsageReporter.getInstance().registerEvent(forgeStartEventType);
 	}
 	
 	public UsageEventType getForgeStartEventType() {
