@@ -29,6 +29,10 @@ public class ForgeCorePlugin extends Plugin {
 		initializeShutdownHook();
 		plugin = this;
 		System.setProperty("org.jboss.forge.addon.shell.forcePOSIXTerminal", "true");
+		initializeUsageReporting();
+	}
+	
+	private void initializeUsageReporting() {
 		forgeStartEventType = new UsageEventType(this, "start");
 		UsageReporter.getInstance().registerEvent(forgeStartEventType);
 	}
