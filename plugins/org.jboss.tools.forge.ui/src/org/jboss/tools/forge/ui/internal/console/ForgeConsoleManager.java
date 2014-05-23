@@ -3,12 +3,8 @@ package org.jboss.tools.forge.ui.internal.console;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
-import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 
 public class ForgeConsoleManager {
 	
@@ -20,23 +16,34 @@ public class ForgeConsoleManager {
 	}
 	
 	private void createConsoles() {
-        IExtensionPoint extensionPoint = 
-        		Platform.getExtensionRegistry().getExtensionPoint(
-        				"org.jboss.tools.forge.ui.consoles");
-        for (IConfigurationElement element : extensionPoint.getConfigurationElements()) {
-        	try {
-        		ForgeConsole forgeConsole = (ForgeConsole)element.createExecutableExtension("class");
-        		int index = calculateIndex(forgeConsole);
-				consoles.add(index, forgeConsole);
-			} catch (CoreException e) {
-				ForgeUIPlugin.log(e);
+		consoles = new ArrayList<ForgeConsole>();
+		for (ForgeRuntime runtime : ForgeCorePreferences.INSTANCE.getRuntimes()) {
+			ForgeConsole console = null;
+			if (runtime.getVersion().startsWith("1.")) {
+				console = new org.jboss.tools.forge.ui.internal.console.f1.ForgeConsoleImpl(runtime);
+			} else {
+				console = new org.jboss.tools.forge.ui.internal.ext.console.ForgeConsoleImpl();
 			}
-        }
-		
+			int index = calculateIndex(console);
+			consoles.add(index, console);
+		}
 	}
 	
 	public ForgeConsole[] getConsoles() {
 		return consoles.toArray(new ForgeConsole[consoles.size()]);
+	}
+	
+	public ForgeConsole getDefaultConsole() {
+		return getConsole(ForgeCorePreferences.INSTANCE.getDefaultRuntime());
+	}
+	
+	private ForgeConsole getConsole(ForgeRuntime runtime) {
+		for (ForgeConsole console : getConsoles()) {
+			if (console.getRuntime() == runtime) {
+				return console;
+			}
+		}
+		return null;
 	}
 	
 	private int calculateIndex(ForgeConsole forgeConsole) {
@@ -55,8 +62,8 @@ public class ForgeConsoleManager {
 		String[] firstValues = first.split("\\.|-");
 		String[] secondValues = second.split("\\.|-");
 		for (int i = 0; i < 2; i++) {
-			if (Integer.valueOf(firstValues[i]) > Integer.valueOf(secondValues[i])) {
-				return true;
+			if (Integer.valueOf(firstValues[i]) < Integer.valueOf(secondValues[i])) {
+				return false;
 			}
 		}
 		return "Final".equals(firstValues[3]);

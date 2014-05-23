@@ -22,7 +22,8 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	private ForgeRuntime forgeRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 	private String label = null;
 	
-	public ForgeConsoleImpl() {
+	public ForgeConsoleImpl(ForgeRuntime runtime) {
+		forgeRuntime = runtime;
 		getRuntime().addPropertyChangeListener(this);
 		label = "Forge " + getRuntime().getVersion() + " - " + getRuntime().getType().name().toLowerCase();
 	}
@@ -30,7 +31,7 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 	@Override
 	public Control createControl(Composite parent) {
 		if (forgeTextViewer == null) {
-			forgeTextViewer = new ForgeTextViewer(parent);
+			forgeTextViewer = new ForgeTextViewer(parent, forgeRuntime);
 		}
 		return forgeTextViewer.getControl();
 	}

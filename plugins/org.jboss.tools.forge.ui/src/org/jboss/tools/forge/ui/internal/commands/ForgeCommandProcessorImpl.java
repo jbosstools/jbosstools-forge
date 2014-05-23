@@ -10,14 +10,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.jboss.tools.forge.core.io.ForgeCommandProcessor;
-import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
-import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
-import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
-import org.jboss.tools.forge.ui.internal.console.ForgeConsoleManager;
 import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 
 
@@ -64,7 +61,7 @@ public class ForgeCommandProcessorImpl implements ForgeCommandProcessor {
 					postProcessor.postProcess(getCommandDetails(commandString));
 				}
 				refreshProjectExplorer();
-				showForgeConsole();
+				showForgeView();
 			}			
 		});
 	}
@@ -92,21 +89,15 @@ public class ForgeCommandProcessorImpl implements ForgeCommandProcessor {
 		}
 	}
 	
-	private void showForgeConsole() {		
+	private void showForgeView() {		
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		if (workbenchWindow != null) {
 			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
 			if (workbenchPage != null) {
-				IViewPart forgeView = workbenchPage.findView(ForgeConsoleView.ID);
-				if (forgeView != null) {
-					ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-					for (ForgeConsole forgeConsole : ForgeConsoleManager.INSTANCE.getConsoles()) {
-						if (runtime == forgeConsole.getRuntime()) {
-							((ForgeConsoleView)forgeView).showForgeConsole(forgeConsole);
-							break;
-						}
-					}
-					forgeView.setFocus();
+				try {
+					workbenchPage.showView((ForgeConsoleView.ID));
+				} catch (PartInitException e) {
+					ForgeUIPlugin.log(e);
 				}
 			}
 		}

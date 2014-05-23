@@ -22,7 +22,7 @@ public class ForgeConsoleView extends ViewPart {
 		this.parent = parent;
 		createActions();
 		createPageBook();
-		showForgeConsole(ForgeConsoleManager.INSTANCE.getConsoles()[0]);
+		showForgeConsole(ForgeConsoleManager.INSTANCE.getDefaultConsole());
 	}
 
 	@Override

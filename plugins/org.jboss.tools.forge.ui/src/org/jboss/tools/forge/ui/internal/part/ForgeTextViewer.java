@@ -14,7 +14,6 @@ import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
 
@@ -34,6 +33,7 @@ public class ForgeTextViewer extends TextViewer {
 	private static final String FORGE_CONSOLE_FONT = "org.jboss.tools.forge.console.font";
 	
 	private ForgeDocument forgeDocument = new ForgeDocument();
+	private ForgeRuntime runtime = null;
 	
 	private class DocumentListener implements IDocumentListener, ForgeDocument.CursorListener {
     	@Override
@@ -70,8 +70,9 @@ public class ForgeTextViewer extends TextViewer {
 		}
 	};
     
-    public ForgeTextViewer(Composite parent) {
+    public ForgeTextViewer(Composite parent, ForgeRuntime runtime) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
+    	this.runtime = runtime;
     	initialize();
     }
 
@@ -157,7 +158,7 @@ public class ForgeTextViewer extends TextViewer {
     }
     
     private ForgeRuntime getRuntime() {
-		return ForgeCorePreferences.INSTANCE.getDefaultRuntime();    	
+		return runtime;    	
     }
     
     public void stopConsole() {
