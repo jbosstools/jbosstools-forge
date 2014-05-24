@@ -142,23 +142,10 @@
              label="Forge ">
        </themeElementCategory>
     </extension>
-   <extension-point 
-           id="consoles" 
-           name="Console Providers" 
-           schema="schema/consoles.exsd"/>
    <extension-point
            id="runtimes"
            name="Runtime Providers"
            schema="schema/runtimes.exsd"/>
-   <extension
-         point="org.jboss.tools.forge.ui.consoles">
-      <console
-            class="org.jboss.tools.forge.ui.internal.console.f1.ForgeConsoleImpl">
-      </console>
-      <console
-            class="org.jboss.tools.forge.ui.internal.ext.console.ForgeConsoleImpl">
-      </console>
-   </extension>
    <extension
          point="org.eclipse.ui.handlers">
       <handler
