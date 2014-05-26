@@ -1,7 +1,6 @@
 package org.jboss.tools.forge.ui.internal.console.f1;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
@@ -13,17 +12,17 @@ import org.jboss.tools.forge.ui.internal.actions.GoToAction;
 import org.jboss.tools.forge.ui.internal.actions.LinkAction;
 import org.jboss.tools.forge.ui.internal.actions.StartAction;
 import org.jboss.tools.forge.ui.internal.actions.StopAction;
-import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
+import org.jboss.tools.forge.ui.internal.console.AbstractForgeConsole;
 import org.jboss.tools.forge.ui.internal.part.ForgeTextViewer;
 
-public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
+public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
 	private ForgeTextViewer forgeTextViewer = null;
 	private ForgeRuntime forgeRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 	private String label = null;
 	
 	public ForgeConsoleImpl(ForgeRuntime runtime) {
-		forgeRuntime = runtime;
+		super(runtime);
 		getRuntime().addPropertyChangeListener(this);
 		label = "Forge " + getRuntime().getVersion() + " - " + getRuntime().getType().name().toLowerCase();
 	}
@@ -46,11 +45,6 @@ public class ForgeConsoleImpl implements ForgeConsole, PropertyChangeListener {
 		};
 	}
 	
-	@Override
-	public ForgeRuntime getRuntime() {
-		return forgeRuntime;
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
