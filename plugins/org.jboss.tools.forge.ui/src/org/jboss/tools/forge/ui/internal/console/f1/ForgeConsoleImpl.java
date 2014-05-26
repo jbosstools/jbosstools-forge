@@ -5,7 +5,6 @@ import java.beans.PropertyChangeEvent;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.actions.GoToAction;
@@ -18,7 +17,6 @@ import org.jboss.tools.forge.ui.internal.part.ForgeTextViewer;
 public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
 	private ForgeTextViewer forgeTextViewer = null;
-	private ForgeRuntime forgeRuntime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
 	private String label = null;
 	
 	public ForgeConsoleImpl(ForgeRuntime runtime) {
@@ -30,7 +28,7 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 	@Override
 	public Control createControl(Composite parent) {
 		if (forgeTextViewer == null) {
-			forgeTextViewer = new ForgeTextViewer(parent, forgeRuntime);
+			forgeTextViewer = new ForgeTextViewer(parent, getRuntime());
 		}
 		return forgeTextViewer.getControl();
 	}
