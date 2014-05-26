@@ -14,13 +14,11 @@ import org.jboss.tools.forge.ui.internal.ext.cli.F2TextViewer;
 
 public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
-	private String label = null;
 	private F2TextViewer textViewer = null;
 	
 	public ForgeConsoleImpl(ForgeRuntime runtime) {
 		super(runtime);
 		getRuntime().addPropertyChangeListener(this);
-		label = "Forge " + getRuntime().getVersion() + " - " + getRuntime().getType().name().toLowerCase();		
 	}
 
 	@Override
@@ -37,11 +35,6 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 		};
 	}
 	
-	@Override
-	public String getLabel() {
-		return label;
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (ForgeRuntimeState.STARTING.equals(evt.getOldValue()) 

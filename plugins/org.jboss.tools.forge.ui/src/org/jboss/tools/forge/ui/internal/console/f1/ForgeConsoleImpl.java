@@ -17,12 +17,10 @@ import org.jboss.tools.forge.ui.internal.part.ForgeTextViewer;
 public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
 	private ForgeTextViewer forgeTextViewer = null;
-	private String label = null;
 	
 	public ForgeConsoleImpl(ForgeRuntime runtime) {
 		super(runtime);
 		getRuntime().addPropertyChangeListener(this);
-		label = "Forge " + getRuntime().getVersion() + " - " + getRuntime().getType().name().toLowerCase();
 	}
 	
 	@Override
@@ -53,11 +51,6 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 		if (ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
 			forgeTextViewer.stopConsole();
 		}
-	}
-	
-	@Override
-	public String getLabel() {
-		return label;
 	}
 	
 }

@@ -17,4 +17,11 @@ implements ForgeConsole, PropertyChangeListener {
 		return runtime;
 	}
 
+	public String getLabel() {
+		return "Forge " + 
+				getRuntime().getVersion() + 
+				" - " + 
+				getRuntime().getType().name().toLowerCase();
+	}
+
 }
