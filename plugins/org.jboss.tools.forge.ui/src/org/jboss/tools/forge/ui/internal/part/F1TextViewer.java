@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
 
-public class ForgeTextViewer extends TextViewer {
+public class F1TextViewer extends TextViewer {
 
 	private static String START_LINE = new Character((char)1).toString();
 	private static String PREV_CHAR = new Character((char)2).toString();
@@ -70,7 +70,7 @@ public class ForgeTextViewer extends TextViewer {
 		}
 	};
     
-    public ForgeTextViewer(Composite parent, ForgeRuntime runtime) {
+    public F1TextViewer(Composite parent, ForgeRuntime runtime) {
     	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
     	this.runtime = runtime;
     	initialize();
