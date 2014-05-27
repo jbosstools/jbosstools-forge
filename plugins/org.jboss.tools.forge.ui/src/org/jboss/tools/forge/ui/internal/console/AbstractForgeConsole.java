@@ -2,7 +2,9 @@ package org.jboss.tools.forge.ui.internal.console;
 
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
 public abstract class AbstractForgeConsole 
 implements ForgeConsole, PropertyChangeListener {
@@ -23,5 +25,8 @@ implements ForgeConsole, PropertyChangeListener {
 				" - " + 
 				getRuntime().getType().name().toLowerCase();
 	}
+	
+	protected abstract ForgeTextViewer createTextViewer(Composite parent);
 
+	
 }
