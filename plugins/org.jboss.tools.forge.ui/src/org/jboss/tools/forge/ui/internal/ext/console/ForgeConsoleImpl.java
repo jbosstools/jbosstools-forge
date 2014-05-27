@@ -36,11 +36,11 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (ForgeRuntimeState.STARTING.equals(evt.getOldValue()) 
 				&& ForgeRuntimeState.RUNNING.equals(evt.getNewValue())) {
-			textViewer.startConsole();
+			getTextViewer().startConsole();
 		}
 		if (ForgeRuntimeState.RUNNING.equals(evt.getOldValue())
 				&& ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
-			textViewer.stopConsole();
+			getTextViewer().stopConsole();
 		}
 	}
 	

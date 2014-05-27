@@ -11,13 +11,17 @@ public abstract class AbstractForgeConsole
 implements ForgeConsole, PropertyChangeListener {
 	
 	private ForgeRuntime runtime;
-	protected ForgeTextViewer textViewer;
+	private ForgeTextViewer textViewer;
 	
 	public AbstractForgeConsole(ForgeRuntime runtime) {
 		this.runtime = runtime;
 	}
 	
 	protected abstract ForgeTextViewer createTextViewer(Composite parent);
+	
+	protected ForgeTextViewer getTextViewer() {
+		return textViewer;
+	}
 
 	public ForgeRuntime getRuntime() {
 		return runtime;

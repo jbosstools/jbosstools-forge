@@ -41,10 +41,10 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
 		if (ForgeRuntimeState.STOPPED.equals(evt.getOldValue()) 
 				&& ForgeRuntimeState.STARTING.equals(evt.getNewValue())) {
-			textViewer.startConsole();
+			getTextViewer().startConsole();
 		}
 		if (ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
-			textViewer.stopConsole();
+			getTextViewer().stopConsole();
 		}
 	}
 	
