@@ -13,10 +13,11 @@ import org.jboss.tools.forge.ui.internal.actions.StartAction;
 import org.jboss.tools.forge.ui.internal.actions.StopAction;
 import org.jboss.tools.forge.ui.internal.console.AbstractForgeConsole;
 import org.jboss.tools.forge.ui.internal.viewer.F1TextViewer;
+import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
 public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
-	private F1TextViewer forgeTextViewer = null;
+	private ForgeTextViewer forgeTextViewer = null;
 	
 	public ForgeConsoleImpl(ForgeRuntime runtime) {
 		super(runtime);
@@ -24,9 +25,14 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 	}
 	
 	@Override
+	public ForgeTextViewer createTextViewer(Composite parent) {
+		return new F1TextViewer(parent, getRuntime());
+	}
+	
+	@Override
 	public Control createControl(Composite parent) {
 		if (forgeTextViewer == null) {
-			forgeTextViewer = new F1TextViewer(parent, getRuntime());
+			forgeTextViewer = createTextViewer(parent);
 		}
 		return forgeTextViewer.getControl();
 	}

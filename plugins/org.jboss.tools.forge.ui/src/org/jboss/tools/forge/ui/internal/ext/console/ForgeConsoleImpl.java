@@ -11,19 +11,27 @@ import org.jboss.tools.forge.ui.internal.actions.StartAction;
 import org.jboss.tools.forge.ui.internal.actions.StopAction;
 import org.jboss.tools.forge.ui.internal.console.AbstractForgeConsole;
 import org.jboss.tools.forge.ui.internal.viewer.F2TextViewer;
+import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
 public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
-	private F2TextViewer textViewer = null;
+	private ForgeTextViewer textViewer = null;
 	
 	public ForgeConsoleImpl(ForgeRuntime runtime) {
 		super(runtime);
 		getRuntime().addPropertyChangeListener(this);
 	}
+	
+	@Override 
+	public ForgeTextViewer createTextViewer(Composite parent) {
+		return new F2TextViewer(parent);
+	}
 
 	@Override
 	public Control createControl(Composite parent) {
-		textViewer = new F2TextViewer(parent);
+		if (textViewer == null) {
+			textViewer = createTextViewer(parent);
+		}
 		return textViewer.getControl();
 	}
 	
