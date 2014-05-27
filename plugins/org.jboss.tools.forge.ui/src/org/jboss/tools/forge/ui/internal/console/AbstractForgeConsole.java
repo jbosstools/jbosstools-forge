@@ -10,6 +10,7 @@ public abstract class AbstractForgeConsole
 implements ForgeConsole, PropertyChangeListener {
 	
 	private ForgeRuntime runtime;
+	protected ForgeTextViewer textViewer;
 	
 	public AbstractForgeConsole(ForgeRuntime runtime) {
 		this.runtime = runtime;

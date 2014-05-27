@@ -15,8 +15,6 @@ import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
 public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
-	private ForgeTextViewer textViewer = null;
-	
 	public ForgeConsoleImpl(ForgeRuntime runtime) {
 		super(runtime);
 		getRuntime().addPropertyChangeListener(this);

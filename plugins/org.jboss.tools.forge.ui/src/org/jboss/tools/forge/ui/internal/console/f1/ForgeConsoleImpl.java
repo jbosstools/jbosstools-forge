@@ -17,9 +17,7 @@ import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
 public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
-	private ForgeTextViewer forgeTextViewer = null;
-	
-	public ForgeConsoleImpl(ForgeRuntime runtime) {
+ 	public ForgeConsoleImpl(ForgeRuntime runtime) {
 		super(runtime);
 		getRuntime().addPropertyChangeListener(this);
 	}
@@ -31,10 +29,10 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
 	@Override
 	public Control createControl(Composite parent) {
-		if (forgeTextViewer == null) {
-			forgeTextViewer = createTextViewer(parent);
+		if (textViewer == null) {
+			textViewer = createTextViewer(parent);
 		}
-		return forgeTextViewer.getControl();
+		return textViewer.getControl();
 	}
 	
 	@Override
@@ -52,10 +50,10 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
 		if (ForgeRuntimeState.STOPPED.equals(evt.getOldValue()) 
 				&& ForgeRuntimeState.STARTING.equals(evt.getNewValue())) {
-			forgeTextViewer.startConsole();
+			textViewer.startConsole();
 		}
 		if (ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
-			forgeTextViewer.stopConsole();
+			textViewer.stopConsole();
 		}
 	}
 	
