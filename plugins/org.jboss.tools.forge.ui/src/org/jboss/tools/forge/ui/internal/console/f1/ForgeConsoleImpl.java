@@ -4,7 +4,6 @@ import java.beans.PropertyChangeEvent;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.actions.GoToAction;
@@ -25,14 +24,6 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 	@Override
 	public ForgeTextViewer createTextViewer(Composite parent) {
 		return new F1TextViewer(parent, getRuntime());
-	}
-	
-	@Override
-	public Control createControl(Composite parent) {
-		if (textViewer == null) {
-			textViewer = createTextViewer(parent);
-		}
-		return textViewer.getControl();
 	}
 	
 	@Override

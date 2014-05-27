@@ -3,6 +3,7 @@ package org.jboss.tools.forge.ui.internal.console;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
@@ -16,6 +17,8 @@ implements ForgeConsole, PropertyChangeListener {
 		this.runtime = runtime;
 	}
 	
+	protected abstract ForgeTextViewer createTextViewer(Composite parent);
+
 	public ForgeRuntime getRuntime() {
 		return runtime;
 	}
@@ -27,7 +30,12 @@ implements ForgeConsole, PropertyChangeListener {
 				getRuntime().getType().name().toLowerCase();
 	}
 	
-	protected abstract ForgeTextViewer createTextViewer(Composite parent);
-
+	@Override
+	public Control createControl(Composite parent) {
+		if (textViewer == null) {
+			textViewer = createTextViewer(parent);
+		}
+		return textViewer.getControl();
+	}
 	
 }
