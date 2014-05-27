@@ -16,8 +16,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
+import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
-public class F1TextViewer extends TextViewer {
+public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 
 	private static String START_LINE = new Character((char)1).toString();
 	private static String PREV_CHAR = new Character((char)2).toString();
