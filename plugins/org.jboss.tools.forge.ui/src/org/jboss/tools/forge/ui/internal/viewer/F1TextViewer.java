@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.internal.part;
+package org.jboss.tools.forge.ui.internal.viewer;
 
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.text.DocumentEvent;
@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
-import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
 public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 

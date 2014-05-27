@@ -12,7 +12,7 @@ import org.jboss.tools.forge.ui.internal.actions.LinkAction;
 import org.jboss.tools.forge.ui.internal.actions.StartAction;
 import org.jboss.tools.forge.ui.internal.actions.StopAction;
 import org.jboss.tools.forge.ui.internal.console.AbstractForgeConsole;
-import org.jboss.tools.forge.ui.internal.part.F1TextViewer;
+import org.jboss.tools.forge.ui.internal.viewer.F1TextViewer;
 
 public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
