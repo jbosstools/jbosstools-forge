@@ -30,7 +30,7 @@ public class PersistencePostProcessor implements ForgeCommandPostProcessor {
 				if (file == null) return;
 				Object objectToSelect = file;
 				IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();
-				IDE.openEditor(workbenchPage, file);
+				IDE.openEditor(workbenchPage, file, false);
 				IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
 				if (projectExplorer != null && projectExplorer instanceof ISetSelectionTarget) {
 					((ISetSelectionTarget)projectExplorer).selectReveal(new StructuredSelection(objectToSelect));
