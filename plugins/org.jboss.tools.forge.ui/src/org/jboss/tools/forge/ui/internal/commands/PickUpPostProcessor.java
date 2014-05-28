@@ -23,7 +23,6 @@ import org.eclipse.rse.ui.view.SystemAdapterHelpers;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
