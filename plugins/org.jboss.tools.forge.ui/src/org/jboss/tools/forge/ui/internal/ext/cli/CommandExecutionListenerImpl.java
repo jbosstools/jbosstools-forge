@@ -2,6 +2,7 @@ package org.jboss.tools.forge.ui.internal.ext.cli;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,11 +14,14 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -28,13 +32,21 @@ import org.eclipse.rse.ui.view.IRSEViewPart;
 import org.eclipse.rse.ui.view.ISystemViewElementAdapter;
 import org.eclipse.rse.ui.view.SystemAdapterHelpers;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorDescriptor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.ide.IEditorAssociationOverride;
+import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectListener;
@@ -47,6 +59,7 @@ import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.tools.forge.core.util.ProjectTools;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 
 public class CommandExecutionListenerImpl 
 implements ProjectListener, CommandExecutionListener {
@@ -82,10 +95,27 @@ implements ProjectListener, CommandExecutionListener {
 						selectResource((Resource<?>)object);
 					}
 				}
+				activateForgeView();
 				pomFile = null;
 				pomFileModificationStamp = -1;
 			}			
 		});
+	}
+	
+	private void activateForgeView() {
+		try {
+			IWorkbenchPage activePage = getActivePage();
+			if (activePage != null) {
+				IViewPart part = activePage.showView(ForgeConsoleView.ID);
+				activePage.activate(part);
+			}
+		} catch (PartInitException e) {
+			ForgeUIPlugin.log(e);
+		}
+	}
+	
+	private IWorkbenchPage getActivePage() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
 	
 	private void refresh(Resource<?> resource) {
@@ -251,14 +281,97 @@ implements ProjectListener, CommandExecutionListener {
 		try {
 			IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 			if (workbenchPage != null) {
-				IDE.openEditorOnFileStore(workbenchPage, fileStore);
+				IEditorInput editorInput = getEditorInput(fileStore);
+				String editorId = getEditorId(fileStore);
+				IDE.openEditor(workbenchPage, editorInput, editorId, false);
 			}
 		} catch (PartInitException e) {
 			ForgeUIPlugin.log(e);
 		}
 	}
 
-	private void refreshResource(File file) {
+ 	private String getEditorId(IFileStore fileStore) throws PartInitException {
+ 		String name = fileStore.fetchInfo().getName();
+ 		IContentType contentType = null;
+    	try {
+ 			InputStream is = null;
+ 			try {
+ 				is = fileStore.openInputStream(EFS.NONE, null);
+				contentType = Platform.getContentTypeManager().findContentTypeFor(is, name);
+ 			} finally {
+				if (is != null) {
+ 					is.close();
+ 				}
+ 			}
+ 		} catch (CoreException ex) {
+ 			// continue without content type
+ 		} catch (IOException ex) {
+ 			// continue without content type
+ 		}
+ 		IEditorRegistry editorReg = PlatformUI.getWorkbench().getEditorRegistry(); 
+ 		IEditorDescriptor defaultEditor = editorReg.getDefaultEditor(name, contentType);
+ 		defaultEditor = IDE.overrideDefaultEditorAssociation(new FileStoreEditorInput(fileStore), contentType, defaultEditor);
+ 		return getEditorDescriptor(name, editorReg, defaultEditor).getId();
+ 	}
+
+
+ 	private IEditorDescriptor getEditorDescriptor(
+ 				String name,
+ 				IEditorRegistry editorReg, 
+				IEditorDescriptor defaultDescriptor)
+						throws PartInitException { 
+ 		if (defaultDescriptor != null) {
+ 			return defaultDescriptor;
+ 		} 
+ 		IEditorDescriptor editorDesc = defaultDescriptor;
+ 		if (editorReg.isSystemInPlaceEditorAvailable(name)) {
+ 			editorDesc = editorReg
+ 					.findEditor(IEditorRegistry.SYSTEM_INPLACE_EDITOR_ID);
+ 		}
+ 		if (editorDesc == null
+ 				&& editorReg.isSystemExternalEditorAvailable(name)) {
+ 			editorDesc = editorReg
+ 					.findEditor(IEditorRegistry.SYSTEM_EXTERNAL_EDITOR_ID);
+ 		}
+ 		if (editorDesc == null) {
+			editorDesc = editorReg
+ 					.findEditor("org.eclipse.ui.DefaultTextEditor");
+ 		}
+ 		if (editorDesc == null) {
+ 			throw new PartInitException(
+ 					"An appropriate editor could not be found");
+ 		} 
+ 		return editorDesc;
+ 	}
+
+ 	private IEditorInput getEditorInput(IFileStore fileStore) {
+ 		IFile workspaceFile = getWorkspaceFile(fileStore);
+ 		if (workspaceFile != null)
+ 			return new FileEditorInput(workspaceFile);
+ 		return new FileStoreEditorInput(fileStore);
+ 	}
+
+	private IFile getWorkspaceFile(IFileStore fileStore) {
+ 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+ 		IFile[] files = root.findFilesForLocationURI(fileStore.toURI());
+ 		files = filterNonExistentFiles(files);
+ 		if (files == null || files.length == 0)
+ 			return null; 
+ 		return files[0];
+ 	}
+	
+	private IFile[] filterNonExistentFiles(IFile[] files) {
+ 		if (files == null) return null;
+ 		int length = files.length;
+ 		ArrayList<IFile> existentFiles = new ArrayList<IFile>(length);
+ 		for (int i = 0; i < length; i++) {
+ 			if (files[i].exists())
+ 				existentFiles.add(files[i]);
+ 		}
+ 		return existentFiles.toArray(new IFile[existentFiles.size()]);
+ 	}
+	
+ 	private void refreshResource(File file) {
 		try {
 			IPath path = new Path(file.getCanonicalPath());
 			IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
