@@ -27,6 +27,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.internal.util.IDEUtils;
 
 
 public class PickUpPostProcessor implements ForgeCommandPostProcessor {
@@ -51,7 +52,7 @@ public class PickUpPostProcessor implements ForgeCommandPostProcessor {
 				expandSystemDirectory(fileStore);
 			}
 		} else {
-			openFileInEditor(fileStore);
+			IDEUtils.openFileInEditor(fileStore, false);
 		}
 	}
 	
@@ -88,17 +89,6 @@ public class PickUpPostProcessor implements ForgeCommandPostProcessor {
 			if (packageExplorer != null) {
 				expandInPackageExplorer(packageExplorer, container);
 			}
-		}
-	}
-	
-	private void openFileInEditor(IFileStore fileStore) {
-		try {
-			IWorkbenchPage workbenchPage = ForgeCommandPostProcessorHelper.getActiveWorkbenchPage();
-			if (workbenchPage != null) {
-				IDE.openEditorOnFileStore(workbenchPage, fileStore);
-			}
-		} catch (PartInitException e) {
-			ForgeUIPlugin.log(e);
 		}
 	}
 	
