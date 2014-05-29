@@ -12,11 +12,17 @@ public class TestFuranceRepositoryProvider implements
 
 	@Override
 	public List<IFurnaceRepository> getRepositories() {
-		List<IFurnaceRepository> repos = new ArrayList<IFurnaceRepository>();
+		List<IFurnaceRepository> repos = new ArrayList<>();
 		
 		repos.add(new FurnaceRepository(TestFurnaceRepositoryManager.TEST_REPOSITORY_PROVIDER_MUTABLE_PATH, true));
 		repos.add(new FurnaceRepository(TestFurnaceRepositoryManager.TEST_REPOSITORY_PROVIDER_IMMUTABLE_PATH, false));
 		
 		return repos;
 	}
+
+   @Override
+   public ClassLoader getClassLoader()
+   {
+      return TestFuranceRepositoryProvider.class.getClassLoader();
+   }
 }

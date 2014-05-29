@@ -14,4 +14,9 @@ public interface IFurnaceRepositoryProvider {
 	 * @return list of Furnace add on repositories to add to Furnace
 	 */
 	public List<IFurnaceRepository> getRepositories();
+
+	/**
+	 * @return the {@link ClassLoader} instance on which Furnace should depend for {@link Class} type proxying.
+	 */
+   public ClassLoader getClassLoader();
 }

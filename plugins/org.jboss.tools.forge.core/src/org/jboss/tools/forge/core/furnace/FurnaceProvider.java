@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,7 @@ import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.util.ClassLoaders;
 import org.jboss.tools.forge.core.furnace.repository.IFurnaceRepository;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
+import org.jboss.tools.forge.core.internal.furnace.CompositeFurnaceClassLoader;
 import org.jboss.tools.forge.core.internal.furnace.repository.FurnaceRepositoryManager;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.osgi.framework.Bundle;
@@ -62,33 +64,49 @@ public class FurnaceProvider {
 				loader = new URLClassLoader(resources.toArray(new URL[resources
 						.size()]), null);
 
-				Furnace furnace = FurnaceFactory.getInstance(loader);
-				
-				setupRepositories(furnace);
+				Furnace furnace = setupFurnace(loader);
 				return furnace;
 			}
 		});
 		return forge;
 	}
 
-	private void setupRepositories(final Furnace furnace) throws IOException {
-		Bundle runtimeBundle = Platform.getBundle(RUNTIME_PLUGIN_ID);
-		File bundleFile = FileLocator.getBundleFile(runtimeBundle);
-		furnace.addRepository(AddonRepositoryMode.IMMUTABLE, new File(
-				bundleFile, "addon-repository"));
-		furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
-				ForgeCorePreferences.INSTANCE.getAddonDir()));
-		
+	private Furnace setupFurnace(ClassLoader loader) throws IOException {
+	   
 		//add repositories from the furnace repository extension point
-		List<IFurnaceRepository> repos = FurnaceRepositoryManager.getDefault().getRepositories();
+		FurnaceRepositoryManager repositoryManager = FurnaceRepositoryManager.getDefault();
+      List<IFurnaceRepository> repos = repositoryManager.getRepositories();
+      
+      ArrayList<ClassLoader> loaders = new ArrayList<>(repositoryManager.getClassLoaders());
+      loaders.add(loader);
+      
+      new CompositeFurnaceClassLoader(loaders);
+      Furnace furnace = FurnaceFactory.getInstance(loader);
+      
+      /*
+       * These native repositories need to be added before extensions
+       * due to JBDS requirements.
+       */
+      Bundle runtimeBundle = Platform.getBundle(RUNTIME_PLUGIN_ID);
+      File bundleFile = FileLocator.getBundleFile(runtimeBundle);
+      furnace.addRepository(AddonRepositoryMode.IMMUTABLE, new File(
+            bundleFile, "addon-repository"));
+      furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
+            ForgeCorePreferences.INSTANCE.getAddonDir()));
+      
 		for(IFurnaceRepository repo : repos) {
 			furnace.addRepository(repo.getMode(), repo.getRepositoryDirectory());
 		}
+		
+		return furnace;
 	}
 
 	public void startFurnace() {
 		try {
-			FurnaceService.INSTANCE.setFurnace(createFurnace());
+		   if(!FurnaceService.INSTANCE.isFurnaceSet())
+		   {
+		      FurnaceService.INSTANCE.setFurnace(createFurnace());
+		   }
 			FurnaceService.INSTANCE.start(loader);
 		} catch (Exception e) {
 			ForgeCorePlugin.log(e);

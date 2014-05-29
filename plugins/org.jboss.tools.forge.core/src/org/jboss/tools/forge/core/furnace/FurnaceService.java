@@ -37,7 +37,8 @@ public enum FurnaceService {
 	}
 
 	public void start(final ClassLoader loader) {
-		furnace.startAsync(loader);
+	   if(furnace.getStatus().isStopped())
+	      furnace.startAsync(loader);
 	}
 
 	public AddonRegistry getAddonRegistry() {
@@ -95,4 +96,9 @@ public enum FurnaceService {
 	public LockManager getLockManager() {
 		return furnace.getLockManager();
 	}
+
+   public boolean isFurnaceSet()
+   {
+      return furnace != null;
+   }
 }

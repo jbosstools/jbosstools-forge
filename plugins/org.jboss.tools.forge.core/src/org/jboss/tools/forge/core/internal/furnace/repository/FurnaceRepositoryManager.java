@@ -39,7 +39,14 @@ public class FurnaceRepositoryManager {
 	 * {@link List} of {@link FurnaceRepository}s loaded from the extension point.
 	 * </p>
 	 */
-	private List<IFurnaceRepository> furnaceRepositories;
+	private List<IFurnaceRepository> repositories;
+	
+   /**
+    * <p>
+    * {@link List} of {@link ClassLoader}s loaded from the extension point.
+    * </p>
+    */
+   private List<ClassLoader> loaders;
 	
 	/**
 	 * <p>
@@ -64,20 +71,21 @@ public class FurnaceRepositoryManager {
 	 * @return {@link IFurnaceRepository}s loaded from the extension point
 	 */
 	public List<IFurnaceRepository> getRepositories() {
-		if(this.furnaceRepositories == null) {
+		if(this.repositories == null) {
 			this.load();
 		}
 		
-		return this.furnaceRepositories;
+		return this.repositories;
 	}
 	
 	/**
 	 * <p>
-	 * Load the {@link IFurnaceRepository}s from the extension points.
+	 * Load the {@link IFurnaceRepository}s and {@link ClassLoader}s from the extension points.
 	 * </p>
 	 */
 	private void load() {
-		final List<IFurnaceRepository> repos = new ArrayList<IFurnaceRepository>();
+		final List<IFurnaceRepository> repos = new ArrayList<>();
+		final List<ClassLoader> loaders = new ArrayList<>();
 		
 		IConfigurationElement[] configElems = Platform.getExtensionRegistry().getConfigurationElementsFor(
 				ForgeCorePlugin.PLUGIN_ID, FURNACE_REPOSITORY_EXTENSION_POINT);
@@ -107,6 +115,7 @@ public class FurnaceRepositoryManager {
 							@Override
 							public void run() throws Exception {
 								repos.addAll(provider.getRepositories());
+								loaders.add(provider.getClassLoader());
 							}
 							
 							@Override
@@ -123,6 +132,16 @@ public class FurnaceRepositoryManager {
 			
 		}
 		
-		this.furnaceRepositories = Collections.unmodifiableList(repos);
+		this.repositories = Collections.unmodifiableList(repos);
+		this.loaders = Collections.unmodifiableList(loaders);
 	}
+
+   public List<ClassLoader> getClassLoaders()
+   {
+      if(loaders == null)
+      {
+         load();
+      }
+      return loaders;
+   }
 }
