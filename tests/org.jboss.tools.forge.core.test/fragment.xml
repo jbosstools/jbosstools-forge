@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+   <extension
+         point="org.jboss.tools.forge.core.furnaceRepository">
+      <repositoryProvider
+            provider="org.jboss.tools.forge.core.internal.furnace.repository.TestFuranceRepositoryProvider"></repositoryProvider>
+   </extension>
+
+</fragment>

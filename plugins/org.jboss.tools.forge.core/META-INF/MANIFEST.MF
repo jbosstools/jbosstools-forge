@@ -13,6 +13,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.jboss.tools.usage
 Bundle-ActivationPolicy: lazy
 Export-Package: org.jboss.tools.forge.core.furnace,
+ org.jboss.tools.forge.core.furnace.repository,
  org.jboss.tools.forge.core.io,
  org.jboss.tools.forge.core.preferences,
  org.jboss.tools.forge.core.runtime,

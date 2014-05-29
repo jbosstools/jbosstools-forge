@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -17,7 +18,9 @@ import org.jboss.forge.furnace.Furnace;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
 import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.util.ClassLoaders;
+import org.jboss.tools.forge.core.furnace.repository.IFurnaceRepository;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
+import org.jboss.tools.forge.core.internal.furnace.repository.FurnaceRepositoryManager;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleWiring;
@@ -75,6 +78,12 @@ public class FurnaceProvider {
 				bundleFile, "addon-repository"));
 		furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
 				ForgeCorePreferences.INSTANCE.getAddonDir()));
+		
+		//add repositories from the furnace repository extension point
+		List<IFurnaceRepository> repos = FurnaceRepositoryManager.getDefault().getRepositories();
+		for(IFurnaceRepository repo : repos) {
+			furnace.addRepository(repo.getMode(), repo.getRepositoryDirectory());
+		}
 	}
 
 	public void startFurnace() {
