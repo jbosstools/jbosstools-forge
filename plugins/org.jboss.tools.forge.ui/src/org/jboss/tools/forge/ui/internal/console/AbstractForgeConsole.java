@@ -2,13 +2,15 @@ package org.jboss.tools.forge.ui.internal.console;
 
 import java.beans.PropertyChangeListener;
 
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
 public abstract class AbstractForgeConsole 
-implements ForgeConsole, PropertyChangeListener {
+implements ForgeConsole, PropertyChangeListener, DisposeListener {
 	
 	private ForgeRuntime runtime;
 	private ForgeTextViewer textViewer;
@@ -39,7 +41,17 @@ implements ForgeConsole, PropertyChangeListener {
 		if (textViewer == null) {
 			textViewer = createTextViewer(parent);
 		}
+		Control result = textViewer.getControl();
+		getRuntime().addPropertyChangeListener(this);
+		result.addDisposeListener(this);
 		return textViewer.getControl();
+	}
+	
+	@Override
+	public void widgetDisposed(DisposeEvent event) {
+		if (event.getSource() == getTextViewer().getControl()) {
+			getRuntime().removePropertyChangeListener(this);
+		}
 	}
 	
 }

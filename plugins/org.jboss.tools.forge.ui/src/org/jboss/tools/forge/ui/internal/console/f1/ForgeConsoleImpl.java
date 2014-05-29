@@ -18,7 +18,6 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 	
  	public ForgeConsoleImpl(ForgeRuntime runtime) {
 		super(runtime);
-		getRuntime().addPropertyChangeListener(this);
 	}
 	
 	@Override
@@ -47,5 +46,5 @@ public class ForgeConsoleImpl extends AbstractForgeConsole {
 			getTextViewer().stopConsole();
 		}
 	}
-	
+
 }
