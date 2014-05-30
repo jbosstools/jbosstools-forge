@@ -10,7 +10,7 @@ import org.jboss.forge.addon.shell.ShellHandle;
 import org.jboss.tools.aesh.core.console.AbstractConsole;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 
-public class F2Console extends AbstractConsole {
+public class AeshConsole extends AbstractConsole {
 	
 	private ShellHandle handle;
 	private CommandExecutionListenerImpl executionListener = new CommandExecutionListenerImpl();
