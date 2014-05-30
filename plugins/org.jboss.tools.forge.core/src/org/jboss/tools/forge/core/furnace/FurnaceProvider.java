@@ -80,8 +80,8 @@ public class FurnaceProvider {
       ArrayList<ClassLoader> loaders = new ArrayList<>(repositoryManager.getClassLoaders());
       loaders.add(loader);
       
-      new CompositeFurnaceClassLoader(loaders);
-      Furnace furnace = FurnaceFactory.getInstance(loader);
+      CompositeFurnaceClassLoader compositeLoader = new CompositeFurnaceClassLoader(loaders);
+      Furnace furnace = FurnaceFactory.getInstance(compositeLoader);
       
       /*
        * These native repositories need to be added before extensions
