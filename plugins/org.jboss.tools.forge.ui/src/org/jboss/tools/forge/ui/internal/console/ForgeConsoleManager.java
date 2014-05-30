@@ -20,7 +20,7 @@ public class ForgeConsoleManager {
 		for (ForgeRuntime runtime : ForgeCorePreferences.INSTANCE.getRuntimes()) {
 			ForgeConsole console = null;
 			if (runtime.getVersion().startsWith("1.")) {
-				console = new org.jboss.tools.forge.ui.internal.console.f1.ForgeConsoleImpl(runtime);
+				console = new org.jboss.tools.forge.ui.internal.console.f1.F1Console(runtime);
 			} else {
 				console = new org.jboss.tools.forge.ui.internal.ext.console.ForgeConsoleImpl(runtime);
 			}

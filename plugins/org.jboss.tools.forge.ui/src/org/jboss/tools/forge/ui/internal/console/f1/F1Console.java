@@ -14,9 +14,9 @@ import org.jboss.tools.forge.ui.internal.console.AbstractForgeConsole;
 import org.jboss.tools.forge.ui.internal.viewer.F1TextViewer;
 import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
-public class ForgeConsoleImpl extends AbstractForgeConsole {
+public class F1Console extends AbstractForgeConsole {
 	
- 	public ForgeConsoleImpl(ForgeRuntime runtime) {
+ 	public F1Console(ForgeRuntime runtime) {
 		super(runtime);
 	}
 	
