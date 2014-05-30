@@ -2,7 +2,6 @@ package org.jboss.tools.forge.core.internal.furnace;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 public class CompositeFurnaceClassLoader extends ClassLoader
@@ -17,9 +16,8 @@ public class CompositeFurnaceClassLoader extends ClassLoader
    @Override
    public Class<?> loadClass(String name) throws ClassNotFoundException
    {
-      for (Iterator<ClassLoader> iterator = loaders.iterator(); iterator.hasNext();)
+      for (ClassLoader classLoader : loaders)
       {
-         ClassLoader classLoader = iterator.next();
          try
          {
             return classLoader.loadClass(name);
