@@ -22,7 +22,7 @@ public class ForgeConsoleManager {
 			if (runtime.getVersion().startsWith("1.")) {
 				console = new org.jboss.tools.forge.ui.internal.console.f1.F1Console(runtime);
 			} else {
-				console = new org.jboss.tools.forge.ui.internal.ext.console.ForgeConsoleImpl(runtime);
+				console = new org.jboss.tools.forge.ui.internal.ext.console.F2Console(runtime);
 			}
 			int index = calculateIndex(console);
 			consoles.add(index, console);
