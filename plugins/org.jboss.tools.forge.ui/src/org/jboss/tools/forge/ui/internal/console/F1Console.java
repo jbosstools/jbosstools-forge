@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.internal.console.f1;
+package org.jboss.tools.forge.ui.internal.console;
 
 import java.beans.PropertyChangeEvent;
 
@@ -10,7 +10,6 @@ import org.jboss.tools.forge.ui.internal.actions.GoToAction;
 import org.jboss.tools.forge.ui.internal.actions.LinkAction;
 import org.jboss.tools.forge.ui.internal.actions.StartAction;
 import org.jboss.tools.forge.ui.internal.actions.StopAction;
-import org.jboss.tools.forge.ui.internal.console.AbstractForgeConsole;
 import org.jboss.tools.forge.ui.internal.viewer.F1TextViewer;
 import org.jboss.tools.forge.ui.internal.viewer.ForgeTextViewer;
 
