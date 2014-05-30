@@ -13,7 +13,7 @@ import org.jboss.tools.forge.core.furnace.FurnaceService;
 public class AeshConsole extends AbstractConsole {
 	
 	private ShellHandle handle;
-	private CommandExecutionListenerImpl executionListener = new CommandExecutionListenerImpl();
+	private CommandLineListener executionListener = new CommandLineListener();
 
 	public void start() {
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);

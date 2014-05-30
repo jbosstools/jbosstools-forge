@@ -49,7 +49,7 @@ import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 import org.jboss.tools.forge.ui.internal.util.IDEUtils;
 
-public class CommandExecutionListenerImpl 
+public class CommandLineListener 
 implements ProjectListener, CommandExecutionListener {
 	
 	private List<Project> projects = new ArrayList<Project>();
