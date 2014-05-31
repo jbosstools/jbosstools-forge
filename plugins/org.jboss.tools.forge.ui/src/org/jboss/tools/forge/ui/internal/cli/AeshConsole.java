@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.internal.ext.cli;
+package org.jboss.tools.forge.ui.internal.cli;
 
 import java.io.File;
 import java.io.OutputStream;

@@ -1,4 +1,4 @@
-package org.jboss.tools.forge.ui.internal.ext.cli;
+package org.jboss.tools.forge.ui.internal.cli;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,8 +49,7 @@ import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 import org.jboss.tools.forge.ui.internal.util.IDEUtils;
 
-public class CommandLineListener 
-implements ProjectListener, CommandExecutionListener {
+public class CommandLineListener implements ProjectListener, CommandExecutionListener {
 	
 	private List<Project> projects = new ArrayList<Project>();
 
