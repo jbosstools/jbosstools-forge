@@ -110,17 +110,17 @@
         <perspectiveExtension 
                 targetID = "org.eclipse.jst.j2ee.J2EEPerspective">
             <showInPart 
-                    id = "org.jboss.tools.forge.ui.view"/>
+                    id = "org.jboss.tools.forge.ui.console"/>
         </perspectiveExtension>
         <perspectiveExtension 
                 targetID = "org.eclipse.jdt.ui.JavaPerspective">
             <showInPart 
-                    id = "org.jboss.tools.forge.ui.view"/>
+                    id = "org.jboss.tools.forge.ui.console"/>
         </perspectiveExtension>
         <perspectiveExtension 
                 targetID = "org.jboss.tools.common.ui.JBossPerspective">
             <showInPart 
-                    id = "org.jboss.tools.forge.ui.view"/>
+                    id = "org.jboss.tools.forge.ui.console"/>
         </perspectiveExtension>
     </extension>
     <extension
