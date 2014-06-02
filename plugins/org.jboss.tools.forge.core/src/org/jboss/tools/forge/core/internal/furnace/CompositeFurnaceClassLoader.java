@@ -11,6 +11,7 @@ public class CompositeFurnaceClassLoader extends ClassLoader
    public CompositeFurnaceClassLoader(List<ClassLoader> loaders)
    {
       this.loaders.addAll(loaders);
+      this.loaders.remove(this);
    }
 
    @Override
@@ -29,7 +30,7 @@ public class CompositeFurnaceClassLoader extends ClassLoader
       }
 
       ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
-      if (contextLoader != null)
+      if (contextLoader != null && contextLoader != this)
       {
          return contextLoader.loadClass(name);
       }
