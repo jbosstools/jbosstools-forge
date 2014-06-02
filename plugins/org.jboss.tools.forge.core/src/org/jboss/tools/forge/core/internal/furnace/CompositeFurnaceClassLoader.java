@@ -10,7 +10,7 @@ public class CompositeFurnaceClassLoader extends ClassLoader
 
    public CompositeFurnaceClassLoader(List<ClassLoader> loaders)
    {
-      loaders.addAll(loaders);
+      this.loaders.addAll(loaders);
    }
 
    @Override
