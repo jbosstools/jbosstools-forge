@@ -36,9 +36,9 @@ public enum FurnaceService {
 		this.furnace = forge;
 	}
 
-	public void start(final ClassLoader loader) {
+	public void start() {
 	   if(furnace.getStatus().isStopped())
-	      furnace.startAsync(loader);
+	      furnace.startAsync();
 	}
 
 	public AddonRegistry getAddonRegistry() {

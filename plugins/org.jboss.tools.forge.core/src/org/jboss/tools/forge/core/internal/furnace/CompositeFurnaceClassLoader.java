@@ -10,6 +10,7 @@ public class CompositeFurnaceClassLoader extends ClassLoader
 
    public CompositeFurnaceClassLoader(List<ClassLoader> loaders)
    {
+      super(null);
       this.loaders.addAll(loaders);
       this.loaders.remove(this);
    }
@@ -29,15 +30,12 @@ public class CompositeFurnaceClassLoader extends ClassLoader
          }
       }
 
-      ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
-      if (contextLoader != null && contextLoader != this)
-      {
-         return contextLoader.loadClass(name);
-      }
-      else
-      {
-         throw new ClassNotFoundException(name);
-      }
+      throw new ClassNotFoundException(name);
    }
 
+   @Override
+   public String toString()
+   {
+      return loaders.toString();
+   }
 }
