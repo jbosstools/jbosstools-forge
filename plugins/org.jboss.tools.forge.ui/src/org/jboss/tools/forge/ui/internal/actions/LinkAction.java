@@ -20,6 +20,7 @@ public class LinkAction extends Action {
 		this.runtime = runtime;
 		this.selectionSynchronizer = new SelectionSynchronizer(runtime);
 		setImageDescriptor(createImageDescriptor());
+		setToolTipText("Link With Editor");
 	}
 
 	@Override

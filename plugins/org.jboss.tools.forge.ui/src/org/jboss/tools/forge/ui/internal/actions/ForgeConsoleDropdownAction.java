@@ -25,6 +25,7 @@ public class ForgeConsoleDropdownAction extends Action implements IMenuCreator {
 	public ForgeConsoleDropdownAction(ForgeConsoleView forgeConsoleView) {
 		this.forgeConsoleView = forgeConsoleView;
 		setImageDescriptor(createImageDescriptor());
+		setToolTipText("Select Forge Runtime");
 		setMenuCreator(this);
 	}
 

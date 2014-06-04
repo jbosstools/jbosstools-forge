@@ -27,6 +27,7 @@ public class GoToAction extends Action implements ISelectionListener {
 		super();
 		this.runtime = runtime;
 		setImageDescriptor(createImageDescriptor());
+		setToolTipText("Go To Selection");
 		getSelectionService().addPostSelectionListener(this);
 	}
 

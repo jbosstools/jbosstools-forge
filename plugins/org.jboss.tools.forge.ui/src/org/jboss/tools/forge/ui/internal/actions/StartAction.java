@@ -17,6 +17,7 @@ public class StartAction extends Action {
 		super();
 		this.runtime = runtime;
 		setImageDescriptor(createImageDescriptor());
+		setToolTipText("Start " + runtime.getName());
 	}
 
 	@Override

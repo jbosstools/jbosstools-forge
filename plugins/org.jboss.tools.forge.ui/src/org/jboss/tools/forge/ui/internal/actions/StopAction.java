@@ -17,6 +17,7 @@ public class StopAction extends Action {
 		super();
 		this.runtime = runtime;
 		setImageDescriptor(createImageDescriptor());
+		setToolTipText("Stop " + runtime.getName());
 	}
 
 	@Override
