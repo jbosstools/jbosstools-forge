@@ -32,12 +32,10 @@ public class F2Console extends AbstractForgeConsole {
 	
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if (ForgeRuntimeState.STARTING.equals(evt.getOldValue()) 
-				&& ForgeRuntimeState.RUNNING.equals(evt.getNewValue())) {
+		if (ForgeRuntimeState.RUNNING.equals(evt.getNewValue())) {
 			getTextViewer().startConsole();
 		}
-		if (ForgeRuntimeState.RUNNING.equals(evt.getOldValue())
-				&& ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
+		if (ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
 			getTextViewer().stopConsole();
 		}
 	}

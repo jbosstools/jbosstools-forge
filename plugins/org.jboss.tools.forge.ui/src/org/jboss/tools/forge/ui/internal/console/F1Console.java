@@ -37,8 +37,7 @@ public class F1Console extends AbstractForgeConsole {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
-		if (ForgeRuntimeState.STOPPED.equals(evt.getOldValue()) 
-				&& ForgeRuntimeState.STARTING.equals(evt.getNewValue())) {
+		if (ForgeRuntimeState.STARTING.equals(evt.getNewValue())) {
 			getTextViewer().startConsole();
 		}
 		if (ForgeRuntimeState.STOPPED.equals(evt.getNewValue())) {
