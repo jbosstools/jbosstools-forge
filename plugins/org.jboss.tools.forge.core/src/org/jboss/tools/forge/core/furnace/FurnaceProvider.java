@@ -66,7 +66,9 @@ public class FurnaceProvider
       FurnaceRepositoryManager repositoryManager = FurnaceRepositoryManager.getDefault();
       List<IFurnaceRepository> repos = repositoryManager.getRepositories();
 
-      ArrayList<ClassLoader> loaders = new ArrayList<>(repositoryManager.getClassLoaders());
+      ArrayList<ClassLoader> loaders = new ArrayList<>();
+      loaders.add(FurnaceProvider.class.getClassLoader()); // this loader needs to be checked first
+      loaders.addAll(repositoryManager.getClassLoaders());
 
       CompositeFurnaceClassLoader compositeLoader = new CompositeFurnaceClassLoader(loaders);
       Furnace furnace = FurnaceFactory.getInstance(furnaceLoader, compositeLoader);
