@@ -13,7 +13,7 @@
    <properties>
       <version.furnace>2.6.1-SNAPSHOT</version.furnace>
       <version.forge.addons>2.6.1-SNAPSHOT</version.forge.addons>
-      <version.angularjs.addon>2.0.0.Final</version.angularjs.addon>
+      <version.angularjs.addon>2.0.1.Final</version.angularjs.addon>
    </properties>
    <build>
       <plugins>
