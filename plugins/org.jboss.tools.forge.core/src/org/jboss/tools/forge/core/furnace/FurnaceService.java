@@ -13,7 +13,6 @@ import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.furnace.ContainerStatus;
 import org.jboss.forge.furnace.Furnace;
 import org.jboss.forge.furnace.addons.AddonRegistry;
-import org.jboss.forge.furnace.lock.LockManager;
 import org.jboss.forge.furnace.repositories.AddonRepository;
 import org.jboss.forge.furnace.services.Imported;
 
@@ -37,20 +36,21 @@ public enum FurnaceService {
 	}
 
 	public void start() {
-	   if(furnace.getStatus().isStopped())
-	      furnace.startAsync();
+		if (furnace.getStatus().isStopped())
+			furnace.startAsync();
 	}
 
 	public AddonRegistry getAddonRegistry() {
 		return furnace.getAddonRegistry();
 	}
-	
+
 	public List<AddonRepository> getRepositories() {
 		return furnace.getRepositories();
 	}
 
 	public void stop() {
 		furnace.stop();
+		furnace = null;
 	}
 
 	public void waitUntilContainerIsStarted() throws InterruptedException {
@@ -93,12 +93,7 @@ public enum FurnaceService {
 		return (instance == null) ? null : instance.get();
 	}
 
-	public LockManager getLockManager() {
-		return furnace.getLockManager();
+	public boolean isFurnaceSet() {
+		return furnace != null;
 	}
-
-   public boolean isFurnaceSet()
-   {
-      return furnace != null;
-   }
 }
