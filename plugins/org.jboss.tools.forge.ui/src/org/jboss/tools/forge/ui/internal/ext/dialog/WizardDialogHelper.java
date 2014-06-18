@@ -154,7 +154,14 @@ public final class WizardDialogHelper {
 				ForgeUIPlugin.log(e);
 			}
 		} else {
-			wizardDialog.open();
+			try {
+				wizardDialog.open();
+			} catch (Exception e) {
+				ForgeUIPlugin.displayMessage("Error",
+						"Error while opening wizard. See Error log",
+						NotificationType.ERROR);
+				ForgeUIPlugin.log(e);
+			}
 		}
 	}
 }
