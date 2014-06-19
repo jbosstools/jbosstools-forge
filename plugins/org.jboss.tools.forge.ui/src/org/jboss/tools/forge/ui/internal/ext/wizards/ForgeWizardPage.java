@@ -20,6 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.jboss.forge.addon.ui.controller.CommandController;
@@ -143,13 +144,19 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 * controls on this page.
 	 */
 	@Override
-	public void handleEvent(Event event) {
-		if (isCurrentPage()) {
-			setPageComplete(validatePage());
-			// Refresh the buttons
-			getContainer().updateButtons();
-		}
-		event.doit = true;
+	public void handleEvent(final Event event) {
+		Display.getDefault().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+				if (isCurrentPage()) {
+					setPageComplete(validatePage());
+					// Refresh the buttons
+					getContainer().updateButtons();
+				}
+				event.doit = true;
+			}
+		});
 	}
 
 	private void updatePageState() {
