@@ -71,7 +71,7 @@ public class FurnaceProvider
       loaders.addAll(repositoryManager.getClassLoaders());
 
       CompositeFurnaceClassLoader compositeLoader = new CompositeFurnaceClassLoader(loaders);
-      Furnace furnace = FurnaceFactory.getInstance(furnaceLoader, compositeLoader);
+      Furnace furnace = FurnaceFactory.getInstance(compositeLoader, furnaceLoader);
 
       /*
        * These native repositories need to be added before extensions due to JBDS requirements.
