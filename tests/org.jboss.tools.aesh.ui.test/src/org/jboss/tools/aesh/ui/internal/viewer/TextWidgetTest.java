@@ -20,6 +20,7 @@ public class TextWidgetTest {
 		@Override public void sendInput(String input) {
 			sentInput = input;
 		}	
+		@Override public Object getCurrentResource() {return null;};
 	};
 	
 	private String sentInput = null;

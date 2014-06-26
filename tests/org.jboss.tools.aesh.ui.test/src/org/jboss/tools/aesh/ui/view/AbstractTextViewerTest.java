@@ -29,6 +29,7 @@ public class AbstractTextViewerTest {
 		@Override public void sendInput(String input) { sentInput = input; }		
 		@Override public void disconnect() { disconnected = true; }		
 		@Override public void connect(Document document) { connectedDocument = document; }
+		@Override public Object getCurrentResource() {return null;};
 	};
 	
 	private AbstractTextViewer testTextViewer = new AbstractTextViewer(new Shell()) {		

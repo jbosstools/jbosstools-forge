@@ -73,4 +73,9 @@ public abstract class AbstractConsole implements Console {
 		handler.setDocument(document);
 	}
 	
+	@Override
+	public Object getCurrentResource() {
+		return null;
+	}
+	
 }
