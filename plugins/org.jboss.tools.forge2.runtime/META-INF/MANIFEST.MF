@@ -46,6 +46,7 @@ Export-Package: bootpath,
    org.jboss.aesh.cl,
    org.jboss.aesh.console,
    org.jboss.forge.addon.shell.spi",
+ org.jboss.forge.addon.shell.spi.command,
  org.jboss.forge.addon.ui;
   uses:="org.jboss.forge.addon.ui.metadata,
    org.jboss.forge.addon.ui.context,
