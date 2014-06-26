@@ -11,4 +11,5 @@ public interface Console {
 	void connect(Document document);
 	void disconnect();
 	
+	Object getCurrentResource();
 }

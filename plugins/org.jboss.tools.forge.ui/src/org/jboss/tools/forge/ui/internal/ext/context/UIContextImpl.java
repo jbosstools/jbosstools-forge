@@ -59,7 +59,12 @@ public class UIContextImpl extends AbstractUIContext {
 			result.add(Proxies.unwrap(convertedObj));
 		} else {
 			for (Object object : selectedElements) {
-				if (object instanceof IResource) {
+				if (object instanceof Resource) {
+					result.add((Resource<?>) object);
+				} else if (object instanceof File) {
+					File file = (File) object;
+					result.add(Proxies.unwrap(converter.convert(file)));
+				} else if (object instanceof IResource) {
 					IPath location = ((IResource) object).getLocation();
 					if (location != null) {
 						File file = location.toFile();

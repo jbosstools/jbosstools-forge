@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.forge.addon.ui.command.UICommand;
@@ -45,6 +46,7 @@ import org.jboss.tools.forge.ui.internal.ext.quickaccess.QuickAccessElement;
 import org.jboss.tools.forge.ui.internal.ext.quickaccess.QuickAccessProvider;
 import org.jboss.tools.forge.ui.internal.ext.quickaccess.impl.ForgeQuickAccessElement;
 import org.jboss.tools.forge.ui.internal.ext.quickaccess.impl.ForgeQuickAccessProvider;
+import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 public class UICommandListDialog extends PopupDialog {
@@ -66,7 +68,7 @@ public class UICommandListDialog extends PopupDialog {
 		if (selection instanceof TreeSelection) {
 			currentSelection = (TreeSelection) selection;
 		} else {
-			IFile activeEditorFile = getActiveEditorInput(window);
+			Object activeEditorFile = getActiveEditorInput(window);
 			if (activeEditorFile != null) {
 				currentSelection = new StructuredSelection(activeEditorFile);
 			}
@@ -78,18 +80,24 @@ public class UICommandListDialog extends PopupDialog {
 	/**
 	 * Retrieves the {@link IFile} represented by the active editor
 	 */
-	private static IFile getActiveEditorInput(IWorkbenchWindow window) {
+	private static Object getActiveEditorInput(IWorkbenchWindow window) {
 		IWorkbenchPage page = window.getActivePage();
 		if (page != null) {
-			IEditorPart part = page.getActiveEditor();
-			if (part != null) {
-				IEditorInput editorInput = part.getEditorInput();
+			IEditorPart editor = page.getActiveEditor();
+			if (editor != null) {
+				IEditorInput editorInput = editor.getEditorInput();
 				if (editorInput != null) {
 					FileEditorInput fileEditorInput = (FileEditorInput) editorInput
 							.getAdapter(FileEditorInput.class);
 					if (fileEditorInput != null) {
 						return fileEditorInput.getFile();
 					}
+				}
+			} else {
+				IWorkbenchPart part = page.getActivePart();
+				if (part instanceof ForgeConsoleView) {
+					return ((ForgeConsoleView) part).getConsole()
+							.getCurrentResource();
 				}
 			}
 		}

@@ -14,6 +14,7 @@ import org.eclipse.swt.custom.VerifyKeyListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
 
@@ -181,5 +182,9 @@ public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 			}   		
     	});
     }
-    
+
+    @Override
+    public Console getConsole() {
+    	throw new UnsupportedOperationException("getConsole() is not supported on this class");
+    }
 }

@@ -8,17 +8,23 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.cli.AeshConsole;
 
 public class F2TextViewer extends AbstractTextViewer implements ForgeTextViewer {
-	
-    public F2TextViewer(Composite parent) {
+	private AeshConsole console;
+
+	public F2TextViewer(Composite parent) {
 		super(parent);
-		if (ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
+		if (ForgeRuntimeState.RUNNING
+				.equals(FurnaceRuntime.INSTANCE.getState())) {
 			startConsole();
 		}
 	}
 
 	protected Console createConsole() {
-    	return new AeshConsole();
-    }
-	
+		return console = new AeshConsole();
+	}
+
+	@Override
+	public Console getConsole() {
+		return console;
+	}
+
 }
-    
