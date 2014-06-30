@@ -8,7 +8,6 @@
 package org.jboss.tools.forge.ui.internal.ext.dialog;
 
 import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
@@ -19,7 +18,7 @@ import org.jboss.tools.forge.ui.notifications.NotificationType;
  * 
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
-public class ForgeWizardDialog extends WizardDialog {
+public class ForgeWizardDialog extends ForgeCommandDialog {
 
 	private final WizardCommandController controller;
 

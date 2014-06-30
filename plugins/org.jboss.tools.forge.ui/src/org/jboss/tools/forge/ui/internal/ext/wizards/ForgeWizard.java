@@ -24,6 +24,7 @@ import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
+import org.jboss.tools.forge.ui.internal.ext.dialog.InterruptableProgressMonitor;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
 
 /**
@@ -35,6 +36,7 @@ public class ForgeWizard extends MutableWizard {
 	private final CommandController controller;
 	private final UIContextImpl uiContext;
 	private ForgeWizardHelper helper = new ForgeWizardHelper();
+	private InterruptableProgressMonitor progressMonitor;
 
 	public ForgeWizard(String windowTitle, CommandController controller,
 			UIContextImpl contextImpl) {
@@ -71,16 +73,19 @@ public class ForgeWizard extends MutableWizard {
 		return true;
 	}
 
-	public void performFinish(final IRunnableContext container,
+	public void performFinish(final IRunnableContext runnableContext,
 			final Shell shell) throws InvocationTargetException,
 			InterruptedException {
-		container.run(true, true, new IRunnableWithProgress() {
+		runnableContext.run(true, true, new IRunnableWithProgress() {
 			@Override
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException, InterruptedException {
 				try {
-					monitor.beginTask(
-							"Executing Forge Wizard", 
+					if (progressMonitor != null)
+						progressMonitor.setRunnableThread(Thread
+								.currentThread());
+
+					monitor.beginTask("Executing Forge Wizard",
 							IProgressMonitor.UNKNOWN);
 					Map<Object, Object> attributeMap = uiContext
 							.getAttributeMap();
@@ -105,6 +110,10 @@ public class ForgeWizard extends MutableWizard {
 				}
 			}
 		});
+	}
+
+	public void setProgressMonitor(InterruptableProgressMonitor progressMonitor) {
+		this.progressMonitor = progressMonitor;
 	}
 
 	private void displayResult(Result result) {

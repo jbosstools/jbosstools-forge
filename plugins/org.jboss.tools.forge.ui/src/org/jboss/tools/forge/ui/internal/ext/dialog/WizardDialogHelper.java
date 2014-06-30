@@ -114,7 +114,7 @@ public final class WizardDialogHelper {
 			wizardDialog = new ForgeWizardDialog(parentShell, wizard,
 					(WizardCommandController) controller);
 		} else {
-			wizardDialog = new WizardDialog(parentShell, wizard);
+			wizardDialog = new ForgeCommandDialog(parentShell, wizard);
 		}
 		// TODO: Show help button when it's possible to display the docs for
 		// each UICommand
