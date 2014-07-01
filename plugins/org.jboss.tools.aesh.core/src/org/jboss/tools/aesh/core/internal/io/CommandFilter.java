@@ -3,8 +3,6 @@ package org.jboss.tools.aesh.core.internal.io;
 import org.jboss.tools.aesh.core.internal.ansi.Command;
 import org.jboss.tools.aesh.core.internal.ansi.CommandFactory;
 import org.jboss.tools.aesh.core.internal.ansi.DefaultCommandFactory;
-import org.jboss.tools.aesh.core.internal.ansi.RestoreCursorPosition;
-import org.jboss.tools.aesh.core.internal.ansi.SaveCursorPosition;
 
 public class CommandFilter implements AeshOutputFilter {
 	
@@ -12,6 +10,8 @@ public class CommandFilter implements AeshOutputFilter {
 	private static final char CURSOR_SAVE = '7';
 	private static final char CURSOR_RESTORE = '8';
 	private static final char LEFT_BRACKET = '[';
+	private static final String CURSOR_SAVE_SEQUENCE = new String(new char[] { ESCAPE_CHAR, LEFT_BRACKET, 's' });
+	private static final String CURSOR_RESTORE_SEQUENCE = new String(new char[] { ESCAPE_CHAR, LEFT_BRACKET, 'u' });
 
 	private CommandFactory commandFactory = DefaultCommandFactory.INSTANCE;
 	
@@ -29,10 +29,10 @@ public class CommandFilter implements AeshOutputFilter {
 			handler.handleOutput(output.substring(index, controlSequenceStart));
 			char next = output.charAt(controlSequenceStart + 1);
 			if (next == CURSOR_SAVE) {
-				handler.handleCommand(new SaveCursorPosition(null));
+				handler.handleCommand(commandFactory.create(CURSOR_SAVE_SEQUENCE));
 				index = controlSequenceStart + 2;
 			} else if (next == CURSOR_RESTORE) {
-				handler.handleCommand(new RestoreCursorPosition(null));
+				handler.handleCommand(commandFactory.create(CURSOR_RESTORE_SEQUENCE));
 				index = controlSequenceStart + 2;
 			} else if (next == LEFT_BRACKET) {
 				int controlSequenceEnd = controlSequenceStart + 3;
