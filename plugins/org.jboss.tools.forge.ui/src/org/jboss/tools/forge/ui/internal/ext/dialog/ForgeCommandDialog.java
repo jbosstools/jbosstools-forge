@@ -59,6 +59,8 @@ public class ForgeCommandDialog extends WizardDialog {
 			} else {
 				getProgressMonitor().setCanceled(true);
 			}
+		} else {
+			super.cancelPressed();
 		}
 	}
 
