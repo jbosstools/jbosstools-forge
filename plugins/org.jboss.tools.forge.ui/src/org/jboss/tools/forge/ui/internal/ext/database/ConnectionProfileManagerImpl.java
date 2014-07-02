@@ -46,6 +46,7 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 			profile.setDriver(props.getProperty(DRIVER_CLASS));
 			profile.setPath(props.getProperty(DRIVER_LOCATION));
 			profile.setUser(props.getProperty(USER_NAME));
+			profile.setPassword(props.getProperty(PASSWORD));
 			profile.setUrl(props.getProperty(URL));
 			profile.setDialect(props.getProperty(HIBERNATE_DIALECT));
 			result.put(profile.getName(), profile);
@@ -53,7 +54,7 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 		return result;		
 	}
 	
-	public void saveConnectionProfile(ConnectionProfile profile) {
+	private void saveConnectionProfile(ConnectionProfile profile) {
 		DriverInstance driverInstance = 
 				DriverManager.getInstance().getDriverInstanceByName(profile.getName());
 		if (driverInstance != null) {
@@ -161,7 +162,10 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 			result.setProperty(DRIVER_DEFINITION_ID, driverId);
 		}
 		result.setProperty(DATABASE_NAME, profile.getName());
-		result.setProperty(PASSWORD, profile.getPassword());
+		if (profile.getPassword() != null) {
+			result.setProperty(PASSWORD, profile.getPassword());
+			result.setProperty(SAVE_PWD, "true");
+		}
 		result.setProperty(URL, profile.getUrl());
 		result.setProperty(VERSION, "1.0");
 		result.setProperty(VENDOR, "Generic JDBC");
