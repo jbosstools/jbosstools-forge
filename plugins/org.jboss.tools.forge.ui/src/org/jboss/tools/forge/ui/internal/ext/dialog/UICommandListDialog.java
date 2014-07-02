@@ -36,6 +36,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
+import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
@@ -75,6 +76,12 @@ public class UICommandListDialog extends PopupDialog {
 		}
 		wizardHelper = new WizardDialogHelper(getParentShell(),
 				currentSelection);
+		UISelection<?> uiSelection = wizardHelper.getContext()
+				.getInitialSelection();
+		if (!uiSelection.isEmpty()) {
+			setTitleText("Current Selection: " + uiSelection.get());
+		}
+
 	}
 
 	/**
