@@ -3,33 +3,21 @@
    <description>
       To install these features, point Eclipse at this site.
    </description>
-   <feature url="features/org.jboss.tools.forge.feature_0.0.0.jar" id="org.jboss.tools.forge.feature" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
-   <feature url="features/org.jboss.tools.forge.test.feature_0.0.0.jar" id="org.jboss.tools.forge.test.feature" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
-   <feature url="features/org.jboss.tools.forge.feature.source_0.0.0.jar" id="org.jboss.tools.forge.feature.source" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
-   <feature url="features/org.jboss.tools.forge.test.feature.source_0.0.0.jar" id="org.jboss.tools.forge.test.feature.source" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
-   <feature url="features/org.jboss.tools.forge.feature_0.0.0.jar" id="org.jboss.tools.forge.ext.feature" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
-   <feature url="features/org.jboss.tools.forge.test.feature_0.0.0.jar" id="org.jboss.tools.forge.ext.test.feature" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
-   <feature url="features/org.jboss.tools.forge.feature.source_0.0.0.jar" id="org.jboss.tools.forge.ext.feature.source" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
-   <feature url="features/org.jboss.tools.forge.test.feature.source_0.0.0.jar" id="org.jboss.tools.forge.ext.test.feature.source" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
-   <feature url="features/org.jboss.tools.forge.m2e.feature_0.0.0.jar" id="org.jboss.tools.forge.m2e.feature" version="0.0.0">
-      <category name="JBoss Tools Forge Nightly Build Update Site"/>
-   </feature>
+   <feature id="org.jboss.tools.forge.feature"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+   <feature id="org.jboss.tools.forge.feature.source"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+
+   <feature id="org.jboss.tools.forge.test.feature"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+   <feature id="org.jboss.tools.forge.test.feature.source"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+
+   <feature id="org.jboss.tools.forge.ext.feature"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+   <feature id="org.jboss.tools.forge.ext.feature.source"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+
+   <feature id="org.jboss.tools.forge.ext.test.feature"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+   <feature id="org.jboss.tools.forge.ext.test.feature.source"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+
+   <feature id="org.jboss.tools.forge.m2e.feature"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+   <feature id="org.jboss.tools.forge.m2e.feature.source"><category name="JBoss Tools Forge Nightly Build Update Site"/></feature>
+
    <category-def name="JBoss Tools Forge Nightly Build Update Site" label="JBoss Tools Forge Nightly Build Update Site">
       <description>
          JBoss Tools Forge Nightly Build Update Site: contains all features in this build.
