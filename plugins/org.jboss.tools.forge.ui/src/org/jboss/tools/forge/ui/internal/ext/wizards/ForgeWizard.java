@@ -45,7 +45,6 @@ public class ForgeWizard extends MutableWizard {
 			UIContextImpl contextImpl) {
 		this.controller = controller;
 		this.uiContext = contextImpl;
-		contextImpl.getInitialSelection().get();
 		setWindowTitle(constructTitle(command));
 		setNeedsProgressMonitor(true);
 		setForcePreviousAndNextButtons(isWizard());
