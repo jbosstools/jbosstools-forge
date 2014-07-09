@@ -12,6 +12,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -79,9 +82,14 @@ public class UICommandListDialog extends PopupDialog {
 		UISelection<?> uiSelection = wizardHelper.getContext()
 				.getInitialSelection();
 		if (!uiSelection.isEmpty()) {
-			setTitleText("Current Selection: " + uiSelection.get());
+			setTitleText("Current Selection: " + normalize(uiSelection.get().toString()));
 		}
 
+	}
+	
+	private String normalize(String pathString) {
+		IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
+		return new Path(pathString).makeRelativeTo(workspaceLocation).makeAbsolute().toOSString();
 	}
 
 	/**
