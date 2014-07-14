@@ -29,7 +29,6 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.internal.ext.control.ControlBuilder;
 import org.jboss.tools.forge.ui.internal.ext.wizards.ForgeWizardPage;
@@ -63,22 +62,23 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		final UISelectMany<Object> selectMany = (UISelectMany) input;
 		final ConverterFactory converterFactory = FurnaceService.INSTANCE
 				.getConverterFactory();
-		final Set<Object> data = new LinkedHashSet<Object>();
-		Iterable<Object> valueChoices = selectMany.getValueChoices();
+		Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
+				.getItemLabelConverter(converterFactory, selectMany);
+		final Set<Object> data = new LinkedHashSet<>();
 		// Adding default values in a separate set
 		Iterable<Object> defaultValues = selectMany.getValue();
 		if (defaultValues != null) {
 			for (Object object : defaultValues) {
-				data.add(object);
+				data.add(itemLabelConverter.convert(object));
 			}
 		}
+		Iterable<Object> valueChoices = selectMany.getValueChoices();
 		if (valueChoices != null) {
-			Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
-					.getItemLabelConverter(converterFactory, selectMany);
 			for (Object next : valueChoices) {
 				TableItem item = new TableItem(table, SWT.NONE);
-				item.setData(Proxies.unwrap(next));
-				item.setText(itemLabelConverter.convert(next));
+				String value = itemLabelConverter.convert(next);
+				item.setData(value);
+				item.setText(value);
 				item.setChecked(data.contains(next));
 			}
 		}
