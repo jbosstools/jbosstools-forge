@@ -79,7 +79,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 				String value = itemLabelConverter.convert(next);
 				item.setData(value);
 				item.setText(value);
-				item.setChecked(data.contains(next));
+				item.setChecked(data.contains(value));
 			}
 		}
 		table.addSelectionListener(new SelectionAdapter() {
