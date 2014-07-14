@@ -33,10 +33,9 @@ public class ForgeQuickAccessProvider extends QuickAccessProvider implements
 			for (UICommand command : commands) {
 				ForgeQuickAccessElement elem = new ForgeQuickAccessElement(
 						this, context, command);
+				candidates.put(elem.getId(), elem);
 				int idx = previous.indexOf(elem);
-				if (idx < 0) {
-					candidates.put(elem.getId(), elem);
-				} else {
+				if (idx > -1) {
 					// Previous UICommand has old values. Replace with a new one
 					previous.set(idx, elem);
 				}
