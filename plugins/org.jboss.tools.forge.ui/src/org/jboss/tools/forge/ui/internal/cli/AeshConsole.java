@@ -43,13 +43,6 @@ public class AeshConsole extends AbstractConsole {
 		// Listening for selection events
 		handle.addCommandExecutionListener(new AbstractCommandExecutionListener() {
 			@Override
-			public void preCommandExecuted(UICommand command,
-					UIExecutionContext context) {
-				// Set Maven settings before a command is executed
-				FurnaceService.INSTANCE.setMavenSettings();
-			}
-
-			@Override
 			public void postCommandExecuted(UICommand command,
 					UIExecutionContext context, Result result) {
 				currentResource = context.getUIContext().getSelection();
