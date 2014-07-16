@@ -9,8 +9,6 @@ package org.jboss.tools.forge.core.furnace;
 
 import java.util.List;
 
-import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.IMavenConfiguration;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.furnace.ContainerStatus;
 import org.jboss.forge.furnace.Furnace;
@@ -39,7 +37,6 @@ public enum FurnaceService {
 
 	public void start() {
 		if (furnace.getStatus().isStopped()) {
-			setMavenSettings();
 			furnace.startAsync();
 		}
 	}
@@ -99,19 +96,5 @@ public enum FurnaceService {
 
 	public boolean isFurnaceSet() {
 		return furnace != null;
-	}
-
-	public void setMavenSettings() {
-		IMavenConfiguration mavenConfig = MavenPlugin.getMavenConfiguration();
-		String userSettingsFile = mavenConfig.getUserSettingsFile();
-		if (userSettingsFile != null) {
-			System.setProperty("org.apache.maven.user-settings",
-					userSettingsFile);
-		}
-		String globalSettingsFile = mavenConfig.getGlobalSettingsFile();
-		if (globalSettingsFile != null) {
-			System.setProperty("org.apache.maven.global-settings",
-					globalSettingsFile);
-		}
 	}
 }
