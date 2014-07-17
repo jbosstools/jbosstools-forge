@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -57,9 +58,15 @@ public class ForgeWizard extends MutableWizard {
 		UISelectionImpl<?> currentSelection = uiContext.getInitialSelection();
 		StringBuilder title = new StringBuilder(command);
 		if (!currentSelection.isEmpty()) {
-			title.append(" [Current Selection: ")
-					.append(currentSelection.getResource().getFullPath()
-							.toOSString()).append("]");
+			String currentSelectionLabel;
+			IResource resource = currentSelection.getResource();
+			if (resource != null) {
+				currentSelectionLabel = resource.getFullPath().toOSString();
+			} else {
+				currentSelectionLabel = currentSelection.get().toString();
+			}
+			title.append(" [Current Selection: ").append(currentSelectionLabel)
+					.append("]");
 		}
 		return title.toString();
 	}
