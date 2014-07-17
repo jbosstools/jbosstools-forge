@@ -12,9 +12,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -39,12 +36,12 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
-import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.addon.ui.metadata.UICategory;
 import org.jboss.forge.addon.ui.util.Categories;
 import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.internal.ext.context.UISelectionImpl;
 import org.jboss.tools.forge.ui.internal.ext.quickaccess.QuickAccessContents;
 import org.jboss.tools.forge.ui.internal.ext.quickaccess.QuickAccessElement;
 import org.jboss.tools.forge.ui.internal.ext.quickaccess.QuickAccessProvider;
@@ -79,17 +76,13 @@ public class UICommandListDialog extends PopupDialog {
 		}
 		wizardHelper = new WizardDialogHelper(getParentShell(),
 				currentSelection);
-		UISelection<?> uiSelection = wizardHelper.getContext()
+		UISelectionImpl<?> uiSelection = wizardHelper.getContext()
 				.getInitialSelection();
 		if (!uiSelection.isEmpty()) {
-			setTitleText("Current Selection: " + normalize(uiSelection.get().toString()));
+			setTitleText("Current Selection: "
+					+ uiSelection.getResource().getFullPath().toOSString());
 		}
 
-	}
-	
-	private String normalize(String pathString) {
-		IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
-		return new Path(pathString).makeRelativeTo(workspaceLocation).makeAbsolute().toOSString();
 	}
 
 	/**
