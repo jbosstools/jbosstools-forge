@@ -1,5 +1,6 @@
 package org.jboss.tools.forge.ui.internal.ext.dialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -33,6 +35,7 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.context.UIContext;
@@ -79,10 +82,15 @@ public class UICommandListDialog extends PopupDialog {
 		UISelectionImpl<?> uiSelection = wizardHelper.getContext()
 				.getInitialSelection();
 		if (!uiSelection.isEmpty()) {
-			setTitleText("Current Selection: "
-					+ uiSelection.getResource().getFullPath().toOSString());
+			String currentSelectionLabel;
+			IResource resource = uiSelection.getResource();
+			if (resource != null) {
+				currentSelectionLabel = resource.getFullPath().toOSString();
+			} else {
+				currentSelectionLabel = uiSelection.get().toString();
+			}
+			setTitleText("Current Selection: " + currentSelectionLabel);
 		}
-
 	}
 
 	/**
@@ -100,6 +108,12 @@ public class UICommandListDialog extends PopupDialog {
 					if (fileEditorInput != null) {
 						return fileEditorInput.getFile();
 					}
+					FileStoreEditorInput fileStoreEditorInput = (FileStoreEditorInput) editorInput
+							.getAdapter(FileStoreEditorInput.class);
+					if (fileStoreEditorInput != null) {
+						return new File(fileStoreEditorInput.getURI());
+					}
+
 				}
 			} else {
 				IWorkbenchPart part = page.getActivePart();
