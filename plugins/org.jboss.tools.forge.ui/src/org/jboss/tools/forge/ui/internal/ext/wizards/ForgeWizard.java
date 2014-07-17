@@ -11,10 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardContainer;
@@ -27,6 +24,7 @@ import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
+import org.jboss.tools.forge.ui.internal.ext.context.UISelectionImpl;
 import org.jboss.tools.forge.ui.internal.ext.dialog.InterruptableProgressMonitor;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
 
@@ -54,12 +52,16 @@ public class ForgeWizard extends MutableWizard {
 	public UIContextImpl getUIContext() {
 		return uiContext;
 	}
-	
+
 	private String constructTitle(String command) {
-		String currentSelection = uiContext.getInitialSelection().get().toString();
-		IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getRawLocation();
-		String normalizedSelection = new Path(currentSelection).makeRelativeTo(workspaceLocation).makeAbsolute().toOSString();	
-		return command + " [Current Selection: " + normalizedSelection + "]";
+		UISelectionImpl<?> currentSelection = uiContext.getInitialSelection();
+		StringBuilder title = new StringBuilder(command);
+		if (!currentSelection.isEmpty()) {
+			title.append(" [Current Selection: ")
+					.append(currentSelection.getResource().getFullPath()
+							.toOSString()).append("]");
+		}
+		return title.toString();
 	}
 
 	@Override
