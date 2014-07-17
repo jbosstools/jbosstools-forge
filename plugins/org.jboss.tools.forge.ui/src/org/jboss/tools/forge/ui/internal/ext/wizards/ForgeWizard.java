@@ -24,6 +24,7 @@ import org.jboss.forge.addon.ui.result.Failed;
 import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
+import org.jboss.tools.forge.ui.internal.ext.context.UISelectionImpl;
 import org.jboss.tools.forge.ui.internal.ext.dialog.InterruptableProgressMonitor;
 import org.jboss.tools.forge.ui.notifications.NotificationType;
 
@@ -38,11 +39,11 @@ public class ForgeWizard extends MutableWizard {
 	private ForgeWizardHelper helper = new ForgeWizardHelper();
 	private InterruptableProgressMonitor progressMonitor;
 
-	public ForgeWizard(String windowTitle, CommandController controller,
+	public ForgeWizard(String command, CommandController controller,
 			UIContextImpl contextImpl) {
 		this.controller = controller;
 		this.uiContext = contextImpl;
-		setWindowTitle(windowTitle);
+		setWindowTitle(constructTitle(command));
 		setNeedsProgressMonitor(true);
 		setForcePreviousAndNextButtons(isWizard());
 		helper.onCreate(contextImpl);
@@ -50,6 +51,17 @@ public class ForgeWizard extends MutableWizard {
 
 	public UIContextImpl getUIContext() {
 		return uiContext;
+	}
+
+	private String constructTitle(String command) {
+		UISelectionImpl<?> currentSelection = uiContext.getInitialSelection();
+		StringBuilder title = new StringBuilder(command);
+		if (!currentSelection.isEmpty()) {
+			title.append(" [Current Selection: ")
+					.append(currentSelection.getResource().getFullPath()
+							.toOSString()).append("]");
+		}
+		return title.toString();
 	}
 
 	@Override
