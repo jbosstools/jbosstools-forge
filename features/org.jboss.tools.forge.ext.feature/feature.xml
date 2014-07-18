@@ -19,13 +19,6 @@
    </license>
 
    <plugin
-         id="org.jboss.tools.forge2.runtime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.jboss.tools.forge.core.ext"
          download-size="0"
          install-size="0"
@@ -34,26 +27,6 @@
 
    <plugin
          id="org.jboss.tools.forge.ui.ext"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.jboss.tools.aesh.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.jboss.tools.aesh.runtime"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.jboss.tools.aesh.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
