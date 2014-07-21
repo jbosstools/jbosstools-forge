@@ -47,6 +47,7 @@ public class ForgeWizardDialog extends ForgeCommandDialog {
 	protected void nextPressed() {
 		try {
 			controller.next();
+			controller.initialize();
 			super.nextPressed();
 		} catch (Exception e) {
 			ForgeUIPlugin
