@@ -50,14 +50,7 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	@Override
 	public ForgeRuntimeState getState() {
-		if (FurnaceService.INSTANCE.getContainerStatus().isStarted()) {
-			return ForgeRuntimeState.RUNNING;
-		} else if (FurnaceService.INSTANCE.getContainerStatus().isStarting()) {
-			return ForgeRuntimeState.STARTING;
-		} else if (FurnaceService.INSTANCE.getContainerStatus().isStopped()) {
-			return ForgeRuntimeState.STOPPED;
-		}
-		return null;
+		return state;
 	}
 	
 	@Override

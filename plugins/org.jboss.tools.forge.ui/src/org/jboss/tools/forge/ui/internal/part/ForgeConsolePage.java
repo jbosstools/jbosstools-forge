@@ -107,7 +107,7 @@ public class ForgeConsolePage implements IPage, PropertyChangeListener {
 			public void run() {
 				// without calls to deactivate and activate the actionBars
 				// do not update properly
-				actionBars.deactivate();;
+				actionBars.deactivate();
 				actionBars.updateActionBars();
 				actionBars.activate();
 				actionBars.updateActionBars();

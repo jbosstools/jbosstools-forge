@@ -50,8 +50,10 @@ public enum FurnaceService {
 	}
 
 	public void stop() {
-		furnace.stop();
-		furnace = null;
+		if (furnace != null) {
+			furnace.stop();
+			furnace = null;
+		}
 	}
 
 	public void waitUntilContainerIsStarted() throws InterruptedException {
