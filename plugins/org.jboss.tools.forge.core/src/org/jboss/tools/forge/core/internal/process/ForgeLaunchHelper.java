@@ -1,6 +1,7 @@
 package org.jboss.tools.forge.core.internal.process;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -18,6 +19,7 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
+import org.osgi.framework.Bundle;
 
 
 public class ForgeLaunchHelper {
@@ -131,7 +133,13 @@ public class ForgeLaunchHelper {
 	private static String getExtraModulesLocation() {
 		String result = "";
 		try {
-			result = FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime.ext")).getAbsolutePath() + "/modules";
+			Bundle bundle = Platform.getBundle("org.jboss.tools.forge.runtime.ext");
+			if (bundle == null) 
+				throw new FileNotFoundException("Bundle org.jboss.tools.forge.runtime.ext not found");
+			File bundleFile = FileLocator.getBundleFile(bundle);
+			if (bundleFile == null)
+				throw new FileNotFoundException("Bundle file for org.jboss.tools.forge.runtime.ext not found");
+			result = bundleFile.getAbsolutePath() + "/modules";
 		} catch (IOException e) {
 			ForgeCorePlugin.log(new RuntimeException("Problem while obtaining location of extra runtime classes.", e));
 		}
