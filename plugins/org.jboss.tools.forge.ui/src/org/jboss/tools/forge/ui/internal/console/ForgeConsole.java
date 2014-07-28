@@ -17,4 +17,6 @@ public interface ForgeConsole {
 	ForgeRuntime getRuntime();
 
 	Resource<?> getCurrentResource();
+
+	void goToPath(String path);
 }

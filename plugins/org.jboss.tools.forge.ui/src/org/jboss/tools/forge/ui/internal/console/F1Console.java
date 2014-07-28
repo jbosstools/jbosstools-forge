@@ -18,12 +18,12 @@ public class F1Console extends AbstractForgeConsole {
  	public F1Console(ForgeRuntime runtime) {
 		super(runtime);
 	}
-	
+
 	@Override
 	public ForgeTextViewer createTextViewer(Composite parent) {
 		return new F1TextViewer(parent, getRuntime());
 	}
-	
+
 	@Override
 	public IAction[] createActions() {
 		return new IAction[] { 
@@ -33,7 +33,7 @@ public class F1Console extends AbstractForgeConsole {
 				new LinkAction(getRuntime())
 		};
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (!ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) return;
@@ -45,4 +45,11 @@ public class F1Console extends AbstractForgeConsole {
 		}
 	}
 
+	@Override
+	public void goToPath(String path) {
+		if (path.indexOf(' ') != -1) {
+			path = '\"' + path + '\"';
+		}
+		getRuntime().sendInput("pick-up " + path + "\n");
+	}
 }

@@ -17,12 +17,14 @@ import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
+import org.jboss.tools.forge.ui.internal.console.ForgeConsoleManager;
 
 public class GoToAction extends Action implements ISelectionListener {
-	
+
 	private ISelection selection;
 	private ForgeRuntime runtime;
-	
+
 	public GoToAction(ForgeRuntime runtime) {
 		super();
 		this.runtime = runtime;
@@ -35,12 +37,12 @@ public class GoToAction extends Action implements ISelectionListener {
 	public void run() {
 		goToSelection();
 	}
-	
+
 	@Override
 	protected void finalize() {
 		getSelectionService().removeSelectionListener(this);
 	}
-	
+
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection newSelection) {
 		selection = newSelection;
@@ -56,36 +58,32 @@ public class GoToAction extends Action implements ISelectionListener {
 	}
 
 	public boolean goToSelection() {
+		ForgeConsole console = ForgeConsoleManager.INSTANCE.getConsole(runtime);
 		if (selection instanceof IStructuredSelection) {
-		    IStructuredSelection ss = (IStructuredSelection)selection;
-		    Object first = ss.getFirstElement();
-		    if (first instanceof IResource) {
-		    	goToPath(((IResource)first).getLocation().toOSString());
-		    } else if (first instanceof IJavaElement) {
-		    	try {
-		    		IResource resource = ((IJavaElement)first).getCorrespondingResource();
-		    		if (resource == null) return false;
-					goToPath(resource.getLocation().toOSString());
+			IStructuredSelection ss = (IStructuredSelection) selection;
+			Object first = ss.getFirstElement();
+			if (first instanceof IResource) {
+				console.goToPath(((IResource) first).getLocation().toOSString());
+			} else if (first instanceof IJavaElement) {
+				try {
+					IResource resource = ((IJavaElement) first)
+							.getCorrespondingResource();
+					if (resource == null)
+						return false;
+					console.goToPath(resource.getLocation().toOSString());
 				} catch (JavaModelException e) {
 					ForgeUIPlugin.log(e);
 					return false;
 				}
-		    } else if (first instanceof IRemoteFile) {
-		    	goToPath(((IRemoteFile)first).getAbsolutePath());
-		    }
-		    return true;
+			} else if (first instanceof IRemoteFile) {
+				console.goToPath(((IRemoteFile) first).getAbsolutePath());
+			}
+			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	private void goToPath(String str) {
-		if (str.indexOf(' ') != -1) {
-			str = '\"' + str + '\"';
-		}
-		runtime.sendInput("pick-up " + str + "\n");
-	}
-	
+
 	private ISelectionService getSelectionService() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getSelectionService();
 	}

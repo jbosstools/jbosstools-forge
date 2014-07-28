@@ -13,6 +13,8 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
+import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
+import org.jboss.tools.forge.ui.internal.console.ForgeConsoleManager;
 
 
 public class SelectionSynchronizer implements ISelectionListener {
@@ -34,11 +36,9 @@ public class SelectionSynchronizer implements ISelectionListener {
 			IFile file = ((IFileEditorInput)editorInput).getFile();
 			if (file == null) return;
 			String path = file.getLocation().toOSString();
-			if (path.indexOf(' ') != -1) {
-				path = '\"' + path + '\"';
-			}
 			if (ForgeRuntimeState.RUNNING.equals(getRuntime().getState())) {
-				getRuntime().sendInput("pick-up " + path + "\n");
+				ForgeConsole console = ForgeConsoleManager.INSTANCE.getConsole(getRuntime());
+				console.goToPath(path);
 			}
 		}		
 	};
@@ -65,20 +65,15 @@ public class SelectionSynchronizer implements ISelectionListener {
 		IFile file = ((IFileEditorInput)editorInput).getFile();
 		if (file == null) return;
 		String path = file.getLocation().toOSString();
-		if (path.indexOf(' ') != -1) {
-			path = '\"' + path + '\"';
-		}
 		if (ForgeRuntimeState.RUNNING.equals(getRuntime().getState())) {
-			getRuntime().sendInput("pick-up " + path + "\n");
+			ForgeConsole console = ForgeConsoleManager.INSTANCE.getConsole(getRuntime());
+			console.goToPath(path);
 		}
-	}
-	
-	private IWorkbenchWindow getWorkbenchWidow() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	}
 	
 	private IPartService getPartService() {
-		return getWorkbenchWidow().getPartService();
+		IWorkbenchWindow activeWorkbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		return activeWorkbenchWindow.getPartService();
 	}
 	
 	private ForgeRuntime getRuntime() {

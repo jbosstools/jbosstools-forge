@@ -8,6 +8,8 @@ import org.jboss.forge.addon.resource.Resource;
 import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
+import org.jboss.tools.forge.ui.internal.actions.GoToAction;
+import org.jboss.tools.forge.ui.internal.actions.LinkAction;
 import org.jboss.tools.forge.ui.internal.actions.StartAction;
 import org.jboss.tools.forge.ui.internal.actions.StopAction;
 import org.jboss.tools.forge.ui.internal.viewer.F2TextViewer;
@@ -28,8 +30,12 @@ public class F2Console extends AbstractForgeConsole {
 
 	@Override
 	public IAction[] createActions() {
-		return new IAction[] { new StartAction(getRuntime()),
-				new StopAction(getRuntime()) };
+		return new IAction[] {
+				new StartAction(getRuntime()),
+				new StopAction(getRuntime()),
+				new GoToAction(getRuntime()),
+				new LinkAction(getRuntime())
+		};
 	}
 
 	@Override
@@ -45,12 +51,21 @@ public class F2Console extends AbstractForgeConsole {
 	@Override
 	public Resource<?> getCurrentResource() {
 		Resource<?> currentResource = null;
-		if (textViewer != null) {
-			Console console = textViewer.getConsole();
-			if (console != null) {
-				currentResource = (Resource<?>) console.getCurrentResource();
-			}
+		Console console = getConsole();
+		if (console != null) {
+			currentResource = (Resource<?>) console.getCurrentResource();
 		}
 		return currentResource;
+	}
+
+	@Override
+	public void goToPath(String path) {
+		Console console = getConsole();
+		if (console != null)
+			console.sendInput("cd " + path.replaceAll(" ", "\\ ") + " \n");
+	}
+
+	private Console getConsole() {
+		return (textViewer != null) ? textViewer.getConsole() : null;
 	}
 }

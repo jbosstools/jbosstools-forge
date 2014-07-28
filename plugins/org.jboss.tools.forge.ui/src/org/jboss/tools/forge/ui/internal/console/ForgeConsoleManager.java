@@ -6,9 +6,9 @@ import java.util.List;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 
-public class ForgeConsoleManager {
+public enum ForgeConsoleManager {
+	INSTANCE;
 	
-	public static final ForgeConsoleManager INSTANCE = new ForgeConsoleManager();
 	private List<ForgeConsole> consoles = new ArrayList<ForgeConsole>();
 	
 	private ForgeConsoleManager() {
@@ -37,7 +37,7 @@ public class ForgeConsoleManager {
 		return getConsole(ForgeCorePreferences.INSTANCE.getDefaultRuntime());
 	}
 	
-	private ForgeConsole getConsole(ForgeRuntime runtime) {
+	public ForgeConsole getConsole(ForgeRuntime runtime) {
 		for (ForgeConsole console : getConsoles()) {
 			if (console.getRuntime() == runtime) {
 				return console;
