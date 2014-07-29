@@ -20,16 +20,16 @@ import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
 
 public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 
-	private static String START_LINE = new Character((char)1).toString();
-	private static String PREV_CHAR = new Character((char)2).toString();
-	private static String CTRL_C = new Character((char)3).toString();
-	private static String CTRL_D = new Character((char)4).toString();
-	private static String END_LINE = new Character((char)5).toString();
-	private static String NEXT_CHAR = new Character((char)6).toString();
-	private static String DELETE_PREV_CHAR = new Character((char)8).toString();
-	private static String PREV_HISTORY = new Character((char)16).toString();
-	private static String NEXT_HISTORY = new Character((char)14).toString();
-	private static String DELETE_NEXT_CHAR = new Character((char)127).toString();
+	private static final String START_LINE = new Character((char)1).toString();
+	private static final String PREV_CHAR = new Character((char)2).toString();
+	private static final String CTRL_C = new Character((char)3).toString();
+	private static final String CTRL_D = new Character((char)4).toString();
+	private static final String END_LINE = new Character((char)5).toString();
+	private static final String NEXT_CHAR = new Character((char)6).toString();
+	private static final String DELETE_PREV_CHAR = new Character((char)8).toString();
+	private static final String PREV_HISTORY = new Character((char)16).toString();
+	private static final String NEXT_HISTORY = new Character((char)14).toString();
+	private static final String DELETE_NEXT_CHAR = new Character((char)127).toString();
 	
 	private static final String FORGE_CONSOLE_FONT = "org.jboss.tools.forge.console.font";
 	
