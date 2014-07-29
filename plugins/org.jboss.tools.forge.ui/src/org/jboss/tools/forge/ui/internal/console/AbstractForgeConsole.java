@@ -37,7 +37,7 @@ public abstract class AbstractForgeConsole implements ForgeConsole,
 
 	@Override
 	public Control createControl(Composite parent) {
-		if (textViewer == null) {
+		if (textViewer == null || textViewer.getControl().isDisposed()) {
 			textViewer = createTextViewer(parent);
 		}
 		Control result = textViewer.getControl();

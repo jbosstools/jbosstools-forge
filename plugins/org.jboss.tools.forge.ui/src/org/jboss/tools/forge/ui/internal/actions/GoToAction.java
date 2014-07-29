@@ -20,7 +20,8 @@ import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
 import org.jboss.tools.forge.ui.internal.console.ForgeConsoleManager;
 
-public class GoToAction extends Action implements ISelectionListener {
+public class GoToAction extends Action implements ISelectionListener,
+		AutoCloseable {
 
 	private ISelection selection;
 	private ForgeRuntime runtime;
@@ -36,6 +37,11 @@ public class GoToAction extends Action implements ISelectionListener {
 	@Override
 	public void run() {
 		goToSelection();
+	}
+
+	@Override
+	public void close() {
+		getSelectionService().removeSelectionListener(this);
 	}
 
 	@Override
