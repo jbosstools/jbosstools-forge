@@ -75,6 +75,8 @@ public class GoToAction extends Action implements ISelectionListener,
 					IResource resource = ((IJavaElement) first)
 							.getCorrespondingResource();
 					if (resource == null)
+						resource = ((IJavaElement) first).getResource();
+					if (resource == null)
 						return false;
 					console.goToPath(resource.getLocation().toOSString());
 				} catch (JavaModelException e) {
