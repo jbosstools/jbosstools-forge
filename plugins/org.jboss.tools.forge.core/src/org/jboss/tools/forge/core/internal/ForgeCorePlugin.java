@@ -2,13 +2,19 @@ package org.jboss.tools.forge.core.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IProcess;
+import org.eclipse.m2e.core.MavenPlugin;
+import org.eclipse.m2e.core.embedder.AbstractMavenConfigurationChangeListener;
+import org.eclipse.m2e.core.embedder.IMavenConfiguration;
+import org.eclipse.m2e.core.embedder.MavenConfigurationChangeEvent;
 import org.jboss.tools.usage.event.UsageEventType;
 import org.jboss.tools.usage.event.UsageReporter;
 import org.osgi.framework.BundleContext;
@@ -21,14 +27,15 @@ public class ForgeCorePlugin extends Plugin {
 
 	private static Thread shutdownHook;
 	private static List<IProcess> processes = new ArrayList<IProcess>();
-	
+
 	private UsageEventType forgeStartEventType;
 
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		setMavenSettings();
 		initializeShutdownHook();
 		plugin = this;
-		System.setProperty("org.jboss.forge.addon.shell.forcePOSIXTerminal", "true");
+		System.setProperty("org.jboss.forge.addon.shell.forcePOSIXTerminal","true");
 		initializeUsageReporting();
 	}
 	
@@ -43,7 +50,44 @@ public class ForgeCorePlugin extends Plugin {
 				);
 		UsageReporter.getInstance().registerEvent(forgeStartEventType);
 	}
-	
+
+	private void setMavenSettings() {
+		IMavenConfiguration mavenConfig = MavenPlugin.getMavenConfiguration();
+		mavenConfig
+				.addConfigurationChangeListener(new AbstractMavenConfigurationChangeListener() {
+					@Override
+					public void mavenConfigurationChange(
+							MavenConfigurationChangeEvent event)
+							throws CoreException {
+						registerSystemProperties();
+					}
+				});
+		registerSystemProperties();
+	}
+
+	private void registerSystemProperties() {
+		IMavenConfiguration mavenConfig = MavenPlugin.getMavenConfiguration();
+		Properties properties = System.getProperties();
+
+		// Register user settings file
+		String userSettingsFile = mavenConfig.getUserSettingsFile();
+		if (userSettingsFile != null) {
+			properties.setProperty("org.apache.maven.user-settings",
+					userSettingsFile);
+		} else {
+			properties.remove("org.apache.maven.user-settings");
+		}
+
+		// Register global settings file
+		String globalSettingsFile = mavenConfig.getGlobalSettingsFile();
+		if (globalSettingsFile != null) {
+			properties.setProperty("org.apache.maven.global-settings",
+					globalSettingsFile);
+		} else {
+			properties.remove("org.apache.maven.global-settings");
+		}
+	}
+
 	public UsageEventType getForgeStartEventType() {
 		return forgeStartEventType;
 	}
