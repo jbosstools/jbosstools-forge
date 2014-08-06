@@ -1,5 +1,8 @@
 /**
- * Copyright (c) Red Hat, Inc., contributors and others 2004 - 2014. All rights reserved
+ * Copyright (c) Red Hat, Inc., contributors and others 2013 - 2014. All rights reserved
+ *
+ * Contributors:
+ *     Fred Bricon (Red Hat, Inc.) - initial API and implementation
  *
  * Licensed under the Eclipse Public License version 1.0, available at
  * http://www.eclipse.org/legal/epl-v10.html
@@ -17,9 +20,9 @@ import org.eclipse.m2e.jdt.AbstractClassifierClasspathProvider;
 /**
  * Adds support for workspace projects referenced with the
  * <code>forge-addon</code> classifier in Eclipse Launch Configurations.
- * 
+ *
  * @author Fred Bricon
- * 
+ *
  */
 public class ForgeAddonClassifierClasspathProvider extends
 		AbstractClassifierClasspathProvider {
