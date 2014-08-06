@@ -1,13 +1,9 @@
-/*************************************************************************************
- * Copyright (c) 2013 Red Hat, Inc. and others.
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
+/**
+ * Copyright (c) Red Hat, Inc., contributors and others 2004 - 2014. All rights reserved
+ *
+ * Licensed under the Eclipse Public License version 1.0, available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *     Fred Bricon (Red Hat, Inc.) - initial API and implementation
- ************************************************************************************/
+ */
 package org.jboss.tools.forge.m2e.internal;
 
 import org.eclipse.jface.resource.ImageDescriptor;

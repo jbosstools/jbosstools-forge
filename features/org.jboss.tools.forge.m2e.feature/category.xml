@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) Red Hat, Inc., contributors and others 2004 - 2014. All rights reserved
+
+    Licensed under the Eclipse Public License version 1.0, available at
+    http://www.eclipse.org/legal/epl-v10.html
+
+-->
 <site>
    <feature url="features/org.jboss.tools.forge.feature_1.0.0.qualifier.jar" id="org.jboss.tools.forge.feature" version="1.0.0.qualifier">
       <category name="org.jboss.tools.forge"/>

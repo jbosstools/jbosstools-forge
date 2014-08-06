@@ -1,14 +1,9 @@
-/*******************************************************************************
- * Copyright (c) 2006, 2007 IBM Corporation and others.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+/**
+ * Copyright (c) Red Hat, Inc., contributors and others 2004 - 2014. All rights reserved
  *
- * Contributors:
- *     IBM Corporation - initial API and implementation
- *******************************************************************************/
-
+ * Licensed under the Eclipse Public License version 1.0, available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.jboss.tools.forge.ui.internal.ext.quickaccess;
 
 import java.util.Collections;
