@@ -14,6 +14,7 @@ import org.jboss.forge.addon.resource.Resource;
 import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
+import org.jboss.tools.forge.ui.internal.actions.ClearAction;
 import org.jboss.tools.forge.ui.internal.actions.GoToAction;
 import org.jboss.tools.forge.ui.internal.actions.LinkAction;
 import org.jboss.tools.forge.ui.internal.actions.StartAction;
@@ -40,8 +41,8 @@ public class F2Console extends AbstractForgeConsole {
 				new StartAction(getRuntime()),
 				new StopAction(getRuntime()),
 				new GoToAction(getRuntime()),
-				new LinkAction(getRuntime())
-		};
+				new ClearAction(getRuntime()),
+				new LinkAction(getRuntime()) };
 	}
 
 	@Override
@@ -69,6 +70,13 @@ public class F2Console extends AbstractForgeConsole {
 		Console console = getConsole();
 		if (console != null)
 			console.sendInput("cd " + path.replaceAll(" ", "\\ ") + " \n");
+	}
+
+	@Override
+	public void clear() {
+		Console console = getConsole();
+		if (console != null)
+			console.sendInput("clear\n");
 	}
 
 	private Console getConsole() {

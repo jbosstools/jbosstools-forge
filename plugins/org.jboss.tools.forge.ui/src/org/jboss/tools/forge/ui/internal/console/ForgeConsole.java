@@ -25,4 +25,6 @@ public interface ForgeConsole {
 	Resource<?> getCurrentResource();
 
 	void goToPath(String path);
+
+	void clear();
 }
