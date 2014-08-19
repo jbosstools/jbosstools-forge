@@ -129,6 +129,14 @@
                 targetID = "org.jboss.tools.common.ui.JBossPerspective">
             <showInPart 
                     id = "org.jboss.tools.forge.ui.console"/>
+            <view
+                  id="org.jboss.tools.forge.ui.console"
+                  relationship="stack"
+                  relative="org.eclipse.ui.views.ProblemView">
+            </view>
+            <viewShortcut
+                  id="org.jboss.tools.forge.ui.console">
+            </viewShortcut>
         </perspectiveExtension>
     </extension>
     <extension
