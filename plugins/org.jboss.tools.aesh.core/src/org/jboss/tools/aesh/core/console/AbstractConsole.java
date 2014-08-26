@@ -14,17 +14,17 @@ import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
 import org.jboss.tools.aesh.core.internal.io.AeshOutputFilter;
 import org.jboss.tools.aesh.core.internal.io.AeshOutputStream;
 import org.jboss.tools.aesh.core.internal.io.CommandFilter;
-import org.jboss.tools.aesh.core.internal.io.DocumentHandler;
+import org.jboss.tools.aesh.core.internal.io.DocumentInputOutputHandler;
 
 public abstract class AbstractConsole implements Console {
 	
 	private AeshInputStream inputStream = null;
 	private AeshOutputStream outputStream, errorStream = null;
-	private DocumentHandler handler = null;
+	private DocumentInputOutputHandler handler = null;
 	private AeshOutputFilter filter = null;
 	
 	public AbstractConsole() {
-		handler = new DocumentHandler();
+		handler = new DocumentInputOutputHandler();
 		filter = new CommandFilter(handler);
 	}
 

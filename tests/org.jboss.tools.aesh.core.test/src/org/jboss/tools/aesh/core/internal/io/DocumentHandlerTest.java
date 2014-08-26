@@ -49,7 +49,7 @@ public class DocumentHandlerTest {
 		}
 	};
 	
-	private DocumentHandler testHandler = new DocumentHandler();
+	private DocumentInputOutputHandler testHandler = new DocumentInputOutputHandler();
 	
 	private String testOutput = "foobar";
 	
