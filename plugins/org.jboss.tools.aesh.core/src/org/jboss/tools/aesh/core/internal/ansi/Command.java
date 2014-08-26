@@ -7,10 +7,12 @@
 package org.jboss.tools.aesh.core.internal.ansi;
 
 import org.jboss.tools.aesh.core.document.Document;
+import org.jboss.tools.aesh.core.internal.io.AeshInputStream;
 
 
 public interface Command {
 	
 	void handle(Document document);
+	void handle(AeshInputStream inputStream, Document document);
 
 }
