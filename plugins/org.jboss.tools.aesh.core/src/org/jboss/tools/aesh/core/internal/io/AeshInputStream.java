@@ -12,8 +12,6 @@ import java.io.PipedOutputStream;
 
 public class AeshInputStream extends PipedInputStream {
 	
-	public static final AeshInputStream INSTANCE = new AeshInputStream();
-
     private PipedOutputStream outputStream = new PipedOutputStream();
     
     public AeshInputStream() {
