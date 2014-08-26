@@ -29,19 +29,19 @@ public class CommandFilterTest {
 	
 	private Command testCommand = new Command() {
 		@Override
-		public void handle(Document document) {
+		public void handle(AeshInputStream inputStream, Document document) {
 		}		
 	};
 	
 	private Command cursorSaveCommand = new Command() {
 		@Override
-		public void handle(Document document) {
+		public void handle(AeshInputStream inputStram, Document document) {
 		}		
 	};
 	
 	private Command cursorRestoreCommand = new Command() {
 		@Override
-		public void handle(Document document) {
+		public void handle(AeshInputStream inputStream, Document document) {
 		}		
 	};
 	

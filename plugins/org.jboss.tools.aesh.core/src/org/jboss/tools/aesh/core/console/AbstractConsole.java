@@ -35,11 +35,13 @@ public abstract class AbstractConsole implements Console {
 		setInputStream(new AeshInputStream()); 
 		setOutputStream( new AeshOutputStream(filter));
 		setErrorStream(new AeshOutputStream(filter));
+		setHandlerInputStream(inputStream);
 		setHandlerDocument(document);		
 	}
 	
 	public void disconnect() {
 		setHandlerDocument(null);
+		setHandlerInputStream(null);
 		setErrorStream(null);
 		setOutputStream(null);
 		setInputStream(null);
@@ -77,6 +79,10 @@ public abstract class AbstractConsole implements Console {
 	
 	void setHandlerDocument(Document document) {
 		handler.setDocument(document);
+	}
+	
+	void setHandlerInputStream(AeshInputStream inputStream) {
+		handler.setInputStream(inputStream);
 	}
 	
 	@Override

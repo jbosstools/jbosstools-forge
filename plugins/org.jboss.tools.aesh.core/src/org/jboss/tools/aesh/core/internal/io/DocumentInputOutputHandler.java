@@ -13,6 +13,7 @@ import org.jboss.tools.aesh.core.internal.ansi.Command;
 public class DocumentInputOutputHandler implements AeshInputOutputHandler {
 	
 	private Document document;
+	private AeshInputStream inputStream;
 
 	@Override
 	public void handleOutput(String output) {
@@ -37,13 +38,17 @@ public class DocumentInputOutputHandler implements AeshInputOutputHandler {
 
 	@Override
 	public void handleCommand(Command command) {
-		if (document != null) {
-			command.handle(document);
+		if (document != null && inputStream != null) {
+			command.handle(inputStream, document);
 		}
 	}
 	
 	public void setDocument(Document document) {
 		this.document = document;
+	}
+	
+	public void setInputStream(AeshInputStream inputStream) {
+		this.inputStream = inputStream;
 	}
 
 }

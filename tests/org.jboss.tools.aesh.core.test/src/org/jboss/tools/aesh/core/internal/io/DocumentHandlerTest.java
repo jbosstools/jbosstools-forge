@@ -24,6 +24,7 @@ public class DocumentHandlerTest {
 	private int replacedLength = 0;
 	private String replacedText = null;
 	private Document handledDocument = null;
+	private AeshInputStream handledInputStream = null;
 	
 	private Style testStyle = new TestStyle() {
 		@Override public int getLength() { return styleLength; }
@@ -44,18 +45,21 @@ public class DocumentHandlerTest {
 	
 	private Command testCommand = new Command() {		
 		@Override
-		public void handle(Document document) {
+		public void handle(AeshInputStream inputStream, Document document) {
+			handledInputStream = inputStream;
 			handledDocument = document;
 		}
 	};
 	
 	private DocumentInputOutputHandler testHandler = new DocumentInputOutputHandler();
+	private AeshInputStream testInputStream = new AeshInputStream();
 	
 	private String testOutput = "foobar";
 	
 	@Test
 	public void testHandleOutput() {
 		testHandler.setDocument(testDocument);
+		testHandler.setInputStream(testInputStream);
 		testHandler.handleOutput(testOutput);
 		Assert.assertEquals("style length", testOutput.length(), styleLength);
 		Assert.assertEquals("replaced offset", 0, replacedOffset);
@@ -67,7 +71,9 @@ public class DocumentHandlerTest {
 	@Test
 	public void testHandleCommand() {
 		testHandler.setDocument(testDocument);
+		testHandler.setInputStream(testInputStream);
 		testHandler.handleCommand(testCommand);
+		Assert.assertEquals("handled input stream", testInputStream, handledInputStream);
 		Assert.assertEquals("handled document", testDocument, handledDocument);
 	}
 
