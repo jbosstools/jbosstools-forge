@@ -60,7 +60,7 @@ public class CommandFilterTest {
 		}
 	};
 	
-	private AeshOutputHandler testHandler = new AeshOutputHandler() {
+	private AeshInputOutputHandler testHandler = new AeshInputOutputHandler() {
 		@Override
 		public void handleOutput(String output) {
 			handledOutput.add(output);

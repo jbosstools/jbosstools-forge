@@ -21,9 +21,9 @@ public class CommandFilter implements AeshOutputFilter {
 
 	private CommandFactory commandFactory = DefaultCommandFactory.INSTANCE;
 	
-	private AeshOutputHandler handler = null;
+	private AeshInputOutputHandler handler = null;
 	
-	public CommandFilter(AeshOutputHandler handler) {
+	public CommandFilter(AeshInputOutputHandler handler) {
 		this.handler = handler;
 	}
 	
