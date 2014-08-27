@@ -15,16 +15,33 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
+import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
+import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.dialog.UICommandListDialog;
+import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 public class ForgeCommandHandler extends AbstractHandler {
 	
 	@Override
 	public Object execute(ExecutionEvent event) {
+		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
+		if (runtime == FurnaceRuntime.INSTANCE) {
+			handleFurnace(event);
+		} else {
+			startForgeRuntime(runtime);
+		}
+		return null;
+	}
+	
+	private void handleFurnace(ExecutionEvent event) {
 		try {
+			ForgeConsoleView forgeConsoleView = ForgeHelper.findForgeConsoleView();
+			if (forgeConsoleView != null && forgeConsoleView.isShowing()) {
+				ForgeHelper.showForgeConsole(FurnaceRuntime.INSTANCE);
+			}
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);
 			if (!ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
@@ -47,7 +64,13 @@ public class ForgeCommandHandler extends AbstractHandler {
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
 		}
-		return null;
+	}
+	
+	private void startForgeRuntime(ForgeRuntime runtime) {
+		ForgeHelper.showForgeConsole(runtime);
+		if (!ForgeRuntimeState.RUNNING.equals(runtime.getState())) {
+			ForgeHelper.start(runtime);
+		}
 	}
 		
 }
