@@ -14,6 +14,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.jboss.forge.addon.database.tools.connections.ConnectionProfileManagerProvider;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.furnace.services.Imported;
@@ -21,8 +26,10 @@ import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
+import org.jboss.tools.forge.ui.internal.console.ForgeConsoleManager;
 import org.jboss.tools.forge.ui.internal.ext.database.ConnectionProfileManagerImpl;
 import org.jboss.tools.forge.ui.internal.ext.importer.ImportEclipseProjectListener;
+import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 
 public class ForgeHelper {
 	
@@ -108,6 +115,31 @@ public class ForgeHelper {
 		} catch (Throwable t) {
 			ForgeUIPlugin.log(t);
 		}
+	}
+	
+	private static IWorkbenchPage getActiveWorkbenchPage() {
+		IWorkbench workbench = PlatformUI.getWorkbench();
+		if (workbench == null) return null;
+		IWorkbenchWindow activeWorkbenchWindow = workbench.getActiveWorkbenchWindow();
+		if (activeWorkbenchWindow == null) return null;
+		return activeWorkbenchWindow.getActivePage();
+	}
+	
+	public static void showForgeConsole(ForgeRuntime forgeRuntime) {
+		try {
+			IWorkbenchPage activeWorkbenchPage = getActiveWorkbenchPage();
+			IViewPart forgeConsoleView = activeWorkbenchPage.showView(ForgeConsoleView.ID);
+			if (forgeConsoleView == null) return;
+			((ForgeConsoleView)forgeConsoleView).showForgeConsole(ForgeConsoleManager.INSTANCE.getConsole(forgeRuntime));
+		} catch (Exception e) {
+			ForgeUIPlugin.log(e);
+		}
+	}
+	
+	public static ForgeConsoleView findForgeConsoleView() {
+		IWorkbenchPage activeWorkbenchPage = getActiveWorkbenchPage();
+		IViewPart forgeConsoleView = activeWorkbenchPage.findView(ForgeConsoleView.ID);
+		return forgeConsoleView == null ? null : (ForgeConsoleView)forgeConsoleView;
 	}
 
 }
