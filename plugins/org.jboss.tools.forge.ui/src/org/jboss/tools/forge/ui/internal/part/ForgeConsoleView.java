@@ -89,4 +89,8 @@ public class ForgeConsoleView extends ViewPart implements IShowInTarget {
 		}
 		return false;
 	}
+	
+	public boolean isShowing() {
+		return forgeConsolePageBook.isVisible();
+	}
 }
