@@ -167,12 +167,14 @@ public class ForgeWizardHelper {
 				resource = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
 			} else {
 				resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
-				openFileInEditor(fileStore);
 			}
 			if (resource != null) {
 				expandWorkspaceResource(resource);
 			} else {
 				expandSystemDirectory(fileStore);
+			}
+			if (!fileInfo.isDirectory()) {
+				openFileInEditor(fileStore);
 			}
 		} catch (IOException e) {
 			ForgeUIPlugin.log(e);
@@ -182,6 +184,7 @@ public class ForgeWizardHelper {
 	private void expandWorkspaceResource(IResource container) {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 		if (workbenchPage != null) {
+			refreshWorkspaceResource(container);
 			IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
 			if (projectExplorer != null && projectExplorer instanceof CommonNavigator) {
 				expandInProjectExplorer((CommonNavigator)projectExplorer, container);
@@ -190,6 +193,14 @@ public class ForgeWizardHelper {
 			if (packageExplorer != null) {
 				expandInPackageExplorer(packageExplorer, container);
 			}
+		}
+	}
+	
+	private void refreshWorkspaceResource(IResource container) {
+		try {
+			container.refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			ForgeUIPlugin.log(e);
 		}
 	}
 	
