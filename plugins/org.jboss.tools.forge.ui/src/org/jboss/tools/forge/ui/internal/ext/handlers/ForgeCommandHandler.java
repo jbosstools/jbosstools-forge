@@ -40,7 +40,7 @@ public class ForgeCommandHandler extends AbstractHandler {
 		try {
 			ForgeConsoleView forgeConsoleView = ForgeHelper.findForgeConsoleView();
 			if (forgeConsoleView != null && forgeConsoleView.isShowing()) {
-				ForgeHelper.showForgeConsole(FurnaceRuntime.INSTANCE);
+				ForgeHelper.showRuntime(FurnaceRuntime.INSTANCE);
 			}
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);

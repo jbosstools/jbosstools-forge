@@ -136,6 +136,16 @@ public class ForgeHelper {
 		}
 	}
 	
+	public static void showRuntime(ForgeRuntime forgeRuntime) {
+		try {
+			ForgeConsoleView forgeConsoleView = findForgeConsoleView();
+			if (forgeConsoleView == null) return;
+			forgeConsoleView.showForgeConsole(ForgeConsoleManager.INSTANCE.getConsole(forgeRuntime));
+		} catch (Exception e) {
+			ForgeUIPlugin.log(e);
+		}
+	}
+	
 	public static ForgeConsoleView findForgeConsoleView() {
 		IWorkbenchPage activeWorkbenchPage = getActiveWorkbenchPage();
 		IViewPart forgeConsoleView = activeWorkbenchPage.findView(ForgeConsoleView.ID);
