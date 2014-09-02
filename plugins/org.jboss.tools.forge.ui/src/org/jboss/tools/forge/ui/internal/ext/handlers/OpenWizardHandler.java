@@ -41,7 +41,6 @@ public class OpenWizardHandler extends AbstractHandler {
 		// Parameters
 		final String wizardName = event
 				.getParameter("org.jboss.tools.forge.ui.openWizard.wizardName");
-		// Unused for now
 		final String wizardTitle = event
 				.getParameter("org.jboss.tools.forge.ui.openWizard.wizardTitle");
 		final String path = event
@@ -92,6 +91,7 @@ public class OpenWizardHandler extends AbstractHandler {
 		WizardDialogHelper helper = new WizardDialogHelper(window.getShell(),
 				currentSelection);
 		UICommand command = helper.getCommand(wizardName);
-		helper.openWizard(wizardName, command);
+		helper.openWizard(wizardTitle == null ? wizardName : wizardTitle,
+				command);
 	}
 }
