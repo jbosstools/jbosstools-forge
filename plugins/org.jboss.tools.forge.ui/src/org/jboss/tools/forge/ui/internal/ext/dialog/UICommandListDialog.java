@@ -73,16 +73,7 @@ public class UICommandListDialog extends PopupDialog {
 				true, true, "Run a Forge command", "JBoss Forge v."
 						+ FurnaceRuntime.INSTANCE.getVersion()
 						+ " - Start typing to filter the list");
-		ISelection selection = window.getSelectionService().getSelection();
-		IStructuredSelection currentSelection = null;
-		if (selection instanceof TreeSelection) {
-			currentSelection = (TreeSelection) selection;
-		} else {
-			Object activeEditorFile = getActiveEditorInput(window);
-			if (activeEditorFile != null) {
-				currentSelection = new StructuredSelection(activeEditorFile);
-			}
-		}
+		IStructuredSelection currentSelection = getCurrentSelection(window);
 		wizardHelper = new WizardDialogHelper(getParentShell(),
 				currentSelection);
 		UISelectionImpl<?> uiSelection = wizardHelper.getContext()
@@ -97,6 +88,21 @@ public class UICommandListDialog extends PopupDialog {
 			}
 			setTitleText("Current Selection: " + currentSelectionLabel);
 		}
+	}
+
+	public static IStructuredSelection getCurrentSelection(
+			IWorkbenchWindow window) {
+		ISelection selection = window.getSelectionService().getSelection();
+		IStructuredSelection currentSelection = null;
+		if (selection instanceof TreeSelection) {
+			currentSelection = (TreeSelection) selection;
+		} else {
+			Object activeEditorFile = getActiveEditorInput(window);
+			if (activeEditorFile != null) {
+				currentSelection = new StructuredSelection(activeEditorFile);
+			}
+		}
+		return currentSelection;
 	}
 
 	/**

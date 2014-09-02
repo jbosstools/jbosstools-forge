@@ -70,6 +70,12 @@ public final class WizardDialogHelper {
 		return result;
 	}
 
+	public UICommand getCommand(String name) {
+		CommandFactory commandFactory = FurnaceService.INSTANCE
+				.lookup(CommandFactory.class);
+		return commandFactory.getCommandByName(context, name);
+	}
+
 	public Map<String, UICommand> getAllCandidatesAsMap() {
 		Map<String, UICommand> result = new TreeMap<>();
 		CommandFactory commandFactory = FurnaceService.INSTANCE
