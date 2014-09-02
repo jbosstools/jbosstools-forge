@@ -26,7 +26,6 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.dialog.UICommandListDialog;
 import org.jboss.tools.forge.ui.internal.ext.dialog.WizardDialogHelper;
-import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 import org.jboss.tools.forge.ui.util.ForgeHelper;
 
 /**
@@ -47,11 +46,6 @@ public class OpenWizardHandler extends AbstractHandler {
 				.getParameter("org.jboss.tools.forge.ui.command.openWizard.wizardPath");
 
 		try {
-			ForgeConsoleView forgeConsoleView = ForgeHelper
-					.findForgeConsoleView();
-			if (forgeConsoleView != null && forgeConsoleView.isShowing()) {
-				ForgeHelper.showRuntime(FurnaceRuntime.INSTANCE);
-			}
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);
 			if (!ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE
