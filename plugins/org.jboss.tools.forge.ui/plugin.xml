@@ -66,6 +66,28 @@
                categoryId="org.jboss.tools.forge.ui"
                id="org.jboss.tools.forge.ui.command.runForgeCommand"
                name="Run a Forge Command" />
+        <command
+              categoryId="org.jboss.tools.forge.ui"
+              defaultHandler="org.jboss.tools.forge.ui.internal.ext.handlers.OpenWizardHandler"
+              description="Opens a Forge Wizard given its parameter"
+              id="org.jboss.tools.forge.ui.command.openWizard"
+              name="Open Forge Wizard">
+           <commandParameter
+                 id="org.jboss.tools.forge.ui.openWizard.wizardName"
+                 name="wizardName"
+                 optional="false">
+           </commandParameter>
+           <commandParameter
+                 id="org.jboss.tools.forge.ui.openWizard.wizardTitle"
+                 name="wizardTitle"
+                 optional="true">
+           </commandParameter>
+           <commandParameter
+                 id="org.jboss.tools.forge.ui.command.openWizard.wizardPath"
+                 name="path"
+                 optional="true">
+           </commandParameter>
+        </command>
 	</extension>
 	<extension
 	      point="org.eclipse.ui.menus">
