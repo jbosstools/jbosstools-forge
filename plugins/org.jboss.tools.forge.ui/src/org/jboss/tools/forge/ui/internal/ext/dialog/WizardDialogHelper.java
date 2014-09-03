@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -25,6 +26,7 @@ import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.controller.CommandControllerFactory;
 import org.jboss.forge.addon.ui.controller.WizardCommandController;
+import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.metadata.UICommandMetadata;
 import org.jboss.forge.addon.ui.wizard.UIWizardStep;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
@@ -97,13 +99,16 @@ public final class WizardDialogHelper {
 	}
 
 	public void openWizard(String windowTitle, UICommand selectedCommand) {
+		openWizard(windowTitle, selectedCommand, null);
+	}
+
+	public void openWizard(String windowTitle, UICommand selectedCommand,
+			Map<String, ?> values) {
 		CommandControllerFactory controllerFactory = FurnaceService.INSTANCE
 				.lookup(CommandControllerFactory.class);
 		ForgeUIRuntime runtime = new ForgeUIRuntime();
 		CommandController controller = controllerFactory.createController(
 				context, runtime, selectedCommand);
-
-		ForgeWizard wizard = new ForgeWizard(windowTitle, controller, context);
 		try {
 			controller.initialize();
 		} catch (Exception e) {
@@ -113,12 +118,49 @@ public final class WizardDialogHelper {
 			ForgeUIPlugin.log(e);
 			return;
 		}
+		ForgeWizard wizard = new ForgeWizard(windowTitle, controller, context);
 		final WizardDialog wizardDialog;
-		// TODO: Review this
 		if (controller instanceof WizardCommandController) {
+			WizardCommandController wizardController = (WizardCommandController) controller;
+			if (values != null) {
+				Map<String, InputComponent<?, ?>> inputs = wizardController
+						.getInputs();
+				for (String key : inputs.keySet()) {
+					Object value = values.get(key);
+					if (value != null)
+						wizardController.setValueFor(key, value);
+				}
+				while (wizardController.canMoveToNextStep()) {
+					try {
+						wizardController.next().initialize();
+					} catch (Exception e) {
+						ForgeUIPlugin.log(e);
+						break;
+					}
+					inputs = wizardController.getInputs();
+					for (String key : inputs.keySet()) {
+						Object value = values.get(key);
+						if (value != null)
+							wizardController.setValueFor(key, value);
+					}
+				}
+				// Rewind
+				while (wizardController.canMoveToPreviousStep()) {
+					try {
+						wizardController.previous();
+					} catch (Exception e) {
+						ForgeUIPlugin.log(e);
+					}
+				}
+			}
 			wizardDialog = new ForgeWizardDialog(parentShell, wizard,
-					(WizardCommandController) controller);
+					wizardController);
 		} else {
+			if (values != null) {
+				for (Entry<String, ?> entry : values.entrySet()) {
+					controller.setValueFor(entry.getKey(), entry.getValue());
+				}
+			}
 			wizardDialog = new ForgeCommandDialog(parentShell, wizard);
 		}
 		// TODO: Show help button when it's possible to display the docs for

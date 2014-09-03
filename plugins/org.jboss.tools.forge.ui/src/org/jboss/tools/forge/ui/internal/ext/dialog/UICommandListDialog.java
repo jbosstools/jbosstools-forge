@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -92,7 +93,8 @@ public class UICommandListDialog extends PopupDialog {
 
 	public static IStructuredSelection getCurrentSelection(
 			IWorkbenchWindow window) {
-		ISelection selection = window.getSelectionService().getSelection();
+		ISelectionService selectionService = window.getSelectionService();
+		ISelection selection = selectionService.getSelection();
 		IStructuredSelection currentSelection = null;
 		if (selection instanceof TreeSelection) {
 			currentSelection = (TreeSelection) selection;
@@ -102,6 +104,12 @@ public class UICommandListDialog extends PopupDialog {
 				currentSelection = new StructuredSelection(activeEditorFile);
 			}
 		}
+		if (currentSelection == null) {
+			// Try to get from Package Explorer
+			currentSelection = (IStructuredSelection) selectionService
+					.getSelection("org.eclipse.jdt.ui.PackageExplorer");
+		}
+
 		return currentSelection;
 	}
 
