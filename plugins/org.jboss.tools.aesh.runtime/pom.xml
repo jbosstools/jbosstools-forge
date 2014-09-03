@@ -21,7 +21,7 @@
    <packaging>eclipse-plugin</packaging>
 
    <properties>
-      <version.aesh>0.53</version.aesh>
+      <version.aesh>0.56</version.aesh>
    </properties>
 
    <build>
