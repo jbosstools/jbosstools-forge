@@ -142,7 +142,9 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		String[] newItemsArray = newItems.toArray(new String[newSize]);
 		String[] oldItems = combo.getItems();
 		if (Arrays.equals(newItemsArray, oldItems) == false) {
-			selectOne.setValue(null);
+			String currentValue = converter.convert(selectOne.getValue());
+			if (!Arrays.asList(newItemsArray).contains(currentValue))
+				selectOne.setValue(null);
 			combo.setItems(newItemsArray);
 		}
 	}
