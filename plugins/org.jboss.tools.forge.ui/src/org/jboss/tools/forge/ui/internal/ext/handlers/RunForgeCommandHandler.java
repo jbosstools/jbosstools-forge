@@ -7,8 +7,6 @@
 
 package org.jboss.tools.forge.ui.internal.ext.handlers;
 
-import java.io.File;
-
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -16,7 +14,6 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -33,18 +30,15 @@ import org.jboss.tools.forge.ui.util.ForgeHelper;
  *
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
-public class OpenWizardHandler extends AbstractHandler {
+public class RunForgeCommandHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// Parameters
 		final String wizardName = event
-				.getParameter("org.jboss.tools.forge.ui.openWizard.wizardName");
+				.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandName");
 		final String wizardTitle = event
-				.getParameter("org.jboss.tools.forge.ui.openWizard.wizardTitle");
-		final String path = event
-				.getParameter("org.jboss.tools.forge.ui.command.openWizard.wizardPath");
-
+				.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandTitle");
 		try {
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);
@@ -58,15 +52,14 @@ public class OpenWizardHandler extends AbstractHandler {
 						Display.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-								openWizard(wizardName, wizardTitle, path,
-										window);
+								openWizard(wizardName, wizardTitle, window);
 							}
 						});
 					}
 				});
 				job.schedule();
 			} else {
-				openWizard(wizardName, wizardTitle, path, window);
+				openWizard(wizardName, wizardTitle, window);
 			}
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
@@ -74,14 +67,10 @@ public class OpenWizardHandler extends AbstractHandler {
 		return null;
 	}
 
-	private void openWizard(String wizardName, String wizardTitle, String path,
+	private void openWizard(String wizardName, String wizardTitle,
 			IWorkbenchWindow window) {
-		IStructuredSelection currentSelection;
-		if (path == null) {
-			currentSelection = UICommandListDialog.getCurrentSelection(window);
-		} else {
-			currentSelection = new StructuredSelection(new File(path));
-		}
+		IStructuredSelection currentSelection = UICommandListDialog
+				.getCurrentSelection(window);
 		WizardDialogHelper helper = new WizardDialogHelper(window.getShell(),
 				currentSelection);
 		UICommand command = helper.getCommand(wizardName);
