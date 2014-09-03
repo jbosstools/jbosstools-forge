@@ -74,12 +74,17 @@
               name="Open Forge Wizard">
            <commandParameter
                  id="org.jboss.tools.forge.ui.runForgeCommand.commandName"
-                 name="commandName"
+                 name="Command Name"
                  optional="false">
            </commandParameter>
            <commandParameter
                  id="org.jboss.tools.forge.ui.runForgeCommand.commandTitle"
-                 name="commandTitle"
+                 name="Command Title"
+                 optional="true">
+           </commandParameter>
+           <commandParameter
+                 id="org.jboss.tools.forge.ui.runForgeCommand.commandValues"
+                 name="Values (in key=value format)"
                  optional="true">
            </commandParameter>
         </command>
