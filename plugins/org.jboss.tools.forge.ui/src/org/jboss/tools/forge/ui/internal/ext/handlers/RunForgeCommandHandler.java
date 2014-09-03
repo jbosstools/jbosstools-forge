@@ -7,6 +7,9 @@
 
 package org.jboss.tools.forge.ui.internal.ext.handlers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -39,6 +42,18 @@ public class RunForgeCommandHandler extends AbstractHandler {
 				.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandName");
 		final String wizardTitle = event
 				.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandTitle");
+		final String wizardValues = event
+				.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandValues");
+		final Map<String, Object> values;
+		if (wizardValues == null) {
+			values = null;
+		} else {
+			values = new HashMap<>();
+			for (String entry : wizardValues.split(",")) {
+				String[] split = entry.split("=");
+				values.put(split[0], split[1]);
+			}
+		}
 		try {
 			final IWorkbenchWindow window = HandlerUtil
 					.getActiveWorkbenchWindowChecked(event);
@@ -52,14 +67,15 @@ public class RunForgeCommandHandler extends AbstractHandler {
 						Display.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-								openWizard(wizardName, wizardTitle, window);
+								openWizard(window, wizardName, wizardTitle,
+										values);
 							}
 						});
 					}
 				});
 				job.schedule();
 			} else {
-				openWizard(wizardName, wizardTitle, window);
+				openWizard(window, wizardName, wizardTitle, values);
 			}
 		} catch (Exception e) {
 			ForgeUIPlugin.log(e);
@@ -67,14 +83,14 @@ public class RunForgeCommandHandler extends AbstractHandler {
 		return null;
 	}
 
-	private void openWizard(String wizardName, String wizardTitle,
-			IWorkbenchWindow window) {
+	private void openWizard(IWorkbenchWindow window, String wizardName,
+			String wizardTitle, Map<String, ?> values) {
 		IStructuredSelection currentSelection = UICommandListDialog
 				.getCurrentSelection(window);
 		WizardDialogHelper helper = new WizardDialogHelper(window.getShell(),
 				currentSelection);
 		UICommand command = helper.getCommand(wizardName);
 		helper.openWizard(wizardTitle == null ? wizardName : wizardTitle,
-				command);
+				command, values);
 	}
 }
