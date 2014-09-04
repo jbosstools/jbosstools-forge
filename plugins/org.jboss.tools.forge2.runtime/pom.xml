@@ -110,12 +110,6 @@
                         <!-- Addons API needed -->
                         <artifactItem>
                            <groupId>org.jboss.forge.addon</groupId>
-                           <artifactId>shell-api</artifactId>
-                           <version>${version.forge.addons}</version>
-                           <destFileName>shell-api-${version.forge.addons}.jar</destFileName>
-                        </artifactItem>
-                        <artifactItem>
-                           <groupId>org.jboss.forge.addon</groupId>
                            <artifactId>shell-spi</artifactId>
                            <version>${version.forge.addons}</version>
                            <classifier>forge-addon</classifier>

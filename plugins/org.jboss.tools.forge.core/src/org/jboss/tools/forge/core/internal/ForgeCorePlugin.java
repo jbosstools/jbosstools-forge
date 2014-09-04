@@ -41,10 +41,9 @@ public class ForgeCorePlugin extends Plugin {
 		setMavenSettings();
 		initializeShutdownHook();
 		plugin = this;
-		System.setProperty("org.jboss.forge.addon.shell.forcePOSIXTerminal","true");
 		initializeUsageReporting();
 	}
-	
+
 	private void initializeUsageReporting() {
 		forgeStartEventType = new UsageEventType(
 				"forge",

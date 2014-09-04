@@ -11,10 +11,12 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.text.ITextViewer;
 import org.jboss.forge.addon.projects.ProjectFactory;
 import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;
-import org.jboss.forge.addon.shell.ShellHandle;
+import org.jboss.forge.addon.shell.spi.ShellHandle;
+import org.jboss.forge.addon.shell.spi.ShellHandleSettings;
 import org.jboss.forge.addon.shell.spi.command.CdTokenHandler;
 import org.jboss.forge.addon.shell.spi.command.CdTokenHandlerFactory;
 import org.jboss.forge.addon.ui.command.AbstractCommandExecutionListener;
@@ -27,11 +29,16 @@ import org.jboss.tools.forge.core.furnace.FurnaceService;
 
 public class AeshConsole extends AbstractConsole {
 
+	private TextViewerTerminal terminal;
 	private ShellHandle handle;
 	private CommandLineListener executionListener = new CommandLineListener();
 	private ListenerRegistration<CdTokenHandler> tokenHandler;
 
 	private Resource<?> currentResource;
+
+	public AeshConsole(ITextViewer textViewer) {
+		this.terminal = new TextViewerTerminal(textViewer);
+	}
 
 	public void start() {
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);
@@ -44,7 +51,10 @@ public class AeshConsole extends AbstractConsole {
 		OutputStream stdErr = getErrorStream();
 		PrintStream out = new PrintStream(stdOut, true);
 		PrintStream err = new PrintStream(stdErr, true);
-		handle.initialize(currentDir, getInputStream(), out, err);
+		ShellHandleSettings settings = new ShellHandleSettings();
+		settings.stdOut(out).stdErr(err).stdIn(getInputStream())
+				.currentResource(currentDir).terminal(terminal);
+		handle.initialize(settings);
 		handle.addCommandExecutionListener(executionListener);
 		// Listening for selection events
 		handle.addCommandExecutionListener(new AbstractCommandExecutionListener() {
