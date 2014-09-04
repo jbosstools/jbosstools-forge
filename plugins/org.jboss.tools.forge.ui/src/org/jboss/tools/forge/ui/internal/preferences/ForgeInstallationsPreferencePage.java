@@ -9,13 +9,11 @@ package org.jboss.tools.forge.ui.internal.preferences;
 
 import java.util.ArrayList;
 
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -26,9 +24,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
@@ -71,102 +67,6 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		Composite pageBody = createPageBodyControl(parent);					
 		createTitleLabel(pageBody);				
 		createRuntimesArea(pageBody);			
-		createButtonsArea(pageBody);						
-	}
-
-	private void createButtonsArea(Composite parent) {
-		Composite buttons = createButtonsComposite(parent);
-    	createAddButton(buttons);		
-		createEditButton(buttons);		
-		createRemoveButton(buttons);		
-	}
-
-	private void createRemoveButton(Composite parent) {
-		removeButton = new Button(parent, SWT.PUSH);
-		removeButton.setText("&Remove");
-		removeButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
-		removeButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event evt) {
-				ISelection selection = runtimesTableViewer.getSelection();
-				if (selection != null && selection instanceof IStructuredSelection) {
-					Object object = ((IStructuredSelection)selection).getFirstElement();
-					if (object != null && object instanceof ForgeRuntime) {
-						runtimes.remove(object);
-						refreshForgeInstallations();
-					}
-				}
-			}
-		});
-	}
-
-	private void createAddButton(Composite parent) {
-		Button addButton = new Button(parent, SWT.PUSH);
-		addButton.setText("&Add...");
-		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
-		addButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event evt) {
-				ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
-				dialog.initialize("Add Forge Runtime", "", "");
-				if (dialog.open() != Dialog.CANCEL) {
-					runtimes.add(ForgeRuntimeFactory.INSTANCE.createForgeRuntime(
-							dialog.getName(), 
-							dialog.getLocation()));
-					refreshForgeInstallations();
-					refreshNeeded = true;
-				}
-			}
-		});
-	}
-	
-	private void createEditButton(Composite parent) {
-		editButton = new Button(parent, SWT.PUSH);
-		editButton.setText("&Edit...");
-		editButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));	
-		editButton.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event evt) {
-				ISelection selection = runtimesTableViewer.getSelection();
-				if (selection != null && selection instanceof IStructuredSelection) {
-					Object object = ((IStructuredSelection)selection).getFirstElement();
-					if (object != null 
-							&& object instanceof ForgeRuntime 
-							&& ForgeRuntimeType.EXTERNAL.equals(((ForgeRuntime)object).getType())) {
-						ForgeRuntime installation = (ForgeRuntime)object;
-						int index = runtimes.indexOf(installation);
-						ForgeInstallationDialog dialog = new ForgeInstallationDialog(null);
-						dialog.initialize("Edit Forge Runtime", installation.getName(), installation.getLocation());
-						if (dialog.open() != Dialog.CANCEL) {
-							if (dialog.getName() != null && !dialog.getName().equals(installation.getName())) {
-								refreshNeeded = true;
-							}
-							if (dialog.getLocation() != null && !dialog.getLocation().equals(installation.getLocation())) {
-								refreshNeeded = true;
-							}
-							if (refreshNeeded) {
-								runtimes.remove(index);
-								runtimes.add(
-										index, 
-										ForgeRuntimeFactory.INSTANCE.createForgeRuntime(
-												dialog.getName(), 
-												dialog.getLocation()));
-								refreshForgeInstallations();
-							}
-						}
-					}
-				}
-			}
-		});
-	}
-
-	private Composite createButtonsComposite(Composite parent) {
-		Composite buttons = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
-		layout.marginWidth = 0;
-		layout.marginHeight = 0;
-    	buttons.setLayout(layout);
-    	GridData gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING);
-		gd.horizontalSpan = 1;
-    	buttons.setLayoutData(gd);
-		return buttons;
 	}
 
 	private void createTitleLabel(Composite parent) {
