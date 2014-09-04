@@ -11,7 +11,7 @@ import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.core.internal.ansi.Command;
 
 public class DocumentInputOutputHandler implements AeshInputOutputHandler {
-	
+
 	private Document document;
 	private AeshInputStream inputStream;
 
@@ -19,18 +19,17 @@ public class DocumentInputOutputHandler implements AeshInputOutputHandler {
 	public void handleOutput(String output) {
 		if ("".equals(output)) return;
 		if (document != null) {
-			output.replaceAll("\r", "");
 			Style style = document.getCurrentStyle();
 			if (style != null) {
-				int increase = 
-						document.getCursorOffset() - 
-						document.getLength() + 
+				int increase =
+						document.getCursorOffset() -
+						document.getLength() +
 						output.length();
 				style.setLength(style.getLength() + increase);
 			}
 			document.replace(
-					document.getCursorOffset(), 
-					document.getLength() - document.getCursorOffset(), 
+					document.getCursorOffset(),
+					document.getLength() - document.getCursorOffset(),
 					output);
 			document.moveCursorTo(document.getCursorOffset() + output.length());
 		}
@@ -42,11 +41,11 @@ public class DocumentInputOutputHandler implements AeshInputOutputHandler {
 			command.handle(inputStream, document);
 		}
 	}
-	
+
 	public void setDocument(Document document) {
 		this.document = document;
 	}
-	
+
 	public void setInputStream(AeshInputStream inputStream) {
 		this.inputStream = inputStream;
 	}
