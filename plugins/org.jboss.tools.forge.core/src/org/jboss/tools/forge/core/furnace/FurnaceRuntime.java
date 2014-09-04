@@ -27,13 +27,13 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 
 public class FurnaceRuntime implements ForgeRuntime {
-	
+
 	public static final FurnaceRuntime INSTANCE = new FurnaceRuntime();
 	private ForgeRuntimeState state = ForgeRuntimeState.STOPPED;
 	private String location = null;
 	private String version = null;
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-	
+
 	private FurnaceRuntime() {}
 
 	@Override
@@ -58,7 +58,7 @@ public class FurnaceRuntime implements ForgeRuntime {
 	public ForgeRuntimeState getState() {
 		return state;
 	}
-	
+
 	@Override
 	public String getVersion() {
 		if (version == null) {
@@ -138,17 +138,17 @@ public class FurnaceRuntime implements ForgeRuntime {
 	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
 	}
-	
+
 	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
 	}
-	
+
 	private void setNewState(ForgeRuntimeState newState) {
 		ForgeRuntimeState oldState = state;
 		state = newState;
 		propertyChangeSupport.firePropertyChange(PROPERTY_STATE, oldState, state);
 	}
-	
+
 	private static Map<String, UICommand> getAllCandidatesAsMap() {
 		Map<String, UICommand> result = new TreeMap<>();
 		Imported<UICommand> instances = FurnaceService.INSTANCE
@@ -168,16 +168,16 @@ public class FurnaceRuntime implements ForgeRuntime {
 		if (!file.exists()) return result;
 		String[] candidates = file.list();
 		for (String candidate : candidates) {
-			if (candidate.startsWith("shell-api-")) {
+			if (candidate.startsWith("shell-spi-")) {
 				int end = candidate.indexOf(".jar");
 				if (end != -1) {
-					result = candidate.substring("shell-api-".length(), end);
+					result = candidate.substring("shell-spi-".length(), end);
 				}
 			}
 		}
 		return result;
 	}
-	
+
 	private void initLocation() {
 		try {
 			location = FileLocator.getBundleFile(
@@ -188,5 +188,5 @@ public class FurnaceRuntime implements ForgeRuntime {
 		}
 	}
 
-	
+
 }

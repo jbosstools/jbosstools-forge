@@ -25,7 +25,7 @@ public class F2TextViewer extends AbstractTextViewer implements ForgeTextViewer 
 	}
 
 	protected Console createConsole() {
-		return console = new AeshConsole();
+		return console = new AeshConsole(this);
 	}
 
 	@Override
