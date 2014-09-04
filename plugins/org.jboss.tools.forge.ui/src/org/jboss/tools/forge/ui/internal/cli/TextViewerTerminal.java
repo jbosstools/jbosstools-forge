@@ -13,6 +13,7 @@ import org.eclipse.jface.text.ITextViewer;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.forge.addon.shell.spi.Terminal;
@@ -72,11 +73,13 @@ public class TextViewerTerminal implements Terminal {
 			@Override
 			public void run() {
 				StyledText textWidget = textViewer.getTextWidget();
+				// Calculating font extent. Thanks to Alexey Kazakov
+				GC gc = new GC(textWidget);
+				gc.setFont(textWidget.getFont());
+				Point p = gc.stringExtent("w");
 				Point size = textWidget.getSize();
-				height = size.y;
-				// XXX: misaligned list of commands output
-				// width = size.x
-				width = 80;
+				height = size.y / p.y;
+				width = size.x / p.x;
 			}
 		});
 	}
