@@ -10,6 +10,11 @@ package org.jboss.tools.forge.ui.internal.cli;
 import java.io.IOException;
 
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Display;
 import org.jboss.forge.addon.shell.spi.Terminal;
 
 /**
@@ -19,30 +24,75 @@ import org.jboss.forge.addon.shell.spi.Terminal;
  */
 public class TextViewerTerminal implements Terminal {
 
+	private final UpdateWidgetSizeListener controlListener = new UpdateWidgetSizeListener();
 	private final ITextViewer textViewer;
 
-	public TextViewerTerminal(ITextViewer textViewer) {
+	private int height;
+	private int width;
+
+	public TextViewerTerminal(final ITextViewer textViewer) {
 		this.textViewer = textViewer;
 	}
 
 	@Override
 	public void initialize() {
-	}
-
-	@Override
-	public void close() throws IOException {
+		updateSize();
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				StyledText textWidget = textViewer.getTextWidget();
+				textWidget.addControlListener(controlListener);
+			}
+		});
 	}
 
 	@Override
 	public int getHeight() {
-		// TODO: Get REAL height info
-		return 24;
+		return height;
 	}
 
 	@Override
 	public int getWidth() {
-		// TODO: Get REAL width info
-		return 80;
+		return width;
 	}
 
+	@Override
+	public void close() throws IOException {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				StyledText textWidget = textViewer.getTextWidget();
+				textWidget.removeControlListener(controlListener);
+			}
+		});
+	}
+
+	private void updateSize() {
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				StyledText textWidget = textViewer.getTextWidget();
+				Point size = textWidget.getSize();
+				height = size.y;
+				// XXX: misaligned list of commands output
+				// width = size.x
+				width = 80;
+			}
+		});
+	}
+
+	/**
+	 * Updates the size info for this widget
+	 */
+	private class UpdateWidgetSizeListener implements ControlListener {
+		@Override
+		public void controlMoved(ControlEvent e) {
+			updateSize();
+		}
+
+		@Override
+		public void controlResized(ControlEvent e) {
+			updateSize();
+		}
+	}
 }
