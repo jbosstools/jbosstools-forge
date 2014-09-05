@@ -80,6 +80,7 @@ public class TextViewerTerminal implements Terminal {
 				Point size = textWidget.getSize();
 				height = size.y / p.y;
 				width = size.x / p.x;
+				gc.dispose();
 			}
 		});
 	}
