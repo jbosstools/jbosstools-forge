@@ -6,6 +6,7 @@
  */
 package org.jboss.tools.forge.ui.internal.viewer;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.jboss.tools.aesh.core.console.Console;
 import org.jboss.tools.aesh.ui.view.AbstractTextViewer;
@@ -17,7 +18,7 @@ public class F2TextViewer extends AbstractTextViewer implements ForgeTextViewer 
 	private AeshConsole console;
 
 	public F2TextViewer(Composite parent) {
-		super(parent);
+		super(parent, SWT.WRAP | SWT.V_SCROLL);
 		if (ForgeRuntimeState.RUNNING
 				.equals(FurnaceRuntime.INSTANCE.getState())) {
 			startConsole();
