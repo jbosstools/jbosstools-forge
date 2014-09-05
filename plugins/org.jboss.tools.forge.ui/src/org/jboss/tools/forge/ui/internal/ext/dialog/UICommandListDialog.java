@@ -110,7 +110,16 @@ public class UICommandListDialog extends PopupDialog {
 			currentSelection = (IStructuredSelection) selectionService
 					.getSelection(JavaUI.ID_PACKAGES);
 		}
-
+		if (currentSelection == null) {
+			// Try to get from Project Explorer
+			currentSelection = (IStructuredSelection) selectionService
+					.getSelection("org.eclipse.ui.navigator.ProjectExplorer");
+		}
+		if (currentSelection == null) {
+			// Try to get from Navigator View
+			currentSelection = (IStructuredSelection) selectionService
+					.getSelection("org.eclipse.ui.views.ResourceNavigator");
+		}
 		return currentSelection;
 	}
 
