@@ -20,6 +20,7 @@ import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -107,7 +108,7 @@ public class UICommandListDialog extends PopupDialog {
 		if (currentSelection == null) {
 			// Try to get from Package Explorer
 			currentSelection = (IStructuredSelection) selectionService
-					.getSelection("org.eclipse.jdt.ui.PackageExplorer");
+					.getSelection(JavaUI.ID_PACKAGES);
 		}
 
 		return currentSelection;
