@@ -39,8 +39,6 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	private final int DEFAULT_COLUMN_WIDTH = 350/3 +1;
 
 	private CheckboxTableViewer runtimesTableViewer	;
-	private Button removeButton;
-	private Button editButton;
 	private ArrayList<ForgeRuntime> runtimes = null;
 	private ForgeRuntime defaultRuntime = null;
 	private boolean refreshNeeded = false;
@@ -59,7 +57,6 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		createVerticalSpacer(parent);	
 		createPageBody(parent);
 		initializeForgeInstallations();		
-		enableButtons();
 		return parent;
 	}
 	
@@ -89,11 +86,6 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		runtimesTableViewer = new CheckboxTableViewer(table);			
 		runtimesTableViewer.setLabelProvider(new ForgeInstallationLabelProvider());
 		runtimesTableViewer.setContentProvider(ArrayContentProvider.getInstance());
-		runtimesTableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			public void selectionChanged(SelectionChangedEvent evt) {
-				enableButtons();
-			}
-		});
 		runtimesTableViewer.addCheckStateListener(new ICheckStateListener() {
 			public void checkStateChanged(final CheckStateChangedEvent event) {
 				if (runtimesTableViewer.getCheckedElements().length == 0) {
@@ -189,23 +181,6 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		runtimesTableViewer.refresh();
 	}
 
-	private void enableButtons() {
-		Object selectedObject = null;
-		IStructuredSelection selection = (IStructuredSelection) runtimesTableViewer.getSelection();
-		if (selection != null) {
-			selectedObject = selection.getFirstElement();
-		}
-		if (selectedObject == null 
-				|| (selectedObject instanceof ForgeRuntime 
-						&& ForgeRuntimeType.EMBEDDED.equals(((ForgeRuntime)selectedObject).getType()))) {
-			removeButton.setEnabled(false);
-			editButton.setEnabled(false);
-		} else {
-			removeButton.setEnabled(selectedObject != runtimesTableViewer.getCheckedElements()[0]);
-			editButton.setEnabled(true);
-		}
-	}	
-	
 	public boolean performOk() {
 		if (refreshNeeded) {
 			final boolean[] canceled = new boolean[] {false};
