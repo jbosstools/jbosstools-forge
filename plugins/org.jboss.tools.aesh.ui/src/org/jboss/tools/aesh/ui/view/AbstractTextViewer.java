@@ -32,6 +32,11 @@ public abstract class AbstractTextViewer extends TextViewer {
     	initialize();
     }
     
+    public AbstractTextViewer(Composite parent, int styles) {
+    	super(parent, styles);
+    	initialize();
+    }
+    
     public void startConsole() {
     	Display.getDefault().syncExec(new Runnable() {
 			@Override
