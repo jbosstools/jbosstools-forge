@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.jboss.tools</groupId>
 		<artifactId>forge</artifactId>
-		<version>1.3.0-SNAPSHOT</version>
+		<version>1.3.1-SNAPSHOT</version>
 	</parent>
 	<groupId>org.jboss.tools.forge</groupId>
 	<artifactId>plugins</artifactId>
@@ -27,14 +27,13 @@
 		<module>org.jboss.tools.aesh.example</module>
 		<module>org.jboss.tools.forge.core</module>
 		<module>org.jboss.tools.forge.core.ext</module>
-                <module>org.jboss.tools.forge.m2e</module>
+        <module>org.jboss.tools.forge.m2e</module>
 		<module>org.jboss.tools.forge.runtime</module>
 		<module>org.jboss.tools.forge.runtime.ext</module>
 		<module>org.jboss.tools.forge2.runtime</module>
 		<module>org.jboss.tools.forge.ui</module>
 		<module>org.jboss.tools.forge.ui.ext</module>
 		<module>org.jboss.tools.forge.ui.notifications</module>
-		<module>org.jboss.tools.forge.ui.wizards</module>
 	</modules>
 </project>
 	

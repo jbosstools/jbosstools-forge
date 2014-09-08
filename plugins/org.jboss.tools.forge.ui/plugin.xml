@@ -37,7 +37,7 @@
 			id="org.jboss.tools.forge.runtimes">
         </page>
 	</extension>
-	<extension 
+	<extension
 			point="org.eclipse.ui.commands">
 		<category
                id="org.jboss.tools.forge.ui"
@@ -56,16 +56,38 @@
                 categoryId="org.jboss.tools.forge.ui"
                 description="Link the editor currently on top to the running Forge runtime"
                 id="org.jboss.tools.forge.ui.link"
-                name="Link with Editor"/> 
+                name="Link with Editor"/>
         <command
                 categoryId="org.jboss.tools.forge.ui"
                 description="Instruct the running Forge runtime to go to the current selection"
                 id="org.jboss.tools.forge.ui.goto"
-                name="Go To Selection"/> 
+                name="Go To Selection"/>
         <command
                categoryId="org.jboss.tools.forge.ui"
                id="org.jboss.tools.forge.ui.command.runForgeCommand"
                name="Run a Forge Command" />
+        <command
+              categoryId="org.jboss.tools.forge.ui"
+              defaultHandler="org.jboss.tools.forge.ui.internal.ext.handlers.RunForgeCommandHandler"
+              description="Opens a Forge Wizard given its parameter"
+              id="org.jboss.tools.forge.ui.runForgeCommand"
+              name="Open Forge Wizard">
+           <commandParameter
+                 id="org.jboss.tools.forge.ui.runForgeCommand.commandName"
+                 name="Command Name"
+                 optional="false">
+           </commandParameter>
+           <commandParameter
+                 id="org.jboss.tools.forge.ui.runForgeCommand.commandTitle"
+                 name="Command Title"
+                 optional="true">
+           </commandParameter>
+           <commandParameter
+                 id="org.jboss.tools.forge.ui.runForgeCommand.commandValues"
+                 name="Values (in key=value format)"
+                 optional="true">
+           </commandParameter>
+        </command>
 	</extension>
 	<extension
 	      point="org.eclipse.ui.menus">
@@ -94,7 +116,7 @@
 	             mnemonic="G"
 	             style="push"
 	             tooltip="Go to Selection">
-	       </command> 
+	       </command>
 	       <command
 	             commandId="org.jboss.tools.forge.ui.link"
 	             icon="icons/link.gif"
@@ -102,7 +124,7 @@
 	             mnemonic="L"
 	             style="toggle"
 	             tooltip="Link with Editor">
-	       </command> 
+	       </command>
 	   </menuContribution>
 	</extension>
 	<extension
@@ -115,19 +137,19 @@
 	</extension>
     <extension
             point="org.eclipse.ui.perspectiveExtensions">
-        <perspectiveExtension 
+        <perspectiveExtension
                 targetID = "org.eclipse.jst.j2ee.J2EEPerspective">
-            <showInPart 
+            <showInPart
                     id = "org.jboss.tools.forge.ui.console"/>
         </perspectiveExtension>
-        <perspectiveExtension 
+        <perspectiveExtension
                 targetID = "org.eclipse.jdt.ui.JavaPerspective">
-            <showInPart 
+            <showInPart
                     id = "org.jboss.tools.forge.ui.console"/>
         </perspectiveExtension>
-        <perspectiveExtension 
+        <perspectiveExtension
                 targetID = "org.jboss.tools.common.ui.JBossPerspective">
-            <showInPart 
+            <showInPart
                     id = "org.jboss.tools.forge.ui.console"/>
             <view
                   id="org.jboss.tools.forge.ui.console"

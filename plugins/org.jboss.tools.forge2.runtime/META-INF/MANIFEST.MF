@@ -2,25 +2,24 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge2.runtime;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 2.8.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Eclipse-BundleShape: dir
-Bundle-ClassPath: lib/furnace-proxy-2.8.1.Final.jar,
+Bundle-ClassPath: lib/furnace-proxy-2.9.2.Final.jar,
  lib/forge-javassist-2.jar,
- lib/furnace-api-2.8.1.Final.jar,
- lib/furnace-se-2.8.1.Final.jar,
- lib/ui-api-2.8.1.Final.jar,
- lib/convert-api-2.8.1.Final.jar,
- lib/ui-spi-2.8.1.Final.jar,
- lib/facets-api-2.8.1.Final.jar,
- lib/resources-api-2.8.1.Final.jar,
- lib/projects-api-2.8.1.Final.jar,
- lib/dependencies-api-2.8.1.Final.jar,
- lib/shell-api-2.8.1.Final.jar,
- lib/shell-spi-2.8.1.Final.jar,
- lib/database-tools-api-2.8.1.Final.jar,
+ lib/furnace-api-2.9.2.Final.jar,
+ lib/furnace-se-2.9.2.Final.jar,
+ lib/ui-api-2.9.2.Final.jar,
+ lib/convert-api-2.9.2.Final.jar,
+ lib/ui-spi-2.9.2.Final.jar,
+ lib/facets-api-2.9.2.Final.jar,
+ lib/resources-api-2.9.2.Final.jar,
+ lib/projects-api-2.9.2.Final.jar,
+ lib/dependencies-api-2.9.2.Final.jar,
+ lib/shell-spi-2.9.2.Final.jar,
+ lib/database-tools-api-2.9.2.Final.jar,
  .
 Export-Package: bootpath,
  org.jboss.forge.addon.convert,
@@ -39,13 +38,7 @@ Export-Package: bootpath,
    org.jboss.forge.addon.dependencies,
    org.jboss.forge.addon.resource",
  org.jboss.forge.addon.resource;uses:="org.jboss.forge.addon.resource.events,org.jboss.forge.addon.facets",
- org.jboss.forge.addon.shell;
-  uses:="org.jboss.forge.addon.ui.input,
-   org.jboss.forge.addon.ui.context,
-   org.jboss.forge.furnace.spi,
-   org.jboss.aesh.cl,
-   org.jboss.aesh.console,
-   org.jboss.forge.addon.shell.spi",
+ org.jboss.forge.addon.shell.spi,
  org.jboss.forge.addon.shell.spi.command,
  org.jboss.forge.addon.ui;
   uses:="org.jboss.forge.addon.ui.metadata,

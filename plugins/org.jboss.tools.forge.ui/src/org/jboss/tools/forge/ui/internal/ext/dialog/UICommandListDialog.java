@@ -20,6 +20,7 @@ import java.util.TreeSet;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -38,6 +39,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -73,16 +75,7 @@ public class UICommandListDialog extends PopupDialog {
 				true, true, "Run a Forge command", "JBoss Forge v."
 						+ FurnaceRuntime.INSTANCE.getVersion()
 						+ " - Start typing to filter the list");
-		ISelection selection = window.getSelectionService().getSelection();
-		IStructuredSelection currentSelection = null;
-		if (selection instanceof TreeSelection) {
-			currentSelection = (TreeSelection) selection;
-		} else {
-			Object activeEditorFile = getActiveEditorInput(window);
-			if (activeEditorFile != null) {
-				currentSelection = new StructuredSelection(activeEditorFile);
-			}
-		}
+		IStructuredSelection currentSelection = getCurrentSelection(window);
 		wizardHelper = new WizardDialogHelper(getParentShell(),
 				currentSelection);
 		UISelectionImpl<?> uiSelection = wizardHelper.getContext()
@@ -97,6 +90,37 @@ public class UICommandListDialog extends PopupDialog {
 			}
 			setTitleText("Current Selection: " + currentSelectionLabel);
 		}
+	}
+
+	public static IStructuredSelection getCurrentSelection(
+			IWorkbenchWindow window) {
+		ISelectionService selectionService = window.getSelectionService();
+		ISelection selection = selectionService.getSelection();
+		IStructuredSelection currentSelection = null;
+		if (selection instanceof TreeSelection) {
+			currentSelection = (TreeSelection) selection;
+		} else {
+			Object activeEditorFile = getActiveEditorInput(window);
+			if (activeEditorFile != null) {
+				currentSelection = new StructuredSelection(activeEditorFile);
+			}
+		}
+		if (currentSelection == null) {
+			// Try to get from Package Explorer
+			currentSelection = (IStructuredSelection) selectionService
+					.getSelection(JavaUI.ID_PACKAGES);
+		}
+		if (currentSelection == null) {
+			// Try to get from Project Explorer
+			currentSelection = (IStructuredSelection) selectionService
+					.getSelection("org.eclipse.ui.navigator.ProjectExplorer");
+		}
+		if (currentSelection == null) {
+			// Try to get from Navigator View
+			currentSelection = (IStructuredSelection) selectionService
+					.getSelection("org.eclipse.ui.views.ResourceNavigator");
+		}
+		return currentSelection;
 	}
 
 	/**
