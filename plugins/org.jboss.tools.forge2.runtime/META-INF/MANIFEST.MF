@@ -18,7 +18,6 @@ Bundle-ClassPath: lib/furnace-proxy-2.8.1.Final.jar,
  lib/resources-api-2.8.1.Final.jar,
  lib/projects-api-2.8.1.Final.jar,
  lib/dependencies-api-2.8.1.Final.jar,
- lib/shell-api-2.8.1.Final.jar,
  lib/shell-spi-2.8.1.Final.jar,
  lib/database-tools-api-2.8.1.Final.jar,
  .
