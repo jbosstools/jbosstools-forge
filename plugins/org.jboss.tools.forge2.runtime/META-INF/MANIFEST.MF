@@ -20,7 +20,6 @@ Bundle-ClassPath: lib/furnace-proxy-2.9.2.Final.jar,
  lib/dependencies-api-2.9.2.Final.jar,
  lib/shell-spi-2.9.2.Final.jar,
  lib/database-tools-api-2.9.2.Final.jar,
-
  .
 Export-Package: bootpath,
  org.jboss.forge.addon.convert,
