@@ -61,7 +61,7 @@ public class AeshConsole extends AbstractConsole {
 			@Override
 			public void postCommandExecuted(UICommand command,
 					UIExecutionContext context, Result result) {
-				currentResource = context.getUIContext().getSelection();
+				currentResource = (Resource<?>) context.getUIContext().getSelection().get();
 			}
 		});
 
