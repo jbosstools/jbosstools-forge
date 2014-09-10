@@ -14,14 +14,10 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -35,14 +31,14 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntimeFactory;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
 
 public class ForgeInstallationsPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
-				
+
 	private final int DEFAULT_COLUMN_WIDTH = 350/3 +1;
 
 	private CheckboxTableViewer runtimesTableViewer	;
 	private ArrayList<ForgeRuntime> runtimes = null;
 	private ForgeRuntime defaultRuntime = null;
 	private boolean refreshNeeded = false;
-	
+
 	public ForgeInstallationsPreferencePage() {
 		super("Installed Forge Runtimes");
 	}
@@ -51,19 +47,19 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	}
 
 	protected Control createContents(Composite parent) {
-		noDefaultAndApplyButton();		
-		createLayout(parent);		
+		noDefaultAndApplyButton();
+		createLayout(parent);
 		createWrapLabel(parent);
-		createVerticalSpacer(parent);	
+		createVerticalSpacer(parent);
 		createPageBody(parent);
-		initializeForgeInstallations();		
+		initializeForgeInstallations();
 		return parent;
 	}
-	
+
 	private void createPageBody(Composite parent) {
-		Composite pageBody = createPageBodyControl(parent);					
-		createTitleLabel(pageBody);				
-		createRuntimesArea(pageBody);			
+		Composite pageBody = createPageBodyControl(parent);
+		createTitleLabel(pageBody);
+		createRuntimesArea(pageBody);
 	}
 
 	private void createTitleLabel(Composite parent) {
@@ -76,14 +72,14 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	}
 
 	private void createRuntimesArea(Composite parent) {
-		Table runtimesTable = createRuntimesTable(parent);	
+		Table runtimesTable = createRuntimesTable(parent);
 		createNameColumn(runtimesTable);
-		createLocationColumn(runtimesTable);		
+		createLocationColumn(runtimesTable);
 		createRuntimesTableViewer(runtimesTable);
 	}
 
 	private void createRuntimesTableViewer(Table table) {
-		runtimesTableViewer = new CheckboxTableViewer(table);			
+		runtimesTableViewer = new CheckboxTableViewer(table);
 		runtimesTableViewer.setLabelProvider(new ForgeInstallationLabelProvider());
 		runtimesTableViewer.setContentProvider(ArrayContentProvider.getInstance());
 		runtimesTableViewer.addCheckStateListener(new ICheckStateListener() {
@@ -99,18 +95,18 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 					}
 				}
 			}
-		});		
+		});
 	}
-		
+
 	private void createLocationColumn(Table table) {
 		TableColumn column = new TableColumn(table, SWT.NULL);
-		column.setText("Location"); 
+		column.setText("Location");
 		column.setWidth(DEFAULT_COLUMN_WIDTH);
 	}
 
 	private void createNameColumn(Table table) {
 		TableColumn column = new TableColumn(table, SWT.NULL);
-		column.setText("Name"); 
+		column.setText("Name");
 		column.setWidth(DEFAULT_COLUMN_WIDTH);
 	}
 
@@ -124,7 +120,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		runtimesTable.setLinesVisible(true);
 		return runtimesTable;
 	}
-	
+
 	private Composite createPageBodyControl(Composite ancestor) {
     	Composite result = new Composite(ancestor, SWT.NONE);
     	result.setLayout(new GridLayout(2, false));
@@ -132,7 +128,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
     	result.setLayoutData(gd);
 		return result;
 	}
-	
+
 	private void createLayout(Composite ancestor) {
 		GridLayout layout= new GridLayout();
 		layout.numColumns= 1;
@@ -150,14 +146,14 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 		l.setLayoutData(gd);
 		return l;
 	}
-	
+
 	private void createVerticalSpacer(Composite parent) {
 		Label lbl = new Label(parent, SWT.NONE);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalSpan = ((GridLayout)parent.getLayout()).numColumns;
 		lbl.setLayoutData(gd);
 	}
-	
+
 	private void initializeForgeInstallations() {
 		runtimes = new ArrayList<ForgeRuntime>();
 		for (ForgeRuntime runtime : ForgeCorePreferences.INSTANCE.getRuntimes()) {
@@ -191,12 +187,12 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 					ForgeCorePreferences.INSTANCE.setRuntimes(runtimes, defaultRuntime);
 					refreshNeeded = false;
 				}
-			});	
+			});
 			if(canceled[0]) {
 				return false;
 			}
 		}
 		return super.performOk();
-	}	
-	
+	}
+
 }

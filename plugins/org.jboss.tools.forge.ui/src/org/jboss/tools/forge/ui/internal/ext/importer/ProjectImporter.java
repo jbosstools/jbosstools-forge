@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.maven.model.Model;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -19,24 +22,33 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.m2e.core.MavenPlugin;
 import org.eclipse.m2e.core.project.IProjectConfigurationManager;
 import org.eclipse.m2e.core.project.MavenProjectInfo;
 import org.eclipse.m2e.core.project.ProjectImportConfiguration;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.IOverwriteQuery;
+import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.wizards.datatransfer.FileSystemStructureProvider;
 import org.eclipse.ui.wizards.datatransfer.ImportOperation;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 
 /**
  * Imports a maven-ized project into the workspace
- * 
+ *
  * FOR INTERNAL USE ONLY. This class was copied from the
  * org.jboss.tools.forge.ui plugin in order to avoid dependency on it and should
  * be removed in future versions.
- * 
+ *
  * @author <a href="mailto:ggastald@redhat.com">George Gastaldi</a>
- * 
+ *
  */
 public class ProjectImporter {
 
@@ -68,6 +80,14 @@ public class ProjectImporter {
 		} catch (InterruptedException e) {
 			ForgeUIPlugin.log(e);
 		}
+		// Select created project
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				selectCreatedProject();
+			}
+		});
+
 	}
 
 	private Collection<MavenProjectInfo> getProjectToImport() {
@@ -89,6 +109,38 @@ public class ProjectImporter {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	private void selectCreatedProject() {
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IProject project = root.getProject(moduleLocation);
+		if (project != null) {
+			IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow();
+			IWorkbenchPage workbenchPage = workbenchWindow.getActivePage();
+			if (workbenchPage != null) {
+				IViewPart projectExplorer = workbenchPage
+						.findView("org.eclipse.ui.navigator.ProjectExplorer");
+				if (projectExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget) projectExplorer)
+							.selectReveal(new StructuredSelection(project));
+				}
+				IViewPart packageExplorer = workbenchPage
+						.findView(JavaUI.ID_PACKAGES);
+				if (packageExplorer == null && projectExplorer == null) {
+					try {
+						packageExplorer = workbenchPage
+								.showView(JavaUI.ID_PACKAGES);
+					} catch (PartInitException e) {
+						ForgeUIPlugin.log(e);
+					}
+				}
+				if (packageExplorer instanceof ISetSelectionTarget) {
+					((ISetSelectionTarget) packageExplorer)
+							.selectReveal(new StructuredSelection(project));
+				}
+			}
+		}
 	}
 
 	private class GeneralImportWorkspaceJob extends WorkspaceJob {
