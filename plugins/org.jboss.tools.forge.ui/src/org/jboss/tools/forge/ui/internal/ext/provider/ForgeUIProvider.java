@@ -22,11 +22,11 @@ import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 
 /**
  * Eclipse implementation of {@link UIProvider}
- * 
+ *
  * @author <a href="ggastald@redhat.com">George Gastaldi</a>
  */
 public class ForgeUIProvider implements UIProvider, UIOutput {
-	
+
 	private MessageConsole forgeConsole;
 	private PrintStream forgeConsoleOutputStream;
 	private PrintStream forgeConsoleErrorStream;
@@ -38,7 +38,7 @@ public class ForgeUIProvider implements UIProvider, UIOutput {
 		}
 		return forgeConsole;
 	}
-	
+
 	private String getName() {
 		return "Forge " + FurnaceRuntime.INSTANCE.getVersion() + " Console";
 	}
@@ -70,7 +70,8 @@ public class ForgeUIProvider implements UIProvider, UIOutput {
 	@Override
 	public PrintStream out() {
 		if (forgeConsoleOutputStream == null) {
-			forgeConsoleOutputStream = new PrintStream(getForgeConsole().newMessageStream(), true);
+			forgeConsoleOutputStream = new PrintStream(getForgeConsole()
+					.newMessageStream(), true);
 		}
 		return forgeConsoleOutputStream;
 	}
@@ -78,22 +79,48 @@ public class ForgeUIProvider implements UIProvider, UIOutput {
 	@Override
 	public PrintStream err() {
 		if (forgeConsoleErrorStream == null) {
-			MessageConsoleStream messageConsoleStream = getForgeConsole().newMessageStream();
+			MessageConsoleStream messageConsoleStream = getForgeConsole()
+					.newMessageStream();
 			messageConsoleStream.setColor(getRed());
-			forgeConsoleErrorStream = new PrintStream(messageConsoleStream, true);
+			forgeConsoleErrorStream = new PrintStream(messageConsoleStream,
+					true);
 		}
 		return forgeConsoleErrorStream;
 	}
-	
+
 	private Color getRed() {
 		if (red == null) {
 			Display.getDefault().syncExec(new Runnable() {
 				@Override
 				public void run() {
 					red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
-				}			
+				}
 			});
 		}
 		return red;
+	}
+
+	@Override
+	public void error(PrintStream writer, String message) {
+		writer.print("[ERROR] ");
+		writer.println(message);
+	}
+
+	@Override
+	public void success(PrintStream writer, String message) {
+		writer.print("[SUCCESS] ");
+		writer.println(message);
+	}
+
+	@Override
+	public void info(PrintStream writer, String message) {
+		writer.print("[INFO] ");
+		writer.println(message);
+	}
+
+	@Override
+	public void warn(PrintStream writer, String message) {
+		writer.print("[WARNING] ");
+		writer.println(message);
 	}
 }
