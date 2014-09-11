@@ -45,7 +45,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	private CommandController controller;
 	private boolean changed;
 
-	private boolean userTyping;
+	private volatile boolean userTyping;
 	private Thread validationThread = null;
 
 	private List<ComponentControlEntry> componentControlEntries = new ArrayList<>();
