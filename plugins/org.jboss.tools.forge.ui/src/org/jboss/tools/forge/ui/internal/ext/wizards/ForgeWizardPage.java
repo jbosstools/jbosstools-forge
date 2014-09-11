@@ -41,8 +41,12 @@ import org.jboss.tools.forge.ui.notifications.NotificationType;
  *
  */
 public class ForgeWizardPage extends WizardPage implements Listener {
+	private static final int VALIDATION_DELAY = 150;
 	private CommandController controller;
 	private boolean changed;
+
+	private boolean userTyping;
+	private Thread validationThread = null;
 
 	private List<ComponentControlEntry> componentControlEntries = new ArrayList<>();
 
@@ -145,18 +149,51 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 */
 	@Override
 	public void handleEvent(final Event event) {
-		Display.getDefault().asyncExec(new Runnable() {
 
-			@Override
-			public void run() {
-				if (isCurrentPage()) {
-					setPageComplete(validatePage());
-					// Refresh the buttons
-					getContainer().updateButtons();
-				}
+		if (isCurrentPage()) {
+			userTyping = true;
+			if (validationThread == null) {
+
+				setPageComplete(false);
+				getContainer().updateButtons();
+
+				validationThread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+
+						while (userTyping) {
+							try {
+								userTyping = false;
+								Thread.sleep(VALIDATION_DELAY);
+							} catch (InterruptedException e) {
+								ForgeUIPlugin.log(e);
+								return;
+							}
+						}
+
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								if (isCurrentPage()) {
+									System.out.println("validating");
+									validationThread = null;
+									setPageComplete(validatePage());
+									getContainer().updateButtons();
+								}
+							}
+						});
+					}
+				});
+
+				validationThread.start();
+				System.out.println("Validation queued.");
+
 				event.doit = true;
+			} else {
+				System.out
+						.println("Validation previously queued, won't requeue.");
 			}
-		});
+		}
 	}
 
 	private void updatePageState() {
@@ -198,6 +235,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	 *         <code>false</code> if at least one is invalid
 	 */
 	private boolean validatePage() {
+
 		clearMessages();
 
 		updatePageState();
@@ -214,6 +252,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 				return true;
 			}
 		}
+
 		return true;
 	}
 
