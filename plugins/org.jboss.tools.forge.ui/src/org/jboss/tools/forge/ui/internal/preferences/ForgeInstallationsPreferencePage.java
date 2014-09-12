@@ -144,7 +144,7 @@ public class ForgeInstallationsPreferencePage extends PreferencePage implements 
 	private Label createWrapLabel(Composite parent) {
 		Label l = new Label(parent, SWT.NONE | SWT.WRAP);
 		l.setFont(parent.getFont());
-		l.setText("Add, remove or edit Forge runtimes. By default, the checked Forge runtime is used when launching Forge.");
+		l.setText("Select the default Forge runtime.");
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.widthHint = 250;
 		l.setLayoutData(gd);
