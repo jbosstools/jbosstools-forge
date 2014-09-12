@@ -21,7 +21,7 @@
    <properties>
       <version.furnace>2.10.0.Final</version.furnace>
       <version.forge.addons>2.10.0.Final</version.forge.addons>
-      <version.angularjs.addon>2.1.1.Final</version.angularjs.addon>
+      <version.angularjs.addon>2.1.2.Final</version.angularjs.addon>
    </properties>
    <build>
       <plugins>
