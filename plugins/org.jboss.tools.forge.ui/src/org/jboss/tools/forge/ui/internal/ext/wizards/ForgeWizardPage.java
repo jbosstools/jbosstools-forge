@@ -175,7 +175,6 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 							@Override
 							public void run() {
 								if (isCurrentPage()) {
-									System.out.println("validating");
 									validationThread = null;
 									setPageComplete(validatePage());
 									getContainer().updateButtons();
@@ -186,12 +185,8 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 				});
 
 				validationThread.start();
-				System.out.println("Validation queued.");
 
 				event.doit = true;
-			} else {
-				System.out
-						.println("Validation previously queued, won't requeue.");
 			}
 		}
 	}
