@@ -10,21 +10,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class AeshOutputStream extends OutputStream {
-	
-	private AeshOutputFilter filter = null;
-	
+
+	private final AeshOutputFilter filter;
+
 	public AeshOutputStream(AeshOutputFilter filter) {
 		this.filter = filter;
 	}
-	
+
 	@Override
 	public void write(int i) throws IOException {
-		filter.filterOutput(new String( new char[] { (char)i }));
+		filter.filterOutput(String.valueOf((char) i));
 	}
-	
+
 	@Override
 	public void write(byte[] b, int off, int len) throws IOException {
-		filter.filterOutput(new String(b).substring(off, off + len));
+		filter.filterOutput(new String(b, off, len));
 	}
-	
 }
