@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
@@ -41,6 +42,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ISetSelectionTarget;
+import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.tools.forge.core.util.ProjectTools;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
@@ -57,33 +59,33 @@ public class ForgeWizardHelper {
 			@Override
 			public void run() {
 				importNewProjects();
-			}			
+			}
 		});
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				refreshInitialSelection(context);
-			}			
+			}
 		});
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				updateProjectConfiguration();
-			}			
+			}
 		});
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				showFinalSelection(context);
-			}			
+			}
 		});
 	}
-	
+
 	public void onCancel(UIContextImpl context) {
 		pomFile = null;
 		pomFileModificationStamp = -1;
 	}
-	
+
 	public void onCreate(UIContextImpl context) {
 		UISelectionImpl<?> selection = context.getInitialSelection();
 		if (selection != null) {
@@ -96,13 +98,13 @@ public class ForgeWizardHelper {
 			}
 		}
 	}
-	
+
 	private void importNewProjects() {
 		if (ImportEclipseProjectListener.INSTANCE.projectsAvailableForImport()) {
 			ImportEclipseProjectListener.INSTANCE.doImport();
 		}
 	}
-	
+
 	private void refreshInitialSelection(UIContextImpl context) {
 		try {
 			UISelectionImpl<?> selection = context.getInitialSelection();
@@ -122,7 +124,7 @@ public class ForgeWizardHelper {
 			ForgeUIPlugin.log(e);
 		}
 	}
-	
+
 	private void updateProjectConfiguration() {
 		if (pomFileModificationStamp != -1 && pomFile != null && pomFile.getModificationStamp() > pomFileModificationStamp) {
 			ProjectTools.updateProjectConfiguration(pomFile.getProject());
@@ -130,18 +132,18 @@ public class ForgeWizardHelper {
 		pomFile = null;
 		pomFileModificationStamp = -1;
 	}
-	
+
 	private void showFinalSelection(UIContextImpl context) {
-		Object object = context.getSelection();
-		if (object != null) {
-			selectResourceFor(object);
-		}		
+		UISelection<?> selection = context.getSelection();
+		if (!selection.isEmpty()) {
+			selectResourceFor(selection.get());
+		}
 	}
-	
+
 	private void selectResourceFor(Object object) {
 		try {
 			Method method = object.getClass().getMethod(
-					"getUnderlyingResourceObject", 
+					"getUnderlyingResourceObject",
 					new Class[] {});
 			if (method != null) {
 				Object resource = method.invoke(object, new Object[] {});
@@ -180,7 +182,7 @@ public class ForgeWizardHelper {
 			ForgeUIPlugin.log(e);
 		}
 	}
-	
+
 	private void expandWorkspaceResource(IResource container) {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 		if (workbenchPage != null) {
@@ -188,14 +190,14 @@ public class ForgeWizardHelper {
 			IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
 			if (projectExplorer != null && projectExplorer instanceof CommonNavigator) {
 				expandInProjectExplorer((CommonNavigator)projectExplorer, container);
-			} 
-			IViewPart packageExplorer = workbenchPage.findView("org.eclipse.jdt.ui.PackageExplorer"); 
+			}
+			IViewPart packageExplorer = workbenchPage.findView(JavaUI.ID_PACKAGES);
 			if (packageExplorer != null) {
 				expandInPackageExplorer(packageExplorer, container);
 			}
 		}
 	}
-	
+
 	private void refreshWorkspaceResource(IResource container) {
 		try {
 			container.refreshLocal(IResource.DEPTH_INFINITE, null);
@@ -203,7 +205,7 @@ public class ForgeWizardHelper {
 			ForgeUIPlugin.log(e);
 		}
 	}
-	
+
 	private void expandSystemDirectory(IFileStore fileStore) {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 		IViewPart remoteSystemView = workbenchPage.findView("org.eclipse.rse.ui.view.systemView");
@@ -211,9 +213,9 @@ public class ForgeWizardHelper {
 			expandInRemoteSystemView(remoteSystemView, fileStore);
 		}
 	}
-	
+
 	private void expandInRemoteSystemView(
-			IViewPart remoteSystemView, 
+			IViewPart remoteSystemView,
 			IFileStore fileStore) {
 		Viewer viewer = getViewer(remoteSystemView);
 		Object input = viewer.getInput();
@@ -243,7 +245,7 @@ public class ForgeWizardHelper {
 		viewer.setSelection(new StructuredSelection(treePath));
 		if (viewer instanceof TreeViewer) {
 			((TreeViewer)viewer).expandToLevel(treePath, 1);
-			
+
 		}
 	}
 
@@ -254,7 +256,7 @@ public class ForgeWizardHelper {
 			return null;
 		}
 	}
-	
+
 	private ArrayList<String> createSegmentNames(IFileStore fileStore) {
 		ArrayList<String> result = new ArrayList<String>();
 		while (fileStore.getParent() != null) {
@@ -267,7 +269,7 @@ public class ForgeWizardHelper {
 		result.add(0, "Local");
 		return result;
 	}
-	
+
 	private IWorkbenchPage getActiveWorkbenchPage() {
 		IWorkbenchPage result = null;
 		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
@@ -275,9 +277,9 @@ public class ForgeWizardHelper {
 			result = workbenchWindow.getActivePage();
 		}
 		if (result != null) {
-			
+
 		}
-		return result;		
+		return result;
 	}
 
 	private void expandInProjectExplorer(CommonNavigator projectExplorer, IResource container) {
@@ -285,7 +287,7 @@ public class ForgeWizardHelper {
 		TreeViewer treeViewer = projectExplorer.getCommonViewer();
 		treeViewer.expandToLevel(container, 1);
 	}
-	
+
 	private void expandInPackageExplorer(IViewPart packageExplorer, IResource container) {
 		if (packageExplorer instanceof ISetSelectionTarget) {
 			((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(container));
@@ -295,7 +297,7 @@ public class ForgeWizardHelper {
 			((TreeViewer)treeViewer).expandToLevel(JavaCore.create(container), 1);
 		}
 	}
-	
+
 	private void openFileInEditor(IFileStore fileStore) {
 		try {
 			IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
@@ -315,5 +317,5 @@ public class ForgeWizardHelper {
 		}
 		return result;
 	}
-	
+
 }
