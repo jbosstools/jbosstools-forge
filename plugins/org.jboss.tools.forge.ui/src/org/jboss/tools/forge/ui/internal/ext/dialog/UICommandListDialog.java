@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
@@ -113,7 +114,7 @@ public class UICommandListDialog extends PopupDialog {
 		if (currentSelection == null) {
 			// Try to get from Project Explorer
 			currentSelection = (IStructuredSelection) selectionService
-					.getSelection("org.eclipse.ui.navigator.ProjectExplorer");
+					.getSelection(IPageLayout.ID_PROJECT_EXPLORER);
 		}
 		if (currentSelection == null) {
 			// Try to get from Navigator View

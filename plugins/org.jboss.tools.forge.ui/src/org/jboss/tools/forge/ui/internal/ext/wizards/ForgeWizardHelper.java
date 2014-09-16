@@ -34,6 +34,7 @@ import org.eclipse.rse.ui.view.IRSEViewPart;
 import org.eclipse.rse.ui.view.ISystemViewElementAdapter;
 import org.eclipse.rse.ui.view.SystemAdapterHelpers;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -135,7 +136,7 @@ public class ForgeWizardHelper {
 
 	private void showFinalSelection(UIContextImpl context) {
 		UISelection<?> selection = context.getSelection();
-		if (!selection.isEmpty()) {
+		if (selection != null && !selection.isEmpty()) {
 			selectResourceFor(selection.get());
 		}
 	}
@@ -187,7 +188,7 @@ public class ForgeWizardHelper {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 		if (workbenchPage != null) {
 			refreshWorkspaceResource(container);
-			IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
+			IViewPart projectExplorer = workbenchPage.findView(IPageLayout.ID_PROJECT_EXPLORER);
 			if (projectExplorer != null && projectExplorer instanceof CommonNavigator) {
 				expandInProjectExplorer((CommonNavigator)projectExplorer, container);
 			}
