@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
@@ -34,6 +35,7 @@ import org.eclipse.rse.ui.view.IRSEViewPart;
 import org.eclipse.rse.ui.view.ISystemViewElementAdapter;
 import org.eclipse.rse.ui.view.SystemAdapterHelpers;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -82,10 +84,11 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 				if (pomFileModificationStamp != -1 && pomFile != null && pomFile.getModificationStamp() > pomFileModificationStamp) {
 					ProjectTools.updateProjectConfiguration(pomFile.getProject());
 				}
-				Object object = uiExecutionContext.getUIContext().getSelection();
-				if (object != null) {
-					if (object instanceof Resource<?>) {
-						selectResource((Resource<?>)object);
+				selection = uiExecutionContext.getUIContext().getSelection();
+				if (selection != null && !selection.isEmpty()) {
+					Object resource = selection.get();
+					if (resource instanceof Resource<?>) {
+						selectResource((Resource<?>)resource);
 					}
 				}
 				activateForgeView();
@@ -167,11 +170,11 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 	private void expandWorkspaceResource(IResource container) {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 		if (workbenchPage != null) {
-			IViewPart projectExplorer = workbenchPage.findView("org.eclipse.ui.navigator.ProjectExplorer");
+			IViewPart projectExplorer = workbenchPage.findView(IPageLayout.ID_PROJECT_EXPLORER);
 			if (projectExplorer != null && projectExplorer instanceof CommonNavigator) {
 				expandInProjectExplorer((CommonNavigator)projectExplorer, container);
 			} 
-			IViewPart packageExplorer = workbenchPage.findView("org.eclipse.jdt.ui.PackageExplorer"); 
+			IViewPart packageExplorer = workbenchPage.findView(JavaUI.ID_PACKAGES); 
 			if (packageExplorer != null) {
 				expandInPackageExplorer(packageExplorer, container);
 			}
