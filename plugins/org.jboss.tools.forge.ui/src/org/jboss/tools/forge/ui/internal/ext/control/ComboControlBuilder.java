@@ -8,7 +8,6 @@ package org.jboss.tools.forge.ui.internal.ext.control;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,12 +25,13 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectOne;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.furnace.util.Sets;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.internal.ext.wizards.ForgeWizardPage;
 
 public class ComboControlBuilder extends ControlBuilder<Combo> {
 
-	private static final Set<Combo> COMBO_STATUS_CHANGE = new HashSet<Combo>();
+	private static final Set<Combo> COMBO_STATUS_CHANGE = Sets.getConcurrentSet();
 
 	@Override
 	public Combo build(final ForgeWizardPage page,

@@ -8,7 +8,6 @@ package org.jboss.tools.forge.ui.internal.ext.control.many;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,12 +25,12 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.jboss.forge.addon.convert.Converter;
-import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.controller.CommandController;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UISelectMany;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.furnace.util.Sets;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.internal.ext.control.ControlBuilder;
 import org.jboss.tools.forge.ui.internal.ext.wizards.ForgeWizardPage;
@@ -63,26 +62,27 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		table.setLayoutData(tableLayoutData);
 		table.setToolTipText(input.getDescription());
 		final UISelectMany<Object> selectMany = (UISelectMany) input;
-		final ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.getConverterFactory();
-		Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
-				.getItemLabelConverter(converterFactory, selectMany);
+		Converter<Object, String> itemLabelConverter = getConverter(selectMany);
 		final Set<Object> data = new LinkedHashSet<>();
 		// Adding default values in a separate set
 		Iterable<Object> defaultValues = selectMany.getValue();
 		if (defaultValues != null) {
 			for (Object object : defaultValues) {
-				data.add(itemLabelConverter.convert(object));
+				String item = itemLabelConverter.convert(object);
+				if (item != null)
+					data.add(item);
 			}
 		}
 		Iterable<Object> valueChoices = selectMany.getValueChoices();
 		if (valueChoices != null) {
 			for (Object next : valueChoices) {
-				TableItem item = new TableItem(table, SWT.NONE);
 				String value = itemLabelConverter.convert(next);
-				item.setData(value);
-				item.setText(value);
-				item.setChecked(data.contains(value));
+				if (value != null) {
+					TableItem item = new TableItem(table, SWT.NONE);
+					item.setData(value);
+					item.setText(value);
+					item.setChecked(data.contains(value));
+				}
 			}
 		}
 		table.addSelectionListener(new SelectionAdapter() {
@@ -90,10 +90,12 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 			public void widgetSelected(SelectionEvent e) {
 				if (e.item instanceof TableItem && e.detail == SWT.CHECK) {
 					TableItem source = (TableItem) e.item;
-					if (source.getChecked()) {
-						data.add(source.getData());
-					} else {
-						data.remove(source.getData());
+					if (source != null && source.getData() != null) {
+						if (source.getChecked()) {
+							data.add(source.getData());
+						} else {
+							data.remove(source.getData());
+						}
 					}
 					CommandController controller = page.getController();
 					controller.setValueFor(inputName, data);
@@ -167,7 +169,8 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		return new Class<?>[] { UISelectMany.class };
 	}
 
-	private static final Set<Table> TABLE_STATUS_CHANGE = new HashSet<>();
+	private static final Set<Table> TABLE_STATUS_CHANGE = Sets
+			.getConcurrentSet();
 
 	@Override
 	public void updateState(Table control, InputComponent<?, ?> input) {
@@ -185,19 +188,16 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 
 	@SuppressWarnings("unchecked")
 	private void updateValues(Table table, InputComponent<?, ?> input) {
-		UISelectMany<Object> selectOne = (UISelectMany<Object>) input;
-		updateValueChoices(table, selectOne);
-	}
-
-	private void updateValueChoices(Table table, UISelectMany<Object> selectMany) {
-		List<String> newItems = new ArrayList<String>();
+		UISelectMany<Object> selectMany = (UISelectMany<Object>) input;
 		Iterable<Object> valueChoices = selectMany.getValueChoices();
+		if (valueChoices == null)
+			return;
+		List<String> newItems = new ArrayList<String>();
 		Converter<Object, String> converter = getConverter(selectMany);
-		if (valueChoices != null) {
-			for (Object choice : valueChoices) {
-				String itemLabel = converter.convert(choice);
+		for (Object choice : valueChoices) {
+			String itemLabel = converter.convert(choice);
+			if (itemLabel != null)
 				newItems.add(itemLabel);
-			}
 		}
 
 		int newSize = newItems.size();
@@ -212,7 +212,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 				}
 			}
 			table.removeAll();
-			Set<String> data = getInputValue(selectMany);
+			Set<String> data = getInputValue(selectMany, converter);
 			for (String newItem : newItemsArray) {
 				TableItem item = new TableItem(table, SWT.NONE);
 				item.setData(newItem);
@@ -222,14 +222,16 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		}
 	}
 
-	private Set<String> getInputValue(UISelectMany<Object> selectMany) {
-		final Set<String> data = new HashSet<>();
-		Converter<Object, String> converter = getConverter(selectMany);
+	private Set<String> getInputValue(UISelectMany<Object> selectMany,
+			Converter<Object, String> converter) {
+		final Set<String> data = new LinkedHashSet<>();
 		// Adding default values in a separate set
 		Iterable<Object> defaultValues = selectMany.getValue();
 		if (defaultValues != null) {
 			for (Object object : defaultValues) {
-				data.add(converter.convert(object));
+				String item = converter.convert(object);
+				if (item != null)
+					data.add(item);
 			}
 		}
 		return data;
