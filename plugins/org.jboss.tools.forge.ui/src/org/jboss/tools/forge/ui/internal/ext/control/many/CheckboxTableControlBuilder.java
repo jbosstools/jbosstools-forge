@@ -6,7 +6,11 @@
  */
 package org.jboss.tools.forge.ui.internal.ext.control.many;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.swt.SWT;
@@ -162,4 +166,90 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 	protected Class<?>[] getSupportedInputComponentTypes() {
 		return new Class<?>[] { UISelectMany.class };
 	}
+
+	private static final Set<Table> TABLE_STATUS_CHANGE = new HashSet<>();
+
+	@Override
+	public void updateState(Table control, InputComponent<?, ?> input) {
+		if (!TABLE_STATUS_CHANGE.add(control)) {
+			return;
+		}
+		try {
+			super.updateState(control, input);
+			updateValues(control, input);
+		} finally {
+			TABLE_STATUS_CHANGE.remove(control);
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	private void updateValues(Table table, InputComponent<?, ?> input) {
+		UISelectMany<Object> selectOne = (UISelectMany<Object>) input;
+		updateValueChoices(table, selectOne);
+	}
+
+	private void updateValueChoices(Table table, UISelectMany<Object> selectMany) {
+		List<String> newItems = new ArrayList<String>();
+		Iterable<Object> valueChoices = selectMany.getValueChoices();
+		Converter<Object, String> converter = getConverter(selectMany);
+		if (valueChoices != null) {
+			for (Object choice : valueChoices) {
+				String itemLabel = converter.convert(choice);
+				newItems.add(itemLabel);
+			}
+		}
+
+		int newSize = newItems.size();
+		String[] newItemsArray = newItems.toArray(new String[newSize]);
+		String[] oldItems = extractData(table.getItems());
+		if (Arrays.equals(newItemsArray, oldItems) == false) {
+			for (TableItem item : table.getItems()) {
+				if (item.getChecked()) {
+					item.setChecked(false);
+					// Notify selection change
+					notifySelectionChange(table, item);
+				}
+			}
+			table.removeAll();
+			Set<String> data = getInputValue(selectMany);
+			for (String newItem : newItemsArray) {
+				TableItem item = new TableItem(table, SWT.NONE);
+				item.setData(newItem);
+				item.setText(newItem);
+				item.setChecked(data.contains(newItem));
+			}
+		}
+	}
+
+	private Set<String> getInputValue(UISelectMany<Object> selectMany) {
+		final Set<String> data = new HashSet<>();
+		Converter<Object, String> converter = getConverter(selectMany);
+		// Adding default values in a separate set
+		Iterable<Object> defaultValues = selectMany.getValue();
+		if (defaultValues != null) {
+			for (Object object : defaultValues) {
+				data.add(converter.convert(object));
+			}
+		}
+		return data;
+	}
+
+	private String[] extractData(TableItem[] items) {
+		int length = items.length;
+		String[] data = new String[length];
+		for (int i = 0; i < length; i++) {
+			data[i] = items[i].getText();
+		}
+		return data;
+	}
+
+	private Converter<Object, String> getConverter(
+			UISelectMany<Object> selectMany) {
+		return (Converter<Object, String>) InputComponents
+				.getItemLabelConverter(
+						FurnaceService.INSTANCE.getConverterFactory(),
+						selectMany);
+	}
+
 }
