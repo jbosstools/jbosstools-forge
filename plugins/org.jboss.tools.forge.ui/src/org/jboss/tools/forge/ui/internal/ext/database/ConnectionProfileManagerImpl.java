@@ -35,15 +35,14 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 	private static final String VERSION = "org.eclipse.datatools.connectivity.db.version";
 	private static final String VENDOR = "org.eclipse.datatools.connectivity.db.vendor";
 	private static final String HIBERNATE_DIALECT = "org.jboss.tools.forge.hibernate.dialect";
-	
+
 	private static final String DRIVER_TEMPLATE = "org.eclipse.datatools.connectivity.db.generic.genericDriverTemplate";
 	private static final String PROVIDER_ID = "org.eclipse.datatools.connectivity.db.generic.connectionProfile";
-	
+
 	@Override
 	public Map<String, ConnectionProfile> loadConnectionProfiles() {
-		IConnectionProfile[] connectionProfiles = ProfileManager
-				.getInstance()
-				.getProfiles();	
+		IConnectionProfile[] connectionProfiles = ProfileManager.getInstance()
+				.getProfiles();
 		Map<String, ConnectionProfile> result = new LinkedHashMap<String, ConnectionProfile>();
 		for (IConnectionProfile currentProfile : connectionProfiles) {
 			ConnectionProfile profile = new ConnectionProfile();
@@ -55,81 +54,88 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 			profile.setPassword(props.getProperty(PASSWORD));
 			profile.setUrl(props.getProperty(URL));
 			profile.setDialect(props.getProperty(HIBERNATE_DIALECT));
+			profile.setSavePassword(Boolean.parseBoolean(props
+					.getProperty(SAVE_PWD)));
 			result.put(profile.getName(), profile);
 		}
-		return result;		
+		return result;
 	}
-	
+
 	private void saveConnectionProfile(ConnectionProfile profile) {
-		DriverInstance driverInstance = 
-				DriverManager.getInstance().getDriverInstanceByName(profile.getName());
+		DriverInstance driverInstance = DriverManager.getInstance()
+				.getDriverInstanceByName(profile.getName());
 		if (driverInstance != null) {
 			saveExistingDriver(driverInstance, profile);
 		}
-		IConnectionProfile connectionProfile = 
-				ProfileManager.getInstance().getProfileByName(profile.getName());
+		IConnectionProfile connectionProfile = ProfileManager.getInstance()
+				.getProfileByName(profile.getName());
 		if (connectionProfile != null) {
 			saveExistingProfile(profile, connectionProfile);
 		} else {
 			createNewProfile(profile);
 		}
 	}
-	
-	private void saveExistingProfile(ConnectionProfile source, IConnectionProfile target) {
+
+	private void saveExistingProfile(ConnectionProfile source,
+			IConnectionProfile target) {
 		try {
 			Properties newProperties = createProperties(source);
 			if (propertiesChanged(target.getBaseProperties(), newProperties)) {
 				target.setBaseProperties(newProperties);
-					ProfileManager.getInstance().modifyProfile(target);
+				ProfileManager.getInstance().modifyProfile(target);
 			}
 		} catch (ConnectionProfileException e) {
 			ForgeUIPlugin.log(e);
 		}
 	}
-	
-	private void saveExistingDriver(DriverInstance driverInstance, ConnectionProfile profile) {
-		if (!profile.getPath().equals(driverInstance.getJarList()) || 
-				!profile.getDriver().equals(driverInstance.getProperty(DRIVER_CLASS))) {
-			DriverManager.getInstance().removeDriverInstance(driverInstance.getId());
+
+	private void saveExistingDriver(DriverInstance driverInstance,
+			ConnectionProfile profile) {
+		if (!profile.getPath().equals(driverInstance.getJarList())
+				|| !profile.getDriver().equals(
+						driverInstance.getProperty(DRIVER_CLASS))) {
+			DriverManager.getInstance().removeDriverInstance(
+					driverInstance.getId());
 			DriverManager.getInstance().createNewDriverInstance(
-					DRIVER_TEMPLATE, 
-					profile.getName(), 
-					profile.getPath(), 
+					DRIVER_TEMPLATE, profile.getName(), profile.getPath(),
 					profile.getDriver());
 		}
 	}
-	
+
 	private boolean propertiesChanged(Properties oldProps, Properties newProps) {
 		boolean result = false;
-		result = result || oldProps.getProperty(DRIVER_CLASS).equals(newProps.getProperty(DRIVER_CLASS));
-		result = result || oldProps.getProperty(DRIVER_LOCATION).equals(newProps.getProperty(DRIVER_LOCATION));
-		result = result || oldProps.getProperty(USER_NAME).equals(newProps.getProperty(USER_NAME));
-		result = result || oldProps.getProperty(URL).equals(newProps.getProperty(URL));
-		result = result || oldProps.getProperty(HIBERNATE_DIALECT).equals(newProps.getProperty(HIBERNATE_DIALECT));
+		result = result
+				|| oldProps.getProperty(DRIVER_CLASS).equals(
+						newProps.getProperty(DRIVER_CLASS));
+		result = result
+				|| oldProps.getProperty(DRIVER_LOCATION).equals(
+						newProps.getProperty(DRIVER_LOCATION));
+		result = result
+				|| oldProps.getProperty(USER_NAME).equals(
+						newProps.getProperty(USER_NAME));
+		result = result
+				|| oldProps.getProperty(URL).equals(newProps.getProperty(URL));
+		result = result
+				|| oldProps.getProperty(HIBERNATE_DIALECT).equals(
+						newProps.getProperty(HIBERNATE_DIALECT));
 		return result;
 	}
-	
+
 	private void createNewProfile(ConnectionProfile profile) {
 		try {
 			DriverManager.getInstance().createNewDriverInstance(
-					DRIVER_TEMPLATE, 
-					profile.getName(), 
-					profile.getPath(), 
+					DRIVER_TEMPLATE, profile.getName(), profile.getPath(),
 					profile.getDriver());
-			ProfileManager.getInstance().createProfile(
-					profile.getName(), 
-					"", 
-					PROVIDER_ID, 
-					createProperties(profile), 
-					"", 
-					false);
+			ProfileManager.getInstance().createProfile(profile.getName(), "",
+					PROVIDER_ID, createProperties(profile), "", false);
 		} catch (ConnectionProfileException e) {
 			ForgeUIPlugin.log(e);
 		}
 	}
 
 	@Override
-	public void saveConnectionProfiles(Collection<ConnectionProfile> connectionProfiles) {
+	public void saveConnectionProfiles(
+			Collection<ConnectionProfile> connectionProfiles) {
 		Map<String, ConnectionProfile> existingProfiles = loadConnectionProfiles();
 		for (ConnectionProfile profile : connectionProfiles) {
 			existingProfiles.remove(profile.getName());
@@ -139,14 +145,17 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 			deleteConnectionProfile(name);
 		}
 	}
-	
+
 	private void deleteConnectionProfile(String name) {
 		try {
-			DriverInstance driverInstance = DriverManager.getInstance().getDriverInstanceByName(name);
+			DriverInstance driverInstance = DriverManager.getInstance()
+					.getDriverInstanceByName(name);
 			if (driverInstance != null) {
-				DriverManager.getInstance().removeDriverInstance(driverInstance.getId());
+				DriverManager.getInstance().removeDriverInstance(
+						driverInstance.getId());
 			}
-			IConnectionProfile profile = ProfileManager.getInstance().getProfileByName(name);
+			IConnectionProfile profile = ProfileManager.getInstance()
+					.getProfileByName(name);
 			if (profile != null) {
 				ProfileManager.getInstance().deleteProfile(profile);
 			}
@@ -154,11 +163,11 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 			ForgeUIPlugin.log(e);
 		}
 	}
-	
+
 	private Properties createProperties(ConnectionProfile profile) {
 		Properties result = new Properties();
 		result.setProperty(CONNECTION_PROPERTIES, "");
-		result.setProperty(SAVE_PWD, "false");
+		result.setProperty(SAVE_PWD, String.valueOf(profile.isSavePassword()));
 		result.setProperty(DRIVER_DEFINITION_TYPE, DRIVER_TEMPLATE);
 		result.setProperty(DRIVER_LOCATION, profile.getPath());
 		result.setProperty(USER_NAME, profile.getUser());
@@ -168,9 +177,8 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 			result.setProperty(DRIVER_DEFINITION_ID, driverId);
 		}
 		result.setProperty(DATABASE_NAME, profile.getName());
-		if (profile.getPassword() != null) {
+		if (profile.isSavePassword() && profile.getPassword() != null) {
 			result.setProperty(PASSWORD, profile.getPassword());
-			result.setProperty(SAVE_PWD, "true");
 		}
 		result.setProperty(URL, profile.getUrl());
 		result.setProperty(VERSION, "1.0");
@@ -181,7 +189,7 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 		}
 		return result;
 	}
-	
+
 	private String getDriverId(String driverName) {
 		String result = null;
 		DriverInstance driverInstance = getDriver(driverName);
@@ -190,7 +198,7 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 		}
 		return result;
 	}
-	
+
 	private DriverInstance getDriver(String name) {
 		return DriverManager.getInstance().getDriverInstanceByName(name);
 	}
