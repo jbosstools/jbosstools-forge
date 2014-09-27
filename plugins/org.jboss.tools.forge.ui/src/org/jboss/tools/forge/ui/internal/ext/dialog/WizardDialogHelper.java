@@ -106,6 +106,8 @@ public final class WizardDialogHelper {
 			Map<String, ?> values) {
 		CommandControllerFactory controllerFactory = FurnaceService.INSTANCE
 				.lookup(CommandControllerFactory.class);
+		CommandFactory commandFactory = FurnaceService.INSTANCE.lookup(CommandFactory.class);
+		selectedCommand = commandFactory.getNewCommandByName(context, selectedCommand.getMetadata(context).getName());
 		ForgeUIRuntime runtime = new ForgeUIRuntime();
 		CommandController controller = controllerFactory.createController(
 				context, runtime, selectedCommand);
