@@ -159,9 +159,6 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 		if (workbenchWindow != null) {
 			result = workbenchWindow.getActivePage();
 		}
-		if (result != null) {
-
-		}
 		return result;
 	}
 
@@ -193,11 +190,12 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 			IViewPart remoteSystemView,
 			IFileStore fileStore) {
 		Viewer viewer = getViewer(remoteSystemView);
+		if (viewer == null) return;
 		Object input = viewer.getInput();
 		ArrayList<String> names = createSegmentNames(fileStore);
 		ArrayList<Object> treeSegments = new ArrayList<Object>();
 		for (String name : names) {
-			if (input != null && input instanceof IAdaptable) {
+			if (input instanceof IAdaptable) {
 				ISystemViewElementAdapter adapter = SystemAdapterHelpers.getViewAdapter(input);
 				if (adapter != null) {
 					for (Object object : adapter.getChildren((IAdaptable)input, null)) {
