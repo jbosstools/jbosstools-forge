@@ -18,7 +18,7 @@ public class ExampleTextViewer extends AbstractTextViewer {
 
 	@Override
     protected Console createConsole() {
-		return new ExampleConsole();
+		return new ExampleConsole(this);
     }
     
 }
