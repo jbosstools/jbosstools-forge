@@ -17,7 +17,6 @@ import org.jboss.forge.addon.resource.Resource;
 import org.jboss.forge.addon.resource.ResourceFactory;
 import org.jboss.forge.addon.shell.spi.ShellHandle;
 import org.jboss.forge.addon.shell.spi.ShellHandleSettings;
-import org.jboss.forge.addon.shell.spi.Terminal;
 import org.jboss.forge.addon.shell.spi.command.CdTokenHandler;
 import org.jboss.forge.addon.shell.spi.command.CdTokenHandlerFactory;
 import org.jboss.forge.addon.ui.command.AbstractCommandExecutionListener;
@@ -30,7 +29,7 @@ import org.jboss.tools.forge.core.furnace.FurnaceService;
 
 public class AeshConsole extends AbstractConsole {
 
-	private Terminal terminal;
+	private TextViewerTerminal terminal;
 	private ShellHandle handle;
 	private CommandLineListener executionListener = new CommandLineListener();
 	private ListenerRegistration<CdTokenHandler> tokenHandler;
@@ -38,7 +37,7 @@ public class AeshConsole extends AbstractConsole {
 	private Resource<?> currentResource;
 
 	public AeshConsole(ITextViewer textViewer) {
-		this.terminal = new MaxSizeTerminal();
+		this.terminal = new TextViewerTerminal(textViewer);
 	}
 
 	public void start() {
