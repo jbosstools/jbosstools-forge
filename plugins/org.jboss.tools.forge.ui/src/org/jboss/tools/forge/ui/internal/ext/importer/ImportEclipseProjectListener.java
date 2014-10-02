@@ -9,10 +9,12 @@ package org.jboss.tools.forge.ui.internal.ext.importer;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.jboss.forge.addon.facets.FacetNotFoundException;
 import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectListener;
 import org.jboss.forge.addon.projects.facets.MetadataFacet;
 import org.jboss.forge.addon.resource.Resource;
+import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.internal.ext.wizards.WizardListener;
 
@@ -33,24 +35,29 @@ public enum ImportEclipseProjectListener implements ProjectListener,
 	public void projectCreated(Project project) {
 		projects.add(project);
 	}
-	
+
 	public boolean projectsAvailableForImport() {
 		return !projects.isEmpty();
 	}
 
 	public void doImport() {
-		for (Project project : projects) {
-			Resource<?> projectRoot = project.getRoot();
-			String baseDirPath = projectRoot.getParent()
-					.getFullyQualifiedName();
-			String moduleLocation = projectRoot.getName();
-			String projectName = project.getFacet(MetadataFacet.class)
-					.getProjectName();
-			ProjectImporter projectImporter = new ProjectImporter(baseDirPath,
-					moduleLocation, projectName);
-			projectImporter.importProject();
+		try {
+			for (Project project : projects) {
+				Resource<?> projectRoot = project.getRoot();
+				String baseDirPath = projectRoot.getParent()
+						.getFullyQualifiedName();
+				String moduleLocation = projectRoot.getName();
+				String projectName = project.getFacet(MetadataFacet.class)
+						.getProjectName();
+				ProjectImporter projectImporter = new ProjectImporter(
+						baseDirPath, moduleLocation, projectName);
+				projectImporter.importProject();
+			}
+		} catch (Exception e) {
+			ForgeUIPlugin.log(e);
+		} finally {
+			projects.clear();
 		}
-		projects.clear();
 	}
 
 	@Override
