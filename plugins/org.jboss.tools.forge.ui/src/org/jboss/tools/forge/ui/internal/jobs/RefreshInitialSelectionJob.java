@@ -16,17 +16,17 @@ import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
 import org.jboss.tools.forge.ui.internal.ext.context.UISelectionImpl;
 
 public class RefreshInitialSelectionJob extends ChainedWorkspaceJob {
-	
+
 	private UIContextImpl context;
 
 	public RefreshInitialSelectionJob() {
 		super("Refresh Initial Selection");
 	}
-	
+
 	public void setContext(UIContextImpl context) {
 		this.context = context;
 	}
-	
+
 	@Override
 	public IStatus runInWorkspace(IProgressMonitor monitor)
 			throws CoreException {
@@ -40,8 +40,9 @@ public class RefreshInitialSelectionJob extends ChainedWorkspaceJob {
 							// resource was deleted
 							resource = resource.getParent();
 						}
-						if (resource != null) {
-							resource.refreshLocal(IResource.DEPTH_INFINITE, null);
+						if (resource != null && resource.getProject() != null) {
+							resource.getProject().refreshLocal(
+									IResource.DEPTH_INFINITE, null);
 						}
 					}
 				}
