@@ -57,47 +57,55 @@ import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 import org.jboss.tools.forge.ui.internal.util.IDEUtils;
 
-public class CommandLineListener implements ProjectListener, CommandExecutionListener {
-	
+public class CommandLineListener implements ProjectListener,
+		CommandExecutionListener {
+
 	private List<Project> projects = new ArrayList<Project>();
 
 	@Override
-	public void postCommandExecuted(
-			UICommand command, 
-			final UIExecutionContext uiExecutionContext,
-			Result result) {
+	public void postCommandExecuted(UICommand command,
+			final UIExecutionContext uiExecutionContext, Result result) {
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				if (!projects.isEmpty()) {
-					importProjects();
-					projects.clear();
+					try {
+						importProjects();
+					} catch (Exception e) {
+						ForgeUIPlugin.log(e);
+					} finally {
+						projects.clear();
+					}
 				}
-				UISelection<?> selection = uiExecutionContext.getUIContext().getInitialSelection();
+				UISelection<?> selection = uiExecutionContext.getUIContext()
+						.getInitialSelection();
 				Iterator<?> iterator = selection.iterator();
 				while (iterator.hasNext()) {
 					Object object = iterator.next();
 					if (object instanceof Resource<?>) {
-						refresh((Resource<?>)object);
+						refresh((Resource<?>) object);
 					}
 				}
-				if (pomFileModificationStamp != -1 && pomFile != null && pomFile.getModificationStamp() > pomFileModificationStamp) {
-					ProjectTools.updateProjectConfiguration(pomFile.getProject());
+				if (pomFileModificationStamp != -1
+						&& pomFile != null
+						&& pomFile.getModificationStamp() > pomFileModificationStamp) {
+					ProjectTools.updateProjectConfiguration(pomFile
+							.getProject());
 				}
 				selection = uiExecutionContext.getUIContext().getSelection();
 				if (selection != null && !selection.isEmpty()) {
 					Object resource = selection.get();
 					if (resource instanceof Resource<?>) {
-						selectResource((Resource<?>)resource);
+						selectResource((Resource<?>) resource);
 					}
 				}
 				activateForgeView();
 				pomFile = null;
 				pomFileModificationStamp = -1;
-			}			
+			}
 		});
 	}
-	
+
 	private void activateForgeView() {
 		try {
 			IWorkbenchPage activePage = getActivePage();
@@ -109,25 +117,26 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 			ForgeUIPlugin.log(e);
 		}
 	}
-	
+
 	private IWorkbenchPage getActivePage() {
-		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage();
 	}
-	
+
 	private void refresh(Resource<?> resource) {
 		Object object = resource.getUnderlyingResourceObject();
 		if (object instanceof File) {
-			refreshResource((File)object);
+			refreshResource((File) object);
 		}
 	}
-	
+
 	private void selectResource(Resource<?> resource) {
 		Object object = resource.getUnderlyingResourceObject();
 		if (object instanceof File) {
-			selectFile((File)object);
+			selectFile((File) object);
 		}
 	}
-	
+
 	@Override
 	public void projectCreated(Project project) {
 		projects.add(project);
@@ -136,11 +145,13 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 	private void importProjects() {
 		for (Project project : projects) {
 			Resource<?> projectRoot = project.getRoot();
-			String baseDirPath = projectRoot.getParent()
-					.getFullyQualifiedName();
-			String projectName = project.getFacet(MetadataFacet.class)
-					.getProjectName();
-			ProjectTools.importProject(baseDirPath, projectName);
+			if (projectRoot.exists()) {
+				String baseDirPath = projectRoot.getParent()
+						.getFullyQualifiedName();
+				String projectName = project.getFacet(MetadataFacet.class)
+						.getProjectName();
+				ProjectTools.importProject(baseDirPath, projectName);
+			}
 		}
 	}
 
@@ -149,12 +160,15 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 			IPath path = new Path(file.getCanonicalPath());
 			IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
 			IFileInfo fileInfo = fileStore.fetchInfo();
-			if (!fileInfo.exists()) return;
+			if (!fileInfo.exists())
+				return;
 			IResource resource = null;
 			if (fileInfo.isDirectory()) {
-				resource = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
+				resource = ResourcesPlugin.getWorkspace().getRoot()
+						.getContainerForLocation(path);
 			} else {
-				resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
+				resource = ResourcesPlugin.getWorkspace().getRoot()
+						.getFileForLocation(path);
 				IDEUtils.openFileInEditor(fileStore, false);
 			}
 			if (resource != null) {
@@ -166,59 +180,69 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 			ForgeUIPlugin.log(e);
 		}
 	}
-	
+
 	private void expandWorkspaceResource(IResource container) {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 		if (workbenchPage != null) {
-			IViewPart projectExplorer = workbenchPage.findView(IPageLayout.ID_PROJECT_EXPLORER);
-			if (projectExplorer != null && projectExplorer instanceof CommonNavigator) {
-				expandInProjectExplorer((CommonNavigator)projectExplorer, container);
-			} 
-			IViewPart packageExplorer = workbenchPage.findView(JavaUI.ID_PACKAGES); 
+			IViewPart projectExplorer = workbenchPage
+					.findView(IPageLayout.ID_PROJECT_EXPLORER);
+			if (projectExplorer != null
+					&& projectExplorer instanceof CommonNavigator) {
+				expandInProjectExplorer((CommonNavigator) projectExplorer,
+						container);
+			}
+			IViewPart packageExplorer = workbenchPage
+					.findView(JavaUI.ID_PACKAGES);
 			if (packageExplorer != null) {
 				expandInPackageExplorer(packageExplorer, container);
 			}
 		}
 	}
-	
+
 	private IWorkbenchPage getActiveWorkbenchPage() {
 		IWorkbenchPage result = null;
-		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		IWorkbenchWindow workbenchWindow = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
 		if (workbenchWindow != null) {
 			result = workbenchWindow.getActivePage();
 		}
 		if (result != null) {
-			
+
 		}
-		return result;		
+		return result;
 	}
 
-	private void expandInProjectExplorer(CommonNavigator projectExplorer, IResource container) {
+	private void expandInProjectExplorer(CommonNavigator projectExplorer,
+			IResource container) {
 		projectExplorer.selectReveal(new StructuredSelection(container));
 		TreeViewer treeViewer = projectExplorer.getCommonViewer();
 		treeViewer.expandToLevel(container, 1);
 	}
-	
-	private void expandInPackageExplorer(IViewPart packageExplorer, IResource container) {
+
+	private void expandInPackageExplorer(IViewPart packageExplorer,
+			IResource container) {
 		if (packageExplorer instanceof ISetSelectionTarget) {
-			((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(container));
+			((ISetSelectionTarget) packageExplorer)
+					.selectReveal(new StructuredSelection(container));
 		}
-		Object treeViewer = packageExplorer.getAdapter(ISelectionProvider.class);
+		Object treeViewer = packageExplorer
+				.getAdapter(ISelectionProvider.class);
 		if (treeViewer != null && treeViewer instanceof TreeViewer) {
-			((TreeViewer)treeViewer).expandToLevel(JavaCore.create(container), 1);
+			((TreeViewer) treeViewer).expandToLevel(JavaCore.create(container),
+					1);
 		}
 	}
-	
+
 	private void expandSystemDirectory(IFileStore fileStore) {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
-		IViewPart remoteSystemView = workbenchPage.findView("org.eclipse.rse.ui.view.systemView");
+		IViewPart remoteSystemView = workbenchPage
+				.findView("org.eclipse.rse.ui.view.systemView");
 		if (remoteSystemView != null) {
 			expandInRemoteSystemView(remoteSystemView, fileStore);
 		}
 	}
-	
-	private void expandInRemoteSystemView(
-			IViewPart remoteSystemView, 
+
+	private void expandInRemoteSystemView(IViewPart remoteSystemView,
 			IFileStore fileStore) {
 		Viewer viewer = getViewer(remoteSystemView);
 		Object input = viewer.getInput();
@@ -226,12 +250,16 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 		ArrayList<Object> treeSegments = new ArrayList<Object>();
 		for (String name : names) {
 			if (input != null && input instanceof IAdaptable) {
-				ISystemViewElementAdapter adapter = SystemAdapterHelpers.getViewAdapter(input);
+				ISystemViewElementAdapter adapter = SystemAdapterHelpers
+						.getViewAdapter(input);
 				if (adapter != null) {
-					for (Object object : adapter.getChildren((IAdaptable)input, null)) {
+					for (Object object : adapter.getChildren(
+							(IAdaptable) input, null)) {
 						if (object instanceof IAdaptable) {
-							adapter = SystemAdapterHelpers.getViewAdapter(object);
-							if (adapter != null && name.equals(adapter.getText(object))) {
+							adapter = SystemAdapterHelpers
+									.getViewAdapter(object);
+							if (adapter != null
+									&& name.equals(adapter.getText(object))) {
 								input = object;
 								treeSegments.add(input);
 								break;
@@ -247,19 +275,19 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 		TreePath treePath = new TreePath(treeSegments.toArray());
 		viewer.setSelection(new StructuredSelection(treePath));
 		if (viewer instanceof TreeViewer) {
-			((TreeViewer)viewer).expandToLevel(treePath, 1);
-			
+			((TreeViewer) viewer).expandToLevel(treePath, 1);
+
 		}
 	}
 
 	private Viewer getViewer(IViewPart remoteSystemView) {
 		if (remoteSystemView instanceof IRSEViewPart) {
-			return ((IRSEViewPart)remoteSystemView).getRSEViewer();
+			return ((IRSEViewPart) remoteSystemView).getRSEViewer();
 		} else {
 			return null;
 		}
 	}
-	
+
 	private ArrayList<String> createSegmentNames(IFileStore fileStore) {
 		ArrayList<String> result = new ArrayList<String>();
 		while (fileStore.getParent() != null) {
@@ -272,21 +300,23 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 		result.add(0, "Local");
 		return result;
 	}
-	
 
- 	private void refreshResource(File file) {
+	private void refreshResource(File file) {
 		try {
 			IPath path = new Path(file.getCanonicalPath());
 			IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
 			IFileInfo fileInfo = fileStore.fetchInfo();
-			if (!fileInfo.exists()) return;
+			if (!fileInfo.exists())
+				return;
 			if (fileInfo.isDirectory()) {
-				IContainer container = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
+				IContainer container = ResourcesPlugin.getWorkspace().getRoot()
+						.getContainerForLocation(path);
 				if (container != null) {
 					container.refreshLocal(IResource.DEPTH_INFINITE, null);
 				}
 			} else {
-				IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
+				IResource resource = ResourcesPlugin.getWorkspace().getRoot()
+						.getFileForLocation(path);
 				if (resource != null) {
 					resource.refreshLocal(IResource.DEPTH_INFINITE, null);
 				}
@@ -297,7 +327,8 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 			ForgeUIPlugin.log(e);
 		}
 		try {
-			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+			ResourcesPlugin.getWorkspace().getRoot()
+					.refreshLocal(IResource.DEPTH_INFINITE, null);
 		} catch (CoreException e) {
 			ForgeUIPlugin.log(e);
 		}
@@ -309,39 +340,43 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 		pomFile = null;
 		pomFileModificationStamp = -1;
 	}
-	
+
 	private IFile pomFile = null;
 	private long pomFileModificationStamp = -1;
 
 	@Override
-	public void preCommandExecuted(UICommand command, UIExecutionContext executionContext) {
-		UISelection<?> selection = executionContext.getUIContext().getInitialSelection();
+	public void preCommandExecuted(UICommand command,
+			UIExecutionContext executionContext) {
+		UISelection<?> selection = executionContext.getUIContext()
+				.getInitialSelection();
 		Iterator<?> iterator = selection.iterator();
 		while (iterator.hasNext()) {
 			Object object = iterator.next();
 			if (object instanceof Resource<?>) {
-				pomFile = determinePomFile((Resource<?>)object);
+				pomFile = determinePomFile((Resource<?>) object);
 				if (pomFile != null) {
 					pomFileModificationStamp = pomFile.getModificationStamp();
 				}
 			}
 		}
 	}
-	
+
 	private IFile determinePomFile(Resource<?> resource) {
 		IFile result = null;
 		try {
 			Object object = resource.getUnderlyingResourceObject();
 			if (object != null && object instanceof File) {
-				Path path = new Path(((File)object).getCanonicalPath());
+				Path path = new Path(((File) object).getCanonicalPath());
 				IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
 				IFileInfo fileInfo = fileStore.fetchInfo();
 				if (fileInfo.exists()) {
 					IResource res = null;
 					if (fileInfo.isDirectory()) {
-						res = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
+						res = ResourcesPlugin.getWorkspace().getRoot()
+								.getContainerForLocation(path);
 					} else {
-						res = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(path);
+						res = ResourcesPlugin.getWorkspace().getRoot()
+								.getFileForLocation(path);
 					}
 					if (res != null) {
 						IProject project = res.getProject();
@@ -356,7 +391,5 @@ public class CommandLineListener implements ProjectListener, CommandExecutionLis
 		}
 		return result;
 	}
-	
-	
-	
+
 }
