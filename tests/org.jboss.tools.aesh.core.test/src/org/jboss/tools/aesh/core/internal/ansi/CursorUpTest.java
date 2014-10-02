@@ -13,7 +13,7 @@ public class CursorUpTest {
 	
 	@Test
 	public void testGetType() {
-		CursorUp cursorUp = new CursorUp(null);
+		CursorUp cursorUp = new CursorUp("");
 		Assert.assertEquals(CommandType.CURSOR_UP, cursorUp.getType());
 	}
 

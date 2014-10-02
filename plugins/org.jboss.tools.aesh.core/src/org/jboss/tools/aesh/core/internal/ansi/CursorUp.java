@@ -6,15 +6,30 @@
  */
 package org.jboss.tools.aesh.core.internal.ansi;
 
-
+import org.jboss.tools.aesh.core.document.Document;
 
 public class CursorUp extends AbstractCommand {
 	
-	public CursorUp(String arguments) {}
+	private int amount = 1;
+	
+	public CursorUp(String arguments) {
+		if (!"".equals(arguments)) {
+			amount = Integer.valueOf(arguments);
+		}
+	}
 
 	@Override
 	public CommandType getType() {
 		return CommandType.CURSOR_UP;
 	}
+
+	public void handle(Document document) {
+		int currentOffset = document.getCursorOffset();
+		int currentLine = document.getLineOfOffset(currentOffset);
+		int currentColumn = currentOffset - document.getLineOffset(currentLine);
+		int newLine = currentLine - amount;
+		int newOffset = document.getLineOffset(newLine) + currentColumn;
+		document.moveCursorTo(newOffset);
+ 	}
 
 }
