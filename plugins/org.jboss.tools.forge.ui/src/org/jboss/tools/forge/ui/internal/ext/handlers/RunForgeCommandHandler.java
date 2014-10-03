@@ -90,7 +90,6 @@ public class RunForgeCommandHandler extends AbstractHandler {
 		WizardDialogHelper helper = new WizardDialogHelper(window.getShell(),
 				currentSelection);
 		UICommand command = helper.getCommand(wizardName);
-		helper.openWizard(wizardTitle == null ? wizardName : wizardTitle,
-				command, values);
+		helper.openWizard(wizardTitle, command, values);
 	}
 }
