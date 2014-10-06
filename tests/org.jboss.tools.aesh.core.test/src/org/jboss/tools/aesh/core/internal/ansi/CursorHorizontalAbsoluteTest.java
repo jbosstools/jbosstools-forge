@@ -33,7 +33,7 @@ public class CursorHorizontalAbsoluteTest {
 		CursorHorizontalAbsolute cursorHorizontalAbsolute = new CursorHorizontalAbsolute("17");
 		testOffset = 833;
 		cursorHorizontalAbsolute.handle(testDocument);
-		Assert.assertEquals(817, testOffset);
+		Assert.assertEquals(816, testOffset);
 	}
 
 }
