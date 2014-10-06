@@ -17,7 +17,7 @@
 	</parent>
 	<artifactId>forge</artifactId>
 	<version>1.3.1-SNAPSHOT</version>
-	<name>forge.all</name>
+	<name>jbosstools-forge</name>
 	<packaging>pom</packaging>
 	<properties>
 		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-forge.git</tycho.scmUrl>
