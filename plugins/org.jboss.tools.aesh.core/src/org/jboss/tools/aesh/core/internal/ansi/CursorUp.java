@@ -26,10 +26,12 @@ public class CursorUp extends AbstractCommand {
 	public void handle(Document document) {
 		int currentOffset = document.getCursorOffset();
 		int currentLine = document.getLineOfOffset(currentOffset);
-		int currentColumn = currentOffset - document.getLineOffset(currentLine);
 		int newLine = currentLine - amount;
-		int newOffset = document.getLineOffset(newLine) + currentColumn;
-		document.moveCursorTo(newOffset);
+		if (newLine >= 0) {
+			int currentColumn = currentOffset - document.getLineOffset(currentLine);
+			int newOffset = document.getLineOffset(newLine) + currentColumn;
+			document.moveCursorTo(newOffset);
+		}
  	}
 
 }
