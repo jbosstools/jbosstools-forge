@@ -13,7 +13,7 @@ public class CursorDownTest {
 	
 	@Test
 	public void testGetType() {
-		CursorDown cursorDown = new CursorDown(null);
+		CursorDown cursorDown = new CursorDown("");
 		Assert.assertEquals(CommandType.CURSOR_DOWN, cursorDown.getType());
 	}
 
