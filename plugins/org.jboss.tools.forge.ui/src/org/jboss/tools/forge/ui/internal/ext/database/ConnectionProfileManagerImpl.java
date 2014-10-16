@@ -48,8 +48,12 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 			ConnectionProfile profile = new ConnectionProfile();
 			profile.setName(currentProfile.getName());
 			Properties props = currentProfile.getBaseProperties();
-			profile.setDriver(props.getProperty(DRIVER_CLASS));
-			profile.setPath(props.getProperty(DRIVER_LOCATION));
+			String driverClass = props.getProperty(DRIVER_CLASS);
+			if (driverClass == null) continue;
+			profile.setDriver(driverClass);
+			String driverLocation = props.getProperty(DRIVER_LOCATION);
+			if (driverLocation == null) continue;
+			profile.setPath(driverLocation);
 			profile.setUser(props.getProperty(USER_NAME));
 			profile.setPassword(props.getProperty(PASSWORD));
 			profile.setUrl(props.getProperty(URL));
