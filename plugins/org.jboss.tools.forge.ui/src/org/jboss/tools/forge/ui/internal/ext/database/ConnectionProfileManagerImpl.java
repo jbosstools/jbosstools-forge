@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.datatools.connectivity.ConnectionProfileException;
 import org.eclipse.datatools.connectivity.IConnectionProfile;
 import org.eclipse.datatools.connectivity.ProfileManager;
@@ -48,8 +50,28 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 			ConnectionProfile profile = new ConnectionProfile();
 			profile.setName(currentProfile.getName());
 			Properties props = currentProfile.getBaseProperties();
-			profile.setDriver(props.getProperty(DRIVER_CLASS));
-			profile.setPath(props.getProperty(DRIVER_LOCATION));
+			String driverClass = props.getProperty(DRIVER_CLASS);
+			if (driverClass == null) {
+				logInfo(
+						"Value for " + 
+						DRIVER_CLASS + 
+						" in connection profile " + 
+						currentProfile.getName() + 
+						"was null. Ignoring this connection profile.");
+				continue;
+			}
+			profile.setDriver(driverClass);
+			String driverLocation = props.getProperty(DRIVER_LOCATION);
+			if (driverLocation == null) {
+				logInfo(
+						"Value for " + 
+						DRIVER_LOCATION + 
+						" in connection profile " + 
+						currentProfile.getName() + 
+						"was null. Ignoring this connection profile.");
+				continue;
+			}
+			profile.setPath(driverLocation);
 			profile.setUser(props.getProperty(USER_NAME));
 			profile.setPassword(props.getProperty(PASSWORD));
 			profile.setUrl(props.getProperty(URL));
@@ -201,6 +223,14 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 
 	private DriverInstance getDriver(String name) {
 		return DriverManager.getInstance().getDriverInstanceByName(name);
+	}
+	
+	private void logInfo(String info) {
+		IStatus status = new Status(
+				Status.INFO,
+				ForgeUIPlugin.PLUGIN_ID,
+				info);
+		ForgeUIPlugin.getDefault().getLog().log(status);
 	}
 
 }
