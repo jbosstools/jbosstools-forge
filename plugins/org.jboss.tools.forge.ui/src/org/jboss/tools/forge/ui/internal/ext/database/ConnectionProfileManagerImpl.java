@@ -46,10 +46,27 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 		Map<String, ConnectionProfile> result = new LinkedHashMap<String, ConnectionProfile>();
 		for (IConnectionProfile currentProfile : connectionProfiles) {
 			ConnectionProfile profile = new ConnectionProfile();
-			profile.setName(currentProfile.getName());
-			Properties props = currentProfile.getBaseProperties();
-			profile.setDriver(props.getProperty(DRIVER_CLASS));
-			profile.setPath(props.getProperty(DRIVER_LOCATION));
+			String profileName = currentProfile.getName();
+			profile.setName(profileName);
+			Properties props = currentProfile.getProperties(currentProfile.getProviderId());
+			String driverClass = props.getProperty(DRIVER_CLASS);
+			if (driverClass == null) {
+				driverClass = ConnectionProfileUtil.getDriverClass(profileName);
+			}
+			if (driverClass != null) {
+				profile.setDriver(driverClass);
+			} else {
+				continue;
+			}
+			String driverLocation = props.getProperty(DRIVER_LOCATION);
+			if (driverLocation == null) {
+				driverLocation = ConnectionProfileUtil.getConnectionProfileDriverURL(profileName)[0];
+			}
+			if (driverLocation != null) {
+				profile.setPath(driverLocation);
+			} else {
+				continue;
+			}
 			profile.setUser(props.getProperty(USER_NAME));
 			profile.setPassword(props.getProperty(PASSWORD));
 			profile.setUrl(props.getProperty(URL));
