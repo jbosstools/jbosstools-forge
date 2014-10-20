@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
@@ -293,6 +294,15 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 
 	public boolean isChanged() {
 		return changed;
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		if (Platform.OS_LINUX.equals(Platform.getOS())) {
+			getContainer().getShell().setVisible(true);
+			getContainer().getShell().forceActive();
+		}
 	}
 
 	/**
