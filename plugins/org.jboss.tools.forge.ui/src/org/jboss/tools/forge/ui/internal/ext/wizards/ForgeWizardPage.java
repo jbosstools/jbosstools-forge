@@ -299,7 +299,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		if (Platform.OS_LINUX.equals(Platform.getOS())) {
+		if (visible && Platform.OS_LINUX.equals(Platform.getOS())) {
 			getContainer().getShell().setVisible(true);
 			getContainer().getShell().forceActive();
 		}
