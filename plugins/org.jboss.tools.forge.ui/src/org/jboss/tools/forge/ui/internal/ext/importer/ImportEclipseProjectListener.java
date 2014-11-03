@@ -9,7 +9,6 @@ package org.jboss.tools.forge.ui.internal.ext.importer;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jboss.forge.addon.facets.FacetNotFoundException;
 import org.jboss.forge.addon.projects.Project;
 import org.jboss.forge.addon.projects.ProjectListener;
 import org.jboss.forge.addon.projects.facets.MetadataFacet;
