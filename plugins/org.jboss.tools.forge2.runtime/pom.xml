@@ -19,8 +19,8 @@
    <version>2.8.1-SNAPSHOT</version>
    <packaging>eclipse-plugin</packaging>
    <properties>
-      <version.furnace>2.12.2.Final</version.furnace>
-      <version.forge.addons>2.12.2.Final</version.forge.addons>
+      <version.furnace>2.12.3-SNAPSHOT</version.furnace>
+      <version.forge.addons>2.12.3-SNAPSHOT</version.forge.addons>
       <version.angularjs.addon>2.1.3.Final</version.angularjs.addon>
    </properties>
    <build>
