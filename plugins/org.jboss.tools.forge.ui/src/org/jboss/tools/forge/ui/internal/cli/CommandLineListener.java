@@ -8,6 +8,8 @@ package org.jboss.tools.forge.ui.internal.cli;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +21,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -65,6 +68,8 @@ public class CommandLineListener implements ProjectListener,
 	@Override
 	public void postCommandExecuted(UICommand command,
 			final UIExecutionContext uiExecutionContext, Result result) {
+		String commandName = command.getMetadata(uiExecutionContext.getUIContext()).getName();
+		final boolean rm = "rm".equals(commandName);
 		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -83,7 +88,7 @@ public class CommandLineListener implements ProjectListener,
 				while (iterator.hasNext()) {
 					Object object = iterator.next();
 					if (object instanceof Resource<?>) {
-						refresh((Resource<?>) object);
+						refresh((Resource<?>) object, rm);
 					}
 				}
 				if (pomFileModificationStamp != -1
@@ -123,10 +128,10 @@ public class CommandLineListener implements ProjectListener,
 				.getActivePage();
 	}
 
-	private void refresh(Resource<?> resource) {
+	private void refresh(Resource<?> resource, boolean rm) {
 		Object object = resource.getUnderlyingResourceObject();
 		if (object instanceof File) {
-			refreshResource((File) object);
+			refreshResource((File) object, rm);
 		}
 	}
 
@@ -301,7 +306,7 @@ public class CommandLineListener implements ProjectListener,
 		return result;
 	}
 
-	private void refreshResource(File file) {
+	private void refreshResource(File file, boolean rm) {
 		try {
 			IPath path = new Path(file.getCanonicalPath());
 			IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
@@ -309,9 +314,12 @@ public class CommandLineListener implements ProjectListener,
 			if (!fileInfo.exists())
 				return;
 			if (fileInfo.isDirectory()) {
-				IContainer container = ResourcesPlugin.getWorkspace().getRoot()
-						.getContainerForLocation(path);
+				IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+				IContainer container = workspaceRoot.getContainerForLocation(path);
 				if (container != null) {
+					if (rm && workspaceRoot == container) {
+						removeOrphanedProjects(workspaceRoot);
+					}
 					container.refreshLocal(IResource.DEPTH_INFINITE, null);
 				}
 			} else {
@@ -390,6 +398,20 @@ public class CommandLineListener implements ProjectListener,
 			ForgeUIPlugin.log(e);
 		}
 		return result;
+	}
+	
+	private void removeOrphanedProjects(IWorkspaceRoot workspaceRoot) {
+		for (IProject project : workspaceRoot.getProjects()) {
+			IPath projectPath = project.getLocation();
+			File file = new File(projectPath.toOSString());
+			if (!file.exists()) {
+				try {
+					project.delete(true, null);
+				} catch (CoreException e) {
+					ForgeUIPlugin.log(e);
+				}
+			}
+		}
 	}
 
 }
