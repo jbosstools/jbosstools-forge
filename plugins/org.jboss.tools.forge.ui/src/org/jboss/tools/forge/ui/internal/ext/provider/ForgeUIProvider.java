@@ -16,6 +16,7 @@ import org.eclipse.ui.console.IConsole;
 import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.console.MessageConsoleStream;
+import org.jboss.forge.addon.ui.UIDesktop;
 import org.jboss.forge.addon.ui.UIProvider;
 import org.jboss.forge.addon.ui.output.UIOutput;
 import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
@@ -122,5 +123,10 @@ public class ForgeUIProvider implements UIProvider, UIOutput {
 	public void warn(PrintStream writer, String message) {
 		writer.print("[WARNING] ");
 		writer.println(message);
+	}
+	
+	@Override
+	public UIDesktop getDesktop() {
+		return new ForgeUIDesktop();
 	}
 }
