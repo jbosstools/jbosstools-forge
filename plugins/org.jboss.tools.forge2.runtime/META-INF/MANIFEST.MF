@@ -2,24 +2,24 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge2.runtime;singleton:=true
-Bundle-Version: 2.12.3.qualifier
+Bundle-Version: 2.13.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
 Eclipse-BundleShape: dir
-Bundle-ClassPath: lib/furnace-proxy-2.12.3.Final.jar,
+Bundle-ClassPath: lib/furnace-proxy-2.13.0.Final.jar,
  lib/forge-javassist-2.jar,
- lib/furnace-api-2.12.3.Final.jar,
- lib/furnace-se-2.12.3.Final.jar,
- lib/ui-api-2.12.3.Final.jar,
- lib/convert-api-2.12.3.Final.jar,
- lib/ui-spi-2.12.3.Final.jar,
- lib/facets-api-2.12.3.Final.jar,
- lib/resources-api-2.12.3.Final.jar,
- lib/projects-api-2.12.3.Final.jar,
- lib/dependencies-api-2.12.3.Final.jar,
- lib/shell-spi-2.12.3.Final.jar,
- lib/database-tools-api-2.12.3.Final.jar,
+ lib/furnace-api-2.13.0.Final.jar,
+ lib/furnace-se-2.13.0.Final.jar,
+ lib/ui-api-2.13.0.Final.jar,
+ lib/convert-api-2.13.0.Final.jar,
+ lib/ui-spi-2.13.0.Final.jar,
+ lib/facets-api-2.13.0.Final.jar,
+ lib/resources-api-2.13.0.Final.jar,
+ lib/projects-api-2.13.0.Final.jar,
+ lib/dependencies-api-2.13.0.Final.jar,
+ lib/shell-spi-2.13.0.Final.jar,
+ lib/database-tools-api-2.13.0.Final.jar,
  .
 Export-Package: bootpath,
  org.jboss.forge.addon.convert,

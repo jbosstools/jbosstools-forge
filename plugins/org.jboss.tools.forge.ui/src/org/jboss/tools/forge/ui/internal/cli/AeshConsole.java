@@ -26,6 +26,7 @@ import org.jboss.forge.addon.ui.result.Result;
 import org.jboss.forge.furnace.spi.ListenerRegistration;
 import org.jboss.tools.aesh.core.console.AbstractConsole;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
+import org.jboss.tools.forge.ui.internal.ext.provider.ForgeUIDesktop;
 
 public class AeshConsole extends AbstractConsole {
 
@@ -53,7 +54,8 @@ public class AeshConsole extends AbstractConsole {
 		PrintStream err = new PrintStream(stdErr, true);
 		ShellHandleSettings settings = new ShellHandleSettings();
 		settings.stdOut(out).stdErr(err).stdIn(getInputStream())
-				.currentResource(currentDir).terminal(terminal);
+				.currentResource(currentDir).terminal(terminal)
+				.desktop(new ForgeUIDesktop());
 		handle.initialize(settings);
 		handle.addCommandExecutionListener(executionListener);
 		// Listening for selection events
@@ -61,7 +63,8 @@ public class AeshConsole extends AbstractConsole {
 			@Override
 			public void postCommandExecuted(UICommand command,
 					UIExecutionContext context, Result result) {
-				currentResource = (Resource<?>) context.getUIContext().getSelection().get();
+				currentResource = (Resource<?>) context.getUIContext()
+						.getSelection().get();
 			}
 		});
 
