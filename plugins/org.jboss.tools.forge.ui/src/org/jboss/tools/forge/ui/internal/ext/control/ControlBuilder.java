@@ -22,7 +22,6 @@ import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UICompleter;
 import org.jboss.forge.addon.ui.util.InputComponents;
-import org.jboss.forge.furnace.proxy.Proxies;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.internal.ext.autocomplete.InputComponentProposalProvider;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
@@ -92,8 +91,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 			String inputTypeHint = InputComponents.getInputType(input);
 			if (inputTypeHint != null
 					&& !inputTypeHint.equals(InputType.DEFAULT)) {
-				handles = Proxies.areEquivalent(inputTypeHint,
-						getSupportedInputType());
+				handles = inputTypeHint.equals(getSupportedInputType());
 			} else {
 				// Fallback to standard type
 				handles = getProducedType().isAssignableFrom(
