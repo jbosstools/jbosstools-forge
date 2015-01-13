@@ -17,6 +17,6 @@
 	</parent>
 	<groupId>org.jboss.tools.forge.features</groupId>
 	<artifactId>org.jboss.tools.forge.m2e.feature</artifactId>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>1.1.2-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 </project>
