@@ -10,6 +10,7 @@ package org.jboss.tools.forge.ui.internal.ext.provider;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
@@ -70,17 +71,23 @@ public class ForgeUIDesktop extends DefaultUIDesktop {
 
 	@Override
 	public void browse(URI uri) throws IOException {
-		IWorkbenchBrowserSupport support = PlatformUI.getWorkbench()
-				.getBrowserSupport();
-		try {
-			IWebBrowser browser = support
-					.createBrowser(ForgeUIPlugin.PLUGIN_ID);
-			browser.openURL(uri.toURL());
-		} catch (PartInitException e) {
-			Status status = new Status(IStatus.ERROR, ForgeUIPlugin.PLUGIN_ID,
-					"Browser initialization failed");
-			ForgeUIPlugin.log(e);
-			MessageDialog.openError(null, "Browse URL", status.getMessage());
-		}
+		final URL url = uri.toURL();
+		Display.getDefault().syncExec(new Runnable() {
+			@Override
+			public void run() {
+				IWorkbenchBrowserSupport support = PlatformUI.getWorkbench()
+						.getBrowserSupport();
+				try {
+					IWebBrowser browser = support
+							.createBrowser(ForgeUIPlugin.PLUGIN_ID);
+					browser.openURL(url);
+				} catch (PartInitException e) {
+					Status status = new Status(IStatus.ERROR, ForgeUIPlugin.PLUGIN_ID,
+							"Browser initialization failed");
+					ForgeUIPlugin.log(e);
+					MessageDialog.openError(null, "Browse URL", status.getMessage());
+				}
+			}
+		});
 	}
 }
