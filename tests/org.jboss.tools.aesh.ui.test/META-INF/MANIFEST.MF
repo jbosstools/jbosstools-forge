@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Aesh UI Tests
 Bundle-SymbolicName: org.jboss.tools.aesh.ui.test
-Bundle-Version: 1.3.2.qualifier
+Bundle-Version: 1.3.3.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Fragment-Host: org.jboss.tools.aesh.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

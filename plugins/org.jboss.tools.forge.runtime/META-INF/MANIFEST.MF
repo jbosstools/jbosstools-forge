@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.runtime
-Bundle-Version: 1.4.144.qualifier
+Bundle-Version: 1.4.145.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: %BundleProvider
 Bundle-Localization: plugin
