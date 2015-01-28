@@ -105,7 +105,6 @@ public class ForgeCorePreferences {
 	private void initializeRuntimes() {
 		runtimes = new ArrayList<ForgeRuntime>();
 		runtimes.add(FurnaceRuntime.INSTANCE);
-		runtimes.add(ForgeEmbeddedRuntime.INSTANCE);
 		addFromXml(getForgeRuntimesPreference());
 		initializeDefaultRuntime();
 	}
@@ -118,11 +117,7 @@ public class ForgeCorePreferences {
 			}
 		}
 		if (defaultRuntime == null) {
-			if ("embedded".equals(defaultRuntimeName)) {
-				defaultRuntime = ForgeEmbeddedRuntime.INSTANCE;
-			} else {
-				defaultRuntime = FurnaceRuntime.INSTANCE;
-			}
+			defaultRuntime = FurnaceRuntime.INSTANCE;
 			defaultRuntimeName = defaultRuntime.getName();
 		}
 	}
@@ -263,9 +258,7 @@ public class ForgeCorePreferences {
 		for (ForgeRuntime runtime : runtimes) {
 			Element element = document.createElement("runtime");
 			element.setAttribute("name", runtime.getName());
-			if (!(runtime instanceof ForgeEmbeddedRuntime)) {
-				element.setAttribute("location", runtime.getLocation());
-			}
+			element.setAttribute("location", runtime.getLocation());
 			element.setAttribute("type", runtime.getType().name().toLowerCase());
 			main.appendChild(element);
 		}

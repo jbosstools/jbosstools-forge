@@ -17,7 +17,6 @@ public class ForgeRuntimeManager {
 	public static List<ForgeRuntime> getEmbeddedRuntimes() {
 		ArrayList<ForgeRuntime> result = new ArrayList<ForgeRuntime>();
 		result.add(FurnaceRuntime.INSTANCE);
-		result.add(ForgeEmbeddedRuntime.INSTANCE);
 		return result;
 	}
 
