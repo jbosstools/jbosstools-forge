@@ -30,12 +30,6 @@
 			class="org.jboss.tools.forge.ui.internal.preferences.ForgeMainPreferencePage"
 			id="org.jboss.tools.forge">
 		</page>
-		<page
-			name="Installed Forge Runtimes"
-			category="org.jboss.tools.forge"
-			class="org.jboss.tools.forge.ui.internal.preferences.ForgeInstallationsPreferencePage"
-			id="org.jboss.tools.forge.runtimes">
-        </page>
 	</extension>
 	<extension
 			point="org.eclipse.ui.commands">
