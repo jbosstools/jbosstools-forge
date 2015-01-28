@@ -38,7 +38,7 @@ public class FurnaceProvider
 
    public static final FurnaceProvider INSTANCE = new FurnaceProvider();
 
-   private static final String RUNTIME_PLUGIN_ID = "org.jboss.tools.forge2.runtime";
+   private static final String RUNTIME_PLUGIN_ID = "org.jboss.tools.forge.runtime";
 
    private FurnaceProvider()
    {

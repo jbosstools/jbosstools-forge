@@ -72,7 +72,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.jboss.tools.forge2.runtime"
+         id="org.jboss.tools.forge.runtime"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

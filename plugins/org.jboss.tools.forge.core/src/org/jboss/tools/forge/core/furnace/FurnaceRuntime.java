@@ -181,7 +181,7 @@ public class FurnaceRuntime implements ForgeRuntime {
 	private void initLocation() {
 		try {
 			location = FileLocator.getBundleFile(
-					Platform.getBundle("org.jboss.tools.forge2.runtime"))
+					Platform.getBundle("org.jboss.tools.forge.runtime"))
 					.getCanonicalPath();
 		} catch (IOException e) {
 			ForgeCorePlugin.log(e);
