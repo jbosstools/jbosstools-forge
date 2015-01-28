@@ -25,47 +25,15 @@ import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 public class ForgeMainPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {
 	
-	private Button startupButton;
-	private Button startInDebugButton;
-	private Text vmArgsText;
 	private Text addonDirText;
 	  
 	protected Control createContents(Composite parent) {
 		noDefaultAndApplyButton();
 		Composite clientArea = createClientArea(parent);
-		createStartupButton(clientArea);
-		createStartInDebugButton(clientArea);
-		createVmArgsText(clientArea);
-		createAddonDirText(parent);
-		return null;
+		createAddonDirText(clientArea);
+		return clientArea;
 	}
 	
-	private void createStartupButton(Composite parent) {
-		startupButton = new Button(parent, SWT.CHECK);
-		startupButton.setText("Start Forge when workbench starts." );
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		startupButton.setLayoutData(gridData);
-		startupButton.setSelection(ForgeCorePreferences.INSTANCE.getStartup());
-	}
-	
-	private void createStartInDebugButton(Composite parent) {
-		startInDebugButton = new Button(parent, SWT.CHECK);
-		startInDebugButton.setText("Start Forge in Debug Mode." );
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		startInDebugButton.setLayoutData(gridData);
-		startInDebugButton.setSelection(ForgeCorePreferences.INSTANCE.getStartInDebug());
-	}
-	
-	private void createVmArgsText(Composite parent) {
-		Label vmArgsLabel = new Label(parent, SWT.NONE);
-		vmArgsLabel.setText("Forge Startup VM Arguments: ");
-		vmArgsText = new Text(parent, SWT.BORDER);
-		vmArgsText.setLayoutData(new GridData(GridData.FILL_BOTH));
-		String vmArgs = ForgeCorePreferences.INSTANCE.getVmArgs();
-		vmArgsText.setText(vmArgs == null ? "" : vmArgs);
-	}
 	
 	private void createAddonDirText(Composite parent) {
 		Label addonDirLabel = new Label(parent, SWT.NONE);
@@ -113,15 +81,7 @@ public class ForgeMainPreferencePage extends PreferencePage implements
 
 	public void init(IWorkbench workbench) {}
 	
-	private String getVmArgsText() {
-		String str = vmArgsText.getText();
-		return "".equals(str) ? null : str; 
-	}
-	
 	public boolean performOk() {
-		ForgeCorePreferences.INSTANCE.setStartup(startupButton.getSelection());
-		ForgeCorePreferences.INSTANCE.setStartInDebug(startInDebugButton.getSelection());
-		ForgeCorePreferences.INSTANCE.setVmArgs(getVmArgsText());
 		ForgeCorePreferences.INSTANCE.setAddonDir(addonDirText.getText());
 		return true;
 	}
