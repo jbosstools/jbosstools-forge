@@ -12,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.IShowInTarget;
 import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
-import org.jboss.tools.forge.ui.internal.actions.ForgeConsoleDropdownAction;
 import org.jboss.tools.forge.ui.internal.actions.GoToAction;
 import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
 import org.jboss.tools.forge.ui.internal.console.ForgeConsoleManager;
@@ -53,15 +52,18 @@ public class ForgeConsoleView extends ViewPart implements IShowInTarget {
 	}
 
 	private void createActions() {
-		ForgeConsoleDropdownAction action = new ForgeConsoleDropdownAction(this);
+		// Since there is only one runtime anymore (for now?) next line is commented
+		// ForgeConsoleDropdownAction action = new ForgeConsoleDropdownAction(this);
 		IToolBarManager toolBarManager = getViewSite().getActionBars()
 				.getToolBarManager();
 		toolBarManager.add(new Separator(FORGE_CONSOLE_ACTION_GROUP));
 		// additional separator needs to be added because otherwise the added
 		// items
 		// appear after the dropdown instead of before (Eclipse bug?)
-		toolBarManager.add(new Separator("dummy"));
-		toolBarManager.add(action);
+		// Adding the separator and action is commented out until there is more
+		// then one runtime again.
+		// toolBarManager.add(new Separator("dummy"));
+		// toolBarManager.add(action);
 	}
 
 	public void setStatusMessage(String message) {
