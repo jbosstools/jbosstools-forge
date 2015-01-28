@@ -34,7 +34,6 @@ import org.jboss.forge.furnace.util.OperatingSystemUtils;
 import org.jboss.tools.forge.core.furnace.FurnaceRuntime;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 import org.jboss.tools.forge.core.internal.preferences.ForgeCorePreferencesInitializer;
-import org.jboss.tools.forge.core.internal.runtime.ForgeEmbeddedRuntime;
 import org.jboss.tools.forge.core.internal.runtime.ForgeExternalRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeType;
