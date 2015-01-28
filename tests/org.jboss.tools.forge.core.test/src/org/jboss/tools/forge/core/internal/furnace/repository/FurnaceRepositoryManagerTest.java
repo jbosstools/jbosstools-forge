@@ -21,7 +21,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TestFurnaceRepositoryManager {
+public class FurnaceRepositoryManagerTest {
 	
 	public static String TEST_REPOSITORY_PROVIDER_MUTABLE_PATH;
 	public static String TEST_REPOSITORY_PROVIDER_IMMUTABLE_PATH;

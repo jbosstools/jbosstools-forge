@@ -13,15 +13,15 @@ import org.jboss.tools.forge.core.furnace.repository.FurnaceRepository;
 import org.jboss.tools.forge.core.furnace.repository.IFurnaceRepository;
 import org.jboss.tools.forge.core.furnace.repository.IFurnaceRepositoryProvider;
 
-public class TestFuranceRepositoryProvider implements
+public class FurnaceRepositoryProviderTest implements
 		IFurnaceRepositoryProvider {
 
 	@Override
 	public List<IFurnaceRepository> getRepositories() {
 		List<IFurnaceRepository> repos = new ArrayList<>();
 		
-		repos.add(new FurnaceRepository(TestFurnaceRepositoryManager.TEST_REPOSITORY_PROVIDER_MUTABLE_PATH, true));
-		repos.add(new FurnaceRepository(TestFurnaceRepositoryManager.TEST_REPOSITORY_PROVIDER_IMMUTABLE_PATH, false));
+		repos.add(new FurnaceRepository(FurnaceRepositoryManagerTest.TEST_REPOSITORY_PROVIDER_MUTABLE_PATH, true));
+		repos.add(new FurnaceRepository(FurnaceRepositoryManagerTest.TEST_REPOSITORY_PROVIDER_IMMUTABLE_PATH, false));
 		
 		return repos;
 	}
@@ -29,6 +29,6 @@ public class TestFuranceRepositoryProvider implements
    @Override
    public ClassLoader getClassLoader()
    {
-      return TestFuranceRepositoryProvider.class.getClassLoader();
+      return FurnaceRepositoryProviderTest.class.getClassLoader();
    }
 }

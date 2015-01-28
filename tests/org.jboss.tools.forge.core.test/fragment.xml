@@ -12,7 +12,7 @@
    <extension
          point="org.jboss.tools.forge.core.furnaceRepository">
       <repositoryProvider
-            provider="org.jboss.tools.forge.core.internal.furnace.repository.TestFuranceRepositoryProvider"></repositoryProvider>
+            provider="org.jboss.tools.forge.core.internal.furnace.repository.FurnaceRepositoryProviderTest"></repositoryProvider>
    </extension>
 
 </fragment>
