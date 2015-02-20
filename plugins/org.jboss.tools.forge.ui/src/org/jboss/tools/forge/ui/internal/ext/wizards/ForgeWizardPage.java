@@ -86,7 +86,6 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 		GridLayout layout = new GridLayout();
 		container.setLayout(layout);
 		layout.numColumns = 3;
-		layout.verticalSpacing = 9;
 
 		// Init component control array
 		for (Entry<String, InputComponent<?, ?>> entry : inputs.entrySet()) {
@@ -105,6 +104,7 @@ public class ForgeWizardPage extends WizardPage implements Listener {
 			for (Control child : modifiableControls) {
 				registerListeners(child);
 			}
+			controlBuilder.setupNote(container, control, input);
 			componentControlEntries.add(new ComponentControlEntry(input,
 					controlBuilder, control));
 		}

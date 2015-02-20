@@ -14,14 +14,19 @@ import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.rse.ui.Mnemonics;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.convert.ConverterFactory;
 import org.jboss.forge.addon.ui.hints.InputType;
 import org.jboss.forge.addon.ui.input.InputComponent;
 import org.jboss.forge.addon.ui.input.UICompleter;
 import org.jboss.forge.addon.ui.util.InputComponents;
+import org.jboss.forge.furnace.util.Strings;
 import org.jboss.tools.forge.core.furnace.FurnaceService;
 import org.jboss.tools.forge.ui.internal.ext.autocomplete.InputComponentProposalProvider;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
@@ -34,6 +39,8 @@ import org.jboss.tools.forge.ui.internal.ext.wizards.ForgeWizardPage;
  *
  */
 public abstract class ControlBuilder<CONTROL extends Control> {
+
+	private static final String NOTE_DATA_KEY = "forge.note";
 
 	/**
 	 * Builds an Eclipse {@link Control} object based on the input
@@ -149,6 +156,28 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		return result;
 	}
 
+	public void setupNote(Composite parent, Control control,
+			InputComponent<?, ?> input) {
+		// Add a placeholder
+		Label placeholder = new Label(parent, SWT.NONE);
+		GridData layoutData = new GridData();
+		layoutData.heightHint = SWT.NULL;
+		placeholder.setLayoutData(layoutData);
+
+		// Label as the note for this component
+		Label notes = new Label(parent, SWT.NONE);
+		control.setData(NOTE_DATA_KEY, notes);
+		layoutData = new GridData(GridData.FILL_HORIZONTAL);
+		layoutData.horizontalSpan = 2;
+		notes.setLayoutData(layoutData);
+		String note = input.getNote();
+		if (Strings.isNullOrEmpty(note)) {
+			layoutData.heightHint = SWT.NULL;
+		} else {
+			notes.setText(note);
+		}
+	}
+
 	protected String getMnemonicLabel(InputComponent<?, ?> input,
 			boolean addColon) {
 		String label = InputComponents.getLabelFor(input, addColon);
@@ -161,6 +190,22 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 
 	public void updateState(CONTROL control, InputComponent<?, ?> input) {
 		setEnabled(control, input.isEnabled());
+		setNote(control, input.getNote());
+	}
+
+	protected void setNote(CONTROL control, String note) {
+		Label notes = (Label) control.getData(NOTE_DATA_KEY);
+		GridData gridData = (GridData) notes.getLayoutData();
+		int oldHeightHint = gridData.heightHint;
+		if (Strings.isNullOrEmpty(note)) {
+			gridData.heightHint = SWT.NULL;
+			notes.setText("");
+		} else {
+			gridData.heightHint = SWT.DEFAULT;
+			notes.setText(note);
+		}
+		if (oldHeightHint != gridData.heightHint)
+			notes.getParent().layout();
 	}
 
 	protected ConverterFactory getConverterFactory() {
