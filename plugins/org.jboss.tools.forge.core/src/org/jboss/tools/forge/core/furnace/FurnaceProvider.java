@@ -6,6 +6,7 @@
  */
 package org.jboss.tools.forge.core.furnace;
 
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,8 +22,10 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.forge.furnace.Furnace;
+import org.jboss.forge.furnace.addons.AddonCompatibilityStrategy;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
 import org.jboss.forge.furnace.se.FurnaceFactory;
+import org.jboss.forge.furnace.util.AddonCompatibilityStrategies;
 import org.jboss.tools.forge.core.furnace.repository.IFurnaceRepository;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
 import org.jboss.tools.forge.core.internal.furnace.CompositeFurnaceClassLoader;
@@ -98,7 +101,8 @@ public class FurnaceProvider
        */
       furnace.addRepository(AddonRepositoryMode.MUTABLE, new File(
                ForgeCorePreferences.INSTANCE.getAddonDir()));
-
+      // Using a lenient addon compatibility strategy
+      furnace.setAddonCompatibilityStrategy(AddonCompatibilityStrategies.LENIENT);
       return furnace;
    }
 
