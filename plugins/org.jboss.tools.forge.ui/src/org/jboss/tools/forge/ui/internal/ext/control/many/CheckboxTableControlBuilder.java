@@ -37,6 +37,9 @@ import org.jboss.tools.forge.ui.internal.ext.wizards.ForgeWizardPage;
 
 public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 
+	private static final String SELECT_ALL_BUTTON_DATA_KEY = "selectAllButton";
+	private static final String SELECT_NONE_BUTTON_DATA_KEY = "selectNoneButton";
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Table build(final ForgeWizardPage page,
@@ -109,6 +112,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 				| GridData.VERTICAL_ALIGN_BEGINNING));
 
 		Button selectAllButton = new Button(buttons, SWT.PUSH);
+		table.setData(SELECT_ALL_BUTTON_DATA_KEY, selectAllButton);
 		selectAllButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectAllButton.setText("Select All");
 		selectAllButton.addSelectionListener(new SelectionAdapter() {
@@ -125,6 +129,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		});
 
 		Button selectNoneButton = new Button(buttons, SWT.PUSH);
+		table.setData(SELECT_NONE_BUTTON_DATA_KEY, selectNoneButton);
 		selectNoneButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		selectNoneButton.setText("Select None");
 		selectNoneButton.addSelectionListener(new SelectionAdapter() {
@@ -139,6 +144,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 				}
 			}
 		});
+		setEnabled(table, input.isEnabled());
 		return table;
 	}
 
@@ -183,7 +189,17 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		} finally {
 			TABLE_STATUS_CHANGE.remove(control);
 		}
+	}
 
+	@Override
+	public void setEnabled(Table control, boolean enabled) {
+		control.setEnabled(enabled);
+		Button selectAllButton = (Button) control
+				.getData(SELECT_ALL_BUTTON_DATA_KEY);
+		selectAllButton.setEnabled(enabled);
+		Button selectNoneButton = (Button) control
+				.getData(SELECT_NONE_BUTTON_DATA_KEY);
+		selectNoneButton.setEnabled(enabled);
 	}
 
 	@SuppressWarnings("unchecked")
