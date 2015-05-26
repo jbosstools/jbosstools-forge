@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.jboss.tools.forge.ui.test
 Bundle-Version: 2.0.0.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: org.junit,
+Require-Bundle: org.junit;bundle-version="4.0.0",
  org.eclipse.core.runtime;bundle-version="3.7.0",
  org.jboss.tools.forge.core;bundle-version="1.0.0",
  org.jboss.tools.forge.ui;bundle-version="1.0.0"
