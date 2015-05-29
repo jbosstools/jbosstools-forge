@@ -56,16 +56,21 @@ public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 					.getValueFor(input));
 			txt.setSelection(value == null ? 0 : value);
 		}
-
 		txt.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
+				String text = txt.getText();
 				CommandController controller = page.getController();
 				try {
-					controller.setValueFor(inputName, txt.getText());
-				} catch (Exception ex) {
-					ForgeUIPlugin.log(ex);
-					controller.setValueFor(inputName, null);
+					int value = Integer.parseInt(text);
+					try {
+						controller.setValueFor(inputName, value);
+					} catch (Exception ex) {
+						ForgeUIPlugin.log(ex);
+						controller.setValueFor(inputName, null);
+					}
+				} catch (NumberFormatException ex) {
+					// Ignore
 				}
 			}
 		});
