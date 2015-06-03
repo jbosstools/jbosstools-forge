@@ -9,10 +9,14 @@ package org.jboss.tools.aesh.ui.internal.document;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocumentListener;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.widgets.Display;
 import org.jboss.tools.aesh.core.document.Style;
 import org.jboss.tools.aesh.ui.internal.AeshUIPlugin;
+import org.jboss.tools.aesh.ui.internal.util.FontManager;
+import org.jboss.tools.aesh.ui.internal.util.StyleRangeHelper;
 
 public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document {
 	
@@ -26,6 +30,7 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 	public DocumentImpl() {
 		this.delegateDocument = new Document();
 		this.currentStyle = StyleImpl.getDefault();
+		initializeListener();
 	}
 
 	@Override
@@ -172,6 +177,15 @@ public class DocumentImpl implements org.jboss.tools.aesh.core.document.Document
 				documentListener = listener;
 			}
 		}
+	}
+	
+	private void initializeListener() {
+		FontManager.INSTANCE.addListener(new IPropertyChangeListener() {		
+			@Override
+			public void propertyChange(PropertyChangeEvent arg0) {
+				StyleRangeHelper.updateStyleRange(currentStyle.getStyleRange());
+			}
+		});
 	}
 	
 }

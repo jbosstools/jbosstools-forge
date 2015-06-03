@@ -6,7 +6,11 @@
  */
 package org.jboss.tools.aesh.ui.internal.util;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -22,11 +26,11 @@ public class FontManager {
 	private static Font BOLD;
 	private static Font ITALIC_BOLD;
 	
+	private ArrayList<IPropertyChangeListener> listeners = new ArrayList<IPropertyChangeListener>();
+	
 	private FontManager() {
-		initializeDefault();
-		initializeItalic();
-		initializeBold();
-		initializeItalicBold();
+		initializeFonts();
+		initializeListener();
 	}
 	
 	private void initializeDefault() {
@@ -73,6 +77,39 @@ public class FontManager {
 	
 	public Font getItalicBold() {
 		return ITALIC_BOLD;
+	}
+	
+	public void addListener(IPropertyChangeListener listener) {
+		listeners.add(listener);
+	}
+	
+	public void removeListener(IPropertyChangeListener listener) {
+		listeners.remove(listener);
+	}
+	
+	private void initializeListener() {
+		JFaceResources.getFontRegistry().addListener(new IPropertyChangeListener() {			
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+				if (AESH_CONSOLE_FONT.equals(event.getProperty())) {
+					initializeFonts();
+					informListeners(event);
+				}
+			}
+		});
+	}
+	
+	private void informListeners(PropertyChangeEvent event) {
+		for (IPropertyChangeListener listener : listeners) {
+			listener.propertyChange(event);
+		}
+	}
+	
+	private void initializeFonts() {
+		initializeDefault();
+		initializeBold();
+		initializeItalic();
+		initializeItalicBold();
 	}
 
 }
