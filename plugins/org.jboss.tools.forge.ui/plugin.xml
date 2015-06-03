@@ -161,7 +161,7 @@
              class="org.jboss.tools.forge.ui.internal.startup.ForgeStarter">
        </startup>
     </extension>
-    <extension
+<!--    <extension
           point="org.eclipse.ui.themes">
        <fontDefinition
              categoryId="org.jboss.tools.forge.ui"
@@ -173,7 +173,7 @@
              id="org.jboss.tools.forge.ui"
              label="Forge ">
        </themeElementCategory>
-    </extension>
+    </extension> -->
    <extension-point
            id="runtimes"
            name="Runtime Providers"
