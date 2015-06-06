@@ -15,10 +15,8 @@ import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.rse.ui.Mnemonics;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.jboss.forge.addon.convert.ConverterFactory;
@@ -165,7 +163,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		placeholder.setLayoutData(layoutData);
 
 		// Label as the note for this component
-		Label notes = new Label(parent, SWT.NONE);
+		Label notes = new Label(parent, SWT.WRAP);
 		control.setData(NOTE_DATA_KEY, notes);
 		layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 2;
@@ -196,7 +194,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 	protected void setNote(CONTROL control, String note) {
 		Label notes = (Label) control.getData(NOTE_DATA_KEY);
 		GridData gridData = (GridData) notes.getLayoutData();
-		int oldHeightHint = gridData.heightHint;
+		boolean changed = !(notes.getText().equals(note));
 		if (Strings.isNullOrEmpty(note)) {
 			gridData.heightHint = SWT.NULL;
 			notes.setText("");
@@ -204,8 +202,9 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 			gridData.heightHint = SWT.DEFAULT;
 			notes.setText(note);
 		}
-		if (oldHeightHint != gridData.heightHint)
+		if (changed) {
 			notes.getParent().layout();
+		}
 	}
 
 	protected ConverterFactory getConverterFactory() {
