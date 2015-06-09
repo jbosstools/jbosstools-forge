@@ -30,8 +30,8 @@ The general idea is to keep your 'master' branch in-sync with the
 
 ## Building Forge Tools
 
-To build _Forge Tools_ requires specific versions of Java (1.6+) and
-+Maven (3.1+). See this [link](https://github.com/jbosstools/jbosstools-devdoc/blob/master/building/readme.md) for more information on how to setup, run and configure build.
+To build _Forge Tools_ requires specific versions of Java (1.7+) and
++Maven (3.1+). See this [link](https://github.com/jbosstools/jbosstools-devdoc/blob/master/building/build_from_eclipse.adoc) for more information on how to setup, run and configure build.
 
 This command will run the build:
 
