@@ -40,8 +40,14 @@ public class ForgeUIProvider implements UIProvider, UIOutput {
 		return forgeConsole;
 	}
 
-	private String getName() {
+	@Override
+	public String getName() {
 		return "Forge " + FurnaceRuntime.INSTANCE.getVersion() + " Console";
+	}
+
+	@Override
+	public boolean isEmbedded() {
+		return true;
 	}
 
 	private MessageConsole findForgeConsole() {
@@ -71,8 +77,8 @@ public class ForgeUIProvider implements UIProvider, UIOutput {
 	@Override
 	public PrintStream out() {
 		if (forgeConsoleOutputStream == null) {
-			forgeConsoleOutputStream = new PrintStream(getForgeConsole()
-					.newMessageStream(), true);
+			forgeConsoleOutputStream = new PrintStream(
+					getForgeConsole().newMessageStream(), true);
 		}
 		return forgeConsoleOutputStream;
 	}
@@ -124,7 +130,7 @@ public class ForgeUIProvider implements UIProvider, UIOutput {
 		writer.print("[WARNING] ");
 		writer.println(message);
 	}
-	
+
 	@Override
 	public UIDesktop getDesktop() {
 		return new ForgeUIDesktop();

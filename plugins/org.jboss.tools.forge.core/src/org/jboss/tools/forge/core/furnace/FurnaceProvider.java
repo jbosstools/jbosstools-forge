@@ -21,7 +21,6 @@ import java.util.List;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.jboss.forge.furnace.Furnace;
-import org.jboss.forge.furnace.addons.AddonCompatibilityStrategy;
 import org.jboss.forge.furnace.repositories.AddonRepositoryMode;
 import org.jboss.forge.furnace.se.FurnaceFactory;
 import org.jboss.forge.furnace.util.AddonCompatibilityStrategies;
