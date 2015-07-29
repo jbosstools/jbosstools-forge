@@ -12,6 +12,8 @@
       label="%featureName"
       version="2.0.0.qualifier"
       provider-name="%featureProvider"
+      license-feature="org.jboss.tools.foundation.license.feature"
+      license-feature-version="0.0.0"
       plugin="org.jboss.tools.forge.m2e">
 
    <description>
@@ -22,7 +24,7 @@
       %copyright
    </copyright>
 
-   <license url="%licenseURL">
+   <license>
       %license
    </license>
 
