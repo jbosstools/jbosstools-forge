@@ -11,10 +11,10 @@ import org.jboss.tools.aesh.core.document.Document;
 public class CursorDown extends AbstractCommand {
 
 	private int amount = 1;
-	
+
 	public CursorDown(String arguments) {
 		if (!"".equals(arguments)) {
-			amount = Integer.valueOf(arguments);
+			amount = Integer.parseInt(arguments);
 		}
 	}
 
@@ -23,17 +23,17 @@ public class CursorDown extends AbstractCommand {
 		return CommandType.CURSOR_DOWN;
 	}
 
+	@Override
 	public void handle(Document document) {
 		int currentOffset = document.getCursorOffset();
 		int currentLine = document.getLineOfOffset(currentOffset);
 		int newLine = currentLine + amount;
 		int lastLine = document.getLineOfOffset(document.getLength());
 		if (newLine <= lastLine) {
-			int currentColumn = Math.min(
-					currentOffset - document.getLineOffset(currentLine),
+			int currentColumn = Math.min(currentOffset - document.getLineOffset(currentLine),
 					document.getLineLength(newLine));
-			int newOffset = document.getLineOffset(newLine) + currentColumn; 
+			int newOffset = document.getLineOffset(newLine) + currentColumn;
 			document.moveCursorTo(newOffset);
 		}
- 	}
+	}
 }

@@ -64,8 +64,8 @@ public enum ForgeConsoleManager {
 		String[] firstValues = first.split("\\.|-");
 		String[] secondValues = second.split("\\.|-");
 		for (int i = 0; i < 2; i++) {
-			if (Integer.valueOf(firstValues[i]) < Integer
-					.valueOf(secondValues[i])) {
+			if (Integer.parseInt(firstValues[i]) < Integer
+					.parseInt(secondValues[i])) {
 				return false;
 			}
 		}
