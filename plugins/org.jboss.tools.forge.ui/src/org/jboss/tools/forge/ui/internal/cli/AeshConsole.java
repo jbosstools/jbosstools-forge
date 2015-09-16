@@ -41,40 +41,33 @@ public class AeshConsole extends AbstractConsole {
 		this.terminal = new TextViewerTerminal(textViewer);
 	}
 
+	@Override
 	public void start() {
 		handle = FurnaceService.INSTANCE.lookup(ShellHandle.class);
-		ResourceFactory resourceFactory = FurnaceService.INSTANCE
-				.lookup(ResourceFactory.class);
-		final File currentDir = ResourcesPlugin.getWorkspace().getRoot()
-				.getLocation().toFile();
+		ResourceFactory resourceFactory = FurnaceService.INSTANCE.lookup(ResourceFactory.class);
+		final File currentDir = ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile();
 		currentResource = resourceFactory.create(currentDir);
 		OutputStream stdOut = getOutputStream();
 		OutputStream stdErr = getErrorStream();
-		PrintStream out = new PrintStream(stdOut, true);
-		PrintStream err = new PrintStream(stdErr, true);
+		PrintStream out = new UncloseablePrintStream(stdOut);
+		PrintStream err = new UncloseablePrintStream(stdErr);
 		ShellHandleSettings settings = new ShellHandleSettings();
-		settings.stdOut(out).stdErr(err).stdIn(getInputStream())
-				.currentResource(currentDir).terminal(terminal)
+		settings.stdOut(out).stdErr(err).stdIn(getInputStream()).currentResource(currentDir).terminal(terminal)
 				.desktop(new ForgeUIDesktop());
 		handle.initialize(settings);
 		handle.addCommandExecutionListener(executionListener);
 		// Listening for selection events
 		handle.addCommandExecutionListener(new AbstractCommandExecutionListener() {
 			@Override
-			public void postCommandExecuted(UICommand command,
-					UIExecutionContext context, Result result) {
-				currentResource = (Resource<?>) context.getUIContext()
-						.getSelection().get();
+			public void postCommandExecuted(UICommand command, UIExecutionContext context, Result result) {
+				currentResource = (Resource<?>) context.getUIContext().getSelection().get();
 			}
 		});
 
-		ProjectFactory projectFactory = FurnaceService.INSTANCE
-				.lookup(ProjectFactory.class);
+		ProjectFactory projectFactory = FurnaceService.INSTANCE.lookup(ProjectFactory.class);
 		projectFactory.addProjectListener(executionListener);
-		CdTokenHandlerFactory tokenHandlerFactory = FurnaceService.INSTANCE
-				.lookup(CdTokenHandlerFactory.class);
-		tokenHandler = tokenHandlerFactory
-				.addTokenHandler(new WorkspaceCdTokenHandler(resourceFactory));
+		CdTokenHandlerFactory tokenHandlerFactory = FurnaceService.INSTANCE.lookup(CdTokenHandlerFactory.class);
+		tokenHandler = tokenHandlerFactory.addTokenHandler(new WorkspaceCdTokenHandler(resourceFactory));
 	}
 
 	@Override
@@ -89,5 +82,16 @@ public class AeshConsole extends AbstractConsole {
 	@Override
 	public Resource<?> getCurrentResource() {
 		return currentResource;
+	}
+
+	static class UncloseablePrintStream extends PrintStream {
+		public UncloseablePrintStream(OutputStream stream) {
+			super(stream, true);
+		}
+
+		@Override
+		public void close() {
+			// Uncloseable
+		}
 	}
 }
