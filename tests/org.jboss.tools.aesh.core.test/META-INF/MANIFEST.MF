@@ -5,5 +5,5 @@ Bundle-SymbolicName: org.jboss.tools.aesh.core.test
 Bundle-Version: 2.0.1.qualifier
 Bundle-Vendor: JBoss by Red Hat
 Fragment-Host: org.jboss.tools.aesh.core
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.11.0"
