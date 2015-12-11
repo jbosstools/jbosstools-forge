@@ -28,24 +28,23 @@ import org.jboss.tools.forge.ui.internal.ext.wizards.ForgeWizardPage;
 public class TextBoxControlBuilder extends ControlBuilder<Text> {
 
 	@Override
-	public Text build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final String inputName,
+	public Text build(final ForgeWizardPage page, final InputComponent<?, ?> input, final String inputName,
 			final Composite container) {
 		// Create the label
-		Label label = new Label(container, SWT.NULL);
+		final Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
+		label.setToolTipText(input.getDescription());
 
 		final Text txt = new Text(container, SWT.BORDER | SWT.SINGLE);
+		txt.setData(LABEL_DATA_KEY, label);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txt.setToolTipText(input.getDescription());
 		// Set Default Value
-		final ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.getConverterFactory();
+		final ConverterFactory converterFactory = FurnaceService.INSTANCE.getConverterFactory();
 		if (converterFactory != null) {
 			Converter<Object, String> converter = (Converter<Object, String>) converterFactory
 					.getConverter(input.getValueType(), String.class);
-			String value = converter
-					.convert(InputComponents.getValueFor(input));
+			String value = converter.convert(InputComponents.getValueFor(input));
 			txt.setText(value == null ? "" : value);
 		}
 
@@ -61,8 +60,7 @@ public class TextBoxControlBuilder extends ControlBuilder<Text> {
 				}
 			}
 		});
-		setupAutoCompleteForText(page.getWizard().getUIContext(), input,
-				InputComponents.getCompleterFor(input), txt);
+		setupAutoCompleteForText(page.getWizard().getUIContext(), input, InputComponents.getCompleterFor(input), txt);
 
 		// skip the third column
 		Label dummy = new Label(container, SWT.NONE);

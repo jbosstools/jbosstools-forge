@@ -35,8 +35,8 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, String inputName, final Composite container) {
+	public Group build(final ForgeWizardPage page, final InputComponent<?, ?> input, String inputName,
+			final Composite container) {
 		final Group group = new Group(container, SWT.SHADOW_NONE);
 		GridData layoutData = new GridData(GridData.FILL_HORIZONTAL);
 		layoutData.horizontalSpan = 3;
@@ -47,8 +47,7 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 		groupPanel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		groupPanel.setLayout(new GridLayout(2, false));
 
-		final List containerList = new List(groupPanel, SWT.MULTI
-				| SWT.V_SCROLL | SWT.H_SCROLL);
+		final List containerList = new List(groupPanel, SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerList.setLayoutData(gd);
 
@@ -56,8 +55,8 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 
 		// Set Default Value
 		final ConverterFactory converterFactory = getConverterFactory();
-		Converter<Object, String> converter = (Converter<Object, String>) converterFactory.getConverter(
-				input.getValueType(), String.class);
+		Converter<Object, String> converter = (Converter<Object, String>) converterFactory
+				.getConverter(input.getValueType(), String.class);
 		Iterable<Object> value = inputMany.getValue();
 		if (value != null) {
 			for (Object item : value) {
@@ -71,8 +70,7 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 		containerList.setToolTipText(input.getDescription());
 		Composite buttons = new Composite(groupPanel, SWT.NULL);
 		buttons.setLayout(new GridLayout(1, true));
-		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER
-				| GridData.VERTICAL_ALIGN_BEGINNING));
+		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_BEGINNING));
 
 		Button addButton = new Button(buttons, SWT.PUSH);
 		addButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -97,19 +95,17 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 		return group;
 	}
 
-	protected abstract void addButtonPressed(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final List containerList);
+	protected abstract void addButtonPressed(final ForgeWizardPage page, final InputComponent<?, ?> input,
+			final List containerList);
 
-	protected void removeButtonPressed(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final List containerList) {
+	protected void removeButtonPressed(final ForgeWizardPage page, final InputComponent<?, ?> input,
+			final List containerList) {
 		containerList.remove(containerList.getSelectionIndices());
 		updateItems(input, containerList);
 	}
 
-	protected void updateItems(final InputComponent<?, ?> input,
-			final List containerList) {
-		InputComponents.setValueFor(getConverterFactory(), input,
-				Arrays.asList(containerList.getItems()));
+	protected void updateItems(final InputComponent<?, ?> input, final List containerList) {
+		InputComponents.setValueFor(getConverterFactory(), input, Arrays.asList(containerList.getItems()));
 	}
 
 	@Override

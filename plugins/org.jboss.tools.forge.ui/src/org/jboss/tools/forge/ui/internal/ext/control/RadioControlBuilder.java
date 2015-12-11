@@ -30,22 +30,22 @@ public class RadioControlBuilder extends ControlBuilder<Control> {
 
 	@Override
 	@SuppressWarnings({ "unchecked" })
-	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final String inputName,
+	public Control build(final ForgeWizardPage page, final InputComponent<?, ?> input, final String inputName,
 			final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
+		label.setToolTipText(input.getDescription());
 
 		Composite container = new Composite(parent, SWT.NULL);
+		container.setData(LABEL_DATA_KEY, label);
 		container.setLayout(new RowLayout());
 		container.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		final ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.getConverterFactory();
+		final ConverterFactory converterFactory = FurnaceService.INSTANCE.getConverterFactory();
 		UISelectOne<Object> selectOne = (UISelectOne<Object>) input;
-		Converter<Object, String> itemLabelConverter = (Converter<Object, String>) InputComponents
-				.getItemLabelConverter(converterFactory, selectOne);
+		Converter<Object, String> itemLabelConverter = InputComponents.getItemLabelConverter(converterFactory,
+				selectOne);
 		Object originalValue = InputComponents.getValueFor(input);
 		Iterable<Object> valueChoices = selectOne.getValueChoices();
 		if (valueChoices != null) {
@@ -60,10 +60,8 @@ public class RadioControlBuilder extends ControlBuilder<Control> {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 						if (button.getSelection()) {
-							final CommandController controller = page
-									.getController();
-							controller.setValueFor(inputName,
-									Proxies.unwrap(choice));
+							final CommandController controller = page.getController();
+							controller.setValueFor(inputName, Proxies.unwrap(choice));
 						}
 					}
 				});
