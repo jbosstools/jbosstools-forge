@@ -29,25 +29,24 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Control build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final String inputName,
+	public Text build(final ForgeWizardPage page, final InputComponent<?, ?> input, final String inputName,
 			final Composite parent) {
 		// Create the label
 		Label label = new Label(parent, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
+		label.setToolTipText(input.getDescription());
 
 		final Text containerText = new Text(parent, SWT.BORDER | SWT.SINGLE);
+		containerText.setData(LABEL_DATA_KEY, label);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		containerText.setLayoutData(gd);
 
 		// Set Default Value
-		final ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.getConverterFactory();
+		final ConverterFactory converterFactory = FurnaceService.INSTANCE.getConverterFactory();
 		if (converterFactory != null) {
 			Converter<Object, String> converter = (Converter<Object, String>) converterFactory
 					.getConverter(input.getValueType(), String.class);
-			String value = converter
-					.convert(InputComponents.getValueFor(input));
+			String value = converter.convert(InputComponents.getValueFor(input));
 			containerText.setText(value == null ? "" : value);
 		}
 		containerText.setToolTipText(input.getDescription());
@@ -70,8 +69,8 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 				browseButtonPressed(page, input, containerText);
 			}
 		});
-		setupAutoCompleteForText(page.getWizard().getUIContext(), input,
-				InputComponents.getCompleterFor(input), containerText);
+		setupAutoCompleteForText(page.getWizard().getUIContext(), input, InputComponents.getCompleterFor(input),
+				containerText);
 		return containerText;
 	}
 
@@ -95,12 +94,12 @@ public abstract class AbstractTextButtonControl extends ControlBuilder<Control> 
 		}
 	}
 
-	protected void decorateContainerText(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Text containerText) {
+	protected void decorateContainerText(final ForgeWizardPage page, final InputComponent<?, ?> input,
+			final Text containerText) {
 
 	}
 
-	protected abstract void browseButtonPressed(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final Text containerText);
+	protected abstract void browseButtonPressed(final ForgeWizardPage page, final InputComponent<?, ?> input,
+			final Text containerText);
 
 }

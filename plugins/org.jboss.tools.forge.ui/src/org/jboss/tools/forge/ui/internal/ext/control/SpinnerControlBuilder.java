@@ -33,27 +33,26 @@ public class SpinnerControlBuilder extends ControlBuilder<Spinner> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Spinner build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final String inputName,
+	public Spinner build(final ForgeWizardPage page, final InputComponent<?, ?> input, final String inputName,
 			final Composite container) {
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
+		label.setToolTipText(input.getDescription());
 
 		final Spinner txt = new Spinner(container, SWT.BORDER);
+		txt.setData(LABEL_DATA_KEY, label);
 		// TODO: Ranges may be configurable in the future
 		txt.setMinimum(Integer.MIN_VALUE);
 		txt.setMaximum(Integer.MAX_VALUE);
 		txt.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		txt.setToolTipText(input.getDescription());
 		// Set Default Value
-		final ConverterFactory converterFactory = FurnaceService.INSTANCE
-				.getConverterFactory();
+		final ConverterFactory converterFactory = FurnaceService.INSTANCE.getConverterFactory();
 		if (converterFactory != null) {
 			Converter<Object, Integer> converter = (Converter<Object, Integer>) converterFactory
 					.getConverter(input.getValueType(), Integer.class);
-			Integer value = converter.convert(InputComponents
-					.getValueFor(input));
+			Integer value = converter.convert(InputComponents.getValueFor(input));
 			txt.setSelection(value == null ? 0 : value);
 		}
 		txt.addModifyListener(new ModifyListener() {

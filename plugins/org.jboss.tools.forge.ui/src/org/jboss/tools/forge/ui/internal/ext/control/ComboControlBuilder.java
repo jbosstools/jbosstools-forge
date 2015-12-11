@@ -34,16 +34,16 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	private static final Set<Combo> COMBO_STATUS_CHANGE = Sets.getConcurrentSet();
 
 	@Override
-	public Combo build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final String inputName,
+	public Combo build(final ForgeWizardPage page, final InputComponent<?, ?> input, final String inputName,
 			final Composite container) {
 		final CommandController controller = page.getController();
 		// Create the label
 		Label label = new Label(container, SWT.NULL);
 		label.setText(getMnemonicLabel(input, true));
+		label.setToolTipText(input.getDescription());
 
-		final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN
-				| SWT.READ_ONLY);
+		final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
+		combo.setData(LABEL_DATA_KEY, label);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addModifyListener(new ModifyListener() {
 			@Override
@@ -103,10 +103,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	}
 
 	private Converter<Object, String> getConverter(UISelectOne<Object> selectOne) {
-		return (Converter<Object, String>) InputComponents
-				.getItemLabelConverter(
-						FurnaceService.INSTANCE.getConverterFactory(),
-						selectOne);
+		return InputComponents.getItemLabelConverter(FurnaceService.INSTANCE.getConverterFactory(), selectOne);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -118,8 +115,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 
 	private void updateDefaultValue(Combo combo, UISelectOne<Object> selectOne) {
 		Converter<Object, String> converter = getConverter(selectOne);
-		String value = converter
-				.convert(InputComponents.getValueFor(selectOne));
+		String value = converter.convert(InputComponents.getValueFor(selectOne));
 		if (value == null) {
 			combo.setText("");
 		} else if (!value.equals(combo.getText())) {

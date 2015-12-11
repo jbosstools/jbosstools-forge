@@ -38,6 +38,7 @@ import org.jboss.tools.forge.ui.internal.ext.wizards.ForgeWizardPage;
  */
 public abstract class ControlBuilder<CONTROL extends Control> {
 
+	protected static final String LABEL_DATA_KEY = "forge.label";
 	private static final String NOTE_DATA_KEY = "forge.note";
 
 	/**
@@ -52,8 +53,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 	 *            the container this control will be placed on
 	 * @return
 	 */
-	public abstract CONTROL build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final String inputName,
+	public abstract CONTROL build(final ForgeWizardPage page, final InputComponent<?, ?> input, final String inputName,
 			final Composite container);
 
 	/**
@@ -94,13 +94,11 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 
 		if (handles) {
 			String inputTypeHint = InputComponents.getInputType(input);
-			if (inputTypeHint != null
-					&& !inputTypeHint.equals(InputType.DEFAULT)) {
+			if (inputTypeHint != null && !inputTypeHint.equals(InputType.DEFAULT)) {
 				handles = inputTypeHint.equals(getSupportedInputType());
 			} else {
 				// Fallback to standard type
-				handles = getProducedType().isAssignableFrom(
-						input.getValueType());
+				handles = getProducedType().isAssignableFrom(input.getValueType());
 			}
 		}
 
@@ -129,33 +127,27 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		}
 	}
 
-	protected ContentProposalAdapter setupAutoCompleteForText(
-			UIContextImpl context, InputComponent<?, ?> input,
+	protected ContentProposalAdapter setupAutoCompleteForText(UIContextImpl context, InputComponent<?, ?> input,
 			UICompleter<?> completer, Text text) {
 		ContentProposalAdapter result = null;
 		if (completer != null) {
-			ControlDecoration dec = new ControlDecoration(text, SWT.TOP
-					| SWT.LEFT);
+			ControlDecoration dec = new ControlDecoration(text, SWT.TOP | SWT.LEFT);
 			// Add lightbulb
-			FieldDecoration completerIndicator = FieldDecorationRegistry
-					.getDefault().getFieldDecoration(
-							FieldDecorationRegistry.DEC_CONTENT_PROPOSAL);
+			FieldDecoration completerIndicator = FieldDecorationRegistry.getDefault()
+					.getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL);
 			dec.setImage(completerIndicator.getImage());
 			dec.setDescriptionText(completerIndicator.getDescription());
 
 			// Register auto-complete
-			KeyStroke activationKeyStroke = KeyStroke.getInstance(SWT.CONTROL,
-					SWT.SPACE);
+			KeyStroke activationKeyStroke = KeyStroke.getInstance(SWT.CONTROL, SWT.SPACE);
 			result = new ContentProposalAdapter(text, new TextContentAdapter(),
-					new InputComponentProposalProvider(context, input,
-							completer), activationKeyStroke, null);
+					new InputComponentProposalProvider(context, input, completer), activationKeyStroke, null);
 			result.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
 		}
 		return result;
 	}
 
-	public void setupNote(Composite parent, Control control,
-			InputComponent<?, ?> input) {
+	public void setupNote(Composite parent, Control control, InputComponent<?, ?> input) {
 		// Add a placeholder
 		Label placeholder = new Label(parent, SWT.NONE);
 		GridData layoutData = new GridData();
@@ -176,8 +168,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		}
 	}
 
-	protected String getMnemonicLabel(InputComponent<?, ?> input,
-			boolean addColon) {
+	protected String getMnemonicLabel(InputComponent<?, ?> input, boolean addColon) {
 		String label = InputComponents.getLabelFor(input, addColon);
 		char shortName = input.getShortName();
 		if (shortName != InputComponents.DEFAULT_SHORT_NAME) {
@@ -189,6 +180,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 	public void updateState(CONTROL control, InputComponent<?, ?> input) {
 		setEnabled(control, input.isEnabled());
 		setNote(control, input.getNote());
+		setLabelTooltip(control, input.getDescription());
 	}
 
 	protected void setNote(CONTROL control, String note) {
@@ -204,6 +196,13 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		}
 		if (changed) {
 			notes.getParent().layout();
+		}
+	}
+
+	protected void setLabelTooltip(CONTROL control, String tooltip) {
+		Label label = (Label) control.getData(LABEL_DATA_KEY);
+		if (label != null) {
+			label.setToolTipText(tooltip);
 		}
 	}
 
