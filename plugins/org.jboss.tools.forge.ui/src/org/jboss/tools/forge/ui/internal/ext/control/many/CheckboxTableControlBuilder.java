@@ -42,8 +42,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Table build(final ForgeWizardPage page,
-			final InputComponent<?, ?> input, final String inputName,
+	public Table build(final ForgeWizardPage page, final InputComponent<?, ?> input, final String inputName,
 			final Composite container) {
 
 		final Group group = new Group(container, SWT.SHADOW_NONE);
@@ -57,8 +56,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		groupPanel.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		groupPanel.setLayout(new GridLayout(2, false));
 
-		final Table table = new Table(groupPanel, SWT.CHECK | SWT.BORDER
-				| SWT.V_SCROLL | SWT.H_SCROLL);
+		final Table table = new Table(groupPanel, SWT.CHECK | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
 		GridData tableLayoutData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		tableLayoutData.widthHint = 300;
 		tableLayoutData.heightHint = 300;
@@ -79,7 +77,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		Iterable<Object> valueChoices = selectMany.getValueChoices();
 		if (valueChoices != null) {
 			for (Object next : valueChoices) {
-				String value = itemLabelConverter.convert(next);
+				String value = (next == null) ? null : itemLabelConverter.convert(next);
 				if (value != null) {
 					TableItem item = new TableItem(table, SWT.NONE);
 					item.setData(value);
@@ -108,8 +106,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 
 		Composite buttons = new Composite(groupPanel, SWT.NULL);
 		buttons.setLayout(new GridLayout(1, true));
-		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER
-				| GridData.VERTICAL_ALIGN_BEGINNING));
+		buttons.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_CENTER | GridData.VERTICAL_ALIGN_BEGINNING));
 
 		Button selectAllButton = new Button(buttons, SWT.PUSH);
 		table.setData(SELECT_ALL_BUTTON_DATA_KEY, selectAllButton);
@@ -175,8 +172,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		return new Class<?>[] { UISelectMany.class };
 	}
 
-	private static final Set<Table> TABLE_STATUS_CHANGE = Sets
-			.getConcurrentSet();
+	private static final Set<Table> TABLE_STATUS_CHANGE = Sets.getConcurrentSet();
 
 	@Override
 	public void updateState(Table control, InputComponent<?, ?> input) {
@@ -194,11 +190,9 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 	@Override
 	public void setEnabled(Table control, boolean enabled) {
 		control.setEnabled(enabled);
-		Button selectAllButton = (Button) control
-				.getData(SELECT_ALL_BUTTON_DATA_KEY);
+		Button selectAllButton = (Button) control.getData(SELECT_ALL_BUTTON_DATA_KEY);
 		selectAllButton.setEnabled(enabled);
-		Button selectNoneButton = (Button) control
-				.getData(SELECT_NONE_BUTTON_DATA_KEY);
+		Button selectNoneButton = (Button) control.getData(SELECT_NONE_BUTTON_DATA_KEY);
 		selectNoneButton.setEnabled(enabled);
 	}
 
@@ -238,8 +232,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		}
 	}
 
-	private Set<String> getInputValue(UISelectMany<Object> selectMany,
-			Converter<Object, String> converter) {
+	private Set<String> getInputValue(UISelectMany<Object> selectMany, Converter<Object, String> converter) {
 		final Set<String> data = new LinkedHashSet<>();
 		// Adding default values in a separate set
 		Iterable<Object> defaultValues = selectMany.getValue();
@@ -262,12 +255,8 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		return data;
 	}
 
-	private Converter<Object, String> getConverter(
-			UISelectMany<Object> selectMany) {
-		return (Converter<Object, String>) InputComponents
-				.getItemLabelConverter(
-						FurnaceService.INSTANCE.getConverterFactory(),
-						selectMany);
+	private Converter<Object, String> getConverter(UISelectMany<Object> selectMany) {
+		return InputComponents.getItemLabelConverter(FurnaceService.INSTANCE.getConverterFactory(), selectMany);
 	}
 
 }

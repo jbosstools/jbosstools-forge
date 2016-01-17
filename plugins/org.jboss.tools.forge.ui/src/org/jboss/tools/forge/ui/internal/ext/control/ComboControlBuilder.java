@@ -115,7 +115,8 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 
 	private void updateDefaultValue(Combo combo, UISelectOne<Object> selectOne) {
 		Converter<Object, String> converter = getConverter(selectOne);
-		String value = converter.convert(InputComponents.getValueFor(selectOne));
+		Object inputValue = InputComponents.getValueFor(selectOne);
+		String value = inputValue == null ? null : converter.convert(inputValue);
 		if (value == null) {
 			combo.setText("");
 		} else if (!value.equals(combo.getText())) {
@@ -138,7 +139,8 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		String[] newItemsArray = newItems.toArray(new String[newSize]);
 		String[] oldItems = combo.getItems();
 		if (Arrays.equals(newItemsArray, oldItems) == false) {
-			String currentValue = converter.convert(selectOne.getValue());
+			Object value = selectOne.getValue();
+			String currentValue = (value == null) ? null : converter.convert(value);
 			if (!Arrays.asList(newItemsArray).contains(currentValue))
 				selectOne.setValue(null);
 			combo.setItems(newItemsArray);

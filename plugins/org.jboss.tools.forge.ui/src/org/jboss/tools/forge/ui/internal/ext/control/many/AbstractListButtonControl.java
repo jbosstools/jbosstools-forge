@@ -60,7 +60,7 @@ public abstract class AbstractListButtonControl extends ControlBuilder<Control> 
 		Iterable<Object> value = inputMany.getValue();
 		if (value != null) {
 			for (Object item : value) {
-				String convertedValue = converter.convert(item);
+				String convertedValue = (item == null) ? null : converter.convert(item);
 				if (convertedValue != null) {
 					containerList.add(convertedValue);
 				}
