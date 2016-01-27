@@ -17,6 +17,7 @@ import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.dialogs.PageChangingEvent;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -45,10 +46,10 @@ public final class WizardDialogHelper {
 	private final UIContextImpl context;
 	private final Shell parentShell;
 
-	public WizardDialogHelper(Shell parentShell, IStructuredSelection selection) {
+	public WizardDialogHelper(Shell parentShell, IStructuredSelection selection, ITextSelection textSelection) {
 		this.parentShell = parentShell;
 		ForgeUIProvider provider = new ForgeUIProvider();
-		this.context = new UIContextImpl(provider, selection);
+		this.context = new UIContextImpl(provider, selection, textSelection);
 	}
 
 	public UIContextImpl getContext() {
@@ -57,12 +58,10 @@ public final class WizardDialogHelper {
 
 	public List<UICommand> getAllCandidatesAsList() {
 		List<UICommand> result = new ArrayList<>();
-		CommandFactory commandFactory = FurnaceService.INSTANCE
-				.lookup(CommandFactory.class);
+		CommandFactory commandFactory = FurnaceService.INSTANCE.lookup(CommandFactory.class);
 		for (UICommand uiCommand : commandFactory.getCommands()) {
 			try {
-				if (!(uiCommand instanceof UIWizardStep)
-						&& uiCommand.isEnabled(context)) {
+				if (!(uiCommand instanceof UIWizardStep) && uiCommand.isEnabled(context)) {
 					result.add(uiCommand);
 				}
 			} catch (Exception e) {
@@ -73,21 +72,17 @@ public final class WizardDialogHelper {
 	}
 
 	public UICommand getCommand(String name) {
-		CommandFactory commandFactory = FurnaceService.INSTANCE
-				.lookup(CommandFactory.class);
+		CommandFactory commandFactory = FurnaceService.INSTANCE.lookup(CommandFactory.class);
 		return commandFactory.getCommandByName(context, name);
 	}
 
 	public Map<String, UICommand> getAllCandidatesAsMap() {
 		Map<String, UICommand> result = new TreeMap<>();
-		CommandFactory commandFactory = FurnaceService.INSTANCE
-				.lookup(CommandFactory.class);
+		CommandFactory commandFactory = FurnaceService.INSTANCE.lookup(CommandFactory.class);
 		for (UICommand uiCommand : commandFactory.getCommands()) {
 			try {
-				if (!(uiCommand instanceof UIWizardStep)
-						&& uiCommand.isEnabled(context)) {
-					UICommandMetadata metadata = uiCommand
-							.getMetadata(getContext());
+				if (!(uiCommand instanceof UIWizardStep) && uiCommand.isEnabled(context)) {
+					UICommandMetadata metadata = uiCommand.getMetadata(getContext());
 					result.put(metadata.getName(), uiCommand);
 				}
 			} catch (Exception e) {
@@ -102,23 +97,19 @@ public final class WizardDialogHelper {
 		openWizard(windowTitle, selectedCommand, null);
 	}
 
-	public void openWizard(String windowTitle, UICommand selectedCommand,
-			Map<String, ?> values) {
-		CommandControllerFactory controllerFactory = FurnaceService.INSTANCE
-				.lookup(CommandControllerFactory.class);
+	public void openWizard(String windowTitle, UICommand selectedCommand, Map<String, ?> values) {
+		CommandControllerFactory controllerFactory = FurnaceService.INSTANCE.lookup(CommandControllerFactory.class);
 		CommandFactory commandFactory = FurnaceService.INSTANCE.lookup(CommandFactory.class);
 		selectedCommand = commandFactory.getNewCommandByName(context, selectedCommand.getMetadata(context).getName());
-		if(windowTitle == null) {
-		   windowTitle = selectedCommand.getMetadata(context).getName();
+		if (windowTitle == null) {
+			windowTitle = selectedCommand.getMetadata(context).getName();
 		}
 		ForgeUIRuntime runtime = new ForgeUIRuntime();
-		CommandController controller = controllerFactory.createController(
-				context, runtime, selectedCommand);
+		CommandController controller = controllerFactory.createController(context, runtime, selectedCommand);
 		try {
 			controller.initialize();
 		} catch (Exception e) {
-			ForgeUIPlugin.displayMessage(windowTitle,
-					"Error while initializing controller. Check logs",
+			ForgeUIPlugin.displayMessage(windowTitle, "Error while initializing controller. Check logs",
 					NotificationType.ERROR);
 			ForgeUIPlugin.log(e);
 			return;
@@ -128,8 +119,7 @@ public final class WizardDialogHelper {
 		if (controller instanceof WizardCommandController) {
 			WizardCommandController wizardController = (WizardCommandController) controller;
 			if (values != null) {
-				Map<String, InputComponent<?, ?>> inputs = wizardController
-						.getInputs();
+				Map<String, InputComponent<?, ?>> inputs = wizardController.getInputs();
 				for (String key : inputs.keySet()) {
 					Object value = values.get(key);
 					if (value != null)
@@ -158,8 +148,7 @@ public final class WizardDialogHelper {
 					}
 				}
 			}
-			wizardDialog = new ForgeWizardDialog(parentShell, wizard,
-					wizardController);
+			wizardDialog = new ForgeWizardDialog(parentShell, wizard, wizardController);
 		} else {
 			if (values != null) {
 				for (Entry<String, ?> entry : values.entrySet()) {
@@ -176,8 +165,7 @@ public final class WizardDialogHelper {
 			@Override
 			public void handlePageChanging(PageChangingEvent event) {
 				// Mark as unchanged
-				ForgeWizardPage currentPage = (ForgeWizardPage) event
-						.getCurrentPage();
+				ForgeWizardPage currentPage = (ForgeWizardPage) event.getCurrentPage();
 				if (currentPage != null) {
 					currentPage.setChanged(false);
 				}
@@ -209,8 +197,7 @@ public final class WizardDialogHelper {
 			try {
 				wizardDialog.open();
 			} catch (Exception e) {
-				ForgeUIPlugin.displayMessage("Error",
-						"Error while opening wizard. See Error log",
+				ForgeUIPlugin.displayMessage("Error", "Error while opening wizard. See Error log",
 						NotificationType.ERROR);
 				ForgeUIPlugin.log(e);
 			}

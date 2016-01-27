@@ -16,6 +16,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -38,12 +39,9 @@ public class RunForgeCommandHandler extends AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		// Parameters
-		final String wizardName = event
-				.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandName");
-		final String wizardTitle = event
-				.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandTitle");
-		final String wizardValues = event
-				.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandValues");
+		final String wizardName = event.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandName");
+		final String wizardTitle = event.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandTitle");
+		final String wizardValues = event.getParameter("org.jboss.tools.forge.ui.runForgeCommand.commandValues");
 		final Map<String, Object> values;
 		if (wizardValues == null) {
 			values = null;
@@ -55,20 +53,16 @@ public class RunForgeCommandHandler extends AbstractHandler {
 			}
 		}
 		try {
-			final IWorkbenchWindow window = HandlerUtil
-					.getActiveWorkbenchWindowChecked(event);
-			if (!ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE
-					.getState())) {
-				Job job = ForgeHelper
-						.createStartRuntimeJob(FurnaceRuntime.INSTANCE);
+			final IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+			if (!ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
+				Job job = ForgeHelper.createStartRuntimeJob(FurnaceRuntime.INSTANCE);
 				job.addJobChangeListener(new JobChangeAdapter() {
 					@Override
 					public void done(IJobChangeEvent event) {
 						Display.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-								openWizard(window, wizardName, wizardTitle,
-										values);
+								openWizard(window, wizardName, wizardTitle, values);
 							}
 						});
 					}
@@ -83,12 +77,10 @@ public class RunForgeCommandHandler extends AbstractHandler {
 		return null;
 	}
 
-	private void openWizard(IWorkbenchWindow window, String wizardName,
-			String wizardTitle, Map<String, ?> values) {
-		IStructuredSelection currentSelection = UICommandListDialog
-				.getCurrentSelection(window);
-		WizardDialogHelper helper = new WizardDialogHelper(window.getShell(),
-				currentSelection);
+	private void openWizard(IWorkbenchWindow window, String wizardName, String wizardTitle, Map<String, ?> values) {
+		IStructuredSelection currentSelection = UICommandListDialog.getCurrentSelection(window);
+		ITextSelection textSelection = UICommandListDialog.getTextSelection(window);
+		WizardDialogHelper helper = new WizardDialogHelper(window.getShell(), currentSelection, textSelection);
 		UICommand command = helper.getCommand(wizardName);
 		helper.openWizard(wizardTitle, command, values);
 	}

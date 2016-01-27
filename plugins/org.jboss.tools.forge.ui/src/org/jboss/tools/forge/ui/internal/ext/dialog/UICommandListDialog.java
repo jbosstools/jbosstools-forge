@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -73,14 +74,12 @@ public class UICommandListDialog extends PopupDialog {
 	public UICommandListDialog(IWorkbenchWindow window) {
 		super(window.getShell(), SWT.RESIZE, true, true, // persist size
 				false, // but not location
-				true, true, "Run a Forge command", "JBoss Forge v."
-						+ FurnaceRuntime.INSTANCE.getVersion()
-						+ " - Start typing to filter the list");
+				true, true, "Run a Forge command",
+				"JBoss Forge v." + FurnaceRuntime.INSTANCE.getVersion() + " - Start typing to filter the list");
 		IStructuredSelection currentSelection = getCurrentSelection(window);
-		wizardHelper = new WizardDialogHelper(getParentShell(),
-				currentSelection);
-		UISelectionImpl<?> uiSelection = wizardHelper.getContext()
-				.getInitialSelection();
+		ITextSelection textSelection = getTextSelection(window);
+		wizardHelper = new WizardDialogHelper(getParentShell(), currentSelection, textSelection);
+		UISelectionImpl<?> uiSelection = wizardHelper.getContext().getInitialSelection();
 		if (!uiSelection.isEmpty()) {
 			String currentSelectionLabel;
 			IResource resource = uiSelection.getResource();
@@ -93,8 +92,17 @@ public class UICommandListDialog extends PopupDialog {
 		}
 	}
 
-	public static IStructuredSelection getCurrentSelection(
-			IWorkbenchWindow window) {
+	public static ITextSelection getTextSelection(IWorkbenchWindow window) {
+		ISelectionService selectionService = window.getSelectionService();
+		ISelection selection = selectionService.getSelection();
+		if (selection instanceof ITextSelection) {
+			return (ITextSelection) selection;
+		} else {
+			return null;
+		}
+	}
+
+	public static IStructuredSelection getCurrentSelection(IWorkbenchWindow window) {
 		ISelectionService selectionService = window.getSelectionService();
 		ISelection selection = selectionService.getSelection();
 		IStructuredSelection currentSelection = null;
@@ -108,13 +116,11 @@ public class UICommandListDialog extends PopupDialog {
 		}
 		if (currentSelection == null) {
 			// Try to get from Package Explorer
-			currentSelection = (IStructuredSelection) selectionService
-					.getSelection(JavaUI.ID_PACKAGES);
+			currentSelection = (IStructuredSelection) selectionService.getSelection(JavaUI.ID_PACKAGES);
 		}
 		if (currentSelection == null) {
 			// Try to get from Project Explorer
-			currentSelection = (IStructuredSelection) selectionService
-					.getSelection(IPageLayout.ID_PROJECT_EXPLORER);
+			currentSelection = (IStructuredSelection) selectionService.getSelection(IPageLayout.ID_PROJECT_EXPLORER);
 		}
 		if (currentSelection == null) {
 			// Try to get from Navigator View
@@ -132,26 +138,27 @@ public class UICommandListDialog extends PopupDialog {
 		if (page != null) {
 			IEditorPart editor = page.getActiveEditor();
 			if (editor != null) {
-				IEditorInput editorInput = editor.getEditorInput();
-				if (editorInput != null) {
-					FileEditorInput fileEditorInput = (FileEditorInput) editorInput
-							.getAdapter(FileEditorInput.class);
-					if (fileEditorInput != null) {
-						return fileEditorInput.getFile();
-					}
-					FileStoreEditorInput fileStoreEditorInput = (FileStoreEditorInput) editorInput
-							.getAdapter(FileStoreEditorInput.class);
-					if (fileStoreEditorInput != null) {
-						return new File(fileStoreEditorInput.getURI());
-					}
-
-				}
+				return extractFile(editor);
 			} else {
 				IWorkbenchPart part = page.getActivePart();
 				if (part instanceof ForgeConsoleView) {
-					return ((ForgeConsoleView) part).getConsole()
-							.getCurrentResource();
+					return ((ForgeConsoleView) part).getConsole().getCurrentResource();
 				}
+			}
+		}
+		return null;
+	}
+
+	private static File extractFile(IEditorPart editor) {
+		IEditorInput editorInput = editor.getEditorInput();
+		if (editorInput != null) {
+			FileEditorInput fileEditorInput = editorInput.getAdapter(FileEditorInput.class);
+			if (fileEditorInput != null) {
+				return fileEditorInput.getFile().getRawLocation().toFile();
+			}
+			FileStoreEditorInput fileStoreEditorInput = editorInput.getAdapter(FileStoreEditorInput.class);
+			if (fileStoreEditorInput != null) {
+				return new File(fileStoreEditorInput.getURI());
 			}
 		}
 		return null;
@@ -195,16 +202,13 @@ public class UICommandListDialog extends PopupDialog {
 					providers = getProviders();
 				} catch (Exception e) {
 					ForgeUIPlugin.log(e);
-					ForgeUIPlugin.displayMessage(
-							"Error has occurred. See Error Log for details",
-							e.getMessage(), NotificationType.ERROR);
+					ForgeUIPlugin.displayMessage("Error has occurred. See Error Log for details", e.getMessage(),
+							NotificationType.ERROR);
 					return;
 				}
-				QuickAccessContents quickAccessContents = new QuickAccessContents(
-						providers) {
+				QuickAccessContents quickAccessContents = new QuickAccessContents(providers) {
 					@Override
-					public void updateFeedback(boolean filterTextEmpty,
-							boolean showAllMatches) {
+					public void updateFeedback(boolean filterTextEmpty, boolean showAllMatches) {
 					}
 
 					@Override
@@ -215,8 +219,7 @@ public class UICommandListDialog extends PopupDialog {
 					@Override
 					public QuickAccessElement getPerfectMatch(String filter) {
 						for (QuickAccessProvider provider : providers) {
-							QuickAccessElement elem = provider
-									.getElementForId(filter);
+							QuickAccessElement elem = provider.getElementForId(filter);
 							if (elem != null) {
 								return elem;
 							}
@@ -225,19 +228,16 @@ public class UICommandListDialog extends PopupDialog {
 					}
 
 					@Override
-					public void handleElementSelected(String textStr,
-							Object selectedElement) {
+					public void handleElementSelected(String textStr, Object selectedElement) {
 						if (selectedElement instanceof ForgeQuickAccessElement) {
 							ForgeQuickAccessElement element = (ForgeQuickAccessElement) selectedElement;
 							addPreviousChoice(element);
-							wizardHelper.openWizard(element.getLabel(),
-									element.getCommand());
+							wizardHelper.openWizard(element.getLabel(), element.getCommand());
 						}
 					}
 				};
 				quickAccessContents.hookFilterText(text);
-				quickAccessContents.createTable(result,
-						Window.getDefaultOrientation());
+				quickAccessContents.createTable(result, Window.getDefaultOrientation());
 				quickAccessContents.toggleShowAllMatches();
 				text.setFocus();
 			}
@@ -253,8 +253,7 @@ public class UICommandListDialog extends PopupDialog {
 		Collection<QuickAccessElement> allElements = new HashSet<>();
 		Map<String, List<UICommand>> categories = new TreeMap<>();
 		for (UICommand command : wizardHelper.getAllCandidatesAsList()) {
-			String categoryName = getCategoryName(wizardHelper.getContext(),
-					command);
+			String categoryName = getCategoryName(wizardHelper.getContext(), command);
 			List<UICommand> list = categories.get(categoryName);
 			if (list == null) {
 				list = new ArrayList<>();
@@ -265,8 +264,7 @@ public class UICommandListDialog extends PopupDialog {
 		// Create Providers for each category
 		Set<ForgeQuickAccessProvider> providers = new TreeSet<>();
 		for (Entry<String, List<UICommand>> entry : categories.entrySet()) {
-			ForgeQuickAccessProvider provider = new ForgeQuickAccessProvider(
-					entry.getKey(), wizardHelper.getContext(),
+			ForgeQuickAccessProvider provider = new ForgeQuickAccessProvider(entry.getKey(), wizardHelper.getContext(),
 					entry.getValue(), PREVIOUS_CHOICES_LIST, allElements);
 			providers.add(provider);
 		}
@@ -275,8 +273,7 @@ public class UICommandListDialog extends PopupDialog {
 		// Add PreviousChoicesProvider
 		allProviders.add(new PreviousChoicesProvider());
 		allProviders.addAll(providers);
-		return allProviders
-				.toArray(new QuickAccessProvider[allProviders.size()]);
+		return allProviders.toArray(new QuickAccessProvider[allProviders.size()]);
 	}
 
 	private String getCategoryName(UIContext context, UICommand command) {

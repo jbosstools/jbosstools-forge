@@ -9,10 +9,13 @@ package org.jboss.tools.forge.ui.internal.ext.context;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.jboss.forge.addon.ui.context.UIRegion;
 import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.forge.furnace.util.Assert;
 
@@ -20,11 +23,13 @@ public class UISelectionImpl<T> implements UISelection<T> {
 
 	private final List<T> selection;
 	private IResource resource;
+	private ITextSelection textSelection;
 
-	public UISelectionImpl(List<T> selection, IStructuredSelection ss) {
+	public UISelectionImpl(List<T> selection, IStructuredSelection ss, ITextSelection textSelection) {
 		Assert.notNull(selection, "Selection must not be null.");
 		this.selection = Collections.unmodifiableList(selection);
 		this.resource = extractSelection(ss);
+		this.textSelection = textSelection;
 	}
 
 	@Override
@@ -49,6 +54,17 @@ public class UISelectionImpl<T> implements UISelection<T> {
 
 	public IResource getResource() {
 		return resource;
+	}
+
+	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Optional<UIRegion<T>> getRegion() {
+		UIRegion<T> region = null;
+		if (selection.size() > 0 && textSelection != null) {
+			T resource = get();
+			region = new UIRegionImpl(resource, textSelection);
+		}
+		return Optional.ofNullable(region);
 	}
 
 	private IResource extractSelection(IStructuredSelection ss) {
