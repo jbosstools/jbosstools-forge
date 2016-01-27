@@ -45,13 +45,6 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		final Combo combo = new Combo(container, SWT.BORDER | SWT.DROP_DOWN | SWT.READ_ONLY);
 		combo.setData(LABEL_DATA_KEY, label);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		combo.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				String text = combo.getText();
-				controller.setValueFor(inputName, text);
-			}
-		});
 		combo.setToolTipText(input.getDescription());
 
 		// skip the third column
@@ -59,6 +52,13 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 		dummy.setText("");
 
 		updateValues(combo, input);
+		combo.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				String text = combo.getText();
+				controller.setValueFor(inputName, text);
+			}
+		});
 		return combo;
 	}
 
