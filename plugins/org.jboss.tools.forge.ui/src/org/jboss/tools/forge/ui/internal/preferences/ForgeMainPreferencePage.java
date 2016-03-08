@@ -22,19 +22,26 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.jboss.tools.forge.core.preferences.ForgeCorePreferences;
 
-public class ForgeMainPreferencePage extends PreferencePage implements
-		IWorkbenchPreferencePage {
-	
+public class ForgeMainPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+
 	private Text addonDirText;
-	  
+	private Button saveEditorOnCommandDialog;
+
+	@Override
 	protected Control createContents(Composite parent) {
 		noDefaultAndApplyButton();
 		Composite clientArea = createClientArea(parent);
 		createAddonDirText(clientArea);
+		createSaveOnCommandMenu(clientArea);
 		return clientArea;
 	}
-	
-	
+
+	private void createSaveOnCommandMenu(Composite parent) {
+		saveEditorOnCommandDialog = new Button(parent, SWT.CHECK);
+		saveEditorOnCommandDialog.setText("Always save before opening the command dialog");
+		saveEditorOnCommandDialog.setSelection(ForgeCorePreferences.INSTANCE.isSaveOnCommandMenu());
+	}
+
 	private void createAddonDirText(Composite parent) {
 		Label addonDirLabel = new Label(parent, SWT.NONE);
 		addonDirLabel.setText("Forge Addon Repository Location: ");
@@ -57,8 +64,7 @@ public class ForgeMainPreferencePage extends PreferencePage implements
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				DirectoryDialog dialog = new DirectoryDialog(getShell(),
-						SWT.OPEN);
+				DirectoryDialog dialog = new DirectoryDialog(getShell(), SWT.OPEN);
 				dialog.setText("Select a directory");
 				dialog.setFilterPath(addonDirText.getText());
 				String selectedPath = dialog.open();
@@ -79,10 +85,14 @@ public class ForgeMainPreferencePage extends PreferencePage implements
 		return clientArea;
 	}
 
-	public void init(IWorkbench workbench) {}
-	
+	@Override
+	public void init(IWorkbench workbench) {
+	}
+
+	@Override
 	public boolean performOk() {
 		ForgeCorePreferences.INSTANCE.setAddonDir(addonDirText.getText());
+		ForgeCorePreferences.INSTANCE.setSaveOnCommandMenu(saveEditorOnCommandDialog.getSelection());
 		return true;
 	}
 }

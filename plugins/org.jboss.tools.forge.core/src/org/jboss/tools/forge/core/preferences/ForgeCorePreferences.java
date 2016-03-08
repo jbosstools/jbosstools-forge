@@ -53,6 +53,7 @@ public class ForgeCorePreferences {
 	public static final String PREF_FORGE_START_IN_DEBUG = "org.jboss.tools.forge.core.startInDebug";
 	public static final String PREF_FORGE_VM_ARGS = "org.jboss.tools.forge.core.vmArgs";
 	private static final String PREF_FORGE_ADDON_DIR = "org.jboss.tools.forge.ext.core.addon_dir";
+	private static final String PREF_FORGE_SAVE_ON_COMMAND_MENU = "org.jboss.tools.forge.ext.core.save_on_command_menu";
 
 	public static final ForgeCorePreferences INSTANCE = new ForgeCorePreferences();
 
@@ -67,8 +68,7 @@ public class ForgeCorePreferences {
 		if (runtimes == null) {
 			initializeRuntimes();
 		}
-		return (ForgeRuntime[]) runtimes.toArray(new ForgeRuntime[runtimes
-				.size()]);
+		return runtimes.toArray(new ForgeRuntime[runtimes.size()]);
 	}
 
 	public ForgeRuntime getDefaultRuntime() {
@@ -84,8 +84,7 @@ public class ForgeCorePreferences {
 	}
 
 	public boolean getStartInDebug() {
-		return getForgeCorePreferences().getBoolean(PREF_FORGE_START_IN_DEBUG,
-				false);
+		return getForgeCorePreferences().getBoolean(PREF_FORGE_START_IN_DEBUG, false);
 	}
 
 	public String getVmArgs() {
@@ -107,7 +106,7 @@ public class ForgeCorePreferences {
 		addFromXml(getForgeRuntimesPreference());
 		initializeDefaultRuntime();
 	}
-	
+
 	private void initializeDefaultRuntime() {
 		for (ForgeRuntime runtime : runtimes) {
 			if (runtime.getName().equals(defaultRuntimeName)) {
@@ -123,9 +122,11 @@ public class ForgeCorePreferences {
 
 	private void addFromXml(String xml) {
 		DocumentBuilder documentBuilder = newDocumentBuilder();
-		if (documentBuilder == null) return;
+		if (documentBuilder == null)
+			return;
 		InputStream inputStream = createInputStream(xml);
-		if (inputStream == null) return;
+		if (inputStream == null)
+			return;
 		Document document = parseRuntimes(documentBuilder, inputStream);
 		Element runtimeElement = document.getDocumentElement();
 		defaultRuntimeName = runtimeElement.getAttribute("default");
@@ -135,8 +136,7 @@ public class ForgeCorePreferences {
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 				Element element = (Element) node;
 				String type = element.getAttribute("type").toUpperCase();
-				if (ForgeRuntimeType.valueOf(type).equals(
-						ForgeRuntimeType.EXTERNAL)) {
+				if (ForgeRuntimeType.valueOf(type).equals(ForgeRuntimeType.EXTERNAL)) {
 					String name = element.getAttribute("name");
 					String location = element.getAttribute("location");
 					runtimes.add(new ForgeExternalRuntime(name, location));
@@ -145,8 +145,7 @@ public class ForgeCorePreferences {
 		}
 	}
 
-	private Document parseRuntimes(DocumentBuilder documentBuilder,
-			InputStream inputStream) {
+	private Document parseRuntimes(DocumentBuilder documentBuilder, InputStream inputStream) {
 		Document result = null;
 		try {
 			result = documentBuilder.parse(inputStream);
@@ -161,8 +160,7 @@ public class ForgeCorePreferences {
 	private InputStream createInputStream(String string) {
 		InputStream result = null;
 		try {
-			result = new BufferedInputStream(new ByteArrayInputStream(
-					string.getBytes("UTF8")));
+			result = new BufferedInputStream(new ByteArrayInputStream(string.getBytes("UTF8")));
 		} catch (UnsupportedEncodingException e) {
 			ForgeCorePlugin.log(e);
 		}
@@ -217,8 +215,19 @@ public class ForgeCorePreferences {
 		}
 	}
 
-	private void setBoolean(String prefKey, boolean startup)
-			throws BackingStoreException {
+	public void setSaveOnCommandMenu(boolean saveOnMenu) {
+		try {
+			setBoolean(PREF_FORGE_SAVE_ON_COMMAND_MENU, saveOnMenu);
+		} catch (BackingStoreException e) {
+			ForgeCorePlugin.log(e);
+		}
+	}
+
+	public boolean isSaveOnCommandMenu() {
+		return getForgeCorePreferences().getBoolean(PREF_FORGE_SAVE_ON_COMMAND_MENU, false);
+	}
+
+	private void setBoolean(String prefKey, boolean startup) throws BackingStoreException {
 		IEclipsePreferences eclipsePreferences = getForgeCorePreferences();
 		eclipsePreferences.putBoolean(prefKey, startup);
 		eclipsePreferences.flush();
@@ -228,8 +237,7 @@ public class ForgeCorePreferences {
 		getForgeCorePreferences().addPreferenceChangeListener(listener);
 	}
 
-	public void removePreferenceChangeListener(
-			IPreferenceChangeListener listener) {
+	public void removePreferenceChangeListener(IPreferenceChangeListener listener) {
 		getForgeCorePreferences().removePreferenceChangeListener(listener);
 	}
 
@@ -276,8 +284,7 @@ public class ForgeCorePreferences {
 		}
 	}
 
-	private static String serializeDocument(Document doc)
-			throws TransformerException, IOException {
+	private static String serializeDocument(Document doc) throws TransformerException, IOException {
 		ByteArrayOutputStream s = new ByteArrayOutputStream();
 		TransformerFactory factory = TransformerFactory.newInstance();
 		Transformer transformer = factory.newTransformer();
@@ -292,8 +299,7 @@ public class ForgeCorePreferences {
 	public String getAddonDir() {
 		IEclipsePreferences prefs = getForgeCorePreferences();
 		return prefs.get(PREF_FORGE_ADDON_DIR,
-				new File(OperatingSystemUtils.getUserForgeDir(), "addons")
-						.getAbsolutePath());
+				new File(OperatingSystemUtils.getUserForgeDir(), "addons").getAbsolutePath());
 	}
 
 	public void setAddonDir(String addonDir) {
