@@ -106,14 +106,14 @@ public class ForgeLaunchHelper {
 	}
 	
 	private static String createProgramArguments(String location) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(createJBossModulesPathArgument(location)).append(' ');
 		buffer.append("org.jboss.forge");
 		return buffer.toString();
 	}
 	
 	private static String createJBossModulesPathArgument(String location) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(getMainModulesLocation(location)).append(File.pathSeparator);
 		buffer.append(getUserModulesLocation()).append(File.pathSeparator);
 		buffer.append(getExtraModulesLocation());
@@ -161,7 +161,7 @@ public class ForgeLaunchHelper {
 	}
 	
 	private static String createVmArguments(String location) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(getVmArgumentPrefs());
 		buffer.append("-Dforge.home=").append(encloseWithDoubleQuotesIfNeeded(location)).append(' ');
 		buffer.append("-Dforge.shell.colorEnabled=true").append(' ');

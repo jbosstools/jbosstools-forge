@@ -23,7 +23,7 @@ public class CharacterConstants {
 	
 	private static String toString(Key key) {
 		int[] keyValues = key.getKeyValues();
-		StringBuffer buffer = new StringBuffer(keyValues.length);
+		StringBuilder buffer = new StringBuilder(keyValues.length);
 		for (int i : keyValues) {
 			buffer.append((char)i);
 		}
