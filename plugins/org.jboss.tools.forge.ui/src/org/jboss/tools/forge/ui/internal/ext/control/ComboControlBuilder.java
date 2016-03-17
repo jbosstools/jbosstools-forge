@@ -125,7 +125,7 @@ public class ComboControlBuilder extends ControlBuilder<Combo> {
 	}
 
 	private void updateValueChoices(Combo combo, UISelectOne<Object> selectOne) {
-		List<String> newItems = new ArrayList<String>();
+		List<String> newItems = new ArrayList<>();
 		Iterable<Object> valueChoices = selectOne.getValueChoices();
 		Converter<Object, String> converter = getConverter(selectOne);
 		if (valueChoices != null) {

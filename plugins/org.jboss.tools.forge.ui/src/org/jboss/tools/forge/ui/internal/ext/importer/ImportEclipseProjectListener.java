@@ -28,7 +28,7 @@ public enum ImportEclipseProjectListener implements ProjectListener,
 
 	INSTANCE;
 
-	private Set<Project> projects = new HashSet<Project>();
+	private Set<Project> projects = new HashSet<>();
 
 	@Override
 	public void projectCreated(Project project) {

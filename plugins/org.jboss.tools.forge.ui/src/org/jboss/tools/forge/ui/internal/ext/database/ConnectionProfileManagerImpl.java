@@ -45,7 +45,7 @@ public class ConnectionProfileManagerImpl implements ConnectionProfileManager {
 	public Map<String, ConnectionProfile> loadConnectionProfiles() {
 		IConnectionProfile[] connectionProfiles = ProfileManager.getInstance()
 				.getProfiles();
-		Map<String, ConnectionProfile> result = new LinkedHashMap<String, ConnectionProfile>();
+		Map<String, ConnectionProfile> result = new LinkedHashMap<>();
 		for (IConnectionProfile currentProfile : connectionProfiles) {
 			ConnectionProfile profile = new ConnectionProfile();
 			String profileName = currentProfile.getName();

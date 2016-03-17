@@ -193,7 +193,7 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 		if (viewer == null) return;
 		Object input = viewer.getInput();
 		ArrayList<String> names = createSegmentNames(fileStore);
-		ArrayList<Object> treeSegments = new ArrayList<Object>();
+		ArrayList<Object> treeSegments = new ArrayList<>();
 		for (String name : names) {
 			if (input instanceof IAdaptable) {
 				ISystemViewElementAdapter adapter = SystemAdapterHelpers.getViewAdapter(input);
@@ -231,7 +231,7 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 	}
 
 	private ArrayList<String> createSegmentNames(IFileStore fileStore) {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		while (fileStore.getParent() != null) {
 			result.add(0, fileStore.getName());
 			fileStore = fileStore.getParent();

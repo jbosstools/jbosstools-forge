@@ -78,7 +78,7 @@ public class ExampleConsole extends AbstractConsole {
 	}
 
 	private Prompt createPrompt() {
-		List<TerminalCharacter> chars = new ArrayList<TerminalCharacter>();
+		List<TerminalCharacter> chars = new ArrayList<>();
 		chars.add(new TerminalCharacter('[', new TerminalColor(Color.DEFAULT, Color.BLUE)));
 		chars.add(new TerminalCharacter('t', new TerminalColor(Color.DEFAULT, Color.RED),
 				CharacterType.ITALIC));

@@ -21,7 +21,7 @@ public class ForgeConsolePageBook extends PageBook {
 	private ForgeConsoleView forgeConsoleView = null;
 	private ForgeConsolePage currentPage = null;
 	private Map<ForgeConsole, ForgeConsolePage> forgeConsoleToPage = 
-			new HashMap<ForgeConsole, ForgeConsolePage>();
+			new HashMap<>();
 
 	public ForgeConsolePageBook(ForgeConsoleView forgeConsoleView, Composite parent) {
 		super(parent, SWT.NONE);

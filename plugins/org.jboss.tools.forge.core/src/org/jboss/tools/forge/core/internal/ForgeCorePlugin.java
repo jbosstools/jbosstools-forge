@@ -32,7 +32,7 @@ public class ForgeCorePlugin extends Plugin {
 	private static ForgeCorePlugin plugin;
 
 	private static Thread shutdownHook;
-	private static List<IProcess> processes = new ArrayList<IProcess>();
+	private static List<IProcess> processes = new ArrayList<>();
 
 	private UsageEventType forgeStartEventType;
 

@@ -41,7 +41,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private MasterStreamListener masterStreamListener = new MasterStreamListener();
 	private CommandResultListener commandResultListener = new CommandResultListener();
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-	private List<ForgeOutputListener> outputListeners = new ArrayList<ForgeOutputListener>();
+	private List<ForgeOutputListener> outputListeners = new ArrayList<>();
 	
 	
 	public IProcess getProcess() {

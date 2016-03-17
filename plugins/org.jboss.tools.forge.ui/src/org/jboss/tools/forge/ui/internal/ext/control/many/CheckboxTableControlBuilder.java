@@ -202,7 +202,7 @@ public class CheckboxTableControlBuilder extends ControlBuilder<Table> {
 		Iterable<Object> valueChoices = selectMany.getValueChoices();
 		if (valueChoices == null)
 			return;
-		List<String> newItems = new ArrayList<String>();
+		List<String> newItems = new ArrayList<>();
 		Converter<Object, String> converter = getConverter(selectMany);
 		for (Object choice : valueChoices) {
 			String itemLabel = converter.convert(choice);

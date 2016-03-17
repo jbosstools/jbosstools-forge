@@ -15,7 +15,7 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 public class ForgeRuntimeManager {
 	
 	public static List<ForgeRuntime> getEmbeddedRuntimes() {
-		ArrayList<ForgeRuntime> result = new ArrayList<ForgeRuntime>();
+		ArrayList<ForgeRuntime> result = new ArrayList<>();
 		result.add(FurnaceRuntime.INSTANCE);
 		return result;
 	}

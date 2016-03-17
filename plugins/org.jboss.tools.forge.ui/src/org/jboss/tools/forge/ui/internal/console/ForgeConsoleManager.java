@@ -15,14 +15,14 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 public enum ForgeConsoleManager {
 	INSTANCE;
 
-	private List<ForgeConsole> consoles = new ArrayList<ForgeConsole>();
+	private List<ForgeConsole> consoles = new ArrayList<>();
 
 	private ForgeConsoleManager() {
 		createConsoles();
 	}
 
 	private void createConsoles() {
-		consoles = new ArrayList<ForgeConsole>();
+		consoles = new ArrayList<>();
 		for (ForgeRuntime runtime : ForgeCorePreferences.INSTANCE.getRuntimes()) {
 			ForgeConsole console = new org.jboss.tools.forge.ui.internal.console.F2Console(
 					runtime);

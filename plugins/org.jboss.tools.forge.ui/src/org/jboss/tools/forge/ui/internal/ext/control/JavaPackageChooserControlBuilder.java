@@ -51,7 +51,7 @@ public class JavaPackageChooserControlBuilder extends AbstractTextButtonControl 
 				public Iterable<Object> getCompletionProposals(
 						UIContext context, InputComponent<?, Object> input,
 						String value) {
-					Set<Object> proposals = new TreeSet<Object>();
+					Set<Object> proposals = new TreeSet<>();
 					try {
 						for (IPackageFragment pkg : selectedProject
 								.getPackageFragments()) {

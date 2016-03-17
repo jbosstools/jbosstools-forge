@@ -60,7 +60,7 @@ public class ProjectTools {
 	}
 	
 	private static Collection<MavenProjectInfo> getProjectToImport(String baseDirPath, String projectName) {
-		ArrayList<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>(1);
+		ArrayList<MavenProjectInfo> result = new ArrayList<>(1);
 		result.add(createMavenProjectInfo(baseDirPath, projectName));
 		return result;
 	}

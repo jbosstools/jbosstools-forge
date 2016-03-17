@@ -51,7 +51,7 @@ public class CamelUtil {
 	 * @return an array of length start
 	 */
 	public static int[][] getCamelCaseIndices(String s, int start, int length) {
-		List<int[]> result = new ArrayList<int[]>();
+		List<int[]> result = new ArrayList<>();
 		int index = 0;
 		while (start > 0) {
 			index = getNextCamelIndex(s, index + 1);
