@@ -17,6 +17,9 @@ import java.util.List;
  */
 public class CamelUtil {
 
+	private CamelUtil() {
+	}
+
 	/**
 	 * Returns a lowercase string consisting of all initials of the words in the
 	 * given String. Words are separated by whitespace and other special

@@ -32,6 +32,9 @@ import org.eclipse.datatools.connectivity.drivers.jdbc.IJDBCDriverDefinitionCons
  */
 public class ConnectionProfileUtil {
 
+	private	 ConnectionProfileUtil() {
+	}
+
 	public static String getDriverDefinitionId(IConnectionProfile profile) {
 		if (profile == null) {
 			return null;

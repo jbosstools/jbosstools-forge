@@ -32,6 +32,9 @@ import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 
 public class IDEUtils {
 
+	private IDEUtils() {
+	}
+
 	public static void openFileInEditor(IFileStore fileStore, boolean activate) {
 		try {
 			IWorkbenchPage workbenchPage = getActiveWorkbenchPage();

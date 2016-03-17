@@ -10,6 +10,9 @@ import org.jboss.aesh.terminal.Key;
 
 public class CharacterConstants {
 
+	private CharacterConstants() {
+	}
+
 	public static final String START_LINE = toString(Key.HOME);
 	public static final String PREV_CHAR = toString(Key.LEFT);
 	public static final String CTRL_C = toString(Key.CTRL_C);

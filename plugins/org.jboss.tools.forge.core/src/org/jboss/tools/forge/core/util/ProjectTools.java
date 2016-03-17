@@ -24,6 +24,9 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
 public class ProjectTools {
 
+	private	 ProjectTools() {
+	}
+
 	public static void updateProjectConfiguration(final IProject project) {		
 	    Job job = new WorkspaceJob("Updating project configuration") {
 	        public IStatus runInWorkspace(IProgressMonitor monitor) {

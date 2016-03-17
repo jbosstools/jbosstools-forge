@@ -29,7 +29,10 @@ import org.osgi.framework.Bundle;
 
 
 public class ForgeLaunchHelper {
-	
+
+	private ForgeLaunchHelper() {
+	}
+
 	private static final String ID_FORGE_PROCESS_FACTORY = "org.jboss.tools.forge.core.process.ForgeProcessFactory";
 
 	private static final ILaunchManager LAUNCH_MANAGER = DebugPlugin.getDefault().getLaunchManager();
