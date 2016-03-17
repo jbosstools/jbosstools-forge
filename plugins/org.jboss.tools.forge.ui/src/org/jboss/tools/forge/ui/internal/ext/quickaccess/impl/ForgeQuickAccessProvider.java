@@ -21,7 +21,7 @@ import org.jboss.tools.forge.ui.internal.ext.quickaccess.QuickAccessProvider;
 public class ForgeQuickAccessProvider extends QuickAccessProvider implements
 		Comparable<ForgeQuickAccessProvider> {
 
-	private Map<String, QuickAccessElement> candidates = new HashMap<String, QuickAccessElement>();
+	private Map<String, QuickAccessElement> candidates = new HashMap<>();
 	private String category;
 
 	public ForgeQuickAccessProvider(String category, UIContext context,
@@ -59,7 +59,7 @@ public class ForgeQuickAccessProvider extends QuickAccessProvider implements
 
 	@Override
 	public List<QuickAccessElement> getElements() {
-		return new ArrayList<QuickAccessElement>(candidates.values());
+		return new ArrayList<>(candidates.values());
 	}
 
 	@Override

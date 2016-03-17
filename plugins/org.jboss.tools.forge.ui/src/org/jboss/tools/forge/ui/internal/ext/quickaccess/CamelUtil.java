@@ -17,6 +17,9 @@ import java.util.List;
  */
 public class CamelUtil {
 
+	private CamelUtil() {
+	}
+
 	/**
 	 * Returns a lowercase string consisting of all initials of the words in the
 	 * given String. Words are separated by whitespace and other special
@@ -28,7 +31,7 @@ public class CamelUtil {
 	 *         the given string.
 	 */
 	public static String getCamelCase(String s) {
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 		if (s.length() > 0) {
 			int index = 0;
 			while (index != -1) {
@@ -51,7 +54,7 @@ public class CamelUtil {
 	 * @return an array of length start
 	 */
 	public static int[][] getCamelCaseIndices(String s, int start, int length) {
-		List<int[]> result = new ArrayList<int[]>();
+		List<int[]> result = new ArrayList<>();
 		int index = 0;
 		while (start > 0) {
 			index = getNextCamelIndex(s, index + 1);

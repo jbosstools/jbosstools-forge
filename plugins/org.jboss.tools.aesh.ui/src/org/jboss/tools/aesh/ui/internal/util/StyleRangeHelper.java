@@ -4,7 +4,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 
 public class StyleRangeHelper {
-	
+
+	private StyleRangeHelper() {
+	}
+
 	public static StyleRange updateStyleRange(StyleRange styleRange) {
 		if (styleRange.fontStyle == SWT.NORMAL) {
 			styleRange.font = FontManager.INSTANCE.getDefault();

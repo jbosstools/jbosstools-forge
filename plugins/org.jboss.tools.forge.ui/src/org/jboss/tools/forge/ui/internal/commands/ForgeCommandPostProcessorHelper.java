@@ -21,9 +21,12 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 public class ForgeCommandPostProcessorHelper {
-	
+
+	private ForgeCommandPostProcessorHelper() {
+	}
+
 	public static Map<String, String> getCommandDetails(String commandString) {
-		Map<String, String> result  = new HashMap<String, String>();
+		Map<String, String> result  = new HashMap<>();
 		int ec = commandString.indexOf(" EC: ");
 		int crn = commandString.indexOf(" CRN: ");
 		int crt = commandString.indexOf(" CRT: ");

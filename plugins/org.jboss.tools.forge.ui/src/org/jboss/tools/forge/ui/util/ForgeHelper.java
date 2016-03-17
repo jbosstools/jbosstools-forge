@@ -32,7 +32,10 @@ import org.jboss.tools.forge.ui.internal.ext.importer.ImportEclipseProjectListen
 import org.jboss.tools.forge.ui.internal.part.ForgeConsoleView;
 
 public class ForgeHelper {
-	
+
+	private ForgeHelper() {
+	}
+
 	public static void start(ForgeRuntime runtime) {
 		createStartRuntimeJob(runtime).schedule();
 	}

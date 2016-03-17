@@ -32,6 +32,9 @@ import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 
 public class IDEUtils {
 
+	private IDEUtils() {
+	}
+
 	public static void openFileInEditor(IFileStore fileStore, boolean activate) {
 		try {
 			IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
@@ -76,7 +79,7 @@ public class IDEUtils {
 	private static IFile[] filterNonExistentFiles(IFile[] files) {
  		if (files == null) return null;
  		int length = files.length;
- 		ArrayList<IFile> existentFiles = new ArrayList<IFile>(length);
+ 		ArrayList<IFile> existentFiles = new ArrayList<>(length);
  		for (int i = 0; i < length; i++) {
  			if (files[i].exists())
  				existentFiles.add(files[i]);

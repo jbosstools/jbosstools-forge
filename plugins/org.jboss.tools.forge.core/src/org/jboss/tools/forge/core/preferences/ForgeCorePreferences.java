@@ -101,7 +101,7 @@ public class ForgeCorePreferences {
 	}
 
 	private void initializeRuntimes() {
-		runtimes = new ArrayList<ForgeRuntime>();
+		runtimes = new ArrayList<>();
 		runtimes.add(FurnaceRuntime.INSTANCE);
 		addFromXml(getForgeRuntimesPreference());
 		initializeDefaultRuntime();

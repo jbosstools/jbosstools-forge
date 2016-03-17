@@ -39,7 +39,7 @@ public enum CommandType {
 	
 	private static Map<Character, CommandType> getCommandTypeMap() {
 		if (commandTypeMap == null) {
-			commandTypeMap = new HashMap<Character, CommandType>();
+			commandTypeMap = new HashMap<>();
 		}
 		return commandTypeMap;
 	}

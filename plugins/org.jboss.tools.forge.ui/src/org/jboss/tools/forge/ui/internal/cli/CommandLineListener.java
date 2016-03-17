@@ -61,7 +61,7 @@ import org.jboss.tools.forge.ui.internal.util.IDEUtils;
 public class CommandLineListener implements ProjectListener,
 		CommandExecutionListener {
 
-	private List<Project> projects = new ArrayList<Project>();
+	private List<Project> projects = new ArrayList<>();
 
 	@Override
 	public void postCommandExecuted(UICommand command,
@@ -250,7 +250,7 @@ public class CommandLineListener implements ProjectListener,
 		Viewer viewer = getViewer(remoteSystemView);
 		Object input = viewer.getInput();
 		ArrayList<String> names = createSegmentNames(fileStore);
-		ArrayList<Object> treeSegments = new ArrayList<Object>();
+		ArrayList<Object> treeSegments = new ArrayList<>();
 		for (String name : names) {
 			if (input != null && input instanceof IAdaptable) {
 				ISystemViewElementAdapter adapter = SystemAdapterHelpers
@@ -292,7 +292,7 @@ public class CommandLineListener implements ProjectListener,
 	}
 
 	private ArrayList<String> createSegmentNames(IFileStore fileStore) {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		while (fileStore.getParent() != null) {
 			result.add(0, fileStore.getName());
 			fileStore = fileStore.getParent();

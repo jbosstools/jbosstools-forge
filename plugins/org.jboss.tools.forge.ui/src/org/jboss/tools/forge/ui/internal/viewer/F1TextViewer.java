@@ -26,38 +26,40 @@ import org.jboss.tools.forge.ui.internal.document.ForgeDocument;
 
 public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 
-	private static final String START_LINE = new Character((char)1).toString();
-	private static final String PREV_CHAR = new Character((char)2).toString();
-	private static final String CTRL_C = new Character((char)3).toString();
-	private static final String CTRL_D = new Character((char)4).toString();
-	private static final String END_LINE = new Character((char)5).toString();
-	private static final String NEXT_CHAR = new Character((char)6).toString();
-	private static final String DELETE_PREV_CHAR = new Character((char)8).toString();
-	private static final String PREV_HISTORY = new Character((char)16).toString();
-	private static final String NEXT_HISTORY = new Character((char)14).toString();
-	private static final String DELETE_NEXT_CHAR = new Character((char)127).toString();
-	
+	private static final String START_LINE = Character.toString((char) 1);
+	private static final String PREV_CHAR = Character.toString((char) 2);
+	private static final String CTRL_C = Character.toString((char) 3);
+	private static final String CTRL_D = Character.toString((char) 4);
+	private static final String END_LINE = Character.toString((char) 5);
+	private static final String NEXT_CHAR = Character.toString((char) 6);
+	private static final String DELETE_PREV_CHAR = Character.toString((char) 8);
+	private static final String PREV_HISTORY = Character.toString((char) 16);
+	private static final String NEXT_HISTORY = Character.toString((char) 14);
+	private static final String DELETE_NEXT_CHAR = Character.toString((char) 127);
+
 	private static final String FORGE_CONSOLE_FONT = "org.jboss.tools.forge.console.font";
-	
+
 	private ForgeDocument forgeDocument = new ForgeDocument();
 	private ForgeRuntime runtime = null;
-	
+
 	private class DocumentListener implements IDocumentListener, ForgeDocument.CursorListener {
-    	@Override
-        public void documentAboutToBeChanged(DocumentEvent event) {
-        }
-        @Override
-        public void documentChanged(final DocumentEvent event) {
-            StyledText textWidget = getTextWidget();
-            if (textWidget != null && !textWidget.isDisposed()) {
-                int lineCount = textWidget.getLineCount();
-                textWidget.setTopIndex(lineCount - 1);
-    			StyleRange styleRange = forgeDocument.getCurrentStyleRange();
-    			if (styleRange != null) {
-    				textWidget.setStyleRange(styleRange);
-    			}
-            }
-        }
+		@Override
+		public void documentAboutToBeChanged(DocumentEvent event) {
+		}
+
+		@Override
+		public void documentChanged(final DocumentEvent event) {
+			StyledText textWidget = getTextWidget();
+			if (textWidget != null && !textWidget.isDisposed()) {
+				int lineCount = textWidget.getLineCount();
+				textWidget.setTopIndex(lineCount - 1);
+				StyleRange styleRange = forgeDocument.getCurrentStyleRange();
+				if (styleRange != null) {
+					textWidget.setStyleRange(styleRange);
+				}
+			}
+		}
+
 		@Override
 		public void cursorMoved() {
 			StyledText textWidget = getTextWidget();
@@ -65,10 +67,10 @@ public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 				textWidget.setCaretOffset(forgeDocument.getCursorOffset());
 			}
 		}
-    }
-	
-    private DocumentListener documentListener = new DocumentListener();
-    private IPropertyChangeListener fontListener = new IPropertyChangeListener() {		
+	}
+
+	private DocumentListener documentListener = new DocumentListener();
+	private IPropertyChangeListener fontListener = new IPropertyChangeListener() {
 		@Override
 		public void propertyChange(PropertyChangeEvent event) {
 			if (FORGE_CONSOLE_FONT.equals(event.getProperty())) {
@@ -76,36 +78,36 @@ public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 			}
 		}
 	};
-    
-    public F1TextViewer(Composite parent, ForgeRuntime runtime) {
-    	super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
-    	this.runtime = runtime;
-    	initialize();
-    }
 
-    private void initialize() {
-        initDocument();
-        initViewer();
-        initFontListener();
-    }
-    
-    private void initFontListener() {
-    	JFaceResources.getFontRegistry().addListener(fontListener);
-    }
-        
-    private void initDocument() {
-        forgeDocument.addDocumentListener(documentListener);
-        forgeDocument.addCursorListener(documentListener);
-    	setDocument(forgeDocument);
-    }
-    
-    private void initViewer() {
+	public F1TextViewer(Composite parent, ForgeRuntime runtime) {
+		super(parent, SWT.WRAP | SWT.V_SCROLL | SWT.H_SCROLL);
+		this.runtime = runtime;
+		initialize();
+	}
+
+	private void initialize() {
+		initDocument();
+		initViewer();
+		initFontListener();
+	}
+
+	private void initFontListener() {
+		JFaceResources.getFontRegistry().addListener(fontListener);
+	}
+
+	private void initDocument() {
+		forgeDocument.addDocumentListener(documentListener);
+		forgeDocument.addCursorListener(documentListener);
+		setDocument(forgeDocument);
+	}
+
+	private void initViewer() {
 		getTextWidget().setStyleRanges(forgeDocument.getStyleRanges());
-    	getTextWidget().setFont(JFaceResources.getFont(FORGE_CONSOLE_FONT));
-    	getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {			
+		getTextWidget().setFont(JFaceResources.getFont(FORGE_CONSOLE_FONT));
+		getTextWidget().addVerifyKeyListener(new VerifyKeyListener() {
 			@Override
 			public void verifyKey(VerifyEvent event) {
-				if ((event.stateMask & SWT.CTRL) == SWT.CTRL ) {
+				if ((event.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if (event.keyCode == 'd') {
 						getRuntime().sendInput(CTRL_D);
 					} else if (event.keyCode == 'c') {
@@ -114,44 +116,48 @@ public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 				}
 			}
 		});
-    }
-    
-    protected void handleDispose() {
-    	forgeDocument.removeCursorListener(documentListener);
-    	forgeDocument.removeDocumentListener(documentListener);
-    	JFaceResources.getFontRegistry().removeListener(fontListener);
-    	super.handleDispose();
-    }
-    
+	}
+
+	@Override
+	protected void handleDispose() {
+		forgeDocument.removeCursorListener(documentListener);
+		forgeDocument.removeDocumentListener(documentListener);
+		JFaceResources.getFontRegistry().removeListener(fontListener);
+		super.handleDispose();
+	}
+
+	@Override
 	protected StyledText createTextWidget(Composite parent, int styles) {
-		StyledText styledText= new StyledText(parent, styles) {
+		StyledText styledText = new StyledText(parent, styles) {
+			@Override
 			public void invokeAction(int action) {
 				switch (action) {
-					case ST.LINE_END:
-						getRuntime().sendInput(END_LINE);
-						break;
-					case ST.LINE_START:
-						getRuntime().sendInput(START_LINE);
-						break;
-					case ST.LINE_UP:
-						getRuntime().sendInput(PREV_HISTORY);
-						break;
-					case ST.LINE_DOWN:
-						getRuntime().sendInput(NEXT_HISTORY);
-						break;
-					case ST.COLUMN_PREVIOUS:
-						getRuntime().sendInput(PREV_CHAR);
-						break;
-					case ST.COLUMN_NEXT:
-						getRuntime().sendInput(NEXT_CHAR);
-						break;
-					case ST.DELETE_PREVIOUS:
-						getRuntime().sendInput(DELETE_PREV_CHAR);
-						break;
-					case ST.DELETE_NEXT:
-						getRuntime().sendInput(DELETE_NEXT_CHAR);
-						break;
-					default: super.invokeAction(action);
+				case ST.LINE_END:
+					getRuntime().sendInput(END_LINE);
+					break;
+				case ST.LINE_START:
+					getRuntime().sendInput(START_LINE);
+					break;
+				case ST.LINE_UP:
+					getRuntime().sendInput(PREV_HISTORY);
+					break;
+				case ST.LINE_DOWN:
+					getRuntime().sendInput(NEXT_HISTORY);
+					break;
+				case ST.COLUMN_PREVIOUS:
+					getRuntime().sendInput(PREV_CHAR);
+					break;
+				case ST.COLUMN_NEXT:
+					getRuntime().sendInput(NEXT_CHAR);
+					break;
+				case ST.DELETE_PREVIOUS:
+					getRuntime().sendInput(DELETE_PREV_CHAR);
+					break;
+				case ST.DELETE_NEXT:
+					getRuntime().sendInput(DELETE_NEXT_CHAR);
+					break;
+				default:
+					super.invokeAction(action);
 				}
 			}
 		};
@@ -159,38 +165,41 @@ public class F1TextViewer extends TextViewer implements ForgeTextViewer {
 		return styledText;
 	}
 
-    protected void handleVerifyEvent(VerifyEvent e) {
-    	getRuntime().sendInput(e.text);
-		e.doit = false;    	
-    }
-    
-    private ForgeRuntime getRuntime() {
-		return runtime;    	
-    }
-    
-    public void stopConsole() {
-    	Display.getDefault().syncExec(new Runnable() {
+	@Override
+	protected void handleVerifyEvent(VerifyEvent e) {
+		getRuntime().sendInput(e.text);
+		e.doit = false;
+	}
+
+	private ForgeRuntime getRuntime() {
+		return runtime;
+	}
+
+	@Override
+	public void stopConsole() {
+		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-		    	if (forgeDocument != null) {
-		    		forgeDocument.reset();
-		    	}
-			}   		
-    	});
-    }
-    
-    public void startConsole() {
-    	Display.getDefault().syncExec(new Runnable() {
+				if (forgeDocument != null) {
+					forgeDocument.reset();
+				}
+			}
+		});
+	}
+
+	@Override
+	public void startConsole() {
+		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				forgeDocument.connect(getRuntime());
-		    	setDocument(forgeDocument);
-			}   		
-    	});
-    }
+				setDocument(forgeDocument);
+			}
+		});
+	}
 
-    @Override
-    public Console getConsole() {
-    	throw new UnsupportedOperationException("getConsole() is not supported on this class");
-    }
+	@Override
+	public Console getConsole() {
+		throw new UnsupportedOperationException("getConsole() is not supported on this class");
+	}
 }

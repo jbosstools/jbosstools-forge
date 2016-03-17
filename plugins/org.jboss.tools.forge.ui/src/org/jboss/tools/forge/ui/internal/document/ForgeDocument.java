@@ -52,8 +52,8 @@ public class ForgeDocument extends Document {
 	private StyleRange currentStyleRange;
 	private ForgeOutputListener outputListener;
 	private Map<String, Color> colors;
-	private List<StyleRange> styleRanges = new ArrayList<StyleRange>();
-	private Set<CursorListener> cursorListeners = new HashSet<CursorListener>();
+	private List<StyleRange> styleRanges = new ArrayList<>();
+	private Set<CursorListener> cursorListeners = new HashSet<>();
 
 	public ForgeDocument() {
 		initColors();
@@ -193,7 +193,7 @@ public class ForgeDocument extends Document {
 	}
 
 	private void initColors() {
-		colors = new HashMap<String, Color>();
+		colors = new HashMap<>();
 		colors.put("30", new Color(Display.getDefault(), 0, 0, 0));
 		colors.put("31", new Color(Display.getDefault(), 0xFF, 0, 0));
 		colors.put("32", new Color(Display.getDefault(), 0, 0xFF, 0));

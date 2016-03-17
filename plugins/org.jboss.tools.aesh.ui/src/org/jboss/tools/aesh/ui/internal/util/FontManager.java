@@ -26,7 +26,7 @@ public class FontManager {
 	private static Font BOLD;
 	private static Font ITALIC_BOLD;
 	
-	private ArrayList<IPropertyChangeListener> listeners = new ArrayList<IPropertyChangeListener>();
+	private ArrayList<IPropertyChangeListener> listeners = new ArrayList<>();
 	
 	private FontManager() {
 		initializeFonts();

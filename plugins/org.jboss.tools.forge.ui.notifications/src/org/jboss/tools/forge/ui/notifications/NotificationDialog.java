@@ -37,7 +37,7 @@ public class NotificationDialog {
 		new NotificationDialog(type, title, message).show();
 	}
 
-	private static ArrayList<Shell> ACTIVE_DIALOGS = new ArrayList<Shell>();
+	private static ArrayList<Shell> ACTIVE_DIALOGS = new ArrayList<>();
 
 	private Shell shell;
 	private Composite clientComposite;

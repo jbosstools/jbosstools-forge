@@ -91,7 +91,7 @@ public class ProjectImporter {
 	}
 
 	private Collection<MavenProjectInfo> getProjectToImport() {
-		ArrayList<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>(1);
+		ArrayList<MavenProjectInfo> result = new ArrayList<>(1);
 		result.add(createMavenProjectInfo());
 		return result;
 	}

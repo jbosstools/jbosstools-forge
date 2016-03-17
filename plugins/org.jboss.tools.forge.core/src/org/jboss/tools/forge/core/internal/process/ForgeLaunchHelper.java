@@ -29,7 +29,10 @@ import org.osgi.framework.Bundle;
 
 
 public class ForgeLaunchHelper {
-	
+
+	private ForgeLaunchHelper() {
+	}
+
 	private static final String ID_FORGE_PROCESS_FACTORY = "org.jboss.tools.forge.core.process.ForgeProcessFactory";
 
 	private static final ILaunchManager LAUNCH_MANAGER = DebugPlugin.getDefault().getLaunchManager();
@@ -106,14 +109,14 @@ public class ForgeLaunchHelper {
 	}
 	
 	private static String createProgramArguments(String location) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(createJBossModulesPathArgument(location)).append(' ');
 		buffer.append("org.jboss.forge");
 		return buffer.toString();
 	}
 	
 	private static String createJBossModulesPathArgument(String location) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(getMainModulesLocation(location)).append(File.pathSeparator);
 		buffer.append(getUserModulesLocation()).append(File.pathSeparator);
 		buffer.append(getExtraModulesLocation());
@@ -161,7 +164,7 @@ public class ForgeLaunchHelper {
 	}
 	
 	private static String createVmArguments(String location) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		buffer.append(getVmArgumentPrefs());
 		buffer.append("-Dforge.home=").append(encloseWithDoubleQuotesIfNeeded(location)).append(' ');
 		buffer.append("-Dforge.shell.colorEnabled=true").append(' ');

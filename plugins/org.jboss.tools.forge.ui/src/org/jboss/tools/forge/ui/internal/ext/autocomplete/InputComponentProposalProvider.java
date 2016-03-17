@@ -32,7 +32,7 @@ public class InputComponentProposalProvider implements IContentProposalProvider 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public IContentProposal[] getProposals(String contents, int position) {
-		List<IContentProposal> proposals = new ArrayList<IContentProposal>();
+		List<IContentProposal> proposals = new ArrayList<>();
 		for (Object proposal : completer.getCompletionProposals(context,
 				(InputComponent) component, contents)) {
 			if (proposal != null) {

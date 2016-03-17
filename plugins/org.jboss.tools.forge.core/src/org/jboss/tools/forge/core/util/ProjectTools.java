@@ -24,6 +24,9 @@ import org.eclipse.m2e.core.project.ProjectImportConfiguration;
 
 public class ProjectTools {
 
+	private	 ProjectTools() {
+	}
+
 	public static void updateProjectConfiguration(final IProject project) {		
 	    Job job = new WorkspaceJob("Updating project configuration") {
 	        public IStatus runInWorkspace(IProgressMonitor monitor) {
@@ -60,7 +63,7 @@ public class ProjectTools {
 	}
 	
 	private static Collection<MavenProjectInfo> getProjectToImport(String baseDirPath, String projectName) {
-		ArrayList<MavenProjectInfo> result = new ArrayList<MavenProjectInfo>(1);
+		ArrayList<MavenProjectInfo> result = new ArrayList<>(1);
 		result.add(createMavenProjectInfo(baseDirPath, projectName));
 		return result;
 	}

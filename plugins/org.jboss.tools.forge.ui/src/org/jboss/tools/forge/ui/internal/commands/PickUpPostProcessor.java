@@ -122,7 +122,7 @@ public class PickUpPostProcessor implements ForgeCommandPostProcessor {
 	}
 	
 	private ArrayList<String> createSegmentNames(IFileStore fileStore) {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		while (fileStore.getParent() != null) {
 			result.add(0, fileStore.getName());
 			fileStore = fileStore.getParent();
@@ -140,7 +140,7 @@ public class PickUpPostProcessor implements ForgeCommandPostProcessor {
 		Viewer viewer = getViewer(remoteSystemView);
 		Object input = viewer.getInput();
 		ArrayList<String> names = createSegmentNames(fileStore);
-		ArrayList<Object> treeSegments = new ArrayList<Object>();
+		ArrayList<Object> treeSegments = new ArrayList<>();
 		for (String name : names) {
 			if (input != null && input instanceof IAdaptable) {
 				ISystemViewElementAdapter adapter = SystemAdapterHelpers.getViewAdapter(input);

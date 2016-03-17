@@ -30,7 +30,7 @@ public class ForgeCommandProcessorImpl implements ForgeCommandProcessor {
 	
 	private static Map<String, ForgeCommandPostProcessor> getPostProcessors() {
 		if (POST_PROCESSORS == null) {
-			POST_PROCESSORS = new HashMap<String, ForgeCommandPostProcessor>();
+			POST_PROCESSORS = new HashMap<>();
 			POST_PROCESSORS.put("new-project", new NewProjectPostProcessor()); // OK
 			POST_PROCESSORS.put("persistence", new PersistencePostProcessor()); // OK
 			POST_PROCESSORS.put("pick-up", new PickUpPostProcessor()); // OK
@@ -73,7 +73,7 @@ public class ForgeCommandProcessorImpl implements ForgeCommandProcessor {
 	}
 	
 	private Map<String, String> getCommandDetails(String commandString) {
-		Map<String, String> result  = new HashMap<String, String>();
+		Map<String, String> result  = new HashMap<>();
 		int ec = commandString.indexOf(" EC: ");
 		int crn = commandString.indexOf(" CRN: ");
 		int crt = commandString.indexOf(" CRT: ");

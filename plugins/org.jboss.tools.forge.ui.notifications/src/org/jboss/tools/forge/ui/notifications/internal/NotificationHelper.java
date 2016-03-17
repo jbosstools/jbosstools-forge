@@ -10,7 +10,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class NotificationHelper {
-	
+
+	private NotificationHelper() {
+	}
+
 	private static class FadeInRunnable implements Runnable {
 		private Shell shell;
 		private int currentAlpha = 0;

@@ -41,7 +41,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 	private MasterStreamListener masterStreamListener = new MasterStreamListener();
 	private CommandResultListener commandResultListener = new CommandResultListener();
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-	private List<ForgeOutputListener> outputListeners = new ArrayList<ForgeOutputListener>();
+	private List<ForgeOutputListener> outputListeners = new ArrayList<>();
 	
 	
 	public IProcess getProcess() {
@@ -168,7 +168,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				if (streamMonitor != null) {
 					synchronized(mutex) {
 						try {
-							streamsProxy.write(new Character((char)31).toString() + str + '\n');
+							streamsProxy.write(Character.toString((char)31) + str + '\n');
 						} catch (IOException e) {
 							ForgeCorePlugin.log(e);
 						}

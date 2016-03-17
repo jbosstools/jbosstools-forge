@@ -10,6 +10,9 @@ import org.jboss.aesh.terminal.Key;
 
 public class CharacterConstants {
 
+	private CharacterConstants() {
+	}
+
 	public static final String START_LINE = toString(Key.HOME);
 	public static final String PREV_CHAR = toString(Key.LEFT);
 	public static final String CTRL_C = toString(Key.CTRL_C);
@@ -23,7 +26,7 @@ public class CharacterConstants {
 	
 	private static String toString(Key key) {
 		int[] keyValues = key.getKeyValues();
-		StringBuffer buffer = new StringBuffer(keyValues.length);
+		StringBuilder buffer = new StringBuilder(keyValues.length);
 		for (int i : keyValues) {
 			buffer.append((char)i);
 		}

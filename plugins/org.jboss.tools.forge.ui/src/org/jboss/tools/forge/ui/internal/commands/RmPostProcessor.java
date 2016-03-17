@@ -26,7 +26,7 @@ public class RmPostProcessor implements ForgeCommandPostProcessor {
 		int end = par.lastIndexOf(']');
 		if (start == -1 || end == -1) return null;
 		par = par.substring(start + 1, end);
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		StringTokenizer tokenizer = new StringTokenizer(par);
 		while (tokenizer.hasMoreTokens()) {
 			result.add(crn + File.separator + tokenizer.nextToken());
