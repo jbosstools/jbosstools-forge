@@ -37,12 +37,8 @@ public class F2Console extends AbstractForgeConsole {
 
 	@Override
 	public IAction[] createActions() {
-		return new IAction[] {
-				new StartAction(getRuntime()),
-				new StopAction(getRuntime()),
-				new GoToAction(getRuntime()),
-				new ClearAction(getRuntime()),
-				new LinkAction(getRuntime()) };
+		return new IAction[] { new StartAction(getRuntime()), new StopAction(getRuntime()),
+				new GoToAction(getRuntime()), new ClearAction(getRuntime()), new LinkAction(getRuntime()) };
 	}
 
 	@Override
@@ -69,14 +65,14 @@ public class F2Console extends AbstractForgeConsole {
 	public void goToPath(String path) {
 		Console console = getConsole();
 		if (console != null)
-			console.sendInput("cd " + path.replaceAll(" ", "\\ ") + " \n");
+			console.sendInput("cd " + path.replaceAll(" ", "\\ ") + " " + System.lineSeparator());
 	}
 
 	@Override
 	public void clear() {
 		Console console = getConsole();
 		if (console != null)
-			console.sendInput("clear\n");
+			console.sendInput("clear" + System.lineSeparator());
 	}
 
 	private Console getConsole() {
