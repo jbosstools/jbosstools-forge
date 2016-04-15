@@ -168,7 +168,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				if (streamMonitor != null) {
 					synchronized(mutex) {
 						try {
-							streamsProxy.write(new Character((char)31).toString() + str + '\n');
+							streamsProxy.write(Character.toString((char)31) + str + '\n');
 						} catch (IOException e) {
 							ForgeCorePlugin.log(e);
 						}
