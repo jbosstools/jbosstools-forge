@@ -6,59 +6,58 @@
     http://www.eclipse.org/legal/epl-v10.html
 
 -->
-<project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.jboss.tools</groupId>
-		<artifactId>parent</artifactId>
-		<version>4.4.0.Alpha1-SNAPSHOT</version>
-	</parent>
-	<artifactId>forge</artifactId>
-	<version>2.0.100-SNAPSHOT</version>
-	<name>jbosstools-forge</name>
-	<packaging>pom</packaging>
-	<properties>
-		<tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-forge.git</tycho.scmUrl>
-		<!-- workaround for https://issues.jboss.org/browse/JBIDE-22248 and https://engineering.redhat.com/rt/Ticket/Display.html?id=401756 -->
-		<!-- <jbossNexus>repository.jboss.org</jbossNexus> -->
-		<jbossNexus>origin-repository.jboss.org</jbossNexus>
-	</properties>
-	<modules>
-		<module>plugins</module>
-		<module>tests</module>
-		<module>features</module>
-		<module>site</module>
-	</modules>
-	<repositories>
-                <!-- To resolve parent artifact -->
-        <repository>
-                <id>jboss-public-repository-group</id>
-                <name>JBoss Public Repository Group</name>
-                <url>http://${jbossNexus}/nexus/content/groups/public/</url>
-                <releases>
-                        <enabled>true</enabled>
-                </releases>
-                <snapshots>
-                        <enabled>true</enabled>
-                </snapshots>
-        </repository>
-        <repository>
-                <id>jboss-developer-repository-group</id>
-                <name>JBoss Developer Repository Group</name>
-                <url>http://${jbossNexus}/nexus/content/groups/developer/</url>
-                <releases>
-                        <enabled>true</enabled>
-                </releases>
-                <snapshots>
-                        <enabled>true</enabled>
-                </snapshots>
-        </repository>
-		<repository>
-			<id>jbosstools-base</id>
-			<layout>p2</layout>
-			<url>${jbosstools-base-site}</url>
-		</repository>
-	</repositories>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+   xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>org.jboss.tools</groupId>
+      <artifactId>parent</artifactId>
+      <version>4.4.0.Alpha1-SNAPSHOT</version>
+   </parent>
+   <artifactId>forge</artifactId>
+   <version>2.0.100-SNAPSHOT</version>
+   <name>jbosstools-forge</name>
+   <packaging>pom</packaging>
+   <properties>
+      <tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-forge.git</tycho.scmUrl>
+      <!-- workaround for https://issues.jboss.org/browse/JBIDE-22248 and https://engineering.redhat.com/rt/Ticket/Display.html?id=401756 -->
+      <!-- <jbossNexus>repository.jboss.org</jbossNexus> -->
+      <jbossNexus>origin-repository.jboss.org</jbossNexus>
+   </properties>
+   <modules>
+      <module>plugins</module>
+      <module>tests</module>
+      <module>features</module>
+      <module>site</module>
+   </modules>
+   <repositories>
+      <!-- To resolve parent artifact -->
+      <repository>
+         <id>jboss-public-repository-group</id>
+         <name>JBoss Public Repository Group</name>
+         <url>http://origin-repository.jboss.org/nexus/content/groups/public/</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>jboss-developer-repository-group</id>
+         <name>JBoss Developer Repository Group</name>
+         <url>http://origin-repository.jboss.org/nexus/content/groups/developer/</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>jbosstools-base</id>
+         <layout>p2</layout>
+         <url>${jbosstools-base-site}</url>
+      </repository>
+   </repositories>
 </project>
