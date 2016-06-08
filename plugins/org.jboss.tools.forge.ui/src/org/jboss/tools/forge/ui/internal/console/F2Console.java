@@ -65,7 +65,7 @@ public class F2Console extends AbstractForgeConsole {
 	public void goToPath(String path) {
 		Console console = getConsole();
 		if (console != null)
-			console.sendInput("cd " + path.replaceAll(" ", "\\ ") + " " + System.lineSeparator());
+			console.sendInput("cd " + path.replaceAll(" ", "\\\\ ") + " " + System.lineSeparator());
 	}
 
 	@Override
