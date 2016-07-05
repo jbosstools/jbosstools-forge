@@ -149,12 +149,12 @@ public class UICommandListDialog extends PopupDialog {
 		return null;
 	}
 
-	private static File extractFile(IEditorPart editor) {
+	private static Object extractFile(IEditorPart editor) {
 		IEditorInput editorInput = editor.getEditorInput();
 		if (editorInput != null) {
 			FileEditorInput fileEditorInput = editorInput.getAdapter(FileEditorInput.class);
 			if (fileEditorInput != null) {
-				return fileEditorInput.getFile().getRawLocation().toFile();
+				return fileEditorInput.getFile();
 			}
 			FileStoreEditorInput fileStoreEditorInput = editorInput.getAdapter(FileStoreEditorInput.class);
 			if (fileStoreEditorInput != null) {
