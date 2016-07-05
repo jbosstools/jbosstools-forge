@@ -20,7 +20,6 @@ import org.eclipse.core.runtime.Platform;
 import org.jboss.forge.addon.ui.command.UICommand;
 import org.jboss.forge.furnace.services.Imported;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
-import org.jboss.tools.forge.core.internal.helper.ForgeHelper;
 import org.jboss.tools.forge.core.io.ForgeOutputListener;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
@@ -34,7 +33,8 @@ public class FurnaceRuntime implements ForgeRuntime {
 	private String version = null;
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-	private FurnaceRuntime() {}
+	private FurnaceRuntime() {
+	}
 
 	@Override
 	public String getName() {
@@ -69,7 +69,7 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	@Override
 	public void start(IProgressMonitor progressMonitor) {
-		ForgeHelper.sendStartEvent(this);
+		ForgeCorePlugin.getDefault().sendStartEvent(this);
 		if (progressMonitor == null) {
 			progressMonitor = new NullProgressMonitor();
 		}
@@ -135,10 +135,12 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	}
 
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
 	}
 
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
 	}
@@ -151,8 +153,7 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	private static Map<String, UICommand> getAllCandidatesAsMap() {
 		Map<String, UICommand> result = new TreeMap<>();
-		Imported<UICommand> instances = FurnaceService.INSTANCE
-				.lookupImported(UICommand.class);
+		Imported<UICommand> instances = FurnaceService.INSTANCE.lookupImported(UICommand.class);
 		for (@SuppressWarnings("unused")
 		UICommand uiCommand : instances) {
 		}
@@ -162,10 +163,12 @@ public class FurnaceRuntime implements ForgeRuntime {
 	private String initializeVersion() {
 		String result = "unknown version";
 		String location = getLocation();
-		if (location == null) return result;
+		if (location == null)
+			return result;
 		location += "/lib";
 		File file = new File(location);
-		if (!file.exists()) return result;
+		if (!file.exists())
+			return result;
 		String[] candidates = file.list();
 		for (String candidate : candidates) {
 			if (candidate.startsWith("shell-spi-")) {
@@ -180,13 +183,11 @@ public class FurnaceRuntime implements ForgeRuntime {
 
 	private void initLocation() {
 		try {
-			location = FileLocator.getBundleFile(
-					Platform.getBundle("org.jboss.tools.forge.runtime"))
+			location = FileLocator.getBundleFile(Platform.getBundle("org.jboss.tools.forge.runtime"))
 					.getCanonicalPath();
 		} catch (IOException e) {
 			ForgeCorePlugin.log(e);
 		}
 	}
-
 
 }

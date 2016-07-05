@@ -24,7 +24,6 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
 import org.jboss.tools.forge.core.internal.ForgeCorePlugin;
-import org.jboss.tools.forge.core.internal.helper.ForgeHelper;
 import org.jboss.tools.forge.core.internal.process.ForgeLaunchHelper;
 import org.jboss.tools.forge.core.internal.process.ForgeRuntimeProcess;
 import org.jboss.tools.forge.core.io.ForgeHiddenOutputFilter;
@@ -33,39 +32,42 @@ import org.jboss.tools.forge.core.runtime.ForgeRuntime;
 import org.jboss.tools.forge.core.runtime.ForgeRuntimeState;
 
 public abstract class ForgeAbstractRuntime implements ForgeRuntime {
-	
+
 	private IProcess process = null;
 	private ForgeRuntimeState state = ForgeRuntimeState.STOPPED;
 	private String version = null;
-	private final TerminateListener terminateListener = new TerminateListener();	
+	private final TerminateListener terminateListener = new TerminateListener();
 	private MasterStreamListener masterStreamListener = new MasterStreamListener();
 	private CommandResultListener commandResultListener = new CommandResultListener();
 	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	private List<ForgeOutputListener> outputListeners = new ArrayList<>();
-	
-	
+
 	public IProcess getProcess() {
 		return process;
 	}
-	
+
+	@Override
 	public ForgeRuntimeState getState() {
 		return state;
 	}
-	
+
+	@Override
 	public String getVersion() {
 		if (version == null) {
 			version = initializeVersion();
 		}
 		return version;
 	}
-	
+
 	private String initializeVersion() {
 		String result = "unknown version";
 		String location = getLocation();
-		if (location == null) return result;
+		if (location == null)
+			return result;
 		location += "/modules/org/jboss/forge/shell/api/main";
 		File file = new File(location);
-		if (!file.exists()) return result;
+		if (!file.exists())
+			return result;
 		String[] candidates = file.list();
 		for (String candidate : candidates) {
 			if (candidate.startsWith("forge-shell-api-")) {
@@ -77,9 +79,10 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		}
 		return result;
 	}
-	
+
+	@Override
 	public void start(IProgressMonitor progressMonitor) {
-		ForgeHelper.sendStartEvent(this);
+		ForgeCorePlugin.getDefault().sendStartEvent(this);
 		errorMessage = null;
 		IStreamListener startupListener = null;
 		IStreamListener errorListener = null;
@@ -146,18 +149,20 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			progressMonitor.done();
 		}
 	}
-	
+
 	private boolean commandResultAvailable = false;
 	private String commandResult = null;
 	private Object mutex = new Object();
 	private String errorMessage = null;
-	
+
+	@Override
 	public String getErrorMessage() {
 		return errorMessage;
 	}
-	
+
+	@Override
 	public String sendCommand(String str) {
-//		System.out.println("sendCommand(" + str + ")");
+		// System.out.println("sendCommand(" + str + ")");
 		String result = null;
 		if (process != null && !process.isTerminated()) {
 			IStreamsProxy streamsProxy = getStreamsProxy();
@@ -166,16 +171,17 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				errorStreamMonitor.removeListener(masterStreamListener);
 				IStreamMonitor streamMonitor = streamsProxy.getOutputStreamMonitor();
 				if (streamMonitor != null) {
-					synchronized(mutex) {
+					synchronized (mutex) {
 						try {
-							streamsProxy.write(Character.toString((char)31) + str + '\n');
+							streamsProxy.write(Character.toString((char) 31) + str + '\n');
 						} catch (IOException e) {
 							ForgeCorePlugin.log(e);
 						}
 						while (!commandResultAvailable) {
 							try {
 								mutex.wait();
-							} catch (InterruptedException e) {}
+							} catch (InterruptedException e) {
+							}
 						}
 					}
 					result = commandResult;
@@ -185,10 +191,12 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 				errorStreamMonitor.addListener(masterStreamListener);
 			}
 		}
-//		System.out.println("ForgeAbstractRuntime.sendCommand result: " + result);
+		// System.out.println("ForgeAbstractRuntime.sendCommand result: " +
+		// result);
 		return result;
 	}
-	
+
+	@Override
 	public void sendInput(String str) {
 		if (process != null && !process.isTerminated()) {
 			IStreamsProxy streamProxy = getStreamsProxy();
@@ -201,7 +209,8 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			}
 		}
 	}
-	
+
+	@Override
 	public void stop(IProgressMonitor progressMonitor) {
 		if (progressMonitor == null) {
 			progressMonitor = new NullProgressMonitor();
@@ -213,7 +222,7 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			progressMonitor.done();
 		}
 	}
-	
+
 	private void terminate() {
 		try {
 			if (process != null) {
@@ -235,13 +244,13 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			ForgeCorePlugin.log(e);
 		}
 	}
-	
+
 	private void setNewState(ForgeRuntimeState newState) {
 		ForgeRuntimeState oldState = state;
 		state = newState;
 		propertyChangeSupport.firePropertyChange(PROPERTY_STATE, oldState, state);
 	}
-	
+
 	private IStreamsProxy getStreamsProxy() {
 		if (process instanceof ForgeRuntimeProcess) {
 			return ((ForgeRuntimeProcess) process).getForgeStreamsProxy();
@@ -249,46 +258,53 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 		return process.getStreamsProxy();
 	}
 
+	@Override
 	public void addPropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		propertyChangeSupport.addPropertyChangeListener(propertyChangeListener);
 	}
-	
+
+	@Override
 	public void removePropertyChangeListener(PropertyChangeListener propertyChangeListener) {
 		propertyChangeSupport.removePropertyChangeListener(propertyChangeListener);
 	}
-	
+
+	@Override
 	public void addOutputListener(ForgeOutputListener listener) {
 		outputListeners.add(listener);
 	}
-	
+
+	@Override
 	public void removeOutputListener(ForgeOutputListener listener) {
 		outputListeners.remove(listener);
 	}
-	
+
 	private class StartupListener implements IStreamListener {
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
 			getStreamsProxy().getOutputStreamMonitor().removeListener(this);
 			setNewState(ForgeRuntimeState.RUNNING);
-		}		
+		}
 	}
-	
+
 	private class ErrorListener implements IStreamListener {
 		private IStreamMonitor fMonitor;
+
 		public ErrorListener(IStreamMonitor monitor) {
 			fMonitor = monitor;
 			monitor.addListener(this);
 			// make sure that output is processed if forge process dies quickly
 			streamAppended(null, fMonitor);
 		}
+
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
-			if (text == null) return;
+			if (text == null)
+				return;
 			errorMessage = monitor.getContents();
 			ForgeCorePlugin.logErrorMessage(errorMessage);
 		}
 	}
-	
+
 	private class MasterStreamListener implements IStreamListener {
 		@Override
 		public void streamAppended(String text, IStreamMonitor monitor) {
@@ -297,16 +313,19 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			}
 		}
 	}
-	
+
 	private class CommandResultListener extends ForgeHiddenOutputFilter implements IStreamListener {
 		@Override
-		public void streamAppended(String text, IStreamMonitor monitor) {	
-//			System.out.println("CommandResultListener.streamAppended(" + text + ")");
+		public void streamAppended(String text, IStreamMonitor monitor) {
+			// System.out.println("CommandResultListener.streamAppended(" + text
+			// + ")");
 			outputAvailable(text);
 		}
+
 		@Override
 		public void handleFilteredString(String str) {
-//			System.out.println("CommandResultListener.handleFilteredString(" + str + ")");
+			// System.out.println("CommandResultListener.handleFilteredString("
+			// + str + ")");
 			if (str.startsWith("RESULT: ")) {
 				commandResult = str.substring(8);
 				commandResultAvailable = true;
@@ -316,28 +335,28 @@ public abstract class ForgeAbstractRuntime implements ForgeRuntime {
 			}
 		}
 	}
-	
+
 	private class TerminateListener implements IDebugEventSetListener {
 		@Override
 		public void handleDebugEvents(DebugEvent[] events) {
-	        for (int i = 0; i < events.length; i++) {
-	            DebugEvent event = events[i];
-	            if (event.getSource().equals(process)) {
-	                if (event.getKind() == DebugEvent.TERMINATE) {
-	                	DebugPlugin.getDefault().asyncExec(new Runnable() {
+			for (int i = 0; i < events.length; i++) {
+				DebugEvent event = events[i];
+				if (event.getSource().equals(process)) {
+					if (event.getKind() == DebugEvent.TERMINATE) {
+						DebugPlugin.getDefault().asyncExec(new Runnable() {
 							@Override
 							public void run() {
-			                	setNewState(ForgeRuntimeState.STOPPED);
-			                	ForgeCorePlugin.removeForgeProcess(process);
-			                	process = null;
-			                	DebugPlugin.getDefault().removeDebugEventListener(terminateListener);
-							}	                		
-	                	});
-	                }
-	            }
-	        }
+								setNewState(ForgeRuntimeState.STOPPED);
+								ForgeCorePlugin.removeForgeProcess(process);
+								process = null;
+								DebugPlugin.getDefault().removeDebugEventListener(terminateListener);
+							}
+						});
+					}
+				}
+			}
 		}
-		
+
 	}
 
 }
