@@ -196,6 +196,7 @@ public abstract class ControlBuilder<CONTROL extends Control> {
 		}
 		if (changed) {
 			notes.getParent().layout();
+			notes.getParent().redraw();
 		}
 	}
 
