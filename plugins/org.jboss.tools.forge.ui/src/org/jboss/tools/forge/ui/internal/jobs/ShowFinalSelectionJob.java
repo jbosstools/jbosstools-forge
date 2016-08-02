@@ -81,12 +81,7 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 			if (method != null) {
 				final Object resource = method.invoke(object, new Object[] {});
 				if (resource != null && resource instanceof File) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							selectFile((File) resource, region);
-						}
-					});
+					Display.getDefault().asyncExec(() -> selectFile((File) resource, region));
 				}
 			}
 		} catch (NoSuchMethodException e) {
