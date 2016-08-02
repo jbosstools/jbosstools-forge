@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -26,6 +27,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.text.BlockTextSelection;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreePath;
@@ -35,6 +38,7 @@ import org.eclipse.rse.ui.view.IRSEViewPart;
 import org.eclipse.rse.ui.view.ISystemViewElementAdapter;
 import org.eclipse.rse.ui.view.SystemAdapterHelpers;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -44,6 +48,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.part.ISetSelectionTarget;
+import org.eclipse.ui.texteditor.ITextEditor;
+import org.jboss.forge.addon.ui.context.UIRegion;
 import org.jboss.forge.addon.ui.context.UISelection;
 import org.jboss.tools.forge.ui.internal.ForgeUIPlugin;
 import org.jboss.tools.forge.ui.internal.ext.context.UIContextImpl;
@@ -59,30 +65,27 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 	public void setContext(UIContextImpl context) {
 		this.context = context;
 	}
-	
+
 	@Override
-	public IStatus runInWorkspace(IProgressMonitor monitor)
-			throws CoreException {
-		UISelection<?> selection = context.getSelection();
+	public IStatus runInWorkspace(IProgressMonitor monitor) throws CoreException {
+		UISelection<Object> selection = context.getSelection();
 		if (selection != null && !selection.isEmpty()) {
-			selectResourceFor(selection.get());
+			selectResourceFor(selection.get(), selection.getRegion());
 		}
 		return Status.OK_STATUS;
 	}
 
-	private void selectResourceFor(Object object) {
+	private void selectResourceFor(Object object, Optional<UIRegion<Object>> region) {
 		try {
-			Method method = object.getClass().getMethod(
-					"getUnderlyingResourceObject",
-					new Class[] {});
+			Method method = object.getClass().getMethod("getUnderlyingResourceObject", new Class[] {});
 			if (method != null) {
 				final Object resource = method.invoke(object, new Object[] {});
 				if (resource != null && resource instanceof File) {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							selectFile((File)resource);
-						}						
+							selectFile((File) resource, region);
+						}
 					});
 				}
 			}
@@ -93,12 +96,13 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 		}
 	}
 
-	private void selectFile(File file) {
+	private void selectFile(File file, Optional<UIRegion<Object>> region) {
 		try {
 			IPath path = new Path(file.getCanonicalPath());
 			IFileStore fileStore = EFS.getLocalFileSystem().getStore(path);
 			IFileInfo fileInfo = fileStore.fetchInfo();
-			if (!fileInfo.exists()) return;
+			if (!fileInfo.exists())
+				return;
 			IResource resource = null;
 			if (fileInfo.isDirectory()) {
 				resource = ResourcesPlugin.getWorkspace().getRoot().getContainerForLocation(path);
@@ -111,13 +115,12 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 				expandSystemDirectory(fileStore);
 			}
 			if (!fileInfo.isDirectory()) {
-				openFileInEditor(fileStore);
+				openFileInEditor(fileStore, region);
 			}
 		} catch (IOException e) {
 			ForgeUIPlugin.log(e);
 		}
 	}
-	
 
 	private void expandWorkspaceResource(IResource container) {
 		IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
@@ -125,7 +128,7 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 			refreshWorkspaceResource(container);
 			IViewPart projectExplorer = workbenchPage.findView(IPageLayout.ID_PROJECT_EXPLORER);
 			if (projectExplorer != null && projectExplorer instanceof CommonNavigator) {
-				expandInProjectExplorer((CommonNavigator)projectExplorer, container);
+				expandInProjectExplorer((CommonNavigator) projectExplorer, container);
 			}
 			IViewPart packageExplorer = workbenchPage.findView(JavaUI.ID_PACKAGES);
 			if (packageExplorer != null) {
@@ -142,11 +145,23 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 		}
 	}
 
-	private void openFileInEditor(IFileStore fileStore) {
+	private void openFileInEditor(IFileStore fileStore, Optional<UIRegion<Object>> region) {
 		try {
 			IWorkbenchPage workbenchPage = getActiveWorkbenchPage();
 			if (workbenchPage != null) {
-				IDE.openEditorOnFileStore(workbenchPage, fileStore);
+				IEditorPart editorPart = IDE.openEditorOnFileStore(workbenchPage, fileStore);
+				if (editorPart instanceof ITextEditor) {
+					ITextEditor itextEditor = (ITextEditor) editorPart;
+					region.ifPresent(r -> {
+						IDocument doc = itextEditor.getDocumentProvider().getDocument(itextEditor.getEditorInput());
+						// Line is 0-based, UIRegion.getStart/EndLine is not
+						BlockTextSelection selection = new BlockTextSelection(doc, r.getStartLine() - 1,
+								r.getStartPosition(), r.getEndLine() - 1, r.getEndPosition(), 1);
+
+						ISelectionProvider selectionProvider = itextEditor.getSelectionProvider();
+						selectionProvider.setSelection(selection);
+					});
+				}
 			}
 		} catch (PartInitException e) {
 			ForgeUIPlugin.log(e);
@@ -178,19 +193,18 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 
 	private void expandInPackageExplorer(IViewPart packageExplorer, IResource container) {
 		if (packageExplorer instanceof ISetSelectionTarget) {
-			((ISetSelectionTarget)packageExplorer).selectReveal(new StructuredSelection(container));
+			((ISetSelectionTarget) packageExplorer).selectReveal(new StructuredSelection(container));
 		}
 		Object treeViewer = packageExplorer.getAdapter(ISelectionProvider.class);
 		if (treeViewer != null && treeViewer instanceof TreeViewer) {
-			((TreeViewer)treeViewer).expandToLevel(JavaCore.create(container), 1);
+			((TreeViewer) treeViewer).expandToLevel(JavaCore.create(container), 1);
 		}
 	}
 
-	private void expandInRemoteSystemView(
-			IViewPart remoteSystemView,
-			IFileStore fileStore) {
+	private void expandInRemoteSystemView(IViewPart remoteSystemView, IFileStore fileStore) {
 		Viewer viewer = getViewer(remoteSystemView);
-		if (viewer == null) return;
+		if (viewer == null)
+			return;
 		Object input = viewer.getInput();
 		ArrayList<String> names = createSegmentNames(fileStore);
 		ArrayList<Object> treeSegments = new ArrayList<>();
@@ -198,7 +212,7 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 			if (input instanceof IAdaptable) {
 				ISystemViewElementAdapter adapter = SystemAdapterHelpers.getViewAdapter(input);
 				if (adapter != null) {
-					for (Object object : adapter.getChildren((IAdaptable)input, null)) {
+					for (Object object : adapter.getChildren((IAdaptable) input, null)) {
 						if (object instanceof IAdaptable) {
 							adapter = SystemAdapterHelpers.getViewAdapter(object);
 							if (adapter != null && name.equals(adapter.getText(object))) {
@@ -217,14 +231,14 @@ public class ShowFinalSelectionJob extends ChainedWorkspaceJob {
 		TreePath treePath = new TreePath(treeSegments.toArray());
 		viewer.setSelection(new StructuredSelection(treePath));
 		if (viewer instanceof TreeViewer) {
-			((TreeViewer)viewer).expandToLevel(treePath, 1);
+			((TreeViewer) viewer).expandToLevel(treePath, 1);
 
 		}
 	}
 
 	private Viewer getViewer(IViewPart remoteSystemView) {
 		if (remoteSystemView instanceof IRSEViewPart) {
-			return ((IRSEViewPart)remoteSystemView).getRSEViewer();
+			return ((IRSEViewPart) remoteSystemView).getRSEViewer();
 		} else {
 			return null;
 		}
