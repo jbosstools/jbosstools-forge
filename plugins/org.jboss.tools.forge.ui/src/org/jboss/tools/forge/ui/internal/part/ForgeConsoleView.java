@@ -52,10 +52,11 @@ public class ForgeConsoleView extends ViewPart implements IShowInTarget {
 	}
 
 	private void createActions() {
-		// Since there is only one runtime anymore (for now?) next line is commented
-		// ForgeConsoleDropdownAction action = new ForgeConsoleDropdownAction(this);
-		IToolBarManager toolBarManager = getViewSite().getActionBars()
-				.getToolBarManager();
+		// Since there is only one runtime anymore (for now?) next line is
+		// commented
+		// ForgeConsoleDropdownAction action = new
+		// ForgeConsoleDropdownAction(this);
+		IToolBarManager toolBarManager = getViewSite().getActionBars().getToolBarManager();
 		toolBarManager.add(new Separator(FORGE_CONSOLE_ACTION_GROUP));
 		// additional separator needs to be added because otherwise the added
 		// items
@@ -91,8 +92,8 @@ public class ForgeConsoleView extends ViewPart implements IShowInTarget {
 		}
 		return false;
 	}
-	
+
 	public boolean isShowing() {
-		return forgeConsolePageBook.isVisible();
+		return forgeConsolePageBook != null && forgeConsolePageBook.isVisible();
 	}
 }
