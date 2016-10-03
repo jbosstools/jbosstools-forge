@@ -185,4 +185,22 @@
             commandId="org.jboss.tools.forge.ui.command.runForgeCommand">
       </handler>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.jboss.tools.forge.ui.category"
+            class="org.jboss.tools.forge.ui.internal.ext.wizards.NewProjectWizard"
+            icon="icons/forge.png"
+            id="org.jboss.tools.forge.ui.newProjectWizard"
+            name="New JBoss Forge Project"
+            project="false">
+         <description>
+            Creates a new project using the JBoss Forge &apos;Project: New&apos; wizard
+         </description>
+      </wizard>
+      <category
+            id="org.jboss.tools.forge.ui.category"
+            name="JBoss Forge">
+      </category>
+   </extension>
 </plugin>

@@ -39,8 +39,7 @@ public class ForgeWizard extends MutableWizard {
 	private ForgeWizardHelper helper = new ForgeWizardHelper();
 	private InterruptableProgressMonitor progressMonitor;
 
-	public ForgeWizard(String command, CommandController controller,
-			UIContextImpl contextImpl) {
+	public ForgeWizard(String command, CommandController controller, UIContextImpl contextImpl) {
 		this.controller = controller;
 		this.uiContext = contextImpl;
 		setWindowTitle(constructTitle(command));
@@ -64,8 +63,7 @@ public class ForgeWizard extends MutableWizard {
 			} else {
 				currentSelectionLabel = currentSelection.get().toString();
 			}
-			title.append(" [Current Selection: ").append(currentSelectionLabel)
-					.append("]");
+			title.append(" [Current Selection: ").append(currentSelectionLabel).append("]");
 		}
 		return title.toString();
 	}
@@ -91,22 +89,17 @@ public class ForgeWizard extends MutableWizard {
 		return true;
 	}
 
-	public void performFinish(final IRunnableContext runnableContext,
-			final Shell shell) throws InvocationTargetException,
-			InterruptedException {
+	public void performFinish(final IRunnableContext runnableContext, final Shell shell)
+			throws InvocationTargetException, InterruptedException {
 		runnableContext.run(true, true, new IRunnableWithProgress() {
 			@Override
-			public void run(IProgressMonitor monitor)
-					throws InvocationTargetException, InterruptedException {
+			public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 				try {
 					if (progressMonitor != null)
-						progressMonitor.setRunnableThread(Thread
-								.currentThread());
+						progressMonitor.setRunnableThread(Thread.currentThread());
 
-					monitor.beginTask("Executing Forge Wizard",
-							IProgressMonitor.UNKNOWN);
-					Map<Object, Object> attributeMap = uiContext
-							.getAttributeMap();
+					monitor.beginTask("Executing Forge Wizard", IProgressMonitor.UNKNOWN);
+					Map<Object, Object> attributeMap = uiContext.getAttributeMap();
 					attributeMap.put(IProgressMonitor.class, monitor);
 					attributeMap.put(Shell.class, shell);
 
@@ -115,8 +108,7 @@ public class ForgeWizard extends MutableWizard {
 					helper.onFinish(getUIContext());
 					monitor.done();
 				} catch (Exception e) {
-					ForgeUIPlugin.displayMessage(getWindowTitle(),
-							"Error while executing task, check Error log view",
+					ForgeUIPlugin.displayMessage(getWindowTitle(), "Error while executing task, check Error log view",
 							NotificationType.ERROR);
 					ForgeUIPlugin.log(e);
 				} finally {
@@ -144,15 +136,13 @@ public class ForgeWizard extends MutableWizard {
 			if (message != null) {
 				NotificationType notificationType = result instanceof Failed ? NotificationType.ERROR
 						: NotificationType.INFO;
-				ForgeUIPlugin.displayMessage(getWindowTitle(), message,
-						notificationType);
+				ForgeUIPlugin.displayMessage(getWindowTitle(), message, notificationType);
 			}
 			if (result instanceof Failed) {
 				Throwable exception = ((Failed) result).getException();
 				if (exception != null) {
 					ForgeUIPlugin.log(exception);
-					ForgeUIPlugin.displayMessage(getWindowTitle(),
-							String.valueOf(exception.getMessage()),
+					ForgeUIPlugin.displayMessage(getWindowTitle(), String.valueOf(exception.getMessage()),
 							NotificationType.ERROR);
 				}
 			}
@@ -203,5 +193,9 @@ public class ForgeWizard extends MutableWizard {
 			forgeWizardPage.dispose();
 		}
 		subList.clear();
+	}
+
+	public CommandController getController() {
+		return controller;
 	}
 }

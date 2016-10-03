@@ -98,23 +98,8 @@ public final class WizardDialogHelper {
 	}
 
 	public void openWizard(String windowTitle, UICommand selectedCommand, Map<String, ?> values) {
-		CommandControllerFactory controllerFactory = FurnaceService.INSTANCE.lookup(CommandControllerFactory.class);
-		CommandFactory commandFactory = FurnaceService.INSTANCE.lookup(CommandFactory.class);
-		selectedCommand = commandFactory.getNewCommandByName(context, selectedCommand.getMetadata(context).getName());
-		if (windowTitle == null) {
-			windowTitle = selectedCommand.getMetadata(context).getName();
-		}
-		ForgeUIRuntime runtime = new ForgeUIRuntime();
-		CommandController controller = controllerFactory.createController(context, runtime, selectedCommand);
-		try {
-			controller.initialize();
-		} catch (Exception e) {
-			ForgeUIPlugin.displayMessage(windowTitle, "Error while initializing controller. Check logs",
-					NotificationType.ERROR);
-			ForgeUIPlugin.log(e);
-			return;
-		}
-		ForgeWizard wizard = new ForgeWizard(windowTitle, controller, context);
+		ForgeWizard wizard = createForgeWizard(windowTitle, selectedCommand.getMetadata(context).getName());
+		CommandController controller = wizard.getController();
 		final WizardDialog wizardDialog;
 		if (controller instanceof WizardCommandController) {
 			WizardCommandController wizardController = (WizardCommandController) controller;
@@ -202,5 +187,25 @@ public final class WizardDialogHelper {
 				ForgeUIPlugin.log(e);
 			}
 		}
+	}
+
+	public ForgeWizard createForgeWizard(String windowTitle, String commandName) {
+		CommandControllerFactory controllerFactory = FurnaceService.INSTANCE.lookup(CommandControllerFactory.class);
+		CommandFactory commandFactory = FurnaceService.INSTANCE.lookup(CommandFactory.class);
+		UICommand cmd = commandFactory.getNewCommandByName(context, commandName);
+		if (windowTitle == null) {
+			windowTitle = cmd.getMetadata(context).getName();
+		}
+		ForgeUIRuntime runtime = new ForgeUIRuntime();
+		CommandController controller = controllerFactory.createController(context, runtime, cmd);
+		try {
+			controller.initialize();
+		} catch (Exception e) {
+			ForgeUIPlugin.displayMessage(windowTitle, "Error while initializing controller. Check logs",
+					NotificationType.ERROR);
+			ForgeUIPlugin.log(e);
+		}
+		ForgeWizard wizard = new ForgeWizard(windowTitle, controller, context);
+		return wizard;
 	}
 }
