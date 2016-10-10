@@ -31,38 +31,38 @@ public class ForgeCommandHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
-		if (runtime == FurnaceRuntime.INSTANCE) {
-			handleFurnace(event);
-		} else {
-			startForgeRuntime(runtime);
-		}
+		IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
+		openWizardDialog(window);
 		return null;
 	}
 
-	private void handleFurnace(ExecutionEvent event) {
-		try {
-			ForgeConsoleView forgeConsoleView = ForgeHelper.findForgeConsoleView();
-			if (forgeConsoleView != null && forgeConsoleView.isShowing()) {
-				ForgeHelper.showRuntime(FurnaceRuntime.INSTANCE);
-			}
-			IWorkbenchWindow window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-			if (saveCurrentEditor(window)) {
-				if (!ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
-					Job job = ForgeHelper.createStartRuntimeJob(FurnaceRuntime.INSTANCE);
-					job.addJobChangeListener(new JobChangeAdapter() {
-						@Override
-						public void done(IJobChangeEvent event) {
-							Display.getDefault().asyncExec(() -> new UICommandListDialog(window).open());
-						}
-					});
-					job.schedule();
-				} else {
-					new UICommandListDialog(window).open();
+	public void openWizardDialog(IWorkbenchWindow window) {
+		ForgeRuntime runtime = ForgeCorePreferences.INSTANCE.getDefaultRuntime();
+		if (runtime != FurnaceRuntime.INSTANCE) {
+			startForgeRuntime(runtime);
+		} else {
+			try {
+				ForgeConsoleView forgeConsoleView = ForgeHelper.findForgeConsoleView();
+				if (forgeConsoleView != null && forgeConsoleView.isShowing()) {
+					ForgeHelper.showRuntime(FurnaceRuntime.INSTANCE);
 				}
+				if (saveCurrentEditor(window)) {
+					if (!ForgeRuntimeState.RUNNING.equals(FurnaceRuntime.INSTANCE.getState())) {
+						Job job = ForgeHelper.createStartRuntimeJob(FurnaceRuntime.INSTANCE);
+						job.addJobChangeListener(new JobChangeAdapter() {
+							@Override
+							public void done(IJobChangeEvent event) {
+								Display.getDefault().asyncExec(() -> new UICommandListDialog(window).open());
+							}
+						});
+						job.schedule();
+					} else {
+						new UICommandListDialog(window).open();
+					}
+				}
+			} catch (Exception e) {
+				ForgeUIPlugin.log(e);
 			}
-		} catch (Exception e) {
-			ForgeUIPlugin.log(e);
 		}
 	}
 

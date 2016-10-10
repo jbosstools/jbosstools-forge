@@ -10,6 +10,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -20,27 +21,28 @@ import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.IPageSite;
 import org.eclipse.ui.part.PageSite;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
+import org.jboss.tools.forge.ui.internal.actions.ShowForgeMenuAction;
 import org.jboss.tools.forge.ui.internal.console.ForgeConsole;
 
 public class ForgeConsolePage implements IPage, PropertyChangeListener {
-	
+
 	private ForgeConsolePageBook forgeConsolePageBook = null;
 	private ForgeConsole forgeConsole = null;
 	private Control control = null;
 	private IPageSite pageSite = null;
 	private SubActionBars actionBars = null;
-	
+
 	public ForgeConsolePage(ForgeConsolePageBook forgeConsolePageBook, ForgeConsole forgeConsole) {
 		this.forgeConsolePageBook = forgeConsolePageBook;
 		this.forgeConsole = forgeConsole;
 		forgeConsole.getRuntime().addPropertyChangeListener(this);
 	}
-	
+
 	public void createControl() {
 		createControl(forgeConsolePageBook);
 	}
-	
-	@Override 
+
+	@Override
 	public void createControl(Composite parent) {
 		control = forgeConsole.createControl(parent);
 	}
@@ -56,56 +58,56 @@ public class ForgeConsolePage implements IPage, PropertyChangeListener {
 			control.setFocus();
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
-        Control control = getControl();
-        if (control != null && !control.isDisposed()) {
+		Control control = getControl();
+		if (control != null && !control.isDisposed()) {
 			control.dispose();
 		}
-        actionBars.dispose();
+		actionBars.dispose();
 	}
 
 	@Override
 	public void setActionBars(IActionBars actionBars) {
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if ((forgeConsolePageBook.getCurrentPage() == this) 
+		if ((forgeConsolePageBook.getCurrentPage() == this)
 				&& ForgeRuntime.PROPERTY_STATE.equals(evt.getPropertyName())) {
 			updateActionBars();
 		}
 	}
-	
+
 	void initialize(IViewSite viewSite) {
 		pageSite = new PageSite(viewSite);
-		actionBars = (SubActionBars)pageSite.getActionBars();
+		actionBars = (SubActionBars) pageSite.getActionBars();
 		IAction[] actions = forgeConsole.createActions();
+		IToolBarManager toolBarManager = actionBars.getToolBarManager();
 		for (IAction action : actions) {
-			actionBars.getToolBarManager().appendToGroup(
-					ForgeConsoleView.FORGE_CONSOLE_ACTION_GROUP, 
-					action);;
+			toolBarManager.appendToGroup(ForgeConsoleView.FORGE_CONSOLE_ACTION_GROUP, action);
 		}
+		actionBars.getMenuManager().add(new ShowForgeMenuAction(pageSite.getWorkbenchWindow()));
 	}
-	
+
 	void activateActionBars() {
 		actionBars.activate();
 	}
-	
+
 	void deactivateActionBars() {
 		actionBars.deactivate();
 	}
-	
+
 	void show() {
 		forgeConsolePageBook.showPage(getControl());
 		forgeConsolePageBook.updateStatusMessage(getStatusMessage());
 	}
-	
+
 	String getStatusMessage() {
 		return forgeConsole.getLabel();
 	}
-	
+
 	private void updateActionBars() {
 		// run in UI thread
 		Display.getDefault().asyncExec(new Runnable() {
@@ -117,7 +119,7 @@ public class ForgeConsolePage implements IPage, PropertyChangeListener {
 				actionBars.updateActionBars();
 				actionBars.activate();
 				actionBars.updateActionBars();
-			}			
+			}
 		});
 	}
 
