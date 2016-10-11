@@ -2,7 +2,7 @@
 
 ## Summary
 
-Forge Tools provides easy access and integration with Forge from within a view in Eclipse. You can open this view by pressing Ctrl+4 (Linux/Windows) or Cmd+4 (Mac).
+Forge Tools provides easy access and integration with Forge from within a view in Eclipse. You can open this view by pressing Ctrl+4 (Linux/Windows) or Cmd+4 (Mac). The menu can also be opened by choosing the `Open Command Selection Dialog...` menu item in the Forge Console view. 
 
 ## Install
 
