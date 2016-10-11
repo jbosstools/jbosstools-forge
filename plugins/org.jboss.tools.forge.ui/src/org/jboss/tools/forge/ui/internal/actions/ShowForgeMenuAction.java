@@ -25,7 +25,7 @@ public class ShowForgeMenuAction extends Action {
 
 	public ShowForgeMenuAction(IWorkbenchWindow window) {
 		this.window = window;
-		setText("Open Wizard Menu...");
+		setText("Open Command Selection Dialog...");
 		setToolTipText("Displays the Quick Access Forge Wizard Menu");
 		// It would be easier if SWT.MOD1 could be used
 		int modifierKey = OperatingSystemUtils.isOSX() ? SWT.COMMAND : SWT.CTRL;
