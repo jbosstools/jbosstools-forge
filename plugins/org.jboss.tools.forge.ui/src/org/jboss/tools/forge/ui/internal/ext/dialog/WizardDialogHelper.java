@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.IPageChangingListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -98,14 +99,20 @@ public final class WizardDialogHelper {
 	}
 
 	public void openWizard(String windowTitle, UICommand selectedCommand, Map<String, ?> values) {
+		Assert.isNotNull(selectedCommand, "No command was selected for execution");
 		CommandControllerFactory controllerFactory = FurnaceService.INSTANCE.lookup(CommandControllerFactory.class);
 		CommandFactory commandFactory = FurnaceService.INSTANCE.lookup(CommandFactory.class);
-		selectedCommand = commandFactory.getNewCommandByName(context, selectedCommand.getMetadata(context).getName());
+		Assert.isNotNull(controllerFactory, CommandControllerFactory.class.getSimpleName() + " service not found");
+		Assert.isNotNull(commandFactory, CommandFactory.class.getSimpleName() + " service not found");
+		UICommandMetadata metadata = selectedCommand.getMetadata(context);
+		Assert.isNotNull(metadata, "No metadata found for " + selectedCommand);
+		String commandName = metadata.getName();
+		UICommand newCommand = commandFactory.getNewCommandByName(context, commandName);
 		if (windowTitle == null) {
-			windowTitle = selectedCommand.getMetadata(context).getName();
+			windowTitle = commandName;
 		}
 		ForgeUIRuntime runtime = new ForgeUIRuntime();
-		CommandController controller = controllerFactory.createController(context, runtime, selectedCommand);
+		CommandController controller = controllerFactory.createController(context, runtime, newCommand);
 		try {
 			controller.initialize();
 		} catch (Exception e) {
