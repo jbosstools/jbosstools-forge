@@ -29,6 +29,7 @@
       <module>tests</module>
       <module>features</module>
       <module>site</module>
+      <module>test-framework</module>
    </modules>
    <repositories>
       <!-- To resolve parent artifact -->
