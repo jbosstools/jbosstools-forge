@@ -20,9 +20,6 @@
    <packaging>pom</packaging>
    <properties>
       <tycho.scmUrl>scm:git:https://github.com/jbosstools/jbosstools-forge.git</tycho.scmUrl>
-      <!-- workaround for https://issues.jboss.org/browse/JBIDE-22248 and https://engineering.redhat.com/rt/Ticket/Display.html?id=401756 -->
-      <!-- <jbossNexus>repository.jboss.org</jbossNexus> -->
-      <jbossNexus>origin-repository.jboss.org</jbossNexus>
    </properties>
    <modules>
       <module>plugins</module>
@@ -36,7 +33,7 @@
       <repository>
          <id>jboss-public-repository-group</id>
          <name>JBoss Public Repository Group</name>
-         <url>http://origin-repository.jboss.org/nexus/content/groups/public/</url>
+         <url>http://repository.jboss.org/nexus/content/groups/public/</url>
          <releases>
             <enabled>true</enabled>
          </releases>
@@ -47,7 +44,7 @@
       <repository>
          <id>jboss-developer-repository-group</id>
          <name>JBoss Developer Repository Group</name>
-         <url>http://origin-repository.jboss.org/nexus/content/groups/developer/</url>
+         <url>http://repository.jboss.org/nexus/content/groups/developer/</url>
          <releases>
             <enabled>true</enabled>
          </releases>
