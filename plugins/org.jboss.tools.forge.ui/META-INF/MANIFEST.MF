@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %BundleName
 Bundle-SymbolicName: org.jboss.tools.forge.ui;singleton:=true
-Bundle-Version: 2.0.202.qualifier
+Bundle-Version: 2.0.203.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.console,
@@ -21,7 +21,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.rse.ui;bundle-version="3.2.1",
  org.eclipse.rse.core;bundle-version="3.2.1",
  org.eclipse.rse.subsystems.files.core;bundle-version="3.2.101",
- org.eclipse.rse.subsystems.files.local;bundle-version="2.1.200",
  org.eclipse.core.expressions;bundle-version="3.4.300",
  org.eclipse.jpt.jpa.core;bundle-version="3.2.1",
  org.jboss.tools.forge.runtime;bundle-version="2.0.0",

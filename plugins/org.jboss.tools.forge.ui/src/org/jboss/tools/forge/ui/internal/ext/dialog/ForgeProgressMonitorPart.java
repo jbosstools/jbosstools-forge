@@ -40,8 +40,7 @@ public class ForgeProgressMonitorPart extends ProgressMonitorPart {
 
 		@Override
 		public void handleEvent(Event event) {
-			InterruptableProgressMonitor progressMonitor = dialog
-					.getProgressMonitor();
+			InterruptableProgressMonitor progressMonitor = dialog.getProgressMonitor();
 			if (progressMonitor != null && dialog.isRunning()) {
 				if (progressMonitor.isPreviouslyCancelled()) {
 					dialog.setErrorMessage("Attempting to force stop...");
@@ -63,8 +62,7 @@ public class ForgeProgressMonitorPart extends ProgressMonitorPart {
 	private ToolBar fToolBar;
 	private ForgeCommandDialog dialog;
 
-	public ForgeProgressMonitorPart(Composite parent, Layout layout,
-			ForgeCommandDialog dialog) {
+	public ForgeProgressMonitorPart(Composite parent, Layout layout, ForgeCommandDialog dialog) {
 		super(parent, layout, true);
 		this.dialog = dialog;
 	}
@@ -79,6 +77,7 @@ public class ForgeProgressMonitorPart extends ProgressMonitorPart {
 	 * @param progressIndicatorHeight
 	 *            The suggested height of the indicator
 	 */
+	@Override
 	protected void initialize(Layout layout, int progressIndicatorHeight) {
 		if (layout == null) {
 			GridLayout l = new GridLayout();
@@ -93,8 +92,7 @@ public class ForgeProgressMonitorPart extends ProgressMonitorPart {
 			((GridLayout) layout).numColumns = numColumns;
 
 		fLabel = new Label(this, SWT.LEFT);
-		fLabel.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true,
-				false, numColumns, 1));
+		fLabel.setLayoutData(new GridData(GridData.FILL, GridData.CENTER, true, false, numColumns, 1));
 
 		if (progressIndicatorHeight == SWT.DEFAULT) {
 			GC gc = new GC(fLabel);
@@ -123,11 +121,9 @@ public class ForgeProgressMonitorPart extends ProgressMonitorPart {
 		// It would have been nice to use the fCancelListener, but that
 		// listener operates on the fCancelComponent which must be a control.
 		fStopButton.addListener(SWT.Selection, new CancelListener());
-		final Image stopImage = ImageDescriptor
-				.createFromFile(ForgeProgressMonitorPart.class,
-						"images/stop.gif").createImage(getDisplay()); //$NON-NLS-1$
-		final Cursor arrowCursor = new Cursor(this.getDisplay(),
-				SWT.CURSOR_ARROW);
+		final Image stopImage = ImageDescriptor.createFromFile(ForgeProgressMonitorPart.class, "images/stop.gif") //$NON-NLS-1$
+				.createImage(getDisplay());
+		final Cursor arrowCursor = new Cursor(this.getDisplay(), SWT.CURSOR_ARROW);
 		fToolBar.setCursor(arrowCursor);
 		fStopButton.setImage(stopImage);
 		fStopButton.addDisposeListener(new DisposeListener() {
@@ -138,8 +134,11 @@ public class ForgeProgressMonitorPart extends ProgressMonitorPart {
 			}
 		});
 		fStopButton.setEnabled(false);
-		fStopButton.setToolTipText(JFaceResources
-				.getString("ProgressMonitorPart.cancelToolTip")); //$NON-NLS-1$
+		fStopButton.setToolTipText(JFaceResources.getString("ProgressMonitorPart.cancelToolTip")); //$NON-NLS-1$
+	}
+
+	@Override
+	protected void queueUpdateLabel() {
 	}
 
 	@Override
@@ -147,6 +146,7 @@ public class ForgeProgressMonitorPart extends ProgressMonitorPart {
 		return fIsCanceled;
 	}
 
+	@Override
 	public void attachToCancelComponent(Control cancelComponent) {
 		cancelComponent.addListener(SWT.Selection, new CancelListener());
 		setCancelEnabled(true);
