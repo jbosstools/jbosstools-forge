@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Aesh Core Tests
 Bundle-SymbolicName: org.jboss.tools.aesh.core.test
 Bundle-Version: 2.0.203.qualifier
-Bundle-Vendor: JBoss by Red Hat
+Bundle-Vendor: Red Hat
 Fragment-Host: org.jboss.tools.aesh.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.11.0"
