@@ -10,7 +10,7 @@
 <feature
       id="org.jboss.tools.forge.m2e.feature"
       label="%featureName"
-      version="2.0.204.qualifier"
+      version="2.0.205.qualifier"
       provider-name="%featureProvider"
       license-feature="org.jboss.tools.foundation.license.feature"
       license-feature-version="0.0.0"
