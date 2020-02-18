@@ -18,8 +18,8 @@
    <artifactId>org.jboss.tools.forge.runtime</artifactId>
    <packaging>eclipse-plugin</packaging>
    <properties>
-      <version.furnace>2.28.3.Final</version.furnace>
-      <version.forge.addons>3.9.5.Final</version.forge.addons>
+      <version.furnace>2.28.4.Final</version.furnace>
+      <version.forge.addons>3.9.6.Final</version.forge.addons>
       <version.angularjs.addon>2.1.7.Final</version.angularjs.addon>
    </properties>
    <build>
