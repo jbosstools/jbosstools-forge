@@ -22,6 +22,7 @@
 	<properties>
 		<coverage.filter>org.jboss.tools.forge.core*</coverage.filter>
 		<emma.instrument.bundles>org.jboss.tools.forge.core</emma.instrument.bundles>
+		<moduleProperties>--add-modules=ALL-SYSTEM --add-opens=java.base/java.lang=ALL-UNNAMED</moduleProperties>
 	</properties>
 	
 	<build>
