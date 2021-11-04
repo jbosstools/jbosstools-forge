@@ -1,0 +1,7 @@
+instructions.configure=\
+org.eclipse.equinox.p2.touchpoint.eclipse.addJvmArg(jvmArg:--add-opens=java.base/java.lang=ALL-UNNAMED);\
+org.eclipse.equinox.p2.touchpoint.eclipse.addJvmArg(jvmArg:--add-opens=java.base/java.util=ALL-UNNAMED);
+
+instructions.unconfigure=\
+org.eclipse.equinox.p2.touchpoint.eclipse.removeJvmArg(jvmArg:--add-opens=java.base/java.lang=ALL-UNNAMED);\
+org.eclipse.equinox.p2.touchpoint.eclipse.removeJvmArg(jvmArg:--add-opens=java.base/java.util=ALL-UNNAMED);
