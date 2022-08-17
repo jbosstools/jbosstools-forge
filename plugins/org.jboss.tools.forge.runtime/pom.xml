@@ -19,7 +19,7 @@
    <packaging>eclipse-plugin</packaging>
    <properties>
       <version.furnace>2.29.1.Final</version.furnace>
-      <version.forge.addons>3.9.10.Final</version.forge.addons>
+      <version.forge.addons>3.10.0.Final</version.forge.addons>
       <version.angularjs.addon>2.1.7.Final</version.angularjs.addon>
    </properties>
    <build>
