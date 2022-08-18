@@ -15,7 +15,7 @@
 		<version>4.25.0.AM1-SNAPSHOT</version>
    </parent>
    <artifactId>forge</artifactId>
-   <version>2.0.700-SNAPSHOT</version>
+   <version>2.0.800-SNAPSHOT</version>
    <name>jbosstools-forge</name>
    <packaging>pom</packaging>
    <properties>
@@ -33,7 +33,7 @@
       <repository>
          <id>jboss-public-repository-group</id>
          <name>JBoss Public Repository Group</name>
-         <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+         <url>https://repository.jboss.org/nexus/content/groups/public/</url>
          <releases>
             <enabled>true</enabled>
          </releases>
@@ -44,7 +44,7 @@
       <repository>
          <id>jboss-developer-repository-group</id>
          <name>JBoss Developer Repository Group</name>
-         <url>http://repository.jboss.org/nexus/content/groups/developer/</url>
+         <url>https://repository.jboss.org/nexus/content/groups/developer/</url>
          <releases>
             <enabled>true</enabled>
          </releases>
