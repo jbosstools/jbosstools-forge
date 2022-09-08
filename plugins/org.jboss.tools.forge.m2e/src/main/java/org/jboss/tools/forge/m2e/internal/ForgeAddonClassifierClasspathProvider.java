@@ -34,16 +34,17 @@ public class ForgeAddonClassifierClasspathProvider extends
 	@Override
 	public void setRuntimeClasspath(
 			Set<IRuntimeClasspathEntry> runtimeClasspath,
-			IMavenProjectFacade mavenProjectFacade, IProgressMonitor monitor)
+			IMavenProjectFacade mavenProjectFacade,
+			IProgressMonitor monitor, int classpathProperty)
 			throws CoreException {
-		addMainFolder(runtimeClasspath, mavenProjectFacade, monitor);
+		addMainFolder(runtimeClasspath, mavenProjectFacade, monitor, classpathProperty);
 	}
 
 	@Override
 	public void setTestClasspath(Set<IRuntimeClasspathEntry> runtimeClasspath,
-			IMavenProjectFacade mavenProjectFacade, IProgressMonitor monitor)
-			throws CoreException {
-		setRuntimeClasspath(runtimeClasspath, mavenProjectFacade, monitor);
+			IMavenProjectFacade mavenProjectFacade,
+			IProgressMonitor monitor, int classpathProperty) throws CoreException {
+		setRuntimeClasspath(runtimeClasspath, mavenProjectFacade, monitor, classpathProperty);
 	}
 
 	public boolean applies(IMavenProjectFacade mavenProjectFacade,
