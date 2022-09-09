@@ -18,7 +18,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.m2e.core.MavenPlugin;
-import org.eclipse.m2e.core.embedder.AbstractMavenConfigurationChangeListener;
+import org.eclipse.m2e.core.embedder.IMavenConfigurationChangeListener;
 import org.eclipse.m2e.core.embedder.IMavenConfiguration;
 import org.eclipse.m2e.core.embedder.MavenConfigurationChangeEvent;
 import org.jboss.tools.forge.core.runtime.ForgeRuntime;
@@ -61,11 +61,8 @@ public class ForgeCorePlugin extends Plugin {
 
 	private void setMavenSettings() {
 		IMavenConfiguration mavenConfig = MavenPlugin.getMavenConfiguration();
-		mavenConfig.addConfigurationChangeListener(new AbstractMavenConfigurationChangeListener() {
-			@Override
-			public void mavenConfigurationChange(MavenConfigurationChangeEvent event) throws CoreException {
+		mavenConfig.addConfigurationChangeListener(event -> {
 				registerSystemProperties();
-			}
 		});
 		registerSystemProperties();
 	}
